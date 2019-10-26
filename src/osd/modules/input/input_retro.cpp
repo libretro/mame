@@ -1006,47 +1006,46 @@ public:
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a3[1]);
 
-			//add the buttons
+			//add buttons
+			for(j = 0; j < RETRO_MAX_BUTTONS; j++)
+				joystate[i].button[j] = 0;
 
-      			for(j=0;j<RETRO_MAX_BUTTONS;j++)joystate[i].button[j] = 0;
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_START], ITEM_ID_START,
+				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_START]);
 
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_SELECT], ITEM_ID_SELECT,
+				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_SELECT]);
 
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_START],ITEM_ID_START,\
-				generic_button_get_state<std::int32_t>,&joystate[i].button[RETROPAD_START]);
-
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_SELECT],ITEM_ID_SELECT,\
-				generic_button_get_state<std::int32_t>,&joystate[i].button[RETROPAD_SELECT]);
-
-			for(j=0;j<6;j++)
-				devinfo->device()->add_item(Buttons_Name[Buttons_mapping[j]],\
-					 (input_item_id)(ITEM_ID_BUTTON1+j),\
-					 generic_button_get_state<std::int32_t>,\
+			for(j = 0; j < 6; j++)
+				devinfo->device()->add_item(Buttons_Name[Buttons_mapping[j]],
+					 (input_item_id)(ITEM_ID_BUTTON1+j),
+					 generic_button_get_state<std::int32_t>,
 					  &joystate[i].button[Buttons_mapping[j]]);
-/* Replaced with analog triggers and fallback to digital
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_L2],ITEM_ID_BUTTON7,\
-				generic_button_get_state<std::uint8_t>,&joystate[i].button[RETROPAD_L2]);
 
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_R2],ITEM_ID_BUTTON8,\
-				generic_button_get_state<std::int32_t>,&joystate[i].button[RETROPAD_R2]);
-*/
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_L3],ITEM_ID_BUTTON9,\
-				generic_button_get_state<std::int32_t>,&joystate[i].button[RETROPAD_L3]);
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_L3], ITEM_ID_BUTTON9,
+				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_L3]);
 
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_R3],ITEM_ID_BUTTON10,\
-				generic_button_get_state<std::int32_t>,&joystate[i].button[RETROPAD_R3]);
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_R3], ITEM_ID_BUTTON10,
+				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_R3]);
 
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_UP],ITEM_ID_BUTTON11,\
-				generic_button_get_state<std::uint8_t>,&joystate[i].button[RETROPAD_PAD_UP]);
+			sprintf(defname, "Retro Pad%d", i);
+			retro_keyboard_device *paddev;
 
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_DOWN],ITEM_ID_BUTTON12,\
-				generic_button_get_state<std::uint8_t>,&joystate[i].button[RETROPAD_PAD_DOWN]);
+			paddev = devicelist()->create_device<retro_keyboard_device>(machine, defname, defname, *this);
+			if (paddev == nullptr)
+				continue;
 
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_LEFT],ITEM_ID_BUTTON13,\
-				generic_button_get_state<std::uint8_t>,&joystate[i].button[RETROPAD_PAD_LEFT]);
+			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_UP], ITEM_ID_UP,
+				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_UP]);
 
-			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_RIGHT],ITEM_ID_BUTTON14,\
-				generic_button_get_state<std::uint8_t>,&joystate[i].button[RETROPAD_PAD_RIGHT]);
+			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_DOWN], ITEM_ID_DOWN,
+				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_DOWN]);
 
+			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_LEFT], ITEM_ID_LEFT,
+				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_LEFT]);
+
+			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_RIGHT], ITEM_ID_RIGHT,
+				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_RIGHT]);
 		}
 
 		m_global_inputs_enabled = true;
