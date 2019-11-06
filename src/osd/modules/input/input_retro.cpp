@@ -182,12 +182,12 @@ int   Buttons_mapping[6]={RETROPAD_A,RETROPAD_B,RETROPAD_X,RETROPAD_Y,RETROPAD_L
 
 void Input_Binding(running_machine &machine)
 {
-   fprintf(stderr, "SOURCE FILE: %s\n", machine.system().type.source());
-   fprintf(stderr, "PARENT: %s\n", machine.system().parent);
-   fprintf(stderr, "NAME: %s\n", machine.system().name);
-   fprintf(stderr, "DESCRIPTION: %s\n", machine.system().type.fullname());
-   fprintf(stderr, "YEAR: %s\n", machine.system().year);
-   fprintf(stderr, "MANUFACTURER: %s\n", machine.system().manufacturer);
+   log_cb(RETRO_LOG_INFO, "SOURCE FILE: %s\n", machine.system().type.source());
+   log_cb(RETRO_LOG_INFO, "PARENT: %s\n", machine.system().parent);
+   log_cb(RETRO_LOG_INFO, "NAME: %s\n", machine.system().name);
+   log_cb(RETRO_LOG_INFO, "DESCRIPTION: %s\n", machine.system().type.fullname());
+   log_cb(RETRO_LOG_INFO, "YEAR: %s\n", machine.system().year);
+   log_cb(RETRO_LOG_INFO, "MANUFACTURER: %s\n", machine.system().manufacturer);
 
    Buttons_mapping[0]=RETROPAD_A;
    Buttons_mapping[1]=RETROPAD_B;
