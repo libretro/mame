@@ -959,7 +959,7 @@ public:
 
 		for (i = 0; i < 4; i++)
 		{
- 			sprintf(defname, "Retro Joy%d", i);
+ 			sprintf(defname, "RetroPad%d", i);
 
 			retro_joystick_device *devinfo;
 
@@ -970,45 +970,40 @@ public:
 			if (devinfo == nullptr)
 				continue;
 
-	      		// add the axes
-
+			// add the axes
 			devinfo->device()->add_item(
-				"LX",
+				"LSX",
 				static_cast<input_item_id>(ITEM_ID_XAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a1[0]);
 			devinfo->device()->add_item(
-				"LY",
+				"LSY",
 				static_cast<input_item_id>(ITEM_ID_YAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a1[1]);
 
 			devinfo->device()->add_item(
-				"RX",
+				"RSX",
 				static_cast<input_item_id>(ITEM_ID_RXAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a2[0]);
 			devinfo->device()->add_item(
-				"RY",
+				"RSY",
 				static_cast<input_item_id>(ITEM_ID_RYAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a2[1]);
-            
-         devinfo->device()->add_item(
+
+			devinfo->device()->add_item(
 				"L2",
-				static_cast<input_item_id>(ITEM_ID_RZAXIS),
+				static_cast<input_item_id>(ITEM_ID_ZAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a3[0]);
 
 			devinfo->device()->add_item(
 				"R2",
-				static_cast<input_item_id>(ITEM_ID_ZAXIS),
+				static_cast<input_item_id>(ITEM_ID_RZAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a3[1]);
-
-			//add buttons
-			for(j = 0; j < RETRO_MAX_BUTTONS; j++)
-				joystate[i].button[j] = 0;
 
 			devinfo->device()->add_item(Buttons_Name[RETROPAD_START], ITEM_ID_START,
 				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_START]);
