@@ -151,34 +151,26 @@ kt_table ktable[]={
 
 const char *Buttons_Name[RETRO_MAX_BUTTONS]=
 {
-   "B",		//0
-   "Y",		//1
-   "SELECT",	//2
-   "START",	//3
-   "Pad UP",	//4
-   "Pad DOWN",	//5
-   "Pad LEFT",	//6
-   "Pad RIGHT",	//7
-   "A",		//8
-   "X",		//9
-   "L",		//10
-   "R",		//11
-   "L2",		//12
-   "R2",		//13
-   "L3",		//14
-   "R3",		//15
+	"B",           //0
+	"Y",           //1
+	"SELECT",      //2
+	"START",       //3
+	"D-Pad Up",    //4
+	"D-Pad Down",  //5
+	"D-Pad Left",  //6
+	"D-Pad Right", //7
+	"A",           //8
+	"X",           //9
+	"L1",          //10
+	"R1",          //11
+	"L2",          //12
+	"R2",          //13
+	"L3",          //14
+	"R3",          //15
 };
 
-input_item_id PAD_DIR[4][4]=
-{
-   {ITEM_ID_UP,ITEM_ID_DOWN,ITEM_ID_LEFT,ITEM_ID_RIGHT },
-   {ITEM_ID_R ,ITEM_ID_F   ,ITEM_ID_D   ,ITEM_ID_G     },
-   {ITEM_ID_I,ITEM_ID_K,ITEM_ID_J,ITEM_ID_L },
-   {ITEM_ID_8_PAD ,ITEM_ID_2_PAD   ,ITEM_ID_4_PAD   ,ITEM_ID_6_PAD }
-};
-
-//    Default : A ->B1 | B ->B2 | X ->B3 | Y ->B4 | L ->B5 | R ->B6
-int   Buttons_mapping[6]={RETROPAD_A,RETROPAD_B,RETROPAD_X,RETROPAD_Y,RETROPAD_L,RETROPAD_R};
+//    Default : A ->B1 | B ->B2 | X ->B3 | Y ->B4 | L ->B5 | R ->B6 | L2 ->B7 | R2 ->B8
+int Buttons_mapping[]={RETROPAD_A,RETROPAD_B,RETROPAD_X,RETROPAD_Y,RETROPAD_L,RETROPAD_R,RETROPAD_L2,RETROPAD_R2};
 
 void Input_Binding(running_machine &machine)
 {
@@ -1011,7 +1003,7 @@ public:
 			devinfo->device()->add_item(Buttons_Name[RETROPAD_SELECT], ITEM_ID_SELECT,
 				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_SELECT]);
 
-			for(j = 0; j < 6; j++)
+			for(j = 0; j < 8; j++)
 				devinfo->device()->add_item(Buttons_Name[Buttons_mapping[j]],
 					 (input_item_id)(ITEM_ID_BUTTON1+j),
 					 generic_button_get_state<std::int32_t>,
