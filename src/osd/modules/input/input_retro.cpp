@@ -981,13 +981,13 @@ public:
 
 			devinfo->device()->add_item(
 				"L2",
-				static_cast<input_item_id>(ITEM_ID_ZAXIS),
+				static_cast<input_item_id>(ITEM_ID_RZAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a3[0]);
 
 			devinfo->device()->add_item(
 				"R2",
-				static_cast<input_item_id>(ITEM_ID_RZAXIS),
+				static_cast<input_item_id>(ITEM_ID_ZAXIS),
 				generic_axis_get_state<std::int32_t>,
 				&joystate[i].a3[1]);
 
