@@ -907,22 +907,16 @@ public:
 	void poll() override
 	{
 		event_based_device::poll();
-
 	}
 
 	void reset() override
 	{
-		int i,j;
-
-		for(i = 0; i < 4; i++)
-			for(j=0;j<RETRO_MAX_BUTTONS;j++)
-				joystate[i].button[j] = 0;	
+		memset(&joystate, 0, sizeof(joystate));
 	}
 
 protected:
 	void process_event(KeyPressEventArgs &args) /*override*/
 	{
-//		printf("here\n");
 	}
 };
 
