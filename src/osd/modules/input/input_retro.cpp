@@ -169,8 +169,8 @@ const char *Buttons_Name[RETRO_MAX_BUTTONS]=
 	"R3",          //15
 };
 
-//    Default : A ->B1 | B ->B2 | X ->B3 | Y ->B4 | L ->B5 | R ->B6 | L2 ->B7 | R2 ->B8
-int Buttons_mapping[]={RETROPAD_A,RETROPAD_B,RETROPAD_X,RETROPAD_Y,RETROPAD_L,RETROPAD_R,RETROPAD_L2,RETROPAD_R2};
+//    Default : A ->B1 | B ->B2 | X ->B3 | Y ->B4 | L ->B5 | R ->B6
+int Buttons_mapping[]={RETROPAD_A,RETROPAD_B,RETROPAD_X,RETROPAD_Y,RETROPAD_L,RETROPAD_R};
 
 void Input_Binding(running_machine &machine)
 {
@@ -632,7 +632,7 @@ ovmy=vmy;
 	//FIXME doubleclick
 	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
 		machine.ui_input().push_mouse_down_event(window->target(), cx, cy);
-	
+
 
    }
    else if(mbL==1 && !mouse_l)
@@ -644,7 +644,7 @@ ovmy=vmy;
 	auto window = osd_common_t::s_window_list.front();
 	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
 		machine.ui_input().push_mouse_up_event(window->target(), cx, cy);
-	
+
    }
 
    if(mbR==0 && mouse_r)
@@ -657,7 +657,7 @@ ovmy=vmy;
 
 	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
 		machine.ui_input().push_mouse_rdown_event(window->target(), cx, cy);
-	
+
 
    }
    else if(mbR==1 && !mouse_r)
@@ -669,7 +669,7 @@ ovmy=vmy;
 	auto window = osd_common_t::s_window_list.front();
 	if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
 		machine.ui_input().push_mouse_rup_event(window->target(), cx, cy);
-	
+
    }
 
 	//printf("vm(%d,%d) mc(%d,%d) mr(%d,%d)\n",vmx,vmy,mouse_x,mouse_y,mouseLX,mouseLY);
@@ -759,7 +759,7 @@ public:
 	virtual void input_init(running_machine &machine) override
 	{
 		retro_keyboard_device *devinfo = devicelist()->create_device<retro_keyboard_device>(machine, "Retro Keyboard 1", "Retro Keyboard 1", *this);
-		
+
 		int i;
    		for(i = 0; i < RETROK_LAST; i++){
 		      retrokbd_state[i]=0;
@@ -816,7 +816,7 @@ event_based_device::poll();
 		mouseLY=fb_height/2;
 
 		int i;
-   		for(i = 0; i < 4; i++)mouseBUT[i]=0;   		
+   		for(i = 0; i < 4; i++)mouseBUT[i]=0;
 	}
 
 protected:
@@ -997,7 +997,7 @@ public:
 			devinfo->device()->add_item(Buttons_Name[RETROPAD_SELECT], ITEM_ID_SELECT,
 				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_SELECT]);
 
-			for(j = 0; j < 8; j++)
+			for(j = 0; j < 6; j++)
 				devinfo->device()->add_item(Buttons_Name[Buttons_mapping[j]],
 					 (input_item_id)(ITEM_ID_BUTTON1+j),
 					 generic_button_get_state<std::int32_t>,
