@@ -1009,23 +1009,17 @@ public:
 			devinfo->device()->add_item(Buttons_Name[RETROPAD_R3], ITEM_ID_BUTTON10,
 				generic_button_get_state<std::int32_t>, &joystate[i].button[RETROPAD_R3]);
 
-			sprintf(defname, "Retro Pad%d", i);
-			retro_keyboard_device *paddev;
-
-			paddev = devicelist()->create_device<retro_keyboard_device>(machine, defname, defname, *this);
-			if (paddev == nullptr)
-				continue;
-
-			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_UP], ITEM_ID_UP,
+			// D-Pad
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_UP], static_cast<input_item_id>(ITEM_ID_HAT1UP+i*4),
 				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_UP]);
 
-			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_DOWN], ITEM_ID_DOWN,
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_DOWN], static_cast<input_item_id>(ITEM_ID_HAT1DOWN+i*4),
 				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_DOWN]);
 
-			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_LEFT], ITEM_ID_LEFT,
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_LEFT], static_cast<input_item_id>(ITEM_ID_HAT1LEFT+i*4),
 				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_LEFT]);
 
-			paddev->device()->add_item(Buttons_Name[RETROPAD_PAD_RIGHT], ITEM_ID_RIGHT,
+			devinfo->device()->add_item(Buttons_Name[RETROPAD_PAD_RIGHT], static_cast<input_item_id>(ITEM_ID_HAT1RIGHT+i*4),
 				generic_button_get_state<std::uint8_t>, &joystate[i].button[RETROPAD_PAD_RIGHT]);
 		}
 
