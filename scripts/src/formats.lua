@@ -619,6 +619,18 @@ end
 
 --------------------------------------------------
 --
+--@src/lib/formats/d40_dsk.h,FORMATS["D40_DSK"] = true
+--------------------------------------------------
+
+if (FORMATS["D40_DSK"]~=null  or _OPTIONS["with-tools"]) then
+	files {
+		MAME_DIR.. "src/lib/formats/d40_dsk.cpp",
+		MAME_DIR.. "src/lib/formats/d40_dsk.h",
+	}
+end
+
+--------------------------------------------------
+--
 --@src/lib/formats/d80_dsk.h,FORMATS["D80_DSK"] = true
 --------------------------------------------------
 
@@ -926,6 +938,18 @@ if (FORMATS["GUAB_DSK"]~=null  or _OPTIONS["with-tools"]) then
 	files {
 		MAME_DIR.. "src/lib/formats/guab_dsk.cpp",
 		MAME_DIR.. "src/lib/formats/guab_dsk.h",
+	}
+end
+
+--------------------------------------------------
+--
+--@src/lib/formats/h8_cas.h,FORMATS["H8_CAS"] = true
+--------------------------------------------------
+
+if (FORMATS["H8_CAS"]~=null  or _OPTIONS["with-tools"]) then
+	files {
+		MAME_DIR.. "src/lib/formats/h8_cas.cpp",
+		MAME_DIR.. "src/lib/formats/h8_cas.h",
 	}
 end
 

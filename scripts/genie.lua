@@ -414,16 +414,6 @@ newoption {
 	description = "Select projects to be built. Will look into project folder for files.",
 }
 
-newoption {
-	trigger = "LIBRETRO_IOS",
-	description = "Specify iOS target when building using libretro"
-}
-
-newoption {
-	trigger = "LIBRETRO_TVOS",
-	description = "Specify tvOS target when building using libretro"
-}
-
 dofile ("extlib.lua")
 
 if _OPTIONS["SHLIB"]=="1" then
@@ -469,10 +459,6 @@ end
 configurations {
 	"Debug",
 	"Release",
-	-- BEGIN libretro overrides to MAME's GENie build
-	"libretrodbg",
-	"libretro",
-	-- END libretro overrides to MAME's GENie build
 }
 
 if _ACTION == "xcode4" then
@@ -519,6 +505,11 @@ configuration { "Release", "vs20*" }
 		"NoEditAndContinue",
 		"NoIncrementalLink",
 	}
+	if _OPTIONS["SYMBOLS"] then
+		flags {
+			"Symbols",
+		}
+	end
 
 configuration { "vsllvm" }
 	buildoptions {
@@ -555,14 +546,10 @@ if string.sub(_ACTION,1,4) == "vs20" and _OPTIONS["osd"]=="sdl" then
 	end
 end
 -- Build SDL2 for Android
-if _OPTIONS["osd"] == "retro" then
--- RETRO HACK no sdl for libretro android
-else
 if _OPTIONS["targetos"] == "android" then
 	_OPTIONS["with-bundled-sdl2"] = "1"
 end
-end
--- RETRO HACK END no sdl for libretro android
+
 configuration {}
 
 if _OPTIONS["osd"] == "uwp" then
@@ -605,22 +592,6 @@ configuration { "gmake or ninja" }
 	}
 
 dofile ("toolchain.lua")
-
--- RETRO HACK
-if _OPTIONS["osd"]=="retro" then
-	if string.sub(_ACTION,1,4) ~= "vs20" then
-		buildoptions {
-			"-fPIC"
-		}
-	end
-
-	configuration { "*" }
-		defines {
-			"__LIBRETRO__",
-			"NDEBUG",
-		}
-end
--- RETRO HACK
 
 if _OPTIONS["targetos"]=="windows" then
 	configuration { "x64" }
@@ -706,8 +677,7 @@ else
 	defines {
 		"LSB_FIRST",
 	}
-	-- For iOS in libretro, don't specify the arch since it's already specified in $(CC) and $(CXX)
-	if _OPTIONS["targetos"]=="macosx"  and _OPTIONS["LIBRETRO_IOS"] ~= "1" and _OPTIONS["LIBRETRO_TVOS"] ~= "1" then
+	if _OPTIONS["targetos"]=="macosx" then
 		configuration { "x64" }
 			buildoptions {
 				"-arch x86_64",
@@ -1021,13 +991,6 @@ if _OPTIONS["MAP"] then
 	end
 end
 
--- On Linux targets link libgcc and libstdc++ statically.  See #137
-if _OPTIONS["targetos"]=="linux" then
-		linkoptions {
-			"-static-libgcc -static-libstdc++"
-		}
-end
-
 
 -- add a basic set of warnings
 	buildoptions {
@@ -1123,6 +1086,16 @@ end
 					"-Wno-pragma-pack" -- clang 6.0 complains when the packing change lifetime is not contained within a header file.
 				}
 			end
+			if ((version < 60000) or (_OPTIONS["targetos"]=="macosx" and (version <= 90000))) then
+				buildoptions {
+					"-Wno-missing-braces" -- std::array brace initialization not fixed until 6.0.0 (https://reviews.llvm.org/rC314838)
+				}
+			end
+			if (_OPTIONS["targetos"]=="macosx" and (version < 80000)) then
+				defines {
+					"TARGET_OS_OSX=1",
+				}
+			end
 		else
 			if (version < 70000) then
 				print("GCC version 7.0 or later needed")
@@ -1141,6 +1114,11 @@ end
 				}
 				buildoptions_cpp {
 					"-Wno-class-memaccess", -- many instances in ImGui and BGFX
+				}
+			end
+			if (version >= 100000) then
+				buildoptions {
+					"-Wno-return-local-addr", -- sqlite3.c in GCC 10
 				}
 			end
 		end
@@ -1198,6 +1176,8 @@ configuration { "asmjs" }
 	}
 	buildoptions_cpp {
 		"-std=c++14",
+		"-s DISABLE_EXCEPTION_CATCHING=2",
+		"-s EXCEPTION_CATCHING_WHITELIST=\"['_ZN15running_machine17start_all_devicesEv','_ZN12cli_frontend7executeEiPPc','_ZN8chd_file11open_commonEb','_ZN8chd_file13read_metadataEjjRNSt3__212basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE','_ZN8chd_file13read_metadataEjjRNSt3__26vectorIhNS0_9allocatorIhEEEE']\"",
 	}
 	linkoptions {
 		"-Wl,--start-group",

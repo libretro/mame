@@ -2,7 +2,7 @@
 // copyright-holders:Aaron Giles
 /***************************************************************************
 
-    inpttype.h
+    inpttype.ipp
 
     Array of core-defined input types and default mappings.
 
@@ -17,10 +17,10 @@ namespace {
 
 #define CORE_INPUT_TYPES_P1 \
 		CORE_INPUT_TYPES_BEGIN(p1) \
-		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_UP,         "P1 Up",                  input_seq(KEYCODE_UP, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_Y_HATUP_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_DOWN,       "P1 Down",                input_seq(KEYCODE_DOWN, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_Y_HATDOWN_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_LEFT,       "P1 Left",                input_seq(KEYCODE_LEFT, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_X_HATLEFT_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_RIGHT,      "P1 Right",               input_seq(KEYCODE_RIGHT, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_X_HATRIGHT_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_UP,         "P1 Up",                  input_seq(KEYCODE_UP, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_DOWN,       "P1 Down",                input_seq(KEYCODE_DOWN, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_LEFT,       "P1 Left",                input_seq(KEYCODE_LEFT, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICK_RIGHT,      "P1 Right",               input_seq(KEYCODE_RIGHT, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(0)) ) \
 		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICKRIGHT_UP,    "P1 Right Stick/Up",      input_seq(KEYCODE_I, input_seq::or_code, JOYCODE_BUTTON2_INDEXED(0)) ) \
 		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICKRIGHT_DOWN,  "P1 Right Stick/Down",    input_seq(KEYCODE_K, input_seq::or_code, JOYCODE_BUTTON3_INDEXED(0)) ) \
 		INPUT_PORT_DIGITAL_TYPE( 1, PLAYER1, JOYSTICKRIGHT_LEFT,  "P1 Right Stick/Left",    input_seq(KEYCODE_J, input_seq::or_code, JOYCODE_BUTTON1_INDEXED(0)) ) \
@@ -136,10 +136,10 @@ namespace {
 
 #define CORE_INPUT_TYPES_P2 \
 		CORE_INPUT_TYPES_BEGIN(p2) \
-		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_UP,         "P2 Up",                  input_seq(KEYCODE_R, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_Y_HATUP_INDEXED(1)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_DOWN,       "P2 Down",                input_seq(KEYCODE_F, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_Y_HATDOWN_INDEXED(1)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_LEFT,       "P2 Left",                input_seq(KEYCODE_D, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_X_HATLEFT_INDEXED(1)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_RIGHT,      "P2 Right",               input_seq(KEYCODE_G, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(1), input_seq::or_code, JOYCODE_X_HATRIGHT_INDEXED(1)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_UP,         "P2 Up",                  input_seq(KEYCODE_R, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(1)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_DOWN,       "P2 Down",                input_seq(KEYCODE_F, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(1)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_LEFT,       "P2 Left",                input_seq(KEYCODE_D, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(1)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICK_RIGHT,      "P2 Right",               input_seq(KEYCODE_G, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(1)) ) \
 		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICKRIGHT_UP,    "P2 Right Stick/Up",      input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICKRIGHT_DOWN,  "P2 Right Stick/Down",    input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE( 2, PLAYER2, JOYSTICKRIGHT_LEFT,  "P2 Right Stick/Left",    input_seq() ) \
@@ -217,10 +217,10 @@ namespace {
 
 #define CORE_INPUT_TYPES_P3 \
 		CORE_INPUT_TYPES_BEGIN(p3) \
-		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_UP,         "P3 Up",                  input_seq(KEYCODE_I, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_Y_HATUP_INDEXED(2)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_DOWN,       "P3 Down",                input_seq(KEYCODE_K, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_Y_HATDOWN_INDEXED(2)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_LEFT,       "P3 Left",                input_seq(KEYCODE_J, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_X_HATLEFT_INDEXED(2)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_RIGHT,      "P3 Right",               input_seq(KEYCODE_L, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(2), input_seq::or_code, JOYCODE_X_HATRIGHT_INDEXED(2)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_UP,         "P3 Up",                  input_seq(KEYCODE_I, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(2)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_DOWN,       "P3 Down",                input_seq(KEYCODE_K, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(2)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_LEFT,       "P3 Left",                input_seq(KEYCODE_J, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(2)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICK_RIGHT,      "P3 Right",               input_seq(KEYCODE_L, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(2)) ) \
 		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICKRIGHT_UP,    "P3 Right Stick/Up",      input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICKRIGHT_DOWN,  "P3 Right Stick/Down",    input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE( 3, PLAYER3, JOYSTICKRIGHT_LEFT,  "P3 Right Stick/Left",    input_seq() ) \
@@ -251,10 +251,10 @@ namespace {
 
 #define CORE_INPUT_TYPES_P4 \
 		CORE_INPUT_TYPES_BEGIN(p4) \
-		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_UP,         "P4 Up",                  input_seq(KEYCODE_8_PAD, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_Y_HATUP_INDEXED(3)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_DOWN,       "P4 Down",                input_seq(KEYCODE_2_PAD, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_Y_HATDOWN_INDEXED(3)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_LEFT,       "P4 Left",                input_seq(KEYCODE_4_PAD, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_X_HATLEFT_INDEXED(3)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_RIGHT,      "P4 Right",               input_seq(KEYCODE_6_PAD, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(3), input_seq::or_code, JOYCODE_X_HATRIGHT_INDEXED(3)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_UP,         "P4 Up",                  input_seq(KEYCODE_8_PAD, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(3)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_DOWN,       "P4 Down",                input_seq(KEYCODE_2_PAD, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(3)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_LEFT,       "P4 Left",                input_seq(KEYCODE_4_PAD, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(3)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICK_RIGHT,      "P4 Right",               input_seq(KEYCODE_6_PAD, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(3)) ) \
 		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICKRIGHT_UP,    "P4 Right Stick/Up",      input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICKRIGHT_DOWN,  "P4 Right Stick/Down",    input_seq() ) \
 		INPUT_PORT_DIGITAL_TYPE( 4, PLAYER4, JOYSTICKRIGHT_LEFT,  "P4 Right Stick/Left",    input_seq() ) \
@@ -823,10 +823,10 @@ namespace {
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_RECORD_MNG,       "Record MNG",             input_seq(KEYCODE_F12, KEYCODE_LSHIFT, input_seq::not_code, KEYCODE_LCONTROL) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_RECORD_AVI,       "Record AVI",             input_seq(KEYCODE_F12, KEYCODE_LSHIFT, KEYCODE_LCONTROL) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_TOGGLE_CHEAT,     "Toggle Cheat",           input_seq(KEYCODE_F6) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_UP,               "UI Up",                  input_seq(KEYCODE_UP, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_Y_HATUP_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_DOWN,             "UI Down",                input_seq(KEYCODE_DOWN, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_Y_HATDOWN_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_LEFT,             "UI Left",                input_seq(KEYCODE_LEFT, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_X_HATLEFT_INDEXED(0)) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_RIGHT,            "UI Right",               input_seq(KEYCODE_RIGHT, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(0), input_seq::or_code, JOYCODE_X_HATRIGHT_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_UP,               "UI Up",                  input_seq(KEYCODE_UP, input_seq::or_code, JOYCODE_Y_UP_SWITCH_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_DOWN,             "UI Down",                input_seq(KEYCODE_DOWN, input_seq::or_code, JOYCODE_Y_DOWN_SWITCH_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_LEFT,             "UI Left",                input_seq(KEYCODE_LEFT, input_seq::or_code, JOYCODE_X_LEFT_SWITCH_INDEXED(0)) ) \
+		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_RIGHT,            "UI Right",               input_seq(KEYCODE_RIGHT, input_seq::or_code, JOYCODE_X_RIGHT_SWITCH_INDEXED(0)) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_HOME,             "UI Home",                input_seq(KEYCODE_HOME) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_END,              "UI End",                 input_seq(KEYCODE_END) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,      UI_PAGE_UP,          "UI Page Up",             input_seq(KEYCODE_PGUP) ) \

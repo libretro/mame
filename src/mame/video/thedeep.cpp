@@ -50,7 +50,7 @@ TILE_GET_INFO_MEMBER(thedeep_state::get_tile_info)
 			0);
 }
 
-WRITE8_MEMBER(thedeep_state::textram_w)
+void thedeep_state::textram_w(offs_t offset, uint8_t data)
 {
 	m_textram[offset] = data;
 	m_text_tilemap->mark_tile_dirty(offset / 2);
@@ -93,7 +93,7 @@ uint32_t thedeep_state::screen_update(screen_device &screen, bitmap_ind16 &bitma
 {
 	bitmap.fill(m_palette->black_pen(), cliprect);
 
-	m_tilegen->deco_bac06_pf_draw(screen, bitmap, cliprect, TILEMAP_DRAW_OPAQUE, 0x00, 0x00, 0x00, 0x00, 0);
+	m_tilegen->deco_bac06_pf_draw(screen, bitmap, cliprect, TILEMAP_DRAW_OPAQUE, 0);
 	m_spritegen->draw_sprites(screen, bitmap, cliprect, m_gfxdecode->gfx(0), reinterpret_cast<uint16_t *>(m_spriteram.target()), 0x400/2);
 	m_text_tilemap->draw(screen, bitmap, cliprect, 0,0);
 	return 0;

@@ -59,6 +59,7 @@
 #include "cpu/m68000/m68000.h"
 #include "cpu/mcs51/mcs51.h"
 #include "machine/gen_latch.h"
+#include "machine/icm7170.h"
 #include "machine/nvram.h"
 #include "machine/timer.h"
 #include "video/bt47x.h"
@@ -76,9 +77,10 @@ public:
 		m_gfxsubcpu(*this, "gfxsubcpu"),
 		m_datacpu(*this, "datacpu"),
 		m_iocpu(*this, "iocpu"),
-		m_mainram(*this, "extram"),
+		m_mainram(*this, "mainram"),
 		m_extram(*this, "extram"),
-		m_vram(*this, "vram")
+		m_vram(*this, "vram"),
+		m_rtc(*this, "rtc")
 	{ }
 
 	void wxstar4k(machine_config &config);
@@ -102,8 +104,9 @@ private:
 	optional_device<m68010_device> m_maincpu, m_gfxcpu;
 	optional_device<mcs51_cpu_device> m_gfxsubcpu, m_datacpu, m_iocpu;
 	optional_shared_ptr<uint16_t> m_mainram, m_extram, m_vram;
+	required_device<icm7170_device> m_rtc;
 
-	DECLARE_READ16_MEMBER(buserr_r)
+	uint16_t buserr_r()
 	{
 		m_maincpu->set_input_line(M68K_LINE_BUSERROR, ASSERT_LINE);
 		m_maincpu->set_input_line(M68K_LINE_BUSERROR, CLEAR_LINE);
@@ -138,7 +141,7 @@ void wxstar4k_state::cpubd_main(address_map &map)
 	// FDF000 - cause IRQ 6 on graphics card
 	// FDF004 - cause IRQ 6 on graphics card 2 (not used)
 	// FDF008 - reset watchdog
-	// FDFFC0-FDFFE2 - ICM7170 RTC, registers every 2 bytes
+	map(0xfdffc0, 0xfdffe3).rw(m_rtc, FUNC(icm7170_device::read), FUNC(icm7170_device::write)).umask16(0x00ff);
 	map(0xfe0000, 0xffffff).rom().region("maincpu", 0);
 }
 
@@ -237,7 +240,7 @@ void wxstar4k_state::wxstar4k(machine_config &config)
 	m_gfxsubcpu->set_addrmap(AS_PROGRAM, &wxstar4k_state::vidbd_sub);
 	m_gfxsubcpu->set_addrmap(AS_IO, &wxstar4k_state::vidbd_sub_io);
 
-	I8051(config, m_datacpu, XTAL(7'372'800));  // 7.3728 MHz crystal connected directly to the CPU
+	I8344(config, m_datacpu, XTAL(7'372'800));  // 7.3728 MHz crystal connected directly to the CPU
 	m_datacpu->set_addrmap(AS_PROGRAM, &wxstar4k_state::databd_main);
 	m_datacpu->set_addrmap(AS_IO, &wxstar4k_state::databd_main_io);
 
@@ -255,6 +258,8 @@ void wxstar4k_state::wxstar4k(machine_config &config)
 	screen.set_palette("palette");
 
 	PALETTE(config, "palette").set_format(palette_device::xBGR_888, 256);
+
+	ICM7170(config, m_rtc, XTAL(32'768));
 }
 
 ROM_START( wxstar4k )

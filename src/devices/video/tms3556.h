@@ -38,12 +38,12 @@ public:
 	static constexpr unsigned TOTAL_HEIGHT = 250 + TOP_BORDER + BOTTOM_BORDER;
 
 	// construction/destruction
-	tms3556_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
+	tms3556_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
 
 	uint8_t vram_r();
 	void vram_w(uint8_t data);
-	uint8_t reg_r(offs_t offset);
-	void reg_w(offs_t offset, uint8_t data);
+	uint8_t reg_r();
+	void reg_w(uint8_t data);
 	uint8_t initptr_r();
 
 	void interrupt();
@@ -87,8 +87,7 @@ private:
 	uint16_t m_address_regs[8];
 
 	// register interface
-	int m_reg, m_reg2;
-	int m_reg_access_phase;
+	uint8_t m_reg, m_reg2;
 
 	int m_row_col_written;
 	int m_bamp_written;

@@ -2,7 +2,7 @@
 // copyright-holders:Aaron Giles
 /*************************************************************************
 
-    empty.c
+    empty.cpp
 
     Empty driver.
 
@@ -62,7 +62,6 @@ void empty_state::___empty(machine_config &config)
 //**************************************************************************
 
 ROM_START( ___empty )
-	ROM_REGION( 0x10, "user1", ROMREGION_ERASEFF )
 ROM_END
 
 

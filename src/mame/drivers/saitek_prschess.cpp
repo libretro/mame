@@ -13,7 +13,7 @@ computer and shake it when one of the sensors is malfunctioning.
 Hardware notes:
 - 6502A @ 2MHz
 - 16KB ROM(2*HN482764G), 2KB RAM(HM6116P-4)
-- 64+12 leds, magnet sensors chessboard
+- buzzer, 64+12 leds, magnet sensors chessboard
 
 TODO:
 - verify CPU speed / XTAL
@@ -68,9 +68,9 @@ private:
 
 	// I/O handlers
 	void update_display();
-	DECLARE_WRITE8_MEMBER(leds_w);
-	DECLARE_WRITE8_MEMBER(control_w);
-	DECLARE_READ8_MEMBER(input_r);
+	void leds_w(offs_t offset, u8 data);
+	void control_w(u8 data);
+	u8 input_r();
 
 	u8 m_inp_mux = 0;
 	u8 m_led_data[2] = { 0, 0 };
@@ -91,17 +91,17 @@ void prschess_state::machine_start()
 void prschess_state::update_display()
 {
 	u16 led_data = m_led_data[1] << 8 | m_led_data[0];
-	led_data = bitswap<16>(led_data, 15,14,5,4,3,2,1,0,7,6,13,12,11,10,9,8);
+	led_data = bitswap<16>(led_data,15,14,5,4,3,2,1,0, 7,6,13,12,11,10,9,8);
 	m_display->matrix(1 << m_inp_mux, led_data);
 }
 
-WRITE8_MEMBER(prschess_state::leds_w)
+void prschess_state::leds_w(offs_t offset, u8 data)
 {
 	m_led_data[offset >> 8] = ~data;
 	update_display();
 }
 
-WRITE8_MEMBER(prschess_state::control_w)
+void prschess_state::control_w(u8 data)
 {
 	// d0-d3: input mux, led select
 	m_inp_mux = data & 0xf;
@@ -113,7 +113,7 @@ WRITE8_MEMBER(prschess_state::control_w)
 	// other: ?
 }
 
-READ8_MEMBER(prschess_state::input_r)
+u8 prschess_state::input_r()
 {
 	u8 data = 0;
 
@@ -214,8 +214,8 @@ void prschess_state::prschess(machine_config &config)
 
 ROM_START( prschess )
 	ROM_REGION( 0x10000, "maincpu", 0 )
-	ROM_LOAD("yo3_rl", 0xc000, 0x2000, CRC(862c3f42) SHA1(e2d2f1d7a0382b0774e86ca83e270dab1df700c2) ) // HN482764G
-	ROM_LOAD("yo3_rh", 0xe000, 0x2000, CRC(ef95cb9f) SHA1(02f763cf9cab1b4be8964ddb5d93efb05a898123) ) // "
+	ROM_LOAD("y03_rl", 0xc000, 0x2000, CRC(862c3f42) SHA1(e2d2f1d7a0382b0774e86ca83e270dab1df700c2) ) // HN482764G
+	ROM_LOAD("y03_rh", 0xe000, 0x2000, CRC(ef95cb9f) SHA1(02f763cf9cab1b4be8964ddb5d93efb05a898123) ) // "
 ROM_END
 
 } // anonymous namespace

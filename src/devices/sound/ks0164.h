@@ -42,7 +42,7 @@ private:
 	address_space_config m_mem_config;
 	sound_stream *m_stream;
 	emu_timer *m_timer;
-	memory_access_cache<1, 0, ENDIANNESS_BIG> *m_mem_cache;
+	memory_access<23, 1, 0, ENDIANNESS_BIG>::cache m_mem_cache;
 
 	u32 m_bank1_base, m_bank2_base;
 	u16 m_bank1_select, m_bank2_select;
@@ -87,6 +87,8 @@ private:
 	void mpu401_w(u8 data);
 	u8 mpu401_istatus_r();
 	void mpu401_istatus_w(u8 data);
+
+	static inline u16 uncomp_8_16(u8 value);
 };
 
 DECLARE_DEVICE_TYPE(KS0164, ks0164_device)

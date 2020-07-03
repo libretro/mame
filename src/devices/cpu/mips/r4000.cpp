@@ -212,6 +212,8 @@ void r4000_base_device::device_reset()
 	m_ll_active = false;
 	m_bus_error = false;
 
+	m_cp0[CP0_Cause] = 0;
+
 	m_cp0[CP0_WatchLo] = 0;
 	m_cp0[CP0_WatchHi] = 0;
 
@@ -3600,7 +3602,7 @@ r4000_base_device::translate_result r4000_base_device::translate(int intention, 
 	u64 const key = (address & (extended ? (EH_R | EH_VPN2_64) : EH_VPN2_32)) | (m_cp0[CP0_EntryHi] & EH_ASID);
 
 	unsigned *mru = m_tlb_mru[intention & TRANSLATE_TYPE_MASK];
-	if (LOG_STATS)
+	if (VERBOSE & LOG_STATS)
 		m_tlb_scans++;
 
 	bool invalid = false;
@@ -3617,7 +3619,7 @@ r4000_base_device::translate_result r4000_base_device::translate(int intention, 
 		if ((entry.vpn & mask) != (key & mask))
 			continue;
 
-		if (LOG_STATS)
+		if (VERBOSE & LOG_STATS)
 			m_tlb_loops += i + 1;
 
 		u64 const pfn = entry.pfn[BIT(address, entry.low_bit)];
