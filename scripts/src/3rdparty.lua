@@ -2224,6 +2224,9 @@ project "wdlfft"
 -- asmjit library
 --------------------------------------------------
 
+-- RETRO HACK BEGIN disable asmjit compilation if C backend used
+if not (_OPTIONS["FORCE_DRC_C_BACKEND"]=='1') then
+-- RETRO HACK END disable asmjit compilation if C backend used
 project "asmjit"
 	uuid "4539757c-6e99-4bae-b3d0-b342a7c49539"
 	kind "StaticLib"
@@ -2353,3 +2356,4 @@ project "asmjit"
 		MAME_DIR .. "3rdparty/asmjit/src/asmjit/x86/x86rapass.cpp",
 		MAME_DIR .. "3rdparty/asmjit/src/asmjit/x86/x86rapass_p.h",
 	}
+end
