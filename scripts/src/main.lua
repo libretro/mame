@@ -347,8 +347,16 @@ end
 		"wdlfft",
 		ext_lib("jpeg"),
 		"7z",
-		"asmjit",
+-- RETRO HACK no asmjit if FORCE_DRC_C_BACKEND
+--		"asmjit",
 	}
+if not (_OPTIONS["FORCE_DRC_C_BACKEND"]=='1') then
+	links {
+		"asmjit"
+	}
+end
+-- RETRO HACK end
+
 if (STANDALONE~=true) then
 	links {
 		ext_lib("lua"),
