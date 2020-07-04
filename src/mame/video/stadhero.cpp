@@ -27,7 +27,7 @@ uint32_t stadhero_state::screen_update(screen_device &screen, bitmap_ind16 &bitm
 	m_spritegen->set_flip_screen(flip);
 	m_pf1_tilemap->set_flip(flip ? (TILEMAP_FLIPY | TILEMAP_FLIPX) : 0);
 
-	m_tilegen->deco_bac06_pf_draw(screen,bitmap,cliprect,TILEMAP_DRAW_OPAQUE, 0x00, 0x00, 0x00, 0x00, 0);
+	m_tilegen->deco_bac06_pf_draw(screen,bitmap,cliprect,TILEMAP_DRAW_OPAQUE, 0);
 	m_spritegen->draw_sprites(screen, bitmap, cliprect, m_gfxdecode->gfx(2), m_spriteram, 0x800/2);
 	m_pf1_tilemap->draw(screen, bitmap, cliprect, 0,0);
 	return 0;
@@ -35,7 +35,7 @@ uint32_t stadhero_state::screen_update(screen_device &screen, bitmap_ind16 &bitm
 
 /******************************************************************************/
 
-WRITE16_MEMBER(stadhero_state::pf1_data_w)
+void stadhero_state::pf1_data_w(offs_t offset, uint16_t data, uint16_t mem_mask)
 {
 	COMBINE_DATA(&m_pf1_data[offset]);
 	m_pf1_tilemap->mark_tile_dirty(offset);

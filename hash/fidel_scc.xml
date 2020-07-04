@@ -4,9 +4,9 @@
 license:CC0
 -->
 
-<softwarelist name="fidel_scc" description="Fidelity SCC Modules">
+<!-- optional bookrom for: Sensory Chess Challenger: 9, 12, A/S, ... -->
 
-<!-- Sensory Chess Challenger: 9, 12, A/S, .. -->
+<softwarelist name="fidel_scc" description="Fidelity SCC Modules">
 
 	<software name="cb9">
 		<description>Challenger Book Openings 1</description>
@@ -14,7 +14,7 @@ license:CC0
 		<publisher>Fidelity Electronics</publisher>
 		<part name="cart" interface="fidel_scc">
 			<dataarea name="rom" size="0x2000">
-				<rom name="cb9.bin" offset="0x0000" size="0x2000" crc="421147e8" sha1="ccf62f6f218e8992baf30973fe41b35e14a1cc1a" />
+				<rom name="cb9.bin" offset="0x0000" size="0x2000" crc="421147e8" sha1="ccf62f6f218e8992baf30973fe41b35e14a1cc1a" /> <!-- 101-1050a01? -->
 			</dataarea>
 		</part>
 	</software>

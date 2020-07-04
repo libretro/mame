@@ -6,7 +6,6 @@
 //
 //============================================================
 #if defined(SDLMAME_WIN32) || defined(OSD_WINDOWS) || defined(OSD_UWP)
-#define NOMINMAX
 #include <windows.h>
 #endif
 #include <algorithm>

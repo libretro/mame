@@ -14,7 +14,6 @@
 #pragma once
 
 #include "debug/express.h"
-#include "debug/debugcpu.h"
 #include "ui/text.h"
 #include "xmlfile.h"
 
@@ -327,8 +326,8 @@ public:
 
 	// global helpers
 	static std::string quote_expression(parsed_expression const &expression);
-	static uint64_t execute_frombcd(symbol_table &table, int params, uint64_t const *param);
-	static uint64_t execute_tobcd(symbol_table &table, int params, uint64_t const *param);
+	static uint64_t execute_frombcd(int params, uint64_t const *param);
+	static uint64_t execute_tobcd(int params, uint64_t const *param);
 
 private:
 	// internal helpers
@@ -345,7 +344,6 @@ private:
 	int8_t                                      m_lastline;     // last line used for output
 	bool                                        m_disabled;     // true if the cheat engine is disabled
 	symbol_table                                m_symtable;     // global symbol table
-	std::unique_ptr<debugger_cpu>               m_cpu;          // debugger interface for cpus/memory
 
 	// constants
 	static constexpr int CHEAT_VERSION = 1;

@@ -7,7 +7,6 @@
 //============================================================
 #if defined(OSD_WINDOWS) || defined(SDLMAME_WIN32)
 // standard windows headers
-#define NOMINMAX
 #include <windows.h>
 #include <process.h>
 #include <tchar.h>

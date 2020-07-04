@@ -4,7 +4,8 @@
 #include "osdcore.h"
 #include <thread>
 #include <chrono>
-#if defined(SDLMAME_ANDROID) && !defined(__LIBRETRO__)
+
+#if defined(SDLMAME_ANDROID)
 #include <SDL2/SDL.h>
 #endif
 
@@ -64,7 +65,7 @@ void osd_output::pop(osd_output *delegate)
 
 void osd_vprintf_error(util::format_argument_pack<std::ostream> const &args)
 {
-#if defined(SDLMAME_ANDROID) && !defined(__LIBRETRO__)
+#if defined(SDLMAME_ANDROID)
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "%s", util::string_format(args).c_str());
 #else
 	if (m_ptr >= 0) m_stack[m_ptr]->output_callback(OSD_OUTPUT_CHANNEL_ERROR, args);
@@ -79,7 +80,7 @@ void osd_vprintf_error(util::format_argument_pack<std::ostream> const &args)
 
 void osd_vprintf_warning(util::format_argument_pack<std::ostream> const &args)
 {
-#if defined(SDLMAME_ANDROID) && !defined(__LIBRETRO__)
+#if defined(SDLMAME_ANDROID)
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_ERROR, "%s", util::string_format(args).c_str());
 #else
 	if (m_ptr >= 0) m_stack[m_ptr]->output_callback(OSD_OUTPUT_CHANNEL_WARNING, args);
@@ -94,7 +95,7 @@ void osd_vprintf_warning(util::format_argument_pack<std::ostream> const &args)
 
 void osd_vprintf_info(util::format_argument_pack<std::ostream> const &args)
 {
-#if defined(SDLMAME_ANDROID) && !defined(__LIBRETRO__)
+#if defined(SDLMAME_ANDROID)
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_INFO, "%s", util::string_format(args).c_str());
 #else
 	if (m_ptr >= 0) m_stack[m_ptr]->output_callback(OSD_OUTPUT_CHANNEL_INFO, args);
@@ -109,7 +110,7 @@ void osd_vprintf_info(util::format_argument_pack<std::ostream> const &args)
 
 void osd_vprintf_verbose(util::format_argument_pack<std::ostream> const &args)
 {
-#if defined(SDLMAME_ANDROID) && !defined(__LIBRETRO__)
+#if defined(SDLMAME_ANDROID)
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_VERBOSE, "%s", util::string_format(args).c_str());
 #else
 	if (m_ptr >= 0) m_stack[m_ptr]->output_callback(OSD_OUTPUT_CHANNEL_VERBOSE, args);
@@ -124,7 +125,7 @@ void osd_vprintf_verbose(util::format_argument_pack<std::ostream> const &args)
 
 void osd_vprintf_debug(util::format_argument_pack<std::ostream> const &args)
 {
-#if defined(SDLMAME_ANDROID) && !defined(__LIBRETRO__)
+#if defined(SDLMAME_ANDROID)
 	SDL_LogMessage(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_DEBUG, "%s", util::string_format(args).c_str());
 #else
 	if (m_ptr >= 0) m_stack[m_ptr]->output_callback(OSD_OUTPUT_CHANNEL_DEBUG, args);

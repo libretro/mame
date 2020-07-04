@@ -261,13 +261,13 @@ constexpr XTAL AY_CLOCK     = MASTER_CLOCK / 8;
 
 
 
-WRITE8_MEMBER(goldstar_state::protection_w)
+void goldstar_state::protection_w(uint8_t data)
 {
 	if (data == 0x2a)
 		m_dataoffset = 0;
 }
 
-READ8_MEMBER(goldstar_state::protection_r)
+uint8_t goldstar_state::protection_r()
 {
 	static const int data[4] = { 0x47, 0x4f, 0x4c, 0x44 };
 
@@ -275,7 +275,7 @@ READ8_MEMBER(goldstar_state::protection_r)
 	return data[m_dataoffset++];
 }
 
-WRITE8_MEMBER(goldstar_state::p1_lamps_w)
+void goldstar_state::p1_lamps_w(uint8_t data)
 {
 /*  bits
   7654 3210     goldstar                            crazybon                ncb3/cb3a               lucky8/bingowng
@@ -316,7 +316,7 @@ WRITE8_MEMBER(goldstar_state::p1_lamps_w)
 //  popmessage("p1 lamps: %02X", data);
 }
 
-WRITE8_MEMBER(goldstar_state::p2_lamps_w)
+void goldstar_state::p2_lamps_w(uint8_t data)
 {
 	m_lamps[8 + 0] = BIT(data, 0);
 	m_lamps[8 + 1] = BIT(data, 1);
@@ -403,7 +403,7 @@ void sanghopm_state::star100_map(address_map &map)
 }
 
 
-WRITE8_MEMBER(sanghopm_state::coincount_w)
+void sanghopm_state::coincount_w(uint8_t data)
 {
 /*
   7654 3210
@@ -422,7 +422,7 @@ WRITE8_MEMBER(sanghopm_state::coincount_w)
 	machine().bookkeeping().coin_counter_w(4, data & 0x01);  /* counter5 payout */
 }
 
-WRITE8_MEMBER(sanghopm_state::enable_w)
+void sanghopm_state::enable_w(uint8_t data)
 {
 	m_enable_reg = data;
 }
@@ -600,7 +600,7 @@ void goldstar_state::ramdac_map(address_map &map)
 
 
 
-WRITE8_MEMBER(goldstar_state::ncb3_port81_w)
+void goldstar_state::ncb3_port81_w(uint8_t data)
 {
 //  if (data!=0x00)
 //      popmessage("ncb3_port81_w %02x\n",data);
@@ -811,7 +811,7 @@ void goldstar_state::nfm_map(address_map &map)
 
 
 
-WRITE8_MEMBER(goldstar_state::cm_coincount_w)
+void goldstar_state::cm_coincount_w(uint8_t data)
 {
 /*  bits
   7654 3210
@@ -1085,7 +1085,7 @@ void goldstar_state::mbstar_map(address_map &map)
 }
 
 
-WRITE8_MEMBER(wingco_state::magodds_outb850_w)
+void wingco_state::magodds_outb850_w(uint8_t data)
 {
 	// guess, could be wrong, this might just be lights
 
@@ -1101,12 +1101,12 @@ WRITE8_MEMBER(wingco_state::magodds_outb850_w)
 
 }
 
-WRITE8_MEMBER(wingco_state::magodds_outb860_w)
+void wingco_state::magodds_outb860_w(uint8_t data)
 {
 //  popmessage("magodds_outb860_w %02x\n", data);
 }
 
-WRITE8_MEMBER(wingco_state::fl7w4_outc802_w)
+void wingco_state::fl7w4_outc802_w(uint8_t data)
 {
 	m_fl7w4_id->write((data >> 6) & 0x01);
 }
@@ -1160,7 +1160,7 @@ void goldstar_state::kkotnoli_map(address_map &map)
 }
 
 
-//WRITE8_MEMBER(goldstar_state::ladylinr_outport_w)
+//void goldstar_state::ladylinr_outport_w(uint8_t data)
 //{
 /* LAMPS (b840)...
 
@@ -1252,7 +1252,7 @@ void unkch_state::unkch_map(address_map &map)
 }
 
 
-WRITE8_MEMBER(unkch_state::coincount_w)
+void unkch_state::coincount_w(uint8_t data)
 {
 /*
   7654 3210
@@ -1274,7 +1274,7 @@ WRITE8_MEMBER(unkch_state::coincount_w)
 	//popmessage("coin counters: %02x", data);
 }
 
-WRITE8_MEMBER(unkch_state::unkcm_0x02_w)
+void unkch_state::unkcm_0x02_w(uint8_t data)
 {
 /*  bits
   7654 3210
@@ -1304,7 +1304,7 @@ WRITE8_MEMBER(unkch_state::unkcm_0x02_w)
 	m_lamps[5] = BIT(data, 5);  /* Take / Stop 1 */
 }
 
-WRITE8_MEMBER(unkch_state::unkcm_0x03_w)
+void unkch_state::unkcm_0x03_w(uint8_t data)
 {
 	//popmessage("unkcm_0x03_w %02x", data);
 
@@ -8509,19 +8509,19 @@ static GFXDECODE_START( gfx_cm97 )
 GFXDECODE_END
 
 
-WRITE8_MEMBER(wingco_state::system_outputa_w)
+void wingco_state::system_outputa_w(uint8_t data)
 {
 	//popmessage("system_outputa_w %02x",data);
 }
 
 
-WRITE8_MEMBER(wingco_state::system_outputb_w)
+void wingco_state::system_outputb_w(uint8_t data)
 {
 	//popmessage("system_outputb_w %02x",data);
 }
 
 
-WRITE8_MEMBER(wingco_state::system_outputc_w)
+void wingco_state::system_outputc_w(uint8_t data)
 {
 	m_nmi_enable = data & 8;
 	m_vidreg = data & 2;
@@ -8531,12 +8531,12 @@ WRITE8_MEMBER(wingco_state::system_outputc_w)
 		m_maincpu->set_input_line(INPUT_LINE_NMI, CLEAR_LINE);
 }
 
-WRITE8_MEMBER(goldstar_state::ay8910_outputa_w)
+void goldstar_state::ay8910_outputa_w(uint8_t data)
 {
 	//popmessage("ay8910_outputa_w %02x",data);
 }
 
-WRITE8_MEMBER(goldstar_state::ay8910_outputb_w)
+void goldstar_state::ay8910_outputb_w(uint8_t data)
 {
 	//popmessage("ay8910_outputb_w %02x",data);
 }
@@ -9587,6 +9587,13 @@ void goldstar_state::crazybon(machine_config &config)
 	m_maincpu->set_addrmap(AS_IO, &goldstar_state::crazybon_portmap);
 }
 
+void goldstar_state::crazybonb(machine_config &config)
+{
+	pkrmast(config);
+
+	m_maincpu->set_addrmap(AS_OPCODES, &goldstar_state::super972_decrypted_opcodes_map);
+}
+
 void unkch_state::megaline(machine_config &config)
 {
 	/* basic machine hardware */
@@ -9850,6 +9857,27 @@ ROM_START( crazybona )
 
 	ROM_REGION( 0x20000, "gfx2", 0 )
 	ROM_LOAD( "crazy_j3.bin", 0x00000, 0x20000, CRC(e375cd4b) SHA1(68888126ff9743cd589f3426205231bc3a896588) )
+
+	ROM_REGION( 0x10000, "user1", ROMREGION_ERASE00 )
+
+	/* proms taken from cmv4, probably wrong  */
+	ROM_REGION( 0x200, "proms", 0 )
+	ROM_LOAD( "82s129.u84", 0x0000, 0x0100, CRC(0489b760) SHA1(78f8632b17a76335183c5c204cdec856988368b0) BAD_DUMP )
+	ROM_LOAD( "82s129.u70", 0x0100, 0x0100, CRC(21eb5b19) SHA1(9b8425bdb97f11f4855c998c7792c3291fd07470) BAD_DUMP )
+
+	ROM_REGION( 0x100, "proms2", 0 )
+	ROM_LOAD( "82s129.u46", 0x0000, 0x0100, CRC(50ec383b) SHA1(ae95b92bd3946b40134bcdc22708d5c6b0f4c23e) BAD_DUMP )
+ROM_END
+
+ROM_START( crazybonb )
+	ROM_REGION( 0x10000, "maincpu", 0 )
+	ROM_LOAD( "main sub-board 27c512.bin",  0x0000, 0x10000, CRC(1195f0b7) SHA1(bf5f502f5090246f7be605cb588ec889a8127df7) )
+
+	ROM_REGION( 0x20000, "gfx1", 0 ) // tiles
+	ROM_LOAD( "k-4 m27c10001 rom 2.bin", 0x00000,  0x20000, CRC(33f4230b) SHA1(26c5aa4f74b221c58390ae1e223a8e879cafa7ca) )
+
+	ROM_REGION( 0x20000, "gfx2", 0 ) // reels + girl?
+	ROM_LOAD( "i-4 m27c10001 rom 1.bin", 0x00000,  0x20000, CRC(e375cd4b) SHA1(68888126ff9743cd589f3426205231bc3a896588) )
 
 	ROM_REGION( 0x10000, "user1", ROMREGION_ERASE00 )
 
@@ -15367,7 +15395,7 @@ void cmaster_state::init_fb2010()
 	ROM[0x10dc] = 0x00;
 	ROM[0x10dd] = 0x00;
 
-	m_maincpu->space(AS_IO).install_read_handler(0x1e, 0x1e, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x7d>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x1e, 0x1e, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x7d>)));
 }
 
 
@@ -16745,31 +16773,6 @@ ROM_END
 ROM_START( cmtetrsa )
 	ROM_REGION( 0x20000, "maincpu", 0 )
 	ROM_LOAD( "cm89-tetri-9.u81",  0x10000,  0x10000, CRC(75e0c101) SHA1(6dc4f7c43f0f4e21d621f3c42cb1709d6b730c53) )
-/*
-  Need checks and fixes
-
-  3800+ --> 5800+
-  9800+ --> 3800+
-
-*/
-//  ROM_COPY( "maincpu", 0x1c000, 0x0000, 0x1000 )      /* src-dest-size ok */
-//  ROM_COPY( "maincpu", 0x16000, 0x1000, 0x1000 )      /* src-dest-size ok */
-//  ROM_COPY( "maincpu", 0x14000, 0x2000, 0x1000 )      /* src-dest-size ok */
-//  ROM_COPY( "maincpu", 0x1a000, 0x3000, 0x1000 )      /* src-dest-size ok (some calls to high 5xxx appear here, maybe split in 0x800?) */
-//  ROM_COPY( "maincpu", 0x15000, 0x4000, 0x1000 )      /* src-dest-size ok */
-//  ROM_COPY( "maincpu", 0x11000, 0x6000, 0x1000 )      /* src-dest-size ok */
-//  ROM_COPY( "maincpu", 0x13000, 0x8000, 0x1000 )      /* src-dest-size ok */
-
-//  ROM_COPY( "maincpu", 0x17000, 0x5000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x10000, 0x7000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x18000, 0x9000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x19000, 0xa000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x12000, 0xb000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x1b000, 0xc000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x1d000, 0xd000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x1e000, 0xe000, 0x1000 )      /* src-dest-size */
-//  ROM_COPY( "maincpu", 0x1f000, 0xf000, 0x1000 )      /* src-dest-size */
-
 	ROM_COPY( "maincpu", 0x1c000, 0x0000, 0x0800 )      /* src-dest-size */ // #01
 	ROM_COPY( "maincpu", 0x19800, 0x0800, 0x0800 )      /* src-dest-size */ // #02
 	ROM_COPY( "maincpu", 0x16000, 0x1000, 0x0800 )      /* src-dest-size */ // #03
@@ -16779,14 +16782,14 @@ ROM_START( cmtetrsa )
 	ROM_COPY( "maincpu", 0x1a000, 0x3000, 0x0800 )      /* src-dest-size */ // #07
 	ROM_COPY( "maincpu", 0x18800, 0x3800, 0x0800 )      /* src-dest-size */ // #08
 	ROM_COPY( "maincpu", 0x10000, 0x4000, 0x0800 )      /* src-dest-size */ // #09
-	ROM_COPY( "maincpu", 0x15000, 0x4800, 0x0800 )      /* src-dest-size */ // #10
-	ROM_COPY( "maincpu", 0x14800, 0x5000, 0x0800 )      /* src-dest-size */ // #11
+	ROM_COPY( "maincpu", 0x15800, 0x4800, 0x0800 )      /* src-dest-size */ // #10
+	ROM_COPY( "maincpu", 0x13000, 0x5000, 0x0800 )      /* src-dest-size */ // #11
 	ROM_COPY( "maincpu", 0x1a800, 0x5800, 0x0800 )      /* src-dest-size */ // #12
 	ROM_COPY( "maincpu", 0x11000, 0x6000, 0x0800 )      /* src-dest-size */ // #13
 	ROM_COPY( "maincpu", 0x11800, 0x6800, 0x0800 )      /* src-dest-size */ // #14
 	ROM_COPY( "maincpu", 0x1b000, 0x7000, 0x0800 )      /* src-dest-size */ // #15
-	ROM_COPY( "maincpu", 0x1f000, 0x7800, 0x0800 )      /* src-dest-size */ // #16
-	ROM_COPY( "maincpu", 0x1f800, 0x8000, 0x0800 )      /* src-dest-size */ // #17
+	ROM_COPY( "maincpu", 0x16800, 0x7800, 0x0800 )      /* src-dest-size */ // #16
+	ROM_COPY( "maincpu", 0x17000, 0x8000, 0x0800 )      /* src-dest-size */ // #17
 	ROM_COPY( "maincpu", 0x13800, 0x8800, 0x0800 )      /* src-dest-size */ // #18
 	ROM_COPY( "maincpu", 0x19000, 0x9000, 0x0800 )      /* src-dest-size */ // #19
 	ROM_COPY( "maincpu", 0x1b800, 0x9800, 0x0800 )      /* src-dest-size */ // #20
@@ -16794,7 +16797,8 @@ ROM_START( cmtetrsa )
 	ROM_COPY( "maincpu", 0x10800, 0xa800, 0x0800 )      /* src-dest-size */ // #22
 	ROM_COPY( "maincpu", 0x18000, 0xb000, 0x0800 )      /* src-dest-size */ // #23
 	ROM_COPY( "maincpu", 0x12800, 0xb800, 0x0800 )      /* src-dest-size */ // #24
-	ROM_COPY( "maincpu", 0x13000, 0xc000, 0x0800 )      /* src-dest-size */ // #25
+	ROM_COPY( "maincpu", 0x15000, 0xc000, 0x0800 )      /* src-dest-size */ // #25
+	ROM_COPY( "maincpu", 0x14800, 0xc800, 0x0800 )      /* src-dest-size */ // #26
 
 	ROM_REGION( 0x18000, "gfx1", 0 )
 	ROM_LOAD( "cm89-tetri-7.u16", 0x00000,  0x8000, CRC(2f5c94bd) SHA1(d99bcaa788f8abf5c75b29572d53be109b20c4bb) )
@@ -16810,7 +16814,6 @@ ROM_START( cmtetrsa )
 	ROM_REGION( 0x10000, "user1", 0 )
 	ROM_LOAD( "cm89-tetri-8.u53",  0x0000, 0x10000, CRC(e92443d3) SHA1(4b6ca4521841610054165f085ae05510e77af191) )
 
-	/* proms taken from cmv4, probably wrong  */
 	ROM_REGION( 0x200, "proms", 0 )
 	ROM_LOAD( "82s129.u84", 0x0000, 0x0100, CRC(0489b760) SHA1(78f8632b17a76335183c5c204cdec856988368b0) )
 	ROM_LOAD( "82s129.u79", 0x0100, 0x0100, CRC(21eb5b19) SHA1(9b8425bdb97f11f4855c998c7792c3291fd07470) )
@@ -16818,7 +16821,6 @@ ROM_START( cmtetrsa )
 	ROM_REGION( 0x100, "proms2", 0 )
 	ROM_LOAD( "82s129.u46", 0x0000, 0x0100, CRC(50ec383b) SHA1(ae95b92bd3946b40134bcdc22708d5c6b0f4c23e) )
 ROM_END
-
 
 /*
   Tetris + Cherry Master (+K, Canada Version, encrypted)
@@ -17615,6 +17617,49 @@ void goldstar_state::init_pkrmast()
 	}
 }
 
+void goldstar_state::init_crazybonb()
+{
+	uint8_t *rom = memregion("maincpu")->base();
+
+	for (int i = 0; i < 0x10000; i++)
+	{
+		uint8_t x = rom[i];
+
+		switch (i & 0x83)
+		{
+			case 0x00: x = bitswap<8>(x ^ 0x22, 3, 6, 1, 4, 7, 2, 5, 0); break;
+			case 0x01: x = bitswap<8>(x ^ 0x2a, 5, 6, 3, 4, 1, 2, 7, 0); break;
+			case 0x02: x = bitswap<8>(x ^ 0x82, 1, 6, 7, 4, 5, 2, 3, 0); break;
+			case 0x03: x = bitswap<8>(x ^ 0x2a, 3, 6, 1, 4, 7, 2, 5, 0); break;
+			case 0x80: x = bitswap<8>(x ^ 0xa8, 5, 6, 3, 4, 1, 2, 7, 0); break;
+			case 0x81: x = bitswap<8>(x ^ 0x88, 3, 6, 1, 4, 7, 2, 5, 0); break;
+			case 0x82: x = bitswap<8>(x ^ 0x22, 5, 6, 3, 4, 1, 2, 7, 0); break;
+			case 0x83: x = bitswap<8>(x ^ 0x88, 1, 6, 7, 4, 5, 2, 3, 0); break;
+		}
+
+		m_decrypted_opcodes[i] = x;
+	}
+
+	for (int i = 0; i < 0x10000; i++)
+	{
+		uint8_t x = rom[i];
+
+		switch (i & 0x83)
+		{
+			case 0x00: x = bitswap<8>(x ^ 0x80, 1, 6, 7, 4, 5, 2, 3, 0); break;
+			case 0x01: x = bitswap<8>(x ^ 0xa0, 5, 6, 3, 4, 1, 2, 7, 0); break;
+			case 0x02: x = bitswap<8>(x ^ 0x02, 5, 6, 3, 4, 1, 2, 7, 0); break;
+			case 0x03: x = bitswap<8>(x ^ 0xa0, 3, 6, 1, 4, 7, 2, 5, 0); break;
+			case 0x80: x = bitswap<8>(x ^ 0x82, 3, 6, 1, 4, 7, 2, 5, 0); break;
+			case 0x81: x = bitswap<8>(x ^ 0x02, 1, 6, 7, 4, 5, 2, 3, 0); break;
+			case 0x82: x = bitswap<8>(x ^ 0x08, 3, 6, 1, 4, 7, 2, 5, 0); break;
+			case 0x83: x = bitswap<8>(x ^ 0x80, 5, 6, 3, 4, 1, 2, 7, 0); break;
+		}
+
+		rom[i] = x;
+	}
+}
+
 void goldstar_state::init_ladylinrb()
 {
 	uint8_t *rom = memregion("maincpu")->base();
@@ -18378,8 +18423,8 @@ void cmaster_state::init_schery97()
 
 		rom[i] = x;
 	}
-	m_maincpu->space(AS_IO).install_read_handler(0x1d, 0x1d, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xa8>)));
-	m_maincpu->space(AS_IO).install_read_handler(0x2a, 0x2a, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xb4>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x1d, 0x1d, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xa8>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x2a, 0x2a, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xb4>)));
 	/* Oki 6295 at 0x20 */
 }
 
@@ -18401,7 +18446,7 @@ void cmaster_state::init_schery97a()
 	}
 
 
-	m_maincpu->space(AS_IO).install_read_handler(0x16, 0x16, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x38>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x16, 0x16, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x38>)));
 	/* Oki 6295 at 0x20 */
 }
 
@@ -18421,7 +18466,7 @@ void cmaster_state::init_skill98()
 
 		rom[i] = x;
 	}
-	m_maincpu->space(AS_IO).install_read_handler(0x1e, 0x1e, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xea>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x1e, 0x1e, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xea>)));
 	/* Oki 6295 at 0x20 */
 }
 
@@ -18475,7 +18520,7 @@ void cmaster_state::init_nfb96_c1()
 		}
 		rom[i] = x;
 	}
-	m_maincpu->space(AS_IO).install_read_handler(0x31, 0x31, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x68>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x31, 0x31, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x68>)));
 
 }
 
@@ -18495,7 +18540,7 @@ void cmaster_state::init_nfb96_c1_2() // C1 PCB, different CPLD
 		}
 		rom[i] = x;
 	}
-	m_maincpu->space(AS_IO).install_read_handler(0x18, 0x18, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x3a>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x18, 0x18, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x3a>)));
 
 }
 
@@ -18516,7 +18561,7 @@ void cmaster_state::init_nfb96_c2()
 
 		rom[i] = x;
 	}
-	m_maincpu->space(AS_IO).install_read_handler(0x21, 0x21, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x58>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x21, 0x21, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x58>)));
 }
 
 void cmaster_state::init_nfb96_d()
@@ -18536,11 +18581,11 @@ void cmaster_state::init_nfb96_d()
 		rom[i] = x;
 	}
 	// nfb96b needs both of these
-	m_maincpu->space(AS_IO).install_read_handler(0x23, 0x23, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x80>)));
-	m_maincpu->space(AS_IO).install_read_handler(0x5a, 0x5a, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xaa>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x23, 0x23, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x80>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x5a, 0x5a, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xaa>)));
 
 	// csel96b
-	m_maincpu->space(AS_IO).install_read_handler(0x6e, 0x6e, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x96>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x6e, 0x6e, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x96>)));
 
 }
 
@@ -18561,7 +18606,7 @@ void cmaster_state::init_nfb96_dk()
 		}
 		rom[i] = x;
 	}
-	m_maincpu->space(AS_IO).install_read_handler(0x2e, 0x2e, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xbe>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x2e, 0x2e, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xbe>)));
 
 }
 
@@ -18600,8 +18645,8 @@ void cmaster_state::init_rp35()
 		rom[i] = x;
 	}
 
-	m_maincpu->space(AS_IO).install_read_handler(0x5e, 0x5e, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x84>)));
-	m_maincpu->space(AS_IO).install_read_handler(0x36, 0x36, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x90>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x5e, 0x5e, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x84>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x36, 0x36, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x90>)));
 }
 
 void cmaster_state::init_rp36()
@@ -18622,7 +18667,7 @@ void cmaster_state::init_rp36()
 		rom[i] = x;
 	}
 
-	m_maincpu->space(AS_IO).install_read_handler(0x34, 0x34, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xb2>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x34, 0x34, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xb2>)));
 }
 
 void cmaster_state::init_rp36c3()
@@ -18643,7 +18688,7 @@ void cmaster_state::init_rp36c3()
 		rom[i] = x;
 	}
 
-	m_maincpu->space(AS_IO).install_read_handler(0x17, 0x17, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x48>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x17, 0x17, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x48>)));
 }
 
 void cmaster_state::init_rp96sub()  // 95 33 95 33 70 6C 70 6C... XORs and bitswaps seem ok. Stuck at Program Check screen. Unlike the other sets, there aren't unmapped reads where to put the handler.
@@ -18664,7 +18709,7 @@ void cmaster_state::init_rp96sub()  // 95 33 95 33 70 6C 70 6C... XORs and bitsw
 		rom[i] = x;
 	}
 
-//  m_maincpu->space(AS_IO).install_read_handler(0x34, 0x34, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xb2>)));
+//  m_maincpu->space(AS_IO).install_read_handler(0x34, 0x34, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xb2>)));
 }
 
 
@@ -18685,8 +18730,8 @@ void cmaster_state::init_po33()
 
 		rom[i] = x;
 	}
-	m_maincpu->space(AS_IO).install_read_handler(0x32, 0x32, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x74>)));
-	m_maincpu->space(AS_IO).install_read_handler(0x12, 0x12, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0x09>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x32, 0x32, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x74>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x12, 0x12, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0x09>)));
 	/* oki6295 at 0x20 */
 }
 
@@ -18709,8 +18754,8 @@ void cmaster_state::init_match133()
 		rom[i] = x;
 	}
 
-	m_maincpu->space(AS_IO).install_read_handler(0x16, 0x16, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xc7>)));
-	m_maincpu->space(AS_IO).install_read_handler(0x1a, 0x1a, read8_delegate(*this, FUNC(cmaster_state::fixedval_r<0xe4>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x16, 0x16, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xc7>)));
+	m_maincpu->space(AS_IO).install_read_handler(0x1a, 0x1a, read8smo_delegate(*this, FUNC(cmaster_state::fixedval_r<0xe4>)));
 }
 
 
@@ -19252,14 +19297,15 @@ GAME( 200?, ss2001,    0,        ss2001,   cmaster,   cmaster_state,  empty_init
 /* Stealth sets.
    These have hidden games inside that can be switched to avoid inspections, police or whatever purposes)... */
 
-/*    YEAR  NAME        PARENT    MACHINE   INPUT     STATE           INIT          ROT    COMPANY                FULLNAME                                                      FLAGS                     LAYOUT    */
-GAMEL( 198?, cmpacman,  0,        cm,       cmpacman, cmaster_state,  init_cm,      ROT0, "<unknown>",           "Super Pacman (v1.2) + Cherry Master (Corsica, v8.31, set 1)", 0,                        layout_cmpacman ) // need to press K to switch between games...
-GAMEL( 198?, cmpacmana, cmpacman, cm,       cmpacman, cmaster_state,  init_cm,      ROT0, "<unknown>",           "Super Pacman (v1.2) + Cherry Master (Corsica, v8.31, set 2)", 0,                        layout_cmpacman ) // need to press K to switch between games...
-GAMEL( 198?, cmtetris,  0,        cm,       cmtetris, cmaster_state,  init_cm,      ROT0, "<unknown>",           "Tetris + Cherry Master (Corsica, v8.01, set 1)",              0,                        layout_cmpacman ) // need to press K/L to switch between games...
-GAMEL( 198?, cmtetrsa,  0,        cm,       cmtetris, cmaster_state,  init_cm,      ROT0, "<unknown>",           "Tetris + Cherry Master (Corsica, v8.01, set 2)",              MACHINE_NOT_WORKING,      layout_cmpacman ) // seems banked...
-GAMEL( 198?, cmtetrsb,  0,        cm,       cmtetris, cmaster_state,  init_cm,      ROT0, "<unknown>",           "Tetris + Cherry Master (+K, Canada Version, encrypted)",      MACHINE_NOT_WORKING,      layout_cmpacman ) // different Tetris game. press insert to throttle and see the attract running.
-GAMEL( 1997, crazybon,  0,        crazybon, crazybon, goldstar_state, empty_init,   ROT0, "bootleg (Crazy Co.)", "Crazy Bonus 2002 (Ver. 1, set 1)",                            MACHINE_IMPERFECT_COLORS, layout_crazybon ) // Windows ME desktop... but not found the way to switch it.
-GAMEL( 1997, crazybona, crazybon, crazybon, crazybon, goldstar_state, empty_init,   ROT0, "bootleg (Crazy Co.)", "Crazy Bonus 2002 (Ver. 1, set 2)",                            MACHINE_IMPERFECT_COLORS, layout_crazybon )
+/*    YEAR  NAME        PARENT    MACHINE    INPUT     STATE           INIT            ROT   COMPANY                FULLNAME                                                      FLAGS                     LAYOUT    */
+GAMEL( 198?, cmpacman,  0,        cm,        cmpacman, cmaster_state,  init_cm,        ROT0, "<unknown>",           "Super Pacman (v1.2) + Cherry Master (Corsica, v8.31, set 1)", 0,                        layout_cmpacman ) // need to press K to switch between games...
+GAMEL( 198?, cmpacmana, cmpacman, cm,        cmpacman, cmaster_state,  init_cm,        ROT0, "<unknown>",           "Super Pacman (v1.2) + Cherry Master (Corsica, v8.31, set 2)", 0,                        layout_cmpacman ) // need to press K to switch between games...
+GAMEL( 198?, cmtetris,  0,        cm,        cmtetris, cmaster_state,  init_cm,        ROT0, "<unknown>",           "Tetris + Cherry Master (Corsica, v8.01, set 1)",              0,                        layout_cmpacman ) // need to press K/L to switch between games...
+GAMEL( 198?, cmtetrsa,  0,        cm,        cmtetris, cmaster_state,  init_cm,        ROT0, "<unknown>",           "Tetris + Cherry Master (Corsica, v8.01, set 2)",              0,                        layout_cmpacman )
+GAMEL( 198?, cmtetrsb,  0,        cm,        cmtetris, cmaster_state,  init_cm,        ROT0, "<unknown>",           "Tetris + Cherry Master (+K, Canada Version, encrypted)",      MACHINE_NOT_WORKING,      layout_cmpacman ) // different Tetris game. press insert to throttle and see the attract running.
+GAMEL( 1997, crazybon,  0,        crazybon,  crazybon, goldstar_state, empty_init,     ROT0, "bootleg (Crazy Co.)", "Crazy Bonus 2002 (Ver. 1, set 1)",                            MACHINE_IMPERFECT_COLORS, layout_crazybon ) // Windows ME desktop... but not found the way to switch it.
+GAMEL( 1997, crazybona, crazybon, crazybon,  crazybon, goldstar_state, empty_init,     ROT0, "bootleg (Crazy Co.)", "Crazy Bonus 2002 (Ver. 1, set 2)",                            MACHINE_IMPERFECT_COLORS, layout_crazybon )
+GAMEL( 1997, crazybonb, crazybon, crazybonb, pkrmast,  goldstar_state, init_crazybonb, ROT0, "bootleg (TV Games)",  "Crazy Bonus 2002 (Ver. 1, set 3)",                            MACHINE_NOT_WORKING | MACHINE_IMPERFECT_COLORS, layout_crazybon ) // F.B. & POKER 94, VER.1 in NVRAM, decryption seems ok, possibly needs proper memory map
 
 /* other possible stealth sets:
  - cmv4a    ---> see the 1fxx zone. put a bp in 1f9f to see the loop.

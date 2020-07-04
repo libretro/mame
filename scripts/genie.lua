@@ -519,6 +519,11 @@ configuration { "Release", "vs20*" }
 		"NoEditAndContinue",
 		"NoIncrementalLink",
 	}
+	if _OPTIONS["SYMBOLS"] then
+		flags {
+			"Symbols",
+		}
+	end
 
 configuration { "vsllvm" }
 	buildoptions {
@@ -1021,13 +1026,6 @@ if _OPTIONS["MAP"] then
 	end
 end
 
--- On Linux targets link libgcc and libstdc++ statically.  See #137
-if _OPTIONS["targetos"]=="linux" then
-		linkoptions {
-			"-static-libgcc -static-libstdc++"
-		}
-end
-
 
 -- add a basic set of warnings
 	buildoptions {
@@ -1123,6 +1121,16 @@ end
 					"-Wno-pragma-pack" -- clang 6.0 complains when the packing change lifetime is not contained within a header file.
 				}
 			end
+			if ((version < 60000) or (_OPTIONS["targetos"]=="macosx" and (version <= 90000))) then
+				buildoptions {
+					"-Wno-missing-braces" -- std::array brace initialization not fixed until 6.0.0 (https://reviews.llvm.org/rC314838)
+				}
+			end
+			if (_OPTIONS["targetos"]=="macosx" and (version < 80000)) then
+				defines {
+					"TARGET_OS_OSX=1",
+				}
+			end
 		else
 			if (version < 70000) then
 				print("GCC version 7.0 or later needed")
@@ -1141,6 +1149,11 @@ end
 				}
 				buildoptions_cpp {
 					"-Wno-class-memaccess", -- many instances in ImGui and BGFX
+				}
+			end
+			if (version >= 100000) then
+				buildoptions {
+					"-Wno-return-local-addr", -- sqlite3.c in GCC 10
 				}
 			end
 		end
@@ -1198,6 +1211,8 @@ configuration { "asmjs" }
 	}
 	buildoptions_cpp {
 		"-std=c++14",
+		"-s DISABLE_EXCEPTION_CATCHING=2",
+		"-s EXCEPTION_CATCHING_WHITELIST=\"['_ZN15running_machine17start_all_devicesEv','_ZN12cli_frontend7executeEiPPc','_ZN8chd_file11open_commonEb','_ZN8chd_file13read_metadataEjjRNSt3__212basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE','_ZN8chd_file13read_metadataEjjRNSt3__26vectorIhNS0_9allocatorIhEEEE']\"",
 	}
 	linkoptions {
 		"-Wl,--start-group",
