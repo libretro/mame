@@ -55,6 +55,9 @@ public:
 	{
 		pcap_dll = osd::dynamic_module::open({ LIB_NAME });
 
+		if (pcap_dll == nullptr)
+			return false;
+
 		pcap_findalldevs_dl = pcap_dll->bind<pcap_findalldevs_fn>("pcap_findalldevs");
 		pcap_open_live_dl = pcap_dll->bind<pcap_open_live_fn>("pcap_open_live");
 		pcap_next_ex_dl = pcap_dll->bind<pcap_next_ex_fn>("pcap_next_ex");
