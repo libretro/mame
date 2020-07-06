@@ -144,3 +144,8 @@ int osd_getpid(void)
 	return getpid();
 #endif
 }
+
+osd::dynamic_module::ptr osd::dynamic_module::open(std::vector<std::string> &&names)
+{
+  return nullptr;
+}
