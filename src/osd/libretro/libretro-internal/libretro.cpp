@@ -648,7 +648,7 @@ int RLOOP=1;
 void retro_deinit(void)
 {
    printf("RETRO DEINIT\n");
-   //if(retro_load_ok)retro_finish();
+   if(retro_load_ok)retro_finish();
 }
 
 void retro_reset (void)
@@ -699,7 +699,7 @@ void retro_run (void)
       NEWGAME_FROM_OSD=0;
    }
 
-	//if(retro_pause==0)retro_main_loop();
+	if(retro_pause==0)retro_main_loop();
 	RLOOP=1;
 
 //FIXME: re-add way to handle OGL
