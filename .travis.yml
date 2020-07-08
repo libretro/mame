@@ -40,6 +40,6 @@ before_install:
   - "if [ ${TRAVIS_OS_NAME:-'linux'} = 'osx' ]; then brew install sdl2 sdl2_ttf; fi"
 branches:
   only:
-    - travis
+    - master
 notifications:
   email: false
