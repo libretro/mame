@@ -25,7 +25,7 @@ before_install:
 
 branches:
   only:
-    - 0.222/clang8-fix
+    - master
 
 notifications:
   email: false
