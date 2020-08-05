@@ -23,3 +23,7 @@ jobs:
         title: macOS x86_64
         files: |
           mame_libretro.zip
+    - uses: actions/upload-artifact@v2
+      with:
+        name: mame libretro
+        path: mame_libretro.zip
