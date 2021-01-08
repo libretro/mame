@@ -7,7 +7,6 @@
 # Core definitions
 .core-defs:
   variables:
-    MAKEFILE_PATH: .
     MAKEFILE: Makefile.libretro
     CORENAME: mame
 
