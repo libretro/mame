@@ -57,6 +57,11 @@ stages:
   - build-shared
   - build-static
 
+cache: &global_cache
+  untracked: true
+  paths:
+    - build/
+
 ################################### DESKTOPS #################################
 # # Windows 64-bit
 # libretro-build-windows-x64:
@@ -75,6 +80,11 @@ libretro-build-linux-x64:
   extends:
     - .libretro-linux-x64-make-default
     - .core-defs
+  cache:
+    <<: *global_cache
+    key: "$CI_COMMIT_REF_SLUG-linux-x64"
+  artifacts:
+    expire_in: 1 day
     
 # # MacOS 64-bit
 # libretro-build-osx-x64:
