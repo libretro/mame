@@ -66,10 +66,15 @@ cache: &global_cache
 
 ################################### DESKTOPS #################################
 # # Windows 64-bit
-# libretro-build-windows-x64:
-#   extends:
-#     - .libretro-windows-x64-mingw-make-default
-#     - .core-defs
+libretro-build-windows-x64:
+  extends:
+    - .libretro-windows-x64-mingw-make-default
+    - .core-defs
+  cache:
+    <<: *global_cache
+    key: "$CI_COMMIT_REF_SLUG-windows-x64"
+  artifacts:
+    expire_in: 1 day
 
 # # Windows 32-bit
 # libretro-build-windows-i686:
