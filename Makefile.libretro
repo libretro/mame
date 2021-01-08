@@ -169,6 +169,8 @@ endif
 #
 ###########################################################################
 
+undefine MAKEFILE
+
 all: build
 
 build:
@@ -179,18 +181,5 @@ vs2015:
 
 clean:
 	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS) clean
-
-download_github_%:
-	@rm -f mame_libretro.zip
-	@echo "Cheking latest release for tag $*"
-	@curl -s -S -L -O -z mame_libretro* '$(GITHUB_REPO)/releases/download/$*/mame_libretro.zip'
-	@if [ -f mame_libretro.zip ]; then \
-		echo "Extracting"; \
-		unzip -qqo mame_libretro.zip; \
-		rm -f mame_libretro.zip; \
-		touch mame_libretro*; \
-	else \
-		echo "Up to date";\
-	fi
 
 .PHONY: all build clean vs2015
