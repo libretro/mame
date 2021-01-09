@@ -25,7 +25,9 @@ UNAME_S = $(shell uname -s)
 UNAME_M = $(shell uname -m)
 ifeq ($(platform),)
 	platform = unix
-	ifeq ($(UNAME_S),)
+	ifeq ($(MSYSTEM),MINGW64)
+		platform = win
+	else ifeq ($(UNAME_S),)
 		platform = win
 	else ifneq ($(findstring MINGW,$(UNAME_S)),)
 		platform = win
@@ -169,7 +171,9 @@ endif
 #
 ###########################################################################
 
-undefine MAKEFILE
+# MAKEFILE is set by libretro gitlab-ci, but it confuses GENIE. So, unset it.
+# undefine <var> is not supported on make 3.81 (used by macosx).
+MAKEFILE :=
 
 all: build
 
