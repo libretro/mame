@@ -39,7 +39,7 @@ ifeq ($(platform),)
 		platform = win
 	else ifneq ($(findstring MSYS,$(UNAME_S)),)
 		platform = win
-	else ifneq ($(findstring Darwin,$(UNAME_S)),)
+	else ifneq ($(findstring Darwin,$(UNAME_S),)
 		platform = osx
 	else ifneq ($(findstring win,$(UNAME_S)),)
 		platform = win
@@ -101,7 +101,7 @@ endif
 
 PLATFLAGS =
 
-ifeq ($(platform),win*)
+ifeq ($(findstring win,$(platform),))
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
 		PLATFLAGS += MINGW64="$(MINGW64)"
