@@ -23,23 +23,15 @@ GITHUB_REPO ?= https://github.com/libretro/mame/
 
 UNAME_S = $(shell uname -s)
 UNAME_S = $(shell uname -m)
-
-$(info $$UNAME_S is [${UNAME_S}])
-$(info $$UNAME_S is [${UNAME_S}])
-$(info $$platform is [${platform}])
-$(info $$MSYSTEM is [${MSYSTEM}])
-
 ifeq ($(platform),)
 	platform = unix
-	ifeq ($(MSYSTEM),MINGW64)
-		platform = win
-	else ifeq ($(UNAME_S),)
+	ifeq ($(UNAME_S),)
 		platform = win
 	else ifneq ($(findstring MINGW,$(UNAME_S)),)
 		platform = win
 	else ifneq ($(findstring MSYS,$(UNAME_S)),)
 		platform = win
-	else ifneq ($(findstring Darwin,$(UNAME_S),)
+	else ifneq ($(findstring Darwin,$(UNAME_S)),)
 		platform = osx
 	else ifneq ($(findstring win,$(UNAME_S)),)
 		platform = win
@@ -101,7 +93,7 @@ endif
 
 PLATFLAGS =
 
-ifeq ($(findstring win,$(platform)),)
+ifneq ($(findstring win,$(platform)),)
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
 		PLATFLAGS += MINGW64="$(MINGW64)"
