@@ -21,10 +21,8 @@ GITHUB_REPO ?= https://github.com/libretro/mame/
 #
 ###########################################################################
 
-$(info $$ARCH is [${ARCH}])
-
 UNAME_S = $(shell uname -s)
-UNAME_S = $(shell uname -m)
+UNAME_M = $(shell uname -m)
 ifeq ($(platform),)
 	platform = unix
 	ifeq ($(UNAME_S),)
@@ -56,6 +54,11 @@ ifeq ($(LIBRETRO_CPU),)
 		LIBRETRO_CPU = $(UNAME_M)
 	endif
 endif
+
+$(info $$ARCH is [${ARCH}])
+$(info $$UNAME_S is [${UNAME_S}])
+$(info $$UNAME_M is [${UNAME_M}])
+$(info $$LIBRETRO_CPU is [${LIBRETRO_CPU}])
 
 ###########################################################################
 #
