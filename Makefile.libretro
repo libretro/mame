@@ -101,7 +101,7 @@ endif
 
 PLATFLAGS =
 
-ifeq ($(findstring win,$(platform),))
+ifeq ($(findstring win,$(platform)),)
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
 		PLATFLAGS += MINGW64="$(MINGW64)"
