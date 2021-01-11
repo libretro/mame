@@ -83,26 +83,26 @@ libretro-build-windows-x64:
 #     - .core-defs
 
 # Linux 64-bit
-libretro-build-linux-x64:
-  extends:
-    - .libretro-linux-x64-make-default
-    - .core-defs
-  cache:
-    <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-linux-x64"
-  artifacts:
-    expire_in: 1 day
+# libretro-build-linux-x64:
+#   extends:
+#     - .libretro-linux-x64-make-default
+#     - .core-defs
+#   cache:
+#     <<: *global_cache
+#     key: "$CI_COMMIT_REF_SLUG-linux-x64"
+#   artifacts:
+#     expire_in: 1 day
     
 # # MacOS 64-bit
-libretro-build-osx-x64:
-  extends:
-    - .libretro-osx-x64-make-default
-    - .core-defs
-  cache:
-    <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-osx-x64"
-  artifacts:
-    expire_in: 1 day
+# libretro-build-osx-x64:
+#   extends:
+#     - .libretro-osx-x64-make-default
+#     - .core-defs
+#   cache:
+#     <<: *global_cache
+#     key: "$CI_COMMIT_REF_SLUG-osx-x64"
+#   artifacts:
+#     expire_in: 1 day
     
 ################################### CELLULAR #################################
 # # Android ARMv7a
