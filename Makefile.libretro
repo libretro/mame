@@ -23,10 +23,14 @@ GITHUB_REPO ?= https://github.com/libretro/mame/
 
 UNAME_S = $(shell uname -s)
 UNAME_M = $(shell uname -m)
+
+echo $(MSYSTEM)
+echo $(UNAME_S)
+echo $(UNAME_M)
+echo ($platform)
+
 ifeq ($(platform),)
 	platform = unix
-	echo $(MSYSTEM)
-	echo $(UNAME_S)
 	ifeq ($(MSYSTEM),MINGW64)
 		platform = win
 	else ifeq ($(UNAME_S),)
