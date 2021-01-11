@@ -97,7 +97,7 @@ ifneq ($(findstring win,$(platform)),)
 	endif
 	OVERRIDE_CC ?= cc
 	OVERRIDE_CCX ?= ccx
-	PLATFLAGS += TARGETOS="windows" OVERRIDE_CC="$(OVERRIDE_CC" OVERRIDE_CCX="$(OVERRIDE_CCX)"
+	PLATFLAGS += TARGETOS="windows" OVERRIDE_CC="$(OVERRIDE_CC)" OVERRIDE_CCX="$(OVERRIDE_CCX)"
 endif
 
 ifeq ($(platform),android-arm)
