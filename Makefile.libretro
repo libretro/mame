@@ -22,11 +22,10 @@ GITHUB_REPO ?= https://github.com/libretro/mame/
 ###########################################################################
 
 UNAME_S = $(shell uname -s)
-UNAME_M = $(shell uname -m)
+UNAME_S = $(shell uname -m)
 
-echo $(UNAME_S)
-echo $(UNAME_M)
-echo ($platform)
+$(info $$UNAME_S is [${var}])
+$(info $$UNAME_S is [${var}])
 
 ifeq ($(platform),)
 	platform = unix
