@@ -61,7 +61,6 @@ $(info $$UNAME_M is [${UNAME_M}])
 $(info $$LIBRETRO_CPU is [${LIBRETRO_CPU}])
 $(info $$OS is [${OS}])
 
-
 ###########################################################################
 #
 #   BUILD FLAGS
@@ -96,6 +95,7 @@ ifneq ($(findstring win,$(platform)),)
 		MINGW32 ?= /mingw32
 		PLATFLAGS += MINGW32="$(MINGW32)"
 	endif
+	PLATFLAGS += TARGETOS="windows"
 endif
 
 ifeq ($(platform),android-arm)
