@@ -94,6 +94,7 @@ ifneq ($(findstring win,$(platform)),)
 		MINGW32 ?= /mingw32
 		PLATFLAGS += MINGW32="$(MINGW32)"
 	endif
+	TARGETOS := "windows"
 endif
 
 ifeq ($(platform),android-arm)
