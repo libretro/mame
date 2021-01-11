@@ -24,7 +24,6 @@ GITHUB_REPO ?= https://github.com/libretro/mame/
 UNAME_S = $(shell uname -s)
 UNAME_M = $(shell uname -m)
 
-echo $(MSYSTEM)
 echo $(UNAME_S)
 echo $(UNAME_M)
 echo ($platform)
