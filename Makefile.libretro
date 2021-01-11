@@ -95,7 +95,9 @@ ifneq ($(findstring win,$(platform)),)
 		MINGW32 ?= /mingw32
 		PLATFLAGS += MINGW32="$(MINGW32)"
 	endif
-	PLATFLAGS += TARGETOS="windows"
+	OVERRIDE_CC ?= cc
+	OVERRIDE_CCX ?= ccx
+	PLATFLAGS += TARGETOS="windows" OVERRIDE_CC="$(OVERRIDE_CC" OVERRIDE_CCX="$(OVERRIDE_CCX)"
 endif
 
 ifeq ($(platform),android-arm)
