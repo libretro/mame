@@ -30,9 +30,9 @@ include:
     file: '/osx-x64.yml'
 
   ################################## CELLULAR ################################
-  # # Android
-  # - project: 'libretro-infrastructure/ci-templates'
-  #   file: '/android-jni.yml'
+  # Android
+  - project: 'tcamargo/ci-templates'
+    file: '/android-make.yml'
 
   ################################## CONSOLES ################################
   # # Nintendo 3DS
@@ -66,15 +66,15 @@ cache: &global_cache
 
 ################################### DESKTOPS #################################
 # # Windows 64-bit
-libretro-build-windows-x64:
-  extends:
-    - .libretro-windows-x64-mingw-make-default
-    - .core-defs
-  cache:
-    <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-windows-x64"
-  artifacts:
-    expire_in: 1 day
+# libretro-build-windows-x64:
+#   extends:
+#     - .libretro-windows-x64-mingw-make-default
+#     - .core-defs
+#   cache:
+#     <<: *global_cache
+#     key: "$CI_COMMIT_REF_SLUG-windows-x64"
+#   artifacts:
+#     expire_in: 1 day
 
 # # Windows 32-bit
 # libretro-build-windows-i686:
@@ -111,11 +111,16 @@ libretro-build-windows-x64:
 #     - .libretro-android-jni-armeabi-v7a
 #     - .core-defs
 
-# # Android ARMv8a
-# android-arm64-v8a:
-#   extends:
-#     - .libretro-android-jni-arm64-v8a
-#     - .core-defs
+# Android ARMv8a
+android-arm64-v8a:
+  extends:
+    - .libretro-android-make-arm64-v8a
+    - .core-defs
+  cache:
+    <<: *global_cache
+    key: "$CI_COMMIT_REF_SLUG-android-arm64-v8a"
+  artifacts:
+    expire_in: 1 day
 
 # # Android 64-bit x86
 # android-x86_64:
