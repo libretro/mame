@@ -21,6 +21,8 @@ GITHUB_REPO ?= https://github.com/libretro/mame/
 #
 ###########################################################################
 
+$(info $$ARCH is [${ARCH}])
+
 UNAME_S = $(shell uname -s)
 UNAME_S = $(shell uname -m)
 ifeq ($(platform),)
@@ -53,18 +55,6 @@ ifeq ($(LIBRETRO_CPU),)
 	else
 		LIBRETRO_CPU = $(UNAME_M)
 	endif
-endif
-
-###########################################################################
-#
-#   LIBRETRO PLATFORM-SPECIFIC CONFIGURATION
-#
-#   Settings needed to get MAME to build everywhere we build it
-#
-###########################################################################
-
-ifeq (,$(findstring x86,$(LIBRETRO_CPU)))
-	FORCE_DRC_C_BACKEND = 1
 endif
 
 ###########################################################################
@@ -102,6 +92,7 @@ ifneq ($(findstring win,$(platform)),)
 		PLATFLAGS += MINGW32="$(MINGW32)"
 	endif
 endif
+
 ifeq ($(platform),android-arm)
 	ANDROID_NDK_LLVM ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
 	ANDROID_NDK_ARM  ?= /opt/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
@@ -126,8 +117,9 @@ ifeq ($(platform),android-arm64)
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
-	PTR64 := 
+	PTR64 :=
 endif
+
 ifeq ($(platform),osx)
   PLATFLAGS += DONT_USE_NETWORK=1
 endif
