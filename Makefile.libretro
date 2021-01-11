@@ -26,6 +26,7 @@ UNAME_S = $(shell uname -m)
 
 $(info $$UNAME_S is [${var}])
 $(info $$UNAME_S is [${var}])
+$(info $$platform is [${var}])
 
 ifeq ($(platform),)
 	platform = unix
