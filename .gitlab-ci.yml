@@ -101,6 +101,10 @@ android-armeabi-v7a:
   extends:
     - .libretro-android-make-armeabi-v7a:
     - .core-defs
+  variables:
+    TARGET:    mame
+    SUBTARGET: arcade
+    CORENAME: mamearcade
   cache:
     <<: *global_cache
     key: "$CI_COMMIT_REF_SLUG-android-armeabi-v7a"
