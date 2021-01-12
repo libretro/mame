@@ -65,6 +65,8 @@ $(info $$NDK_ROOT is [${NDK_ROOT}])
 $(info $$ANDROID_NDK_ROOT is [${ANDROID_NDK_ROOT}])
 $(info $$ANDROID_NDK_ARM64 is [${ANDROID_NDK_ARM64}])
 
+
+
 ###########################################################################
 #
 #   BUILD FLAGS
