@@ -60,6 +60,8 @@ $(info $$UNAME_S is [${UNAME_S}])
 $(info $$UNAME_M is [${UNAME_M}])
 $(info $$LIBRETRO_CPU is [${LIBRETRO_CPU}])
 $(info $$OS is [${OS}])
+$(info $$platform is [${platform}])
+$(info $$NDK_ROOT is [${NDK_ROOT}])
 
 ###########################################################################
 #
