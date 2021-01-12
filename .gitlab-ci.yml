@@ -57,16 +57,16 @@ cache: &global_cache
   paths:
     - build/
 
-# # Windows 64-bit
-# libretro-build-windows-x64:
-#   extends:
-#     - .libretro-windows-x64-mingw-make-default
-#     - .core-defs
-#   cache:
-#     <<: *global_cache
-#     key: "$CI_COMMIT_REF_SLUG-windows-x64"
-#   artifacts:
-#     expire_in: 1 day
+# Windows 64-bit
+libretro-build-windows-x64:
+  extends:
+    - .libretro-windows-x64-mingw-make-default
+    - .core-defs
+  cache:
+    <<: *global_cache
+    key: "$CI_COMMIT_REF_SLUG-windows-x64"
+  artifacts:
+    expire_in: 1 day
 
 # # Windows 32-bit
 # libretro-build-windows-i686:
@@ -74,27 +74,27 @@ cache: &global_cache
 #     - .libretro-windows-i686-mingw-make-default
 #     - .core-defs
 
-# # Linux 64-bit
-# libretro-build-linux-x64:
-#   extends:
-#     - .libretro-linux-x64-make-default
-#     - .core-defs
-#   cache:
-#     <<: *global_cache
-#     key: "$CI_COMMIT_REF_SLUG-linux-x64"
-#   artifacts:
-#     expire_in: 1 day
+# Linux 64-bit
+libretro-build-linux-x64:
+  extends:
+    - .libretro-linux-x64-make-default
+    - .core-defs
+  cache:
+    <<: *global_cache
+    key: "$CI_COMMIT_REF_SLUG-linux-x64"
+  artifacts:
+    expire_in: 1 day
     
-# # MacOS 64-bit
-# libretro-build-osx-x64:
-#   extends:
-#     - .libretro-osx-x64-make-default
-#     - .core-defs
-#   cache:
-#     <<: *global_cache
-#     key: "$CI_COMMIT_REF_SLUG-osx-x64"
-#   artifacts:
-#     expire_in: 1 day
+# MacOS 64-bit
+libretro-build-osx-x64:
+  extends:
+    - .libretro-osx-x64-make-default
+    - .core-defs
+  cache:
+    <<: *global_cache
+    key: "$CI_COMMIT_REF_SLUG-osx-x64"
+  artifacts:
+    expire_in: 1 day
 
 # Android ARMv7a
 android-armeabi-v7a:
