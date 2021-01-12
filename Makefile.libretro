@@ -62,6 +62,8 @@ $(info $$LIBRETRO_CPU is [${LIBRETRO_CPU}])
 $(info $$OS is [${OS}])
 $(info $$platform is [${platform}])
 $(info $$NDK_ROOT is [${NDK_ROOT}])
+$(info $$ANDROID_NDK_ROOT is [${ANDROID_NDK_ROOT}])
+$(info $$ANDROID_NDK_ARM64 is [${ANDROID_NDK_ARM64}])
 
 ###########################################################################
 #
