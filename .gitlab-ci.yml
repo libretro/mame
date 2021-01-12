@@ -1,9 +1,5 @@
 # DESCRIPTION: GitLab CI/CD for libRetro (NOT FOR GitLab-proper)
 
-##############################################################################
-################################# BOILERPLATE ################################
-##############################################################################
-
 # Core definitions
 .core-defs:
   variables:
@@ -12,7 +8,6 @@
 
 # Core definitions
 include:
-  ################################## DESKTOPS ################################
   # Windows 64-bit
   - project: 'libretro-infrastructure/ci-templates'
     file: '/windows-x64-mingw.yml'
@@ -29,12 +24,10 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/osx-x64.yml'
 
-  ################################## CELLULAR ################################
   # Android
   - project: 'tcamargo/ci-templates'
     file: '/android-make.yml'
 
-  ################################## CONSOLES ################################
   # # Nintendo 3DS
   # - project: 'libretro-infrastructure/ci-templates'
   #   file: '/ctr-static.yml'
@@ -64,7 +57,6 @@ cache: &global_cache
   paths:
     - build/
 
-################################### DESKTOPS #################################
 # # Windows 64-bit
 # libretro-build-windows-x64:
 #   extends:
@@ -103,13 +95,17 @@ cache: &global_cache
 #     key: "$CI_COMMIT_REF_SLUG-osx-x64"
 #   artifacts:
 #     expire_in: 1 day
-    
-################################### CELLULAR #################################
+
 # # Android ARMv7a
 # android-armeabi-v7a:
 #   extends:
-#     - .libretro-android-jni-armeabi-v7a
-#     - .core-defs 
+#     - .libretro-android-make-armeabi-v7a:
+#     - .core-defs
+#   cache:
+#     <<: *global_cache
+#     key: "$CI_COMMIT_REF_SLUG-android-armeabi-v7a"
+#   artifacts:
+#     expire_in: 1 day
 
 # Android ARMv8a
 android-arm64-v8a:
