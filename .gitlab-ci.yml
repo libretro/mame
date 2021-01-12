@@ -25,7 +25,7 @@ include:
     file: '/osx-x64.yml'
 
   # Android
-  - project: 'tcamargo/ci-templates'
+  - project: 'libretro-infrastructure/ci-templates'
     file: '/android-make.yml'
 
   # # Nintendo 3DS
