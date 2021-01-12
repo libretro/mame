@@ -99,7 +99,7 @@ cache: &global_cache
 # Android ARMv7a
 android-armeabi-v7a:
   extends:
-    - .libretro-android-make-armeabi-v7a:
+    - .libretro-android-make-armeabi-v7a
     - .core-defs
   variables:
     TARGET:    mame
