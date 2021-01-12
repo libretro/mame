@@ -20,7 +20,7 @@ include:
   - project: 'libretro-infrastructure/ci-templates'
     file: '/linux-x64.yml'
 
-  # # MacOS 64-bit
+  # MacOS 64-bit
   - project: 'libretro-infrastructure/ci-templates'
     file: '/osx-x64.yml'
 
@@ -96,16 +96,16 @@ cache: &global_cache
 #   artifacts:
 #     expire_in: 1 day
 
-# # Android ARMv7a
-# android-armeabi-v7a:
-#   extends:
-#     - .libretro-android-make-armeabi-v7a:
-#     - .core-defs
-#   cache:
-#     <<: *global_cache
-#     key: "$CI_COMMIT_REF_SLUG-android-armeabi-v7a"
-#   artifacts:
-#     expire_in: 1 day
+# Android ARMv7a
+android-armeabi-v7a:
+  extends:
+    - .libretro-android-make-armeabi-v7a:
+    - .core-defs
+  cache:
+    <<: *global_cache
+    key: "$CI_COMMIT_REF_SLUG-android-armeabi-v7a"
+  artifacts:
+    expire_in: 1 day
 
 # Android ARMv8a
 android-arm64-v8a:
