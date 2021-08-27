@@ -337,7 +337,7 @@ void mame_machine_manager::mmchange()
       if (retro_global_machine->exit_pending())m_options.set_system_name("");
    }
 
-   if (!started_empty || (system == &GAME_NAME(___empty)) )
+   if (mfirst == 0)
       retro_finish();
 
 }
