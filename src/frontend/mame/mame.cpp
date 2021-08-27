@@ -337,9 +337,8 @@ void mame_machine_manager::mmchange()
       if (retro_global_machine->exit_pending())m_options.set_system_name("");
    }
 
-   //FIXME RETRO
-   //if (retro_global_machine->exit_pending() && (!started_empty || (system == &GAME_NAME(___empty))))
-   //exit_pending = true;
+   if (!started_empty || (system == &GAME_NAME(___empty)) )
+      retro_finish();
 
 }
  
