@@ -59,7 +59,7 @@ end
 	addprojectflags()
 	flags {
 		"NoManifest",
-		"Symbols", -- always include minimum symbols for executables
+		--"Symbols", -- always include minimum symbols for executables, or maybe not, since it wastes space and needs stripping after
 	}
 
 	if _OPTIONS["SYMBOLS"] then

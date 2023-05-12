@@ -2,7 +2,7 @@
 VERBOSE ?= 1
 RETRO ?= 1
 NOWERROR ?= 1
-CONFIG ?= libretro"
+CONFIG ?= libretro
 NO_USE_MIDI ?= 1
 NO_USE_PORTAUDIO ?= 1
 PTR64 ?= 1
@@ -104,6 +104,10 @@ ifneq ($(findstring win,$(platform)),)
 	CXX ?= cxx
 	AR  ?= ar
 	PLATFLAGS += TARGETOS="windows" OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)" "AR=$(AR)"
+	LLD := $(shell command -v lld 2> /dev/null)
+	ifneq ($(LLD),)
+		BUILDFLAGS += LDOPTS="-fuse-ld=lld"
+	endif
 	ifneq ($(WINDRES),)
 		PLATFLAGS += WINDRES="$(WINDRES)"
 	endif
