@@ -82,8 +82,6 @@ unsigned int videoBuffer[4096*3072];
 #define LOG_PIXEL_BYTES 2*1
 #endif
 
-retro_video_refresh_t video_cb = NULL;
-retro_environment_t environ_cb = NULL;
 
 /* FIXME: re-add way to handle OGL  */
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
@@ -129,17 +127,69 @@ static void extract_directory(char *buf, const char *path, size_t size)
       buf[0] = '\0';
 }
 
+retro_environment_t environ_cb = NULL;
 retro_input_state_t input_state_cb = NULL;
+retro_input_poll_t input_poll_cb = NULL;
+retro_video_refresh_t video_cb = NULL;
 retro_audio_sample_batch_t audio_batch_cb = NULL;
-
-void retro_set_audio_sample_batch(retro_audio_sample_batch_t cb) { audio_batch_cb = cb; }
-/*static*/ retro_input_poll_t input_poll_cb;
 
 void retro_set_input_state(retro_input_state_t cb) { input_state_cb = cb; }
 void retro_set_input_poll(retro_input_poll_t cb) { input_poll_cb = cb; }
-
 void retro_set_video_refresh(retro_video_refresh_t cb) { video_cb = cb; }
 void retro_set_audio_sample(retro_audio_sample_t cb) { }
+void retro_set_audio_sample_batch(retro_audio_sample_batch_t cb) { audio_batch_cb = cb; }
+
+/* Audio output buffer */
+static struct {
+   int16_t *data;
+   int32_t size;
+   int32_t capacity;
+} output_audio_buffer = {NULL, 0, 0};
+
+static void ensure_output_audio_buffer_capacity(int32_t capacity)
+{
+   if (capacity <= output_audio_buffer.capacity) {
+      return;
+   }
+
+   output_audio_buffer.data = (int16_t*)realloc(output_audio_buffer.data, capacity * sizeof(*output_audio_buffer.data));
+   output_audio_buffer.capacity = capacity;
+   log_cb(RETRO_LOG_DEBUG, "Output audio buffer capacity set to %d\n", capacity);
+}
+
+static void init_output_audio_buffer(int32_t capacity)
+{
+   output_audio_buffer.data = NULL;
+   output_audio_buffer.size = 0;
+   output_audio_buffer.capacity = 0;
+   ensure_output_audio_buffer_capacity(capacity);
+}
+
+static void free_output_audio_buffer()
+{
+   free(output_audio_buffer.data);
+   output_audio_buffer.data = NULL;
+   output_audio_buffer.size = 0;
+   output_audio_buffer.capacity = 0;
+}
+
+static void upload_output_audio_buffer()
+{
+   audio_batch_cb(output_audio_buffer.data, output_audio_buffer.size / 2);
+   output_audio_buffer.size = 0;
+}
+
+void retro_audio_queue(const int16_t *data, int32_t samples)
+{
+   if ((samples < 1) || retro_pause)
+      return;
+
+   if (output_audio_buffer.capacity - output_audio_buffer.size < samples)
+      ensure_output_audio_buffer_capacity((output_audio_buffer.capacity + samples) * 1.5);
+
+   memcpy(output_audio_buffer.data + output_audio_buffer.size, data, samples * sizeof(*output_audio_buffer.data));
+   output_audio_buffer.size += samples;
+}
 
 void retro_set_environment(retro_environment_t cb)
 {
@@ -659,6 +709,8 @@ void retro_init (void)
          log_cb(RETRO_LOG_ERROR, "pixel format not supported\n");
       exit(0);
    }
+
+   init_output_audio_buffer(2048);
 }
 
 extern void retro_finish();
@@ -667,8 +719,9 @@ int RLOOP=1;
 
 void retro_deinit(void)
 {
-   printf("RETRO DEINIT\n");
-   if(retro_load_ok)retro_finish();
+   free_output_audio_buffer();
+   if (retro_load_ok)
+      retro_finish();
 }
 
 void retro_reset (void)
@@ -718,6 +771,8 @@ void retro_run (void)
    else
       video_cb(NULL, fb_width, fb_height, fb_pitch << LOG_PIXEL_BYTES);
 #endif
+   upload_output_audio_buffer();
+
 	const screen_device *primary_screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
 
 	if (primary_screen) // this was causing a buffer overflow with this check

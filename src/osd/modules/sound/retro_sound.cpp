@@ -18,10 +18,7 @@
 
 #include "libretro-internal/libretro.h"
 
-#define INT16 int16_t
-
-extern int retro_pause;
-extern retro_audio_sample_batch_t audio_batch_cb;
+extern void retro_audio_queue(const int16_t *data, int32_t samples);
 
 //============================================================
 //  DEBUGGING
@@ -46,13 +43,12 @@ public:
 
 	// sound_module
 
-	virtual void update_audio_stream(bool is_throttled, const INT16 *buffer, int samples_this_frame) {
-	    if (retro_pause != -1)
-	        audio_batch_cb(buffer, samples_this_frame);
+	virtual void update_audio_stream(bool is_throttled, const int16_t *buffer, int samples_this_frame)
+	{
+		retro_audio_queue(buffer, samples_this_frame * 2);
 	}
 
 	virtual void set_mastervolume(int attenuation) {}
 };
-
 
 MODULE_DEFINITION(SOUND_RETRO, sound_retro)

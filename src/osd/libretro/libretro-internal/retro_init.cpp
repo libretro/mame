@@ -336,8 +336,6 @@ static void Set_Default_Option(void)
    Add_Option("0");
    Add_Option("-joystick_saturation");
    Add_Option("1");
-   Add_Option("-samplerate");
-   Add_Option("48000");
 
    if(cheats_enable)
       Add_Option("-cheat");
