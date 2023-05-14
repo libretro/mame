@@ -9,7 +9,9 @@
 
 // only for strconv.h
 #if defined(RETROMAME_WIN32)
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #endif
 
@@ -29,7 +31,7 @@
 //============================================================
 // retro_output
 //============================================================
-static struct retro_message frontend_message;
+
 class retro_output : public osd_output
 {
 public:
@@ -40,10 +42,12 @@ public:
 
 		util::stream_format(buffer, args);
 		
-		switch(channel) {
+		switch (channel)
+		{
 			case OSD_OUTPUT_CHANNEL_ERROR:
 				lvl = RETRO_LOG_ERROR;
 				break;
+			default:
 			case OSD_OUTPUT_CHANNEL_INFO:
 			case OSD_OUTPUT_CHANNEL_LOG:
 			case OSD_OUTPUT_CHANNEL_COUNT:
@@ -307,10 +311,7 @@ void retro_osd_interface::init(running_machine &machine)
 
 	osd_num_processors = 0;
 
-
 	osd_common_t::init_subsystems();
-
- 	retro_switch_to_main_thread();
 
 	if (options().oslog())
 	{
@@ -349,6 +350,5 @@ void retro_osd_interface::customize_input_type_list(std::vector<input_type_entry
 			default:
 				break;
 		}
-
 
 }

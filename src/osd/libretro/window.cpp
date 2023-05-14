@@ -8,7 +8,9 @@
 //============================================================
 
 #ifdef SDLMAME_WIN32
+#ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
+#endif
 #include <windows.h>
 #endif
 
@@ -206,26 +208,22 @@ void retro_window_info::show_pointer()
 //  sdlwindow_resize
 //============================================================
 extern int NEWGAME_FROM_OSD;
-static int first_time=1;
+static int first_time = 1;
 
 void retro_window_info::resize(int32_t width, int32_t height)
 {
 	osd_dim cd = get_size();
 
-	printf("resize-it %f\n",m_monitor->aspect());
-
-	if (width != cd.width() || height != cd.height() ||first_time==1)
+	if (width != cd.width() || height != cd.height() || first_time == 1)
 	{
-//		SDL_SetWindowSize(platform_window<SDL_Window*>(), width, height);
-
-         fb_width=width; 
-         fb_height=height;
-         fb_pitch=width;
-         retro_aspect =m_monitor->pixel_aspect();// m_monitor->/*pixel_*/aspect();//(float)width/(float)height;
-	 NEWGAME_FROM_OSD  = 1;
-	 first_time =0;
-		renderer().notify_changed();
-	}
+	    fb_width     = width;
+	    fb_height    = height;
+	    fb_pitch     = width;
+	    retro_aspect = m_monitor->pixel_aspect();
+	    NEWGAME_FROM_OSD = 1;
+	    first_time = 0;
+	    renderer().notify_changed();
+    }
 }
 
 
@@ -235,7 +233,6 @@ void retro_window_info::resize(int32_t width, int32_t height)
 
 void retro_window_info::notify_changed()
 {
-	printf("notify\n");
 	renderer().notify_changed();
 }
 
@@ -394,30 +391,35 @@ int retro_window_info::window_init()
 
 	result = complete_create();
 	
-	oldfps=retro_fps;
+	oldfps = retro_fps;
 
-    const screen_device *primary_screen = screen_device_enumerator(machine().root_device()).first();
-
-    if (primary_screen != nullptr){
-        retro_fps = primary_screen->frame_period().as_hz();
+	const screen_device *primary_screen = screen_device_enumerator(machine().root_device()).first();
+	if (primary_screen != nullptr)
+	{
+		retro_fps = primary_screen->frame_period().as_hz();
 	}
 
-	if(alternate_renderer==false){
-	//test correct aspect
+	if (!alternate_renderer)
+	{
+		//test correct aspect
 		retro_aspect = target()->current_view().effective_aspect();
 
-		if(target()->orientation() & ORIENTATION_SWAP_XY)retro_aspect=1.0/retro_aspect;
+		if (target()->orientation() & ORIENTATION_SWAP_XY)
+		    retro_aspect = 1.0 / retro_aspect;
 
 		int tempwidth, tempheight;
 		target()->compute_minimum_size(tempwidth, tempheight);
-		fb_width=tempwidth;
-		fb_pitch=tempwidth;
-		fb_height=tempheight;
+		fb_width  = tempwidth;
+		fb_pitch  = tempwidth;
+		fb_height = tempheight;
 
-		if(fb_width>max_width || fb_height>max_height || oldfps!=retro_fps)
+		if (
+				   fb_width  > max_width
+				|| fb_height > max_height
+				|| oldfps   != retro_fps)
 			NEWGAME_FROM_OSD = 1;
-		else NEWGAME_FROM_OSD = 2;
-
+		else
+			NEWGAME_FROM_OSD = 2;
 	}
 
 	// handle error conditions
@@ -494,43 +496,40 @@ void retro_window_info::update()
 	{
 		int tempwidth, tempheight;
 
-		if(alternate_renderer==false){
+		if (!alternate_renderer)
+		{
 			view_aspect = target()->current_view().effective_aspect();
-			if(target()->orientation() & ORIENTATION_SWAP_XY)view_aspect=1.0f/view_aspect;
+			if (target()->orientation() & ORIENTATION_SWAP_XY)
+			    view_aspect = 1.0f / view_aspect;
 		}
 
 		// see if the games video mode has changed
 		target()->compute_minimum_size(tempwidth, tempheight);
-		if (osd_dim(tempwidth, tempheight) != m_minimum_dim || view_aspect!=retro_aspect)
+		if (osd_dim(tempwidth, tempheight) != m_minimum_dim || view_aspect != retro_aspect)
 		{
 			m_minimum_dim = osd_dim(tempwidth, tempheight);
 
-
-			if(alternate_renderer==false)
+			if (!alternate_renderer)
 			{
-
-				fb_width=tempwidth;
-				fb_pitch=tempwidth;
-				fb_height=tempheight;
-
-				//if(video_changed==true)
-				{
-				//retro_aspect = (float)tempwidth/(float)tempheight;
+				fb_width  = tempwidth;
+				fb_pitch  = tempwidth;
+				fb_height = tempheight;
 
 				retro_aspect = target()->current_view().effective_aspect();
-				if(target()->orientation() & ORIENTATION_SWAP_XY)retro_aspect=1.0/retro_aspect;
-				view_aspect =retro_aspect;
+				if (target()->orientation() & ORIENTATION_SWAP_XY)
+				    retro_aspect = 1.0f / retro_aspect;
+
+				view_aspect = retro_aspect;
 				monitor()->refresh();
 				monitor()->update_resolution(tempwidth, tempheight);
 				//osd_printf_info("(%dx%d)as:%f rot:%d %d\n",tempwidth, tempheight,retro_aspect,target()->orientation(),target()->orientation() & ORIENTATION_SWAP_XY);
 
-				if(fb_width>max_width || fb_height>max_height)
+				if (fb_width>max_width || fb_height>max_height)
 					NEWGAME_FROM_OSD = 1;
-				else (NEWGAME_FROM_OSD==1)?NEWGAME_FROM_OSD = 1:NEWGAME_FROM_OSD = 2;
+				else
+					NEWGAME_FROM_OSD = (NEWGAME_FROM_OSD == 1) ? 1 : 2;
 
-					video_changed=false;
-				}
-
+				video_changed = false;
 			}
 
 			if (!this->m_fullscreen)
@@ -561,8 +560,8 @@ void retro_window_info::update()
 			// and redraw now
 
 			// Some configurations require events to be polled in the worker thread
-//FIXME RETRO
-		//	downcast< retro_osd_interface& >(machine().osd()).process_events_buf();
+			//FIXME RETRO
+			//	downcast< retro_osd_interface& >(machine().osd()).process_events_buf();
 
 			// Check whether window has vector screens
 
@@ -655,7 +654,7 @@ int retro_window_info::complete_create()
 	 */
 	osd_printf_verbose("Enter sdl_info::create\n");
 
-		m_extra_flags = 0;
+	m_extra_flags = 0;
 
 
 #if 0
@@ -937,13 +936,7 @@ osd_dim retro_window_info::get_min_bounds(int constrain)
 
 osd_dim retro_window_info::get_size()
 {
-	int w=0; int h=0;
-//	SDL_GetWindowSize(platform_window<SDL_Window*>(), &w, &h);
-
-         w=fb_width; 
-         h=fb_height;
-
-	return osd_dim(w,h);
+	return osd_dim(fb_width, fb_height);
 }
 
 

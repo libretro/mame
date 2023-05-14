@@ -7,6 +7,10 @@
 #define RETRO_MAX_BUTTONS 16
 #endif
 
+#ifndef USE_XINPUT
+#define USE_XINPUT 0
+#endif
+
 #define HAVE_RGB32
 //FIXME: re-add way to handle 16/32 bit
 #if (!defined(HAVE_OPENGL) && !defined(HAVE_RGB32)) || (!defined(HAVE_OPENGLES) && !defined(HAVE_RGB32))
@@ -52,18 +56,17 @@ enum
 };
 
 extern int NEWGAME_FROM_OSD;
-
+extern int retro_pause;
 extern char g_rom_dir[1024];
 extern const char *retro_save_directory;
 extern const char *retro_system_directory;
 extern const char *retro_content_directory;
-extern int retro_pause;
 
+extern int  lightgun_mode;
+extern int  lightgun_offscreen_mode;
 extern bool experimental_cmdline;
 extern bool hide_gameinfo;
 extern bool mouse_enable;
-extern int  lightgun_mode;
-extern int  lightgun_offscreen_mode;
 extern bool cheats_enable;
 extern bool alternate_renderer;
 extern bool boot_to_osd_enable;
@@ -97,8 +100,6 @@ extern unsigned short retrokbd_state[RETROK_LAST];
 
 extern char mediaType[10];
 
-extern bool nobuffer_enable;
-
 extern int mame_reset;
 
 extern int ui_ipt_pushchar;
@@ -118,8 +119,6 @@ extern retro_log_printf_t log_cb;
 extern retro_environment_t environ_cb;
 extern retro_input_state_t input_state_cb;
 extern retro_input_poll_t input_poll_cb;
-
-void retro_switch_to_main_thread(void);
 
 void retro_frame_draw_enable(bool enable);
 

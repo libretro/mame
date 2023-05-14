@@ -1392,8 +1392,8 @@ extern int RLOOP;
 extern int ENDEXEC;
 extern int retro_pause;
 
-void running_machine::retro_machineexit(){
-
+void running_machine::retro_machineexit()
+{
 	// and out via the exit phase
 	m_current_phase = machine_phase::EXIT;
 
@@ -1402,26 +1402,24 @@ void running_machine::retro_machineexit(){
 	nvram_save();
 	m_configuration->save_settings();
 	call_notifiers(MACHINE_NOTIFY_EXIT);
-	printf("retro exit machine\n");
+
 	util::archive_file::cache_clear();
 
 	m_logfile.reset();
 }
 
-void running_machine::retro_loop(){
-
+void running_machine::retro_loop()
+{
 	// get most recent input now 
 	m_manager.osd().input_update();
 	// perform tasks for this frame
 	call_notifiers(MACHINE_NOTIFY_FRAME);
 
-	while (RLOOP==1) {
-
+	while (RLOOP == 1)
+	{
 		// execute CPUs if not paused
 		if (!m_paused)
-		{
 			m_scheduler.timeslice();
-		}
 		// otherwise, just pump video updates through
 		else
 			m_video->frame_update();
@@ -1429,11 +1427,10 @@ void running_machine::retro_loop(){
 		// handle save/load
 		if (m_saveload_schedule != saveload_schedule::NONE)
 			handle_saveload();
-
 	}
 
-	if( (m_hard_reset_pending || m_exit_pending) && m_saveload_schedule == saveload_schedule::NONE){
-
+	if ((m_hard_reset_pending || m_exit_pending) && m_saveload_schedule == saveload_schedule::NONE)
+	{
 	 	// and out via the exit phase
 		m_current_phase = machine_phase::EXIT;
 
@@ -1449,8 +1446,7 @@ void running_machine::retro_loop(){
 
 		m_logfile.reset();
 
-		ENDEXEC=1;
+		ENDEXEC = 1;
 	}
-
 }
 #endif

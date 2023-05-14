@@ -201,7 +201,9 @@ void retro_osd_interface::extract_video_config()
 	stemp = options().video();
 	if (strcmp(stemp, "auto") == 0)
 	{
-#if (defined SDLMAME_MACOSX || defined SDLMAME_WIN32)
+#if 1
+		stemp = "soft";
+#elif (defined SDLMAME_MACOSX || defined SDLMAME_WIN32)
 		stemp = "opengl";
 #elif (defined __STEAMLINK__)
 		stemp = "bgfx";
@@ -209,6 +211,7 @@ void retro_osd_interface::extract_video_config()
 		stemp = "soft";
 #endif
 	}
+
 	if (strcmp(stemp, RETROOPTVAL_SOFT) == 0)
 		video_config.mode = VIDEO_MODE_SOFT;
 	else if (strcmp(stemp, OSDOPTVAL_NONE) == 0)
@@ -219,7 +222,6 @@ void retro_osd_interface::extract_video_config()
 		if (!emulator_info::standalone() && options().seconds_to_run() == 0)
 			osd_printf_warning("Warning: -video none doesn't make much sense without -seconds_to_run\n");
 	}
-
 	else
 	{
 		osd_printf_warning("Invalid video value %s; reverting to software\n", stemp);
