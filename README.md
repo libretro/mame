@@ -9,6 +9,15 @@ To build libretro MAME core from source you need to use `Makefile.libretro` make
 make -f Makefile.libretro
 ```
 
+
+For faster building after the initial makefile creation:
+
+```
+make -f Makefile.libretro REGENIE=0
+```
+
+For Windows install `lld` for much faster linking.
+
 --------
 
 # **MAME** #

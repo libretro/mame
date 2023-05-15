@@ -107,6 +107,10 @@ int premake_execute(lua_State* L, int argc, const char** argv)
 	/* Parse the command line arguments */
 	int z = process_arguments(L, argc, argv);
 
+	/* Skip doing the scripts every single time */
+	if (!strcmp(getenv("REGENIE"), "0"))
+		return z;
+
 	/* Run the built-in Premake scripts */
 	if (z == OKAY)  z = load_builtin_scripts(L);
 
