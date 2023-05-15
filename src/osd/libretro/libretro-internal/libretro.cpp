@@ -192,51 +192,49 @@ void retro_set_environment(retro_environment_t cb)
    sprintf(option_mouse, "%s_%s", core, "mouse_enable");
    sprintf(option_lightgun, "%s_%s", core, "lightgun_mode");
    sprintf(option_lightgun_offscreen, "%s_%s", core, "lightgun_offscreen_mode");
-   sprintf(option_cheats, "%s_%s", core, "cheats_enable");
-   sprintf(option_overclock, "%s_%s", core, "cpu_overclock");
-   sprintf(option_renderer,"%s_%s",core,"alternate_renderer");
-   sprintf(option_osd,"%s_%s",core,"boot_to_osd");
-   sprintf(option_bios,"%s_%s",core,"boot_to_bios");
-   sprintf(option_cli,"%s_%s",core,"boot_from_cli");
-   sprintf(option_softlist,"%s_%s",core,"softlists_enable");
-   sprintf(option_softlist_media,"%s_%s",core,"softlists_auto_media");
-   sprintf(option_media,"%s_%s",core,"media_type");
-   sprintf(option_read_config,"%s_%s",core,"read_config");
-   sprintf(option_write_config,"%s_%s",core,"write_config");
-   sprintf(option_auto_save,"%s_%s",core,"auto_save");
-   sprintf(option_saves,"%s_%s",core,"saves");
-   sprintf(option_throttle,"%s_%s",core,"throttle");
-   sprintf(option_res,"%s_%s",core,"altres");
    sprintf(option_buttons_profiles, "%s_%s", core, "buttons_profiles");
-   sprintf(option_mame_paths, "%s_%s", core, "mame_paths_enable");
    sprintf(option_mame_4way, "%s_%s", core, "mame_4way_enable");
+   sprintf(option_renderer, "%s_%s", core, "alternate_renderer");
+   sprintf(option_res, "%s_%s", core, "altres");
+   sprintf(option_overclock, "%s_%s", core, "cpu_overclock");
+   sprintf(option_cheats, "%s_%s", core, "cheats_enable");
+   sprintf(option_throttle, "%s_%s", core, "throttle");
+   sprintf(option_bios, "%s_%s", core, "boot_to_bios");
+   sprintf(option_osd, "%s_%s", core, "boot_to_osd");
+   sprintf(option_cli, "%s_%s", core, "boot_from_cli");
+   sprintf(option_read_config, "%s_%s", core, "read_config");
+   sprintf(option_write_config, "%s_%s", core, "write_config");
+   sprintf(option_mame_paths, "%s_%s", core, "mame_paths_enable");
+   sprintf(option_saves, "%s_%s", core, "saves");
+   sprintf(option_auto_save, "%s_%s", core, "auto_save");
+   sprintf(option_softlist, "%s_%s", core, "softlists_enable");
+   sprintf(option_softlist_media, "%s_%s", core, "softlists_auto_media");
+   sprintf(option_media, "%s_%s", core, "media_type");
 
-   static const struct retro_variable vars[] = {
-    { option_read_config, "Read configuration; disabled|enabled" },
-    { option_write_config, "Write configuration; disabled|enabled" },
-    { option_saves, "Save state naming; game|system" },
-    { option_auto_save, "Auto save/load states; disabled|enabled" },
-    { option_mouse, "Enable in-game mouse; disabled|enabled" },
-    { option_lightgun, "Lightgun mode; none|touchscreen|lightgun" },
-    { option_lightgun_offscreen, "Lightgun offscreen position; free|fixed (top left)|fixed (bottom right)" },
-    { option_buttons_profiles, "Profile Buttons according to games (Restart); enabled|disabled" },
-    { option_throttle, "Enable throttle; disabled|enabled" },
-    { option_cheats, "Enable cheats; disabled|enabled" },
-    { option_overclock, "Main CPU Overclock; default|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150" },
-    { option_renderer, "Alternate render method; disabled|enabled" },
-
-    { option_softlist, "Enable softlists; enabled|disabled" },
-    { option_softlist_media, "Softlist automatic media type; enabled|disabled" },
-    { option_media, "Media type; rom|cart|flop|cdrm|cass|hard|serl|prin" },
-    { option_bios, "Boot to BIOS; disabled|enabled" },
-
-    { option_osd, "Boot to OSD; disabled|enabled" },
-    { option_cli, "Boot from CLI; disabled|enabled" },
-    { option_res, "Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
-    { option_mame_paths, "MAME INI Paths; disabled|enabled" },
-
-    { option_mame_4way, "MAME Joystick 4-way simulation; disabled|4way|strict|qbert"},
-    { NULL, NULL },
+   static const struct retro_variable vars[] =
+   {
+      { option_mouse, "Enable Mouse; disabled|enabled" },
+      { option_lightgun, "Lightgun Mode; none|touchscreen|lightgun" },
+      { option_lightgun_offscreen, "Lightgun Offscreen Position; free|fixed (top left)|fixed (bottom right)" },
+      { option_buttons_profiles, "Profile Buttons Per Game; enabled|disabled" },
+      { option_mame_4way, "MAME Joystick 4-way Simulation; disabled|4way|strict|qbert"},
+      { option_renderer, "Alternate Render; disabled|enabled" },
+      { option_res, "Alternate Render Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
+      { option_overclock, "Main CPU Overclock; default|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150" },
+      { option_cheats, "Enable Cheats; disabled|enabled" },
+      { option_throttle, "Enable Throttle; disabled|enabled" },
+      { option_bios, "Boot to BIOS; disabled|enabled" },
+      { option_osd, "Boot to OSD; disabled|enabled" },
+      { option_cli, "Boot from CLI; disabled|enabled" },
+      { option_read_config, "Read Configuration; disabled|enabled" },
+      { option_write_config, "Write Configuration; disabled|enabled" },
+      { option_mame_paths, "MAME INI Paths; disabled|enabled" },
+      { option_saves, "Save State Naming; game|system" },
+      { option_auto_save, "Auto Save/Load States; disabled|enabled" },
+      { option_softlist, "Enable Softlists; enabled|disabled" },
+      { option_softlist_media, "Softlist Automatic Media Type; enabled|disabled" },
+      { option_media, "Media Type; rom|cart|flop|cdrm|cass|hard|serl|prin" },
+      { NULL, NULL },
    };
 
    environ_cb = cb;
