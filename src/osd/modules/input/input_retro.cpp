@@ -875,7 +875,7 @@ public:
 
 	virtual void input_init(running_machine &machine) override
 	{
-		auto &devinfo = devicelist().create_device<retro_keyboard_device>(machine, "Retro Keyboard 1", "Retro Keyboard 1", *this);
+		auto &devinfo = devicelist().create_device<retro_keyboard_device>(machine, "RetroKeyboard0", "RetroKeyboard0", *this);
 
 		int i;
    		for(i = 0; i < RETROK_LAST; i++){
@@ -969,7 +969,7 @@ public:
 		
 		for(i = 0; i < 8; i++)
 		{
-		   sprintf(defname, "Retro mouse%d", i);
+		   sprintf(defname, "RetroMouse%d", i);
 		   
 		   auto &devinfo = devicelist().create_device<retro_mouse_device>(machine, defname, defname, *this);
 
@@ -1217,7 +1217,7 @@ public:
 		
 		for(i = 0; i < 8; i++)
 		{
-		   sprintf(defname, "Retro lightgun%d", i);
+		   sprintf(defname, "RetroLightgun%d", i);
 
 		   auto &devinfo = devicelist().create_device<retro_lightgun_device>(machine, defname, defname, *this);
 
