@@ -522,9 +522,8 @@ void retro_window_info::update()
 				view_aspect = retro_aspect;
 				monitor()->refresh();
 				monitor()->update_resolution(tempwidth, tempheight);
-				//osd_printf_info("(%dx%d)as:%f rot:%d %d\n",tempwidth, tempheight,retro_aspect,target()->orientation(),target()->orientation() & ORIENTATION_SWAP_XY);
 
-				if (fb_width>max_width || fb_height>max_height)
+				if (fb_width > max_width || fb_height > max_height)
 					NEWGAME_FROM_OSD = 1;
 				else
 					NEWGAME_FROM_OSD = (NEWGAME_FROM_OSD == 1) ? 1 : 2;

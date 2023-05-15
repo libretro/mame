@@ -211,14 +211,14 @@ int mmain(int argc, char *argv[])
 #endif
 
 	{
-		retro_global_osd =  new retro_osd_interface(retro_global_options);
+		retro_global_osd = new retro_osd_interface(retro_global_options);
 
 		retro_output retrooutput;
 		osd_output::push(&retrooutput);
 
 		retro_global_osd->register_options();
 
-		res =  emulator_info::start_frontend(retro_global_options, *retro_global_osd,args);
+		res = emulator_info::start_frontend(retro_global_options, *retro_global_osd,args);
 		
 		osd_output::pop(&retrooutput);
 		

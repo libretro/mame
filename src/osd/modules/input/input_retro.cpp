@@ -635,7 +635,7 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
 	     int mouse_m[8];
          int16_t mouse_x[8];
          int16_t mouse_y[8];
-         //printf("mouseneable=%d\n",mouse_enable);
+
          if (!mouse_enable)
             return;
 
@@ -732,7 +732,6 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
             mbM[i]=0;
          }
    }
-	      //printf("vm(%d,%d) mc(%d,%d) mr(%d,%d)\n",vmx,vmy,mouse_x[0],mouse_y[0],mouseLX[0],mouseLY[0]);
 }
 
 void retro_osd_interface::process_lightgun_state(running_machine &machine)

@@ -355,7 +355,8 @@ void mame_machine_manager::mmchange()
    }
    else
    {
-      if (retro_global_machine->exit_pending())m_options.set_system_name("");
+      if (retro_global_machine->exit_pending())
+         m_options.set_system_name("");
    }
 
    //FIXME RETRO

@@ -84,6 +84,8 @@ extern bool buttons_profiles;
 extern bool mame_paths_enable;
 extern bool mame_4way_enable;
 extern char mame_4way_map[256];
+extern char joystick_deadzone[8];
+extern char joystick_saturation[8];
 
 extern bool res_43;
 extern bool video_changed;

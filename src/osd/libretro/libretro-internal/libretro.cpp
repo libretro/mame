@@ -64,6 +64,8 @@ static char option_buttons_profiles[50];
 static char option_mame_paths[50];
 static char option_mame_4way[50];
 static char option_res[50];
+static char option_joystick_deadzone[50];
+static char option_joystick_saturation[50];
 
 const char *retro_save_directory;
 const char *retro_system_directory;
@@ -193,6 +195,8 @@ void retro_set_environment(retro_environment_t cb)
    sprintf(option_lightgun, "%s_%s", core, "lightgun_mode");
    sprintf(option_lightgun_offscreen, "%s_%s", core, "lightgun_offscreen_mode");
    sprintf(option_buttons_profiles, "%s_%s", core, "buttons_profiles");
+   sprintf(option_joystick_deadzone, "%s_%s", core, "joystick_deadzone");
+   sprintf(option_joystick_saturation, "%s_%s", core, "joystick_saturation");
    sprintf(option_mame_4way, "%s_%s", core, "mame_4way_enable");
    sprintf(option_renderer, "%s_%s", core, "alternate_renderer");
    sprintf(option_res, "%s_%s", core, "altres");
@@ -217,7 +221,9 @@ void retro_set_environment(retro_environment_t cb)
       { option_lightgun, "Lightgun Mode; none|touchscreen|lightgun" },
       { option_lightgun_offscreen, "Lightgun Offscreen Position; free|fixed (top left)|fixed (bottom right)" },
       { option_buttons_profiles, "Profile Buttons Per Game; enabled|disabled" },
-      { option_mame_4way, "MAME Joystick 4-way Simulation; disabled|4way|strict|qbert"},
+      { option_joystick_deadzone, "Joystick Deadzone; 0.20|0.0|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
+      { option_joystick_saturation, "Joystick Saturation; 1.00|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
+      { option_mame_4way, "Joystick 4-way Simulation; disabled|4way|strict|qbert"},
       { option_renderer, "Alternate Render; disabled|enabled" },
       { option_res, "Alternate Render Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
       { option_overclock, "Main CPU Overclock; default|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150" },
@@ -322,6 +328,28 @@ static void check_variables(void)
          buttons_profiles = true;
    }
 
+   var.key   = option_joystick_deadzone;
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      strcpy(joystick_deadzone, var.value);
+
+      if (mame_machine_manager::instance() && mame_machine_manager::instance()->machine())
+         mame_machine_manager::instance()->machine()->options().set_value(OPTION_JOYSTICK_DEADZONE, joystick_deadzone, OPTION_PRIORITY_MAXIMUM);
+   }
+
+   var.key   = option_joystick_saturation;
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      strcpy(joystick_saturation, var.value);
+
+      if (mame_machine_manager::instance() && mame_machine_manager::instance()->machine())
+         mame_machine_manager::instance()->machine()->options().set_value(OPTION_JOYSTICK_SATURATION, joystick_saturation, OPTION_PRIORITY_MAXIMUM);
+   }
+
    var.key   = option_throttle;
    var.value = NULL;
 
@@ -354,7 +382,7 @@ static void check_variables(void)
          if (pch)
             fb_height = strtoul(pch, NULL, 0);
 
-         retro_aspect = (float)fb_width/(float)fb_height;
+         retro_aspect = (float)fb_width / (float)fb_height;
 
          if ((int)(fb_width/4) == (int)(fb_height/3))
             res_43 = true;
@@ -513,7 +541,6 @@ static void check_variables(void)
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
-      log_cb(RETRO_LOG_DEBUG, "Joystick map: %s\n", var.value);
       mame_4way_enable = true;
       if (!strcmp(var.value, "disabled"))
          mame_4way_enable = false;
@@ -542,7 +569,7 @@ void retro_get_system_info(struct retro_system_info *info)
    info->block_extract    = true;
 }
 
-void update_geometry()
+void update_geometry(void)
 {
    struct retro_system_av_info system_av_info;
    system_av_info.geometry.base_width   = fb_width;
@@ -553,11 +580,8 @@ void update_geometry()
 
 void retro_get_system_av_info(struct retro_system_av_info *info)
 {
-   check_variables();
-
    info->geometry.base_width   = fb_width;
    info->geometry.base_height  = fb_height;
-
    info->geometry.max_width    = fb_width;
    info->geometry.max_height   = fb_height;
    max_width                   = fb_width;
@@ -580,7 +604,7 @@ static void fallback_log(enum retro_log_level level, const char *fmt, ...)
    va_end(va);
 }
 
-void retro_init (void)
+void retro_init(void)
 {
    const char *system_dir  = NULL;
    const char *content_dir = NULL;
@@ -773,7 +797,7 @@ bool retro_load_game(const struct retro_game_info *info)
 
    extract_basename(basename, info->path, sizeof(basename));
    extract_directory(g_rom_dir, info->path, sizeof(g_rom_dir));
-   strcpy(RPATH,info->path);
+   strcpy(RPATH, info->path);
 
    bool updated = false;
 

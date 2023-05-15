@@ -64,6 +64,8 @@ bool buttons_profiles = true;
 bool mame_paths_enable = false;
 bool mame_4way_enable = false;
 char mame_4way_map[256];
+char joystick_deadzone[8];
+char joystick_saturation[8];
 
 bool res_43 = false;
 bool video_changed = false;
@@ -214,7 +216,7 @@ static int parseParentPath(char* path, char* parentPath)
    return 1;
 }
 
-static int getGameInfo(char* gameName, int* rotation, int* driverIndex,bool *Arcade)
+static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *Arcade)
 {
    int gameFound = 0;
    int num = driver_list::find(gameName);
@@ -228,11 +230,11 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex,bool *Arc
          *Arcade = true;
          log_cb(RETRO_LOG_DEBUG, "System type: ARCADE\n");
       }
-      else if(driver_list::driver(num).flags& MACHINE_TYPE_CONSOLE)
+      else if (driver_list::driver(num).flags& MACHINE_TYPE_CONSOLE)
       {
          log_cb(RETRO_LOG_DEBUG, "System type: CONSOLE\n");
       }
-      else if(driver_list::driver(num).flags& MACHINE_TYPE_COMPUTER)
+      else if (driver_list::driver(num).flags& MACHINE_TYPE_COMPUTER)
       {
          log_cb(RETRO_LOG_DEBUG, "System type: COMPUTER\n");
       }
@@ -240,10 +242,6 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex,bool *Arc
 
       log_cb(RETRO_LOG_INFO, "Game name: %s\n", driver_list::driver(num).name);
       log_cb(RETRO_LOG_INFO, "Game description: %s\n", driver_list::driver(num).type.fullname());
-   }
-   else
-   {
-      log_cb(RETRO_LOG_WARN, "Driver %s not found %i\n", gameName, num);
    }
 
    return gameFound;
@@ -312,23 +310,19 @@ static void Set_Default_Option(void)
 
    Add_Option(core);
 
-   if(throttle_enable)
-      Add_Option("-throttle");
-   else
-      Add_Option("-nothrottle");
-
    Add_Option("-joystick");
    Add_Option("-joystick_deadzone");
-   Add_Option("0");
+   Add_Option(joystick_deadzone);
    Add_Option("-joystick_saturation");
-   Add_Option("1");
+   Add_Option(joystick_saturation);
 
-   if(cheats_enable)
-      Add_Option("-cheat");
-   else
-      Add_Option("-nocheat");
+   if (mame_4way_enable)
+   {
+      Add_Option("-joystick_map");
+      Add_Option(mame_4way_map);
+   }
 
-   if(mouse_enable)
+   if (mouse_enable)
    {
       Add_Option("-mouse");
       Add_Option("-multimouse");
@@ -336,34 +330,38 @@ static void Set_Default_Option(void)
    else
       Add_Option("-nomouse");
 
-   if ( lightgun_mode != RETRO_SETTING_LIGHTGUN_MODE_DISABLED )
+   if (lightgun_mode != RETRO_SETTING_LIGHTGUN_MODE_DISABLED)
       Add_Option("-lightgun");
    else
       Add_Option("-nolightgun");
 
-   if(write_config_enable)
+   if (throttle_enable)
+      Add_Option("-throttle");
+   else
+      Add_Option("-nothrottle");
+
+   if (cheats_enable)
+      Add_Option("-cheat");
+   else
+      Add_Option("-nocheat");
+
+   if (write_config_enable)
       Add_Option("-writeconfig");
 
-   if(read_config_enable)
+   if (read_config_enable)
       Add_Option("-readconfig");
    else
       Add_Option("-noreadconfig");
 
-   if(auto_save_enable)
+   if (auto_save_enable)
       Add_Option("-autosave");
 
-   if(game_specific_saves_enable)
+   if (game_specific_saves_enable)
    {
       char option[50];
       Add_Option("-statename");
       snprintf(option, sizeof(option), "%%g/%s", MgameName);
       Add_Option(option);
-   }
-
-   if(mame_4way_enable)
-   {
-      Add_Option("-joystick_map");
-      Add_Option(mame_4way_map);
    }
 }
 
@@ -422,7 +420,7 @@ static int execute_game(char* path)
    /* Find if the driver exists for MgameName.
     * If not, check if a driver exists for MsystemName.
     * Otherwise, exit. */
-   if (getGameInfo(MgameName, &gameRot, &driverIndex,&arcade) == 0)
+   if (getGameInfo(MgameName, &gameRot, &driverIndex, &arcade) == 0)
    {
       log_cb(RETRO_LOG_ERROR, "Driver not found: %s\n", MgameName);
       if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade) == 0)
@@ -433,9 +431,9 @@ static int execute_game(char* path)
    }
 
    /* Handle case where Arcade game exists and game on a System also. */
-   if(arcade == true)
+   if (arcade == true)
    {
-      log_cb(RETRO_LOG_ERROR, "System not found: %s\n", MsystemName);
+      log_cb(RETRO_LOG_DEBUG, "System not found: %s\n", MsystemName);
 
       // test system
       if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade) != 0)
@@ -466,7 +464,7 @@ static int execute_game(char* path)
 
    Set_Default_Option();
 
-   if(!mame_paths_enable)
+   if (!mame_paths_enable)
       Set_Path_Option();
 
    /* useless ? */
@@ -483,7 +481,7 @@ static int execute_game(char* path)
 
    Add_Option((char*)("-rompath"));
 
-   if(!boot_to_osd_enable)
+   if (!boot_to_osd_enable)
    {
       if (retro_system_directory)
          snprintf(tmp_dir, sizeof(tmp_dir), "%s;%s%c%s%c%s;%s%c%s%c%s",
@@ -494,14 +492,14 @@ static int execute_game(char* path)
          snprintf(tmp_dir, sizeof(tmp_dir), "%s", MgamePath);
       Add_Option((char*)(tmp_dir));
 
-      if(softlist_enable)
+      if (softlist_enable)
       {
-         if(!arcade)
+         if (!arcade)
          {
             Add_Option(MsystemName);
-            if(!boot_to_bios_enable)
+            if (!boot_to_bios_enable)
             {
-               if(!softlist_auto)
+               if (!softlist_auto)
                   Add_Option((char*)mediaType);
                Add_Option((char*)MgameName);
             }
