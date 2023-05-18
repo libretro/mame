@@ -689,13 +689,14 @@ void retro_init(void)
    #undef input_descriptor_macro
    environ_cb(RETRO_ENVIRONMENT_SET_INPUT_DESCRIPTORS, input_descriptors);
 
+   memset(videoBuffer, 0, sizeof(videoBuffer));
    init_output_audio_buffer(2048);
 }
 
 extern void retro_finish();
 extern void retro_main_loop();
 int RLOOP = 1;
-int first_run = 1;
+bool first_run = true;
 
 void retro_deinit(void)
 {
@@ -722,6 +723,13 @@ void retro_run(void)
    if (!retro_pause)
       retro_main_loop();
    RLOOP = 1;
+
+   if (first_run)
+   {
+      /* Skip drawing the first frame due to a gray border */
+      first_run       = false;
+      draw_this_frame = false;
+   }
 
 //FIXME: re-add way to handle OGL
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
@@ -769,12 +777,6 @@ bool retro_load_game(const struct retro_game_info *info)
 
    check_variables();
 
-//FIXME: re-add way to handle 16/32 bit
-#ifdef M16B
-   memset(videoBuffer, 0, 4096*3072*2);
-#else
-   memset(videoBuffer, 0, 4096*3072*2*2);
-#endif
 
 //FIXME: re-add way to handle OGL
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
