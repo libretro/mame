@@ -13,7 +13,7 @@ make -f Makefile.libretro
 For faster building after the initial makefile creation:
 
 ```
-make -f Makefile.libretro REGENIE=0
+make -f Makefile.libretro PREMAKE=0
 ```
 
 For Windows install `lld` for much faster linking.
