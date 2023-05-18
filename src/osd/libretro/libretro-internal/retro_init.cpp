@@ -36,7 +36,6 @@ char slash = '\\';
 char slash = '/';
 #endif
 
-
 /* Args for experimental_commandline */
 static char ARGUV[32][1024];
 static unsigned char ARGUC=0;
@@ -67,13 +66,8 @@ char mame_4way_map[256];
 char joystick_deadzone[8];
 char joystick_saturation[8];
 
-bool res_43 = false;
-bool video_changed = false;
 // emu flags
-static int tate = 0;
-static int screenRot = 0;
-int vertical,orient;
-static bool arcade=false;
+static bool arcade = false;
 static int FirstTimeUpdate = 1;
 
 // rom file name and path
@@ -89,7 +83,6 @@ static char gameName[1024];
 static char XARGV[64][1024];
 static const char* xargv_cmd[64];
 int PARAMCOUNT=0;
-
 
 // path configuration
 #define NB_OPTPATH 13
@@ -112,7 +105,6 @@ int opt_type[NB_OPTPATH]={ // 0 for save_dir | 1 for system_dir
     1,1,1,1,
     1
 };
-
 
 //============================================================
 //  main
@@ -216,7 +208,7 @@ static int parseParentPath(char* path, char* parentPath)
    return 1;
 }
 
-static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *Arcade)
+static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *arcade)
 {
    int gameFound = 0;
    int num = driver_list::find(gameName);
@@ -225,20 +217,30 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *Ar
 
    if (num != -1)
    {
-      if (driver_list::driver(num).flags & MACHINE_TYPE_ARCADE)
+      int flags = driver_list::driver(num).flags;
+      gameFound = 1;
+
+      if (flags & MACHINE_TYPE_ARCADE)
       {
-         *Arcade = true;
+         *arcade = true;
          log_cb(RETRO_LOG_DEBUG, "System type: ARCADE\n");
       }
-      else if (driver_list::driver(num).flags& MACHINE_TYPE_CONSOLE)
+      else if (flags & MACHINE_TYPE_CONSOLE)
       {
          log_cb(RETRO_LOG_DEBUG, "System type: CONSOLE\n");
       }
-      else if (driver_list::driver(num).flags& MACHINE_TYPE_COMPUTER)
+      else if (flags & MACHINE_TYPE_COMPUTER)
       {
          log_cb(RETRO_LOG_DEBUG, "System type: COMPUTER\n");
       }
-      gameFound = 1;
+
+      *rotation = flags & 0x7;
+      if ((flags & ROT90) == ROT90)
+         log_cb(RETRO_LOG_DEBUG, "Screen rotation: 90deg\n");
+      else if ((flags & ROT180) == ROT180)
+         log_cb(RETRO_LOG_DEBUG, "Screen rotation: 180deg\n");
+      else if ((flags & ROT270) == ROT270)
+         log_cb(RETRO_LOG_DEBUG, "Screen rotation: 270deg\n");
 
       log_cb(RETRO_LOG_INFO, "Game name: %s\n", driver_list::driver(num).name);
       log_cb(RETRO_LOG_INFO, "Game description: %s\n", driver_list::driver(num).type.fullname());
@@ -246,7 +248,6 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *Ar
 
    return gameFound;
 }
-
 
 void Extract_AllPath(char *srcpath)
 {
@@ -406,11 +407,10 @@ static int execute_game(char* path)
    unsigned i;
    char tmp_dir[512];
    int gameRot = 0;
+   int screenRot = 0;
    int driverIndex;
 
    FirstTimeUpdate = 1;
-
-   screenRot = 0;
 
    for (i = 0; i < 64; i++)
       xargv_cmd[i] = NULL;
@@ -440,25 +440,6 @@ static int execute_game(char* path)
          arcade = false;
    }
 
-   /* useless ? */
-   if (tate)
-   {
-      /* horizontal game */
-      if (gameRot == ROT0)
-         screenRot = 1;
-      else if (gameRot &  ORIENTATION_FLIP_X)
-         screenRot = 3;
-   }
-   else
-   {
-      if (gameRot != ROT0)
-      {
-         screenRot = 1;
-         if (gameRot &  ORIENTATION_FLIP_X)
-            screenRot = 2;
-      }
-   }
-
    log_cb(RETRO_LOG_DEBUG, "Creating frontend for game: %s\n", MgameName);
    log_cb(RETRO_LOG_DEBUG, "Softlists: %d\n", softlist_enable);
 
@@ -467,17 +448,25 @@ static int execute_game(char* path)
    if (!mame_paths_enable)
       Set_Path_Option();
 
-   /* useless ? */
-   if (tate)
+   switch (gameRot)
    {
-      if (screenRot == 3)
-         Add_Option((char*) "-rol");
+      case ROT90:
+         screenRot = 3;
+         break;
+      case ROT180:
+         screenRot = 2;
+         break;
+      case ROT270:
+         screenRot = 1;
+         break;
+      case ROT0:
+      default:
+         screenRot = 0;
+         break;
    }
-   else
-   {
-      if (screenRot == 2)
-         Add_Option((char*)"-rol");
-   }
+
+   if (environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
+      Add_Option((char*)"-norotate");
 
    Add_Option((char*)("-rompath"));
 
@@ -615,8 +604,6 @@ static int execute_game_cmd(char* path)
 
    FirstTimeUpdate = 1;
 
-   screenRot = 0;
-
    for (i = 0; i < 64; i++)
       xargv_cmd[i] = NULL;
 
@@ -668,7 +655,7 @@ static int execute_game_cmd(char* path)
    if (Only1Arg)
    {
       /* handle case where Arcade game exist and game on a System also */
-      if (arcade==true)
+      if (arcade)
       {
          /* test system */
          if (getGameInfo(MsystemName, &gameRot, &driverIndex, &arcade) == 0)
@@ -678,7 +665,7 @@ static int execute_game_cmd(char* path)
          else
          {
             log_cb(RETRO_LOG_INFO, "System found: \"%s\"\n", MsystemName);
-            arcade=false;
+            arcade = false;
          }
       }
    }

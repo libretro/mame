@@ -55,7 +55,7 @@ enum
    RETRO_SETTING_LIGHTGUN_MODE_LIGHTGUN
 };
 
-extern int NEWGAME_FROM_OSD;
+extern int video_changed;
 extern int retro_pause;
 extern char g_rom_dir[1024];
 extern const char *retro_save_directory;
@@ -87,9 +87,6 @@ extern char mame_4way_map[256];
 extern char joystick_deadzone[8];
 extern char joystick_saturation[8];
 
-extern bool res_43;
-extern bool video_changed;
-
 extern int mouseLX[8];
 extern int mouseLY[8];
 extern int mouseBUT[4];
@@ -108,7 +105,6 @@ extern int ui_ipt_pushchar;
 
 extern int fb_width;
 extern int fb_height;
-extern int fb_pitch;
 extern int max_width;
 extern int max_height;
 extern float retro_aspect;

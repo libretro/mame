@@ -29,15 +29,14 @@ bool retro_load_ok = false;
 //Use alternate render by default with screen resolution 640x480
 int fb_width       = 640;
 int fb_height      = 480;
-int fb_pitch       = 640;
-int max_width      = 640;
-int max_height     = 480;
+int max_width      = 3840;
+int max_height     = 2160;
 float retro_aspect = (float)4.0f/(float)3.0f;
 float retro_fps    = 60.0;
 float view_aspect  = 1.0f; // aspect for current view
+int video_changed  = 0;
 
 int SHIFTON          = -1;
-int NEWGAME_FROM_OSD = 0;
 char RPATH[512];
 
 static bool draw_this_frame;
@@ -224,8 +223,8 @@ void retro_set_environment(retro_environment_t cb)
       { option_joystick_deadzone, "Joystick Deadzone; 0.20|0.0|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
       { option_joystick_saturation, "Joystick Saturation; 1.00|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
       { option_mame_4way, "Joystick 4-way Simulation; disabled|4way|strict|qbert"},
-      { option_renderer, "Alternate Render; disabled|enabled" },
-      { option_res, "Alternate Render Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
+      { option_renderer, "Alternate Renderer; disabled|enabled" },
+      { option_res, "Alternate Renderer Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
       { option_overclock, "Main CPU Overclock; default|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150" },
       { option_cheats, "Enable Cheats; disabled|enabled" },
       { option_throttle, "Enable Throttle; disabled|enabled" },
@@ -361,39 +360,6 @@ static void check_variables(void)
          throttle_enable = true;
    }
 
-   var.key   = option_res;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      if (alternate_renderer)
-      {
-         char *pch;
-         char str[100];
-         snprintf(str, sizeof(str), "%s", var.value);
-
-         pch = strtok(str, "x");
-         if (pch)
-         {
-            fb_width = strtoul(pch, NULL, 0);
-            fb_pitch = fb_width;
-         }
-         pch = strtok(NULL, "x");
-         if (pch)
-            fb_height = strtoul(pch, NULL, 0);
-
-         retro_aspect = (float)fb_width / (float)fb_height;
-
-         if ((int)(fb_width/4) == (int)(fb_height/3))
-            res_43 = true;
-         else
-            res_43 = false;
-
-         video_changed    = true;
-         NEWGAME_FROM_OSD = 1;
-      }
-   }
-
    var.key   = option_cheats;
    var.value = NULL;
 
@@ -420,13 +386,47 @@ static void check_variables(void)
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
+      bool alternate_renderer_prev = alternate_renderer;
+
       if (!strcmp(var.value, "disabled"))
          alternate_renderer = false;
       if (!strcmp(var.value, "enabled"))
          alternate_renderer = true;
 
-      video_changed    = true;
-      NEWGAME_FROM_OSD = 1;
+      if (alternate_renderer != alternate_renderer_prev)
+         video_changed = 2;
+   }
+
+   var.key   = option_res;
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (alternate_renderer)
+      {
+         char *pch;
+         char str[100];
+         int width          = 640;
+         int height         = 480;
+
+         snprintf(str, sizeof(str), "%s", var.value);
+
+         pch = strtok(str, "x");
+         if (pch)
+            width = strtoul(pch, NULL, 0);
+
+         pch = strtok(NULL, "x");
+         if (pch)
+            height = strtoul(pch, NULL, 0);
+
+         if (width != fb_width || height != fb_height)
+         {
+            fb_width      = width;
+            fb_height     = height;
+            retro_aspect  = (float)fb_width / (float)fb_height;
+            video_changed = 2;
+         }
+      }
    }
 
    var.key   = option_osd;
@@ -582,12 +582,10 @@ void retro_get_system_av_info(struct retro_system_av_info *info)
 {
    info->geometry.base_width   = fb_width;
    info->geometry.base_height  = fb_height;
-   info->geometry.max_width    = fb_width;
-   info->geometry.max_height   = fb_height;
-   max_width                   = fb_width;
-   max_height                  = fb_height;
-
    info->geometry.aspect_ratio = retro_aspect;
+
+   info->geometry.max_width    = max_width;
+   info->geometry.max_height   = max_height;
 
    info->timing.fps            = retro_fps;
    info->timing.sample_rate    = 48000.0;
@@ -697,6 +695,7 @@ void retro_init(void)
 extern void retro_finish();
 extern void retro_main_loop();
 int RLOOP = 1;
+int first_run = 1;
 
 void retro_deinit(void)
 {
@@ -720,33 +719,33 @@ void retro_run(void)
       update_runtime_variables();
    }
 
-   if (NEWGAME_FROM_OSD == 1)
-   {
-      struct retro_system_av_info ninfo;
-      retro_get_system_av_info(&ninfo);
-      environ_cb(RETRO_ENVIRONMENT_SET_SYSTEM_AV_INFO, &ninfo);
-      NEWGAME_FROM_OSD = 0;
-   }
-   else if (NEWGAME_FROM_OSD == 2)
-   {
-      update_geometry();
-      NEWGAME_FROM_OSD = 0;
-   }
-
-	if (!retro_pause)
-	   retro_main_loop();
-	RLOOP = 1;
+   if (!retro_pause)
+      retro_main_loop();
+   RLOOP = 1;
 
 //FIXME: re-add way to handle OGL
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
    do_glflush();
 #else
    if (draw_this_frame)
-      video_cb(videoBuffer, fb_width, fb_height, fb_pitch << LOG_PIXEL_BYTES);
+      video_cb(videoBuffer, fb_width, fb_height, fb_width << LOG_PIXEL_BYTES);
    else
-      video_cb(NULL, fb_width, fb_height, fb_pitch << LOG_PIXEL_BYTES);
+      video_cb(NULL, fb_width, fb_height, fb_width << LOG_PIXEL_BYTES);
 #endif
    upload_output_audio_buffer();
+
+   if (video_changed == 1)
+   {
+      struct retro_system_av_info av_info;
+      retro_get_system_av_info(&av_info);
+      environ_cb(RETRO_ENVIRONMENT_SET_SYSTEM_AV_INFO, &av_info);
+      video_changed = 0;
+   }
+   else if (video_changed == 2)
+   {
+      update_geometry();
+      video_changed = 0;
+   }
 
    const screen_device *primary_screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
 
@@ -810,7 +809,7 @@ bool retro_load_game(const struct retro_game_info *info)
    int res = mmain2(1, RPATH);
 
    if (res != 0)
-      return false;
+      exit(0);
    else
       retro_load_ok = true;
 
