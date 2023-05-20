@@ -1076,7 +1076,7 @@ else
 OLD_GIT_VERSION := $(shell cat $(GENDIR)/git_desc 2> NUL)
 endif
 ifneq ($(IGNORE_GIT),1)
-NEW_GIT_VERSION := $(shell git describe --dirty)
+NEW_GIT_VERSION := $(shell git describe --always)
 else
 NEW_GIT_VERSION := unknown
 endif
