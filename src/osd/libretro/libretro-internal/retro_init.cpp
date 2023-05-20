@@ -69,6 +69,8 @@ char joystick_saturation[8];
 // emu flags
 static bool arcade = false;
 static int FirstTimeUpdate = 1;
+int rotation_mode = 0;
+int rotation_allow = 0;
 
 // rom file name and path
 char g_rom_dir[1024];
@@ -235,12 +237,26 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *ar
       }
 
       *rotation = flags & 0x7;
-      if ((flags & ROT90) == ROT90)
-         log_cb(RETRO_LOG_DEBUG, "Screen rotation: 90deg\n");
-      else if ((flags & ROT180) == ROT180)
-         log_cb(RETRO_LOG_DEBUG, "Screen rotation: 180deg\n");
-      else if ((flags & ROT270) == ROT270)
+      if ((flags & ROT270) == ROT270)
+      {
+         flags -= ROT270;
          log_cb(RETRO_LOG_DEBUG, "Screen rotation: 270deg\n");
+      }
+      else if ((flags & ROT180) == ROT180)
+      {
+         flags -= ROT180;
+         log_cb(RETRO_LOG_DEBUG, "Screen rotation: 180deg\n");
+      }
+      else if ((flags & ROT90) == ROT90)
+      {
+         flags -= ROT90;
+         log_cb(RETRO_LOG_DEBUG, "Screen rotation: 90deg\n");
+      }
+
+      if ((flags & ORIENTATION_FLIP_X) == ORIENTATION_FLIP_X)
+         log_cb(RETRO_LOG_DEBUG, "Screen orientation: flip x\n");
+      else if ((flags & ORIENTATION_FLIP_Y) == ORIENTATION_FLIP_Y)
+         log_cb(RETRO_LOG_DEBUG, "Screen orientation: flip y\n");
 
       log_cb(RETRO_LOG_INFO, "Game name: %s\n", driver_list::driver(num).name);
       log_cb(RETRO_LOG_INFO, "Game description: %s\n", driver_list::driver(num).type.fullname());
@@ -409,6 +425,7 @@ static int execute_game(char* path)
    int gameRot = 0;
    int screenRot = 0;
    int driverIndex;
+   bool norotate = false;
 
    FirstTimeUpdate = 1;
 
@@ -450,23 +467,51 @@ static int execute_game(char* path)
 
    switch (gameRot)
    {
+      case 7:
+         screenRot = 3;
+         gameRot  -= ROT270;
+         break;
       case ROT90:
          screenRot = 3;
+         gameRot   = 0;
          break;
       case ROT180:
          screenRot = 2;
+         gameRot   = 0;
          break;
       case ROT270:
          screenRot = 1;
+         gameRot   = 0;
          break;
       case ROT0:
       default:
-         screenRot = 0;
          break;
    }
 
-   if (environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
+   if (rotation_mode == 2 && environ_cb(RETRO_ENVIRONMENT_SET_ROTATION, &screenRot))
+   {
+      rotation_allow = 1;
       Add_Option((char*)"-norotate");
+      norotate = true;
+   }
+   else if (rotation_mode == 1 || rotation_mode == 2)
+   {
+      rotation_allow = 0;
+   }
+   else if (rotation_mode == 0)
+   {
+      rotation_allow = 0;
+      Add_Option((char*)"-norotate");
+      norotate = true;
+   }
+
+   if (norotate)
+   {
+      if (gameRot & ORIENTATION_FLIP_X)
+         Add_Option((char*)"-flipx");
+      else if (gameRot & ORIENTATION_FLIP_Y)
+         Add_Option((char*)"-flipy");
+   }
 
    Add_Option((char*)("-rompath"));
 

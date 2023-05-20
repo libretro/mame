@@ -207,19 +207,17 @@ void retro_window_info::show_pointer()
 //  sdlwindow_resize
 //============================================================
 extern int video_changed;
+extern int rotation_allow;
 static int first_time = 1;
 
 void retro_window_info::resize(int32_t width, int32_t height)
 {
 	osd_dim cd = get_size();
-
 	if (width != cd.width() || height != cd.height() || first_time == 1)
 	{
 	    fb_width      = width;
 	    fb_height     = height;
-	    retro_aspect  = m_monitor->pixel_aspect();
-
-	    video_changed = 1;
+	    video_changed = 2;
 	    first_time    = 0;
 	    renderer().notify_changed();
     }
@@ -465,9 +463,7 @@ osd_dim retro_window_info::pick_best_mode()
       minimum_height -= 4;
    }
 
-   //FIXME RETRO
-   ret = osd_dim(target_width,target_height);
-   osd_printf_verbose("**********************%4dx%4d@%2d -> %f\n", (int)target_width, (int)target_height,0,(double)0);
+   ret = osd_dim(target_width, target_height);
    return ret;
 }
 
@@ -507,7 +503,12 @@ void retro_window_info::update()
 				fb_width  = tempwidth;
 				fb_height = tempheight;
 
-				monitor()->update_resolution(tempwidth, tempheight);
+				/* Flip internal resolution for internal rotation */
+				if (target()->orientation() & ORIENTATION_SWAP_XY && !rotation_allow)
+					monitor()->update_resolution(tempheight, tempwidth);
+				else
+					monitor()->update_resolution(tempwidth, tempheight);
+
 				monitor()->refresh();
 
 				video_changed = 2;
@@ -515,7 +516,8 @@ void retro_window_info::update()
 			else
 			{
 				float temp_aspect = view_aspect;
-				if (target()->orientation() & ORIENTATION_SWAP_XY)
+				if (rotation_allow
+						&& (machine().system().flags & ORIENTATION_SWAP_XY))
 					temp_aspect = 1.0f / temp_aspect;
 
 				if (temp_aspect != retro_aspect)
@@ -529,7 +531,8 @@ void retro_window_info::update()
 			if (video_changed)
 			{
 				retro_aspect = view_aspect;
-				if (target()->orientation() & ORIENTATION_SWAP_XY)
+				if (rotation_allow
+						&& (machine().system().flags & ORIENTATION_SWAP_XY))
 					retro_aspect = 1.0f / retro_aspect;
 			}
 

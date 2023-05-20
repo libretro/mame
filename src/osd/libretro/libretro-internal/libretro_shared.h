@@ -57,7 +57,10 @@ enum
 
 extern int video_changed;
 extern int retro_pause;
+extern int mame_reset;
+extern int ui_ipt_pushchar;
 extern char g_rom_dir[1024];
+extern char mediaType[10];
 extern const char *retro_save_directory;
 extern const char *retro_system_directory;
 extern const char *retro_content_directory;
@@ -97,19 +100,12 @@ extern int lightgunBUT[4];
 
 extern unsigned short retrokbd_state[RETROK_LAST];
 
-extern char mediaType[10];
-
-extern int mame_reset;
-
-extern int ui_ipt_pushchar;
-
 extern int fb_width;
 extern int fb_height;
-extern int max_width;
-extern int max_height;
 extern float retro_aspect;
 extern float retro_fps;
 extern float view_aspect;
+extern int rotation_mode;
 static const char core[] = "mame";
 
 /* libretro callbacks */
