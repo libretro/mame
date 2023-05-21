@@ -257,6 +257,8 @@ static int getGameInfo(char* gameName, int* rotation, int* driverIndex, bool *ar
          log_cb(RETRO_LOG_DEBUG, "Screen orientation: flip x\n");
       else if ((flags & ORIENTATION_FLIP_Y) == ORIENTATION_FLIP_Y)
          log_cb(RETRO_LOG_DEBUG, "Screen orientation: flip y\n");
+      else if ((flags & ORIENTATION_SWAP_XY) == ORIENTATION_SWAP_XY)
+         log_cb(RETRO_LOG_DEBUG, "Screen orientation: swap xy\n");
 
       log_cb(RETRO_LOG_INFO, "Game name: %s\n", driver_list::driver(num).name);
       log_cb(RETRO_LOG_INFO, "Game description: %s\n", driver_list::driver(num).type.fullname());
@@ -467,19 +469,20 @@ static int execute_game(char* path)
 
    switch (gameRot)
    {
-      case 7:
+      case 7: /* All flags (shtrider) */
+      case 4: /* Only ORIENTATION_SWAP_XY (ladyfrog, kick) */
          screenRot = 3;
          gameRot  -= ROT270;
          break;
-      case ROT90:
+      case ROT90: /* 5: ORIENTATION_SWAP_XY | ORIENTATION_FLIP_X */
          screenRot = 3;
          gameRot   = 0;
          break;
-      case ROT180:
+      case ROT180: /* 3: ORIENTATION_FLIP_X | ORIENTATION_FLIP_Y */
          screenRot = 2;
          gameRot   = 0;
          break;
-      case ROT270:
+      case ROT270: /* 6: ORIENTATION_SWAP_XY | ORIENTATION_FLIP_Y */
          screenRot = 1;
          gameRot   = 0;
          break;
