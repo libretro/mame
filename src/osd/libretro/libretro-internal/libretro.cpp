@@ -25,6 +25,7 @@ extern const char bare_build_version[];
 
 int retro_pause    = 0;
 bool retro_load_ok = false;
+bool libretro_supports_bitmasks = false;
 
 //Use alternate render by default with screen resolution 640x480
 int fb_width       = 640;
@@ -704,6 +705,9 @@ void retro_init(void)
    };
    #undef input_descriptor_macro
    environ_cb(RETRO_ENVIRONMENT_SET_INPUT_DESCRIPTORS, input_descriptors);
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_INPUT_BITMASKS, NULL))
+      libretro_supports_bitmasks = true;
 
    memset(videoBuffer, 0, sizeof(videoBuffer));
    init_output_audio_buffer(2048);

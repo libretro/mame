@@ -22,7 +22,7 @@
 #include "../../libretro/osdretro.h"
 #include "../../libretro/window.h"
 
-static bool libretro_supports_bitmasks = false;
+extern bool libretro_supports_bitmasks;
 uint16_t retrokbd_state[RETROK_LAST];
 uint16_t retrokbd_state2[RETROK_LAST];
 int mouseLX[8];
@@ -150,7 +150,7 @@ kt_table ktable[]={
 {"-1",-1,ITEM_ID_INVALID},
 };
 
-const char *Buttons_Name[RETRO_MAX_BUTTONS]=
+const char *Buttons_Name[RETRO_MAX_BUTTONS] =
 {
 	"B",           //0
 	"Y",           //1
@@ -171,7 +171,15 @@ const char *Buttons_Name[RETRO_MAX_BUTTONS]=
 };
 
 //    Default : B ->B1 | A ->B2 | Y ->B3 | X ->B4 | L ->B5 | R ->B6
-int Buttons_mapping[]={RETROPAD_A,RETROPAD_B,RETROPAD_X,RETROPAD_Y,RETROPAD_L,RETROPAD_R};
+int Buttons_mapping[] =
+{
+   RETROPAD_B,
+   RETROPAD_A,
+   RETROPAD_Y,
+   RETROPAD_X,
+   RETROPAD_L,
+   RETROPAD_R
+};
 
 void Input_Binding(running_machine &machine)
 {
@@ -182,10 +190,10 @@ void Input_Binding(running_machine &machine)
    log_cb(RETRO_LOG_INFO, "YEAR: %s\n", machine.system().year);
    log_cb(RETRO_LOG_INFO, "MANUFACTURER: %s\n", machine.system().manufacturer);
 
-   Buttons_mapping[0]=RETROPAD_A;
-   Buttons_mapping[1]=RETROPAD_B;
-   Buttons_mapping[2]=RETROPAD_X;
-   Buttons_mapping[3]=RETROPAD_Y;
+   Buttons_mapping[0]=RETROPAD_B;
+   Buttons_mapping[1]=RETROPAD_A;
+   Buttons_mapping[2]=RETROPAD_Y;
+   Buttons_mapping[3]=RETROPAD_X;
    Buttons_mapping[4]=RETROPAD_L;
    Buttons_mapping[5]=RETROPAD_R;
 
@@ -529,9 +537,6 @@ void Input_Binding(running_machine &machine)
       Buttons_mapping[5]=RETROPAD_R;
 
    }
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_INPUT_BITMASKS, NULL))
-      libretro_supports_bitmasks = true;
 }
 
 void retro_osd_interface::release_keys()
@@ -574,26 +579,23 @@ void retro_osd_interface::process_joypad_state(running_machine &machine)
 
    if (libretro_supports_bitmasks)
    {
-      for(j = 0;j < 8; j++)
-      {
-         ret[j] = 0;
+      for (j = 0; j < 8; j++)
          ret[j] = input_state_cb(j, RETRO_DEVICE_JOYPAD, 0, RETRO_DEVICE_ID_JOYPAD_MASK);
-      }
    }
    else
    {
-      for(j = 0;j < 8; j++)
+      for (j = 0; j < 8; j++)
       {
          ret[j] = 0;
-         for(i = 0;i < RETRO_MAX_BUTTONS; i++)
-            if (input_state_cb(j, RETRO_DEVICE_JOYPAD, 0,i))
+         for (i = 0; i < RETRO_MAX_BUTTONS; i++)
+            if (input_state_cb(j, RETRO_DEVICE_JOYPAD, 0, i))
                ret[j] |= (1 << i);
       }
    }
 
-   for(j = 0;j < 8; j++)
+   for (j = 0; j < 8; j++)
    {
-      for(i = 0;i < RETRO_MAX_BUTTONS; i++)
+      for (i = 0; i < RETRO_MAX_BUTTONS; i++)
       {
          if (ret[j] & (1 << i))
             joystate[j].button[i] = 0x80;
