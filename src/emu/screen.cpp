@@ -21,6 +21,9 @@
 
 #include <set>
 
+#ifdef __LIBRETRO__
+#include "libretro/osdretro.h"
+#endif
 
 //**************************************************************************
 //  DEBUGGING
@@ -1025,6 +1028,10 @@ void screen_device::configure(int width, int height, const rectangle &visarea, a
 
 	// adjust speed if necessary
 	machine().video().update_refresh_speed();
+
+#ifdef __LIBRETRO__
+	retro_fps = ATTOSECONDS_TO_HZ(frame_period);
+#endif
 }
 
 

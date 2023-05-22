@@ -206,19 +206,15 @@ void retro_window_info::show_pointer()
 //============================================================
 //  sdlwindow_resize
 //============================================================
-extern int video_changed;
-extern int rotation_allow;
-static int first_time = 1;
 
 void retro_window_info::resize(int32_t width, int32_t height)
 {
 	osd_dim cd = get_size();
-	if (width != cd.width() || height != cd.height() || first_time == 1)
+	if (width != cd.width() || height != cd.height())
 	{
 	    fb_width      = width;
 	    fb_height     = height;
 	    video_changed = 2;
-	    first_time    = 0;
 	    renderer().notify_changed();
     }
 }
@@ -369,7 +365,6 @@ int retro_window_info::xy_to_render_target(int x, int y, int *xt, int *yt)
 int retro_window_info::window_init()
 {
 	int result;
-	float old_fps;
 
 	// set the initial maximized state
 	// FIXME: Does not belong here
@@ -388,17 +383,9 @@ int retro_window_info::window_init()
 
 	result = complete_create();
 	
-	old_fps = retro_fps;
-
-	const screen_device *primary_screen = screen_device_enumerator(machine().root_device()).first();
-	if (primary_screen != nullptr)
-	{
-		retro_fps = primary_screen->frame_period().as_hz();
-	}
-
 	if (!alternate_renderer)
 	{
-		//test correct aspect
+		// test correct aspect
 		retro_aspect = target()->current_view().effective_aspect();
 		if (target()->orientation() & ORIENTATION_SWAP_XY)
 		    retro_aspect = 1.0 / retro_aspect;
@@ -408,11 +395,11 @@ int retro_window_info::window_init()
 		fb_width  = tempwidth;
 		fb_height = tempheight;
 
-		if (old_fps != retro_fps)
-			video_changed = 1;
-		else
-			video_changed = 2;
+		video_changed = 2;
 	}
+
+	// reset sound timer (set in `sound_manager::update` to `retro_fps`)
+	sound_timer = 0;
 
 	// handle error conditions
 	if (result == 1)
@@ -510,7 +497,6 @@ void retro_window_info::update()
 					monitor()->update_resolution(tempwidth, tempheight);
 
 				monitor()->refresh();
-
 				video_changed = 2;
 			}
 			else
@@ -556,6 +542,7 @@ void retro_window_info::update()
 		if (m_rendered_event.wait(event_wait_ticks))
 		{
 			const int update = 1;
+			const screen_device *screen = screen_device_enumerator(machine().root_device()).byindex(index());
 
 			// ensure the target bounds are up-to-date, and then get the primitives
 
@@ -569,12 +556,21 @@ void retro_window_info::update()
 
 			// Check whether window has vector screens
 
+			if ((screen != nullptr) && (screen->screen_type() == SCREEN_TYPE_VECTOR))
+				renderer().set_flags(osd_renderer::FLAG_HAS_VECTOR_SCREEN);
+			else
+				renderer().clear_flags(osd_renderer::FLAG_HAS_VECTOR_SCREEN);
+
+			/* Update retro_fps */
+			if (screen)
 			{
-				const screen_device *screen = screen_device_enumerator(machine().root_device()).byindex(index());
-				if ((screen != nullptr) && (screen->screen_type() == SCREEN_TYPE_VECTOR))
-					renderer().set_flags(osd_renderer::FLAG_HAS_VECTOR_SCREEN);
-				else
-					renderer().clear_flags(osd_renderer::FLAG_HAS_VECTOR_SCREEN);
+				float current_screen_refresh = screen->frame_period().as_hz();
+
+				if (current_screen_refresh != retro_fps)
+				{
+					retro_fps = current_screen_refresh;
+					video_changed = 1;
+				}
 			}
 
 			m_primlist = &primlist;
@@ -586,7 +582,7 @@ void retro_window_info::update()
 			// otherwise, render with our drawing system
 			else
 			{
-				if( video_config.perftest )
+				if (video_config.perftest)
 					measure_fps(update);
 				else
 					renderer().draw(update);

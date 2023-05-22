@@ -19,6 +19,9 @@
 
 #include "osdepend.h"
 
+#ifdef __LIBRETRO__
+#include "libretro/osdretro.h"
+#endif
 
 //**************************************************************************
 //  DEBUGGING
@@ -1117,13 +1120,7 @@ sound_manager::sound_manager(running_machine &machine) :
 
 	// start the periodic update flushing timer
 	m_update_timer = machine.scheduler().timer_alloc(timer_expired_delegate(FUNC(sound_manager::update), this));
-#ifdef __LIBRETRO__
-	/* Update sound on every frame per hardware instead of hardcoded
-	 * STREAMS_UPDATE_ATTOTIME = STREAMS_UPDATE_FREQUENCY = 50hz (?!) */
-	m_update_timer->adjust(attotime::from_hz(machine.sample_rate()), 0, attotime::from_hz(machine.sample_rate()));
-#else
 	m_update_timer->adjust(STREAMS_UPDATE_ATTOTIME, 0, STREAMS_UPDATE_ATTOTIME);
-#endif
 }
 
 
@@ -1486,6 +1483,15 @@ stream_buffer::sample_t sound_manager::adjust_toward_compressor_scale(stream_buf
 void sound_manager::update(int param)
 {
 	LOG("sound_update\n");
+
+#ifdef __LIBRETRO__
+	/* Adjust sound timer to every frame */
+	if (sound_timer != retro_fps)
+	{
+		sound_timer = retro_fps;
+		m_update_timer->adjust(attotime::from_hz(sound_timer), 0, attotime::from_hz(sound_timer));
+	}
+#endif
 
 	g_profiler.start(PROFILER_SOUND);
 

@@ -8,7 +8,6 @@
 #include "osdepend.h"
 
 #include "emu.h"
-#include "screen.h"
 #include "emuopts.h"
 #include "render.h"
 #include "ui/uimain.h"
@@ -27,14 +26,14 @@ int retro_pause    = 0;
 bool retro_load_ok = false;
 bool libretro_supports_bitmasks = false;
 
-//Use alternate render by default with screen resolution 640x480
 int fb_width       = 640;
 int fb_height      = 480;
 int max_width      = 3840;
 int max_height     = 2160;
-float retro_aspect = (float)4.0f/(float)3.0f;
+float retro_aspect = (float)4.0f / (float)3.0f;
+float view_aspect  = 1.0f;
 float retro_fps    = 60.0;
-float view_aspect  = 1.0f; // aspect for current view
+float sound_timer  = 50; /* default STREAMS_UPDATE_ATTOTIME, changed later to `retro_fps` */
 int video_changed  = 0;
 
 int SHIFTON          = -1;
@@ -588,11 +587,20 @@ void retro_get_system_info(struct retro_system_info *info)
 
 void update_geometry(void)
 {
-   struct retro_system_av_info system_av_info;
-   system_av_info.geometry.base_width   = fb_width;
-   system_av_info.geometry.base_height  = fb_height;
-   system_av_info.geometry.aspect_ratio = retro_aspect;
-   environ_cb(RETRO_ENVIRONMENT_SET_GEOMETRY, &system_av_info);
+   struct retro_system_av_info av_info;
+   av_info.geometry.base_width   = fb_width;
+   av_info.geometry.base_height  = fb_height;
+   av_info.geometry.aspect_ratio = retro_aspect;
+   environ_cb(RETRO_ENVIRONMENT_SET_GEOMETRY, &av_info);
+   video_changed = 0;
+}
+
+void update_av_info(void)
+{
+   struct retro_system_av_info av_info;
+   retro_get_system_av_info(&av_info);
+   environ_cb(RETRO_ENVIRONMENT_SET_SYSTEM_AV_INFO, &av_info);
+   video_changed = 0;
 }
 
 void retro_get_system_av_info(struct retro_system_av_info *info)
@@ -763,32 +771,9 @@ void retro_run(void)
    upload_output_audio_buffer();
 
    if (video_changed == 1)
-   {
-      struct retro_system_av_info av_info;
-      retro_get_system_av_info(&av_info);
-      environ_cb(RETRO_ENVIRONMENT_SET_SYSTEM_AV_INFO, &av_info);
-      video_changed = 0;
-   }
+      update_av_info();
    else if (video_changed == 2)
-   {
       update_geometry();
-      video_changed = 0;
-   }
-
-   const screen_device *primary_screen = screen_device_enumerator(mame_machine_manager::instance()->machine()->root_device()).first();
-
-   if (primary_screen) // this was causing a buffer overflow with this check
-   {
-      float current_screen_refresh = primary_screen->frame_period().as_hz();
-
-      if (current_screen_refresh != retro_fps)
-      {
-         retro_fps = current_screen_refresh;
-         struct retro_system_av_info av_info;
-         retro_get_system_av_info(&av_info);
-         environ_cb(RETRO_ENVIRONMENT_SET_SYSTEM_AV_INFO, &av_info);
-      }
-   }
 }
 
 bool retro_load_game(const struct retro_game_info *info)
