@@ -36,6 +36,9 @@
 #include "modules/render/drawretro.h"
 #include "modules/monitor/monitor_common.h"
 
+extern int max_width;
+extern int max_height;
+extern bool retro_load_ok;
 
 //============================================================
 //  PARAMETERS
@@ -523,6 +526,29 @@ void retro_window_info::update()
 				if (rotation_allow
 						&& (machine().system().flags & ORIENTATION_SWAP_XY))
 					retro_aspect = 1.0f / retro_aspect;
+
+				/* Enlarge maximum geometry always */
+				if (fb_width > max_width || fb_height > max_height)
+				{
+					max_width     = fb_width;
+					max_height    = fb_height;
+					video_changed = 1;
+				}
+
+				/* Shrink geometry to native in native resolution renderer */
+				if (!alternate_renderer)
+				{
+					if (fb_width < max_width || fb_height < max_height)
+					{
+						max_width     = fb_width;
+						max_height    = fb_height;
+						video_changed = 1;
+					}
+				}
+
+				/* No reason to call av_info when not yet running */
+				if (!retro_load_ok)
+					video_changed = 0;
 			}
 
 			if (!this->m_fullscreen)
