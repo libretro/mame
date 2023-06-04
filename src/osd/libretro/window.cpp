@@ -401,6 +401,9 @@ int retro_window_info::window_init()
 	// reset sound timer (set in `sound_manager::update` to `retro_fps`)
 	sound_timer = 0;
 
+	// reset machine aspect (set in `retro_window_info::update()`)
+	view_aspect = 1;
+
 	// handle error conditions
 	if (result == 1)
 		goto error;
