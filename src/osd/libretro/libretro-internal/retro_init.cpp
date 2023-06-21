@@ -71,7 +71,7 @@ static bool arcade = false;
 static int FirstTimeUpdate = 1;
 int rotation_mode = 0;
 int rotation_allow = 0;
-
+int thread_mode = 0;
 // rom file name and path
 char g_rom_dir[1024];
 char mediaType[10];

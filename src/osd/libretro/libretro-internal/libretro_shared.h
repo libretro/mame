@@ -106,6 +106,7 @@ extern float retro_aspect;
 extern float retro_fps;
 extern float view_aspect;
 extern int rotation_mode;
+extern int thread_mode;
 static const char core[] = "mame";
 
 /* libretro callbacks */

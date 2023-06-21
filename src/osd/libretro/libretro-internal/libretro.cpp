@@ -50,6 +50,7 @@ static char option_joystick_deadzone[50];
 static char option_joystick_saturation[50];
 static char option_mame_4way[50];
 static char option_rotation_mode[50];
+static char option_thread_mode[50];
 static char option_renderer[50];
 static char option_res[50];
 static char option_overclock[50];
@@ -199,6 +200,7 @@ void retro_set_environment(retro_environment_t cb)
    sprintf(option_joystick_saturation, "%s_%s", core, "joystick_saturation");
    sprintf(option_mame_4way, "%s_%s", core, "mame_4way_enable");
    sprintf(option_rotation_mode, "%s_%s", core, "rotation_mode");
+   sprintf(option_thread_mode, "%s_%s", core, "thread_mode");
    sprintf(option_renderer, "%s_%s", core, "alternate_renderer");
    sprintf(option_res, "%s_%s", core, "altres");
    sprintf(option_overclock, "%s_%s", core, "cpu_overclock");
@@ -226,6 +228,7 @@ void retro_set_environment(retro_environment_t cb)
       { option_joystick_saturation, "Joystick Saturation; 1.00|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
       { option_mame_4way, "Joystick 4-way Simulation; disabled|4way|strict|qbert"},
       { option_rotation_mode, "Rotation Mode; libretro|internal|none" },
+      { option_thread_mode, "Enable Threads; enabled|disabled" },
       { option_renderer, "Alternate Renderer; disabled|enabled" },
       { option_res, "Alternate Renderer Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
       { option_overclock, "Main CPU Overclock; default|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150" },
@@ -397,6 +400,19 @@ static void check_variables(void)
          rotation_mode = 0;
    }
 
+   var.key   = option_thread_mode;
+   var.value = NULL;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      if (!strcmp(var.value, "enabled"))
+         thread_mode = 1;
+      else if (!strcmp(var.value, "disabled"))
+         thread_mode = 0;
+      else
+         thread_mode = 0;
+   }
+ 
    var.key   = option_renderer;
    var.value = NULL;
 
