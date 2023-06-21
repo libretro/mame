@@ -228,7 +228,7 @@ void retro_set_environment(retro_environment_t cb)
       { option_joystick_saturation, "Joystick Saturation; 1.00|0.05|0.10|0.15|0.20|0.25|0.30|0.35|0.40|0.45|0.50|0.55|0.60|0.65|0.70|0.75|0.80|0.85|0.90|0.95|1.00" },
       { option_mame_4way, "Joystick 4-way Simulation; disabled|4way|strict|qbert"},
       { option_rotation_mode, "Rotation Mode; libretro|internal|none" },
-      { option_thread_mode, "Enable Threads; enabled|disabled" },
+      { option_thread_mode, "Enable Threads(restart); enabled|disabled" },
       { option_renderer, "Alternate Renderer; disabled|enabled" },
       { option_res, "Alternate Renderer Resolution; 640x480|640x360|800x600|800x450|960x720|960x540|1024x768|1024x576|1280x960|1280x720|1600x1200|1600x900|1440x1080|1920x1080|1920x1440|2560x1440|2880x2160|3840x2160" },
       { option_overclock, "Main CPU Overclock; default|30|31|32|33|34|35|36|37|38|39|40|41|42|43|44|45|46|47|48|49|50|51|52|53|54|55|60|65|70|75|80|85|90|95|100|105|110|115|120|125|130|135|140|145|150" },
