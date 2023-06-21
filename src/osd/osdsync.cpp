@@ -294,6 +294,7 @@ osd_work_queue *osd_work_queue_alloc(int flags)
 		threadnum = 0;
 #endif
 
+	// clamp to the maximum
 	queue->threads = std::min(threadnum, WORK_MAX_THREADS);
 
 	// allocate memory for thread array (+1 to count the calling thread if WORK_QUEUE_FLAG_MULTI)
