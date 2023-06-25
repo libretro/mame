@@ -37,7 +37,7 @@ ifeq ($(platform),)
 		platform = osx
 	else ifneq ($(findstring win,$(UNAME_S)),)
 		platform = win
-	else ifeq ($(UNAME_M), "i686")
+	else ifeq ($(UNAME_M), i686)
 		platform = linux32
 	endif
 endif
@@ -69,7 +69,7 @@ endif
 #
 ###########################################################################
 
-BUILDFLAGS = RETRO=$(RETRO) REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD="retro" NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
+BUILDFLAGS = RETRO=$(RETRO) REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD=retro NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
 
 ifneq ($(PYTHON_EXECUTABLE),)
 	BUILDFLAGS += PYTHON_EXECUTABLE=$(PYTHON_EXECUTABLE)
@@ -92,24 +92,40 @@ PLATFLAGS =
 ifneq ($(findstring win,$(platform)),)
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
-		PLATFLAGS += MINGW64="$(MINGW64)"
-		LIBRETRO_CPU="x86_64"
+		PLATFLAGS += MINGW64=$(MINGW64)
+		LIBRETRO_CPU=x86_64
 	else ifeq ($(MSYSTEM),MINGW32)
 		MINGW32 ?= /mingw32
-		PLATFLAGS += MINGW32="$(MINGW32)"
-		LIBRETRO_CPU="x86"
+		PLATFLAGS += MINGW32=$(MINGW32)
+		LIBRETRO_CPU=x86
 		PTR64=0
+	else ifeq ($(MSYSTEM),CLANG32)
+		MINGW32 ?= /clang32
+		PLATFLAGS += MINGW32=$(MINGW32)
+		LIBRETRO_CPU=x86
+		#mingw clang env has no gcc installed by default geanie will fail to compile without setting CC to clang as its set to gcc
+		PLATFLAGS += CC=clang
+		PTR64=0
+	else ifeq ($(MSYSTEM),CLANG64)
+		MINGW64 ?= /clang64
+		PLATFLAGS += MINGW64=$(MINGW64)
+		LIBRETRO_CPU=x86_64
+		#mingw clang env has no gcc installed by default geanie will fail to compile without setting CC to clang as its set to gcc
+		PLATFLAGS += CC=clang
+	else ifeq ($(MSYSTEM),UCRT64)
+		MINGW64 ?= /ucrt64
+		PLATFLAGS += MINGW64=$(MINGW64)
+		LIBRETRO_CPU=x86_64
+		#mingw Overidew can be use here as we have gcc and clang
+		#the gcc verstion does not link
+		PLATFLAGS += OVERRIDE_CC=clang
 	endif
-	CC  ?= cc
-	CXX ?= cxx
-	AR  ?= ar
-	PLATFLAGS += TARGETOS="windows" OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)" "AR=$(AR)"
+#  These flags below dont make sense setting TARGETOS sets CROSS_BUILD which 
+# disables setting CC to OVERRIDE_CC  ....set CC CXX if using TARGETOS if you plan on cross compiling from the terminal
+	#PLATFLAGS += TARGETOS=windows 
 	LLD := $(shell command -v lld 2> /dev/null)
 	ifneq ($(LLD),)
-		BUILDFLAGS += LDOPTS="-fuse-ld=lld"
-	endif
-	ifneq ($(WINDRES),)
-		PLATFLAGS += WINDRES="$(WINDRES)"
+		BUILDFLAGS += LDOPTS=-fuse-ld=lld
 	endif
 endif
 
@@ -117,10 +133,10 @@ ifeq ($(platform),android-arm)
 	ANDROID_NDK_LLVM ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
 	ANDROID_NDK_ARM  ?= /opt/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
 	ANDROID_NDK_ROOT ?= /opt/ndk
-	PLATFLAGS += TARGETOS="android-arm" gcc="android-arm"
-	PLATFLAGS +=  ANDROID_NDK_LLVM="$(ANDROID_NDK_LLVM)"
-	PLATFLAGS +=  ANDROID_NDK_ARM="$(ANDROID_NDK_ARM)"
-	PLATFLAGS +=  ANDROID_NDK_ROOT="$(ANDROID_NDK_ROOT)"
+	PLATFLAGS += TARGETOS=android-arm gcc=android-arm
+	PLATFLAGS +=  ANDROID_NDK_LLVM=$(ANDROID_NDK_LLVM)
+	PLATFLAGS +=  ANDROID_NDK_ARM=$(ANDROID_NDK_ARM)
+	PLATFLAGS +=  ANDROID_NDK_ROOT=$(ANDROID_NDK_ROOT)
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
@@ -130,10 +146,10 @@ ifeq ($(platform),android-arm64)
 	ANDROID_NDK_LLVM  ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
 	ANDROID_NDK_ARM64 ?= /opt/ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64
 	ANDROID_NDK_ROOT  ?= /opt/ndk
-	PLATFLAGS += TARGETOS="android-arm64" gcc="android-arm64"
-	PLATFLAGS += ANDROID_NDK_LLVM="$(ANDROID_NDK_LLVM)"
-	PLATFLAGS += ANDROID_NDK_ARM64="$(ANDROID_NDK_ARM64)"
-	PLATFLAGS += ANDROID_NDK_ROOT="$(ANDROID_NDK_ROOT)"
+	PLATFLAGS += TARGETOS=android-arm64 gcc=android-arm64
+	PLATFLAGS += ANDROID_NDK_LLVM=$(ANDROID_NDK_LLVM)
+	PLATFLAGS += ANDROID_NDK_ARM64=$(ANDROID_NDK_ARM64)
+	PLATFLAGS += ANDROID_NDK_ROOT=$(ANDROID_NDK_ROOT)
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
@@ -143,10 +159,10 @@ ifeq ($(platform),android-x86_64)
 	ANDROID_NDK_LLVM  ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
 	ANDROID_NDK_X64 ?= /opt/ndk/toolchains/x86_64-4.9/prebuilt/linux-x86_64
 	ANDROID_NDK_ROOT  ?= /opt/ndk
-	PLATFLAGS += TARGETOS="android-x64" gcc="android-x64"
-	PLATFLAGS += ANDROID_NDK_LLVM="$(ANDROID_NDK_LLVM)"
-	PLATFLAGS += ANDROID_NDK_X64="$(ANDROID_NDK_X64)"
-	PLATFLAGS += ANDROID_NDK_ROOT="$(ANDROID_NDK_ROOT)"
+	PLATFLAGS += TARGETOS=android-x64 gcc=android-x64
+	PLATFLAGS += ANDROID_NDK_LLVM=$(ANDROID_NDK_LLVM)
+	PLATFLAGS += ANDROID_NDK_X64=$(ANDROID_NDK_X64)
+	PLATFLAGS += ANDROID_NDK_ROOT=$(ANDROID_NDK_ROOT)
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
@@ -167,7 +183,7 @@ ifeq ($(platform),osx)
 		TARGET_RULE   = -arch $(ARCH) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		CC = clang $(TARGET_RULE)
 		CXX = clang++ $(TARGET_RULE)
-		PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
+		PLATFLAGS += OVERRIDE_CC=$(CC) OVERRIDE_CXX=$(CXX)
 		CFLAGS   += $(TARGET_RULE)
 		CPPFLAGS += $(TARGET_RULE)
 		CXXFLAGS += $(TARGET_RULE)
@@ -184,7 +200,7 @@ ifeq ($(platform),ios-arm64)
 	IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
 	CC = cc -arch arm64 -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	CXX = c++ -arch arm64 -isysroot $(IOSSDK) -miphoneos-version-min=12.0
-	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
+	PLATFLAGS += OVERRIDE_CC=$(CC) OVERRIDE_CXX=$(CXX)
 	BUILDFLAGS += OPTIMIZE=z
 endif
 
@@ -196,18 +212,18 @@ ifeq ($(platform),tvos-arm64)
 	IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
 	CC = cc -arch arm64 -isysroot $(IOSSDK)
 	CXX = c++ -arch arm64 -isysroot $(IOSSDK)
-	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
+	PLATFLAGS += OVERRIDE_CC=$(CC) OVERRIDE_CXX=$(CXX)
 	BUILDFLAGS += OPTIMIZE=z
 endif
 
 ifneq ($(LIBRETRO_CPU),)
-	PLATFLAGS += ARCH="" LIBRETRO_CPU="$(LIBRETRO_CPU)"
+	PLATFLAGS += ARCH= LIBRETRO_CPU=$(LIBRETRO_CPU)
 endif
 ifneq ($(FORCE_DRC_C_BACKEND),)
-	PLATFLAGS += FORCE_DRC_C_BACKEND="$(FORCE_DRC_C_BACKEND)"
+	PLATFLAGS += FORCE_DRC_C_BACKEND=$(FORCE_DRC_C_BACKEND)
 endif
 ifneq ($(LIBRETRO_OS),)
-	PLATFLAGS += LIBRETRO_OS="$(platform)"
+	PLATFLAGS += LIBRETRO_OS=$(platform)
 endif
 ifneq ($(PTR64),)
 	PLATFLAGS += PTR64=$(PTR64)
