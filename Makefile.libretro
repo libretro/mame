@@ -121,7 +121,7 @@ ifneq ($(findstring win,$(platform)),)
 		PLATFLAGS += OVERRIDE_CC=clang
 	endif
 #  These flags below dont make sense setting TARGETOS sets CROSS_BUILD which 
-# disables setting CC to OVERRIDE_CC  ....set CC CXX if using TARGETOS if you plan on cross compiling from the terminal
+# disables setting CC to OVERRIDE_CC  ....set OVERIDE_CC and  OVERIDE_CXX if using TARGETOS and MINGWXX=/path/ you plan on cross compiling 
 	#PLATFLAGS += TARGETOS=windows 
 	LLD := $(shell command -v lld 2> /dev/null)
 	ifneq ($(LLD),)
