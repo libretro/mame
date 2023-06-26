@@ -41,21 +41,22 @@ ifeq ($(platform),)
 		platform = linux32
 	endif
 endif
-ifeq ($(ARCH),)
+
+ifneq ($(ARCH),)
 	LIBRETRO_CPU = $(ARCH)
 endif
+
 ifeq ($(LIBRETRO_CPU),)
-	ifeq ($(UNAME_M),)
+	ifneq ($(UNAME_M),)
 		ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
 			LIBRETRO_CPU = x86_64
-		endif
-		ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
+		else ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
 			LIBRETRO_CPU = x86_64
+		else ifeq ($(UNAME_M),amd64)
+			LIBRETRO_CPU = x86_64
+		else
+			LIBRETRO_CPU = $(UNAME_M)
 		endif
-	else ifeq ($(UNAME_M),amd64)
-		LIBRETRO_CPU = x86_64
-	else
-		LIBRETRO_CPU = $(UNAME_M)
 	endif
 endif
 
@@ -103,26 +104,20 @@ ifneq ($(findstring win,$(platform)),)
 		MINGW32 ?= /clang32
 		PLATFLAGS += MINGW32=$(MINGW32)
 		LIBRETRO_CPU=x86
-		#mingw clang env has no gcc installed by default geanie will fail to compile without setting CC to clang as its set to gcc
 		PLATFLAGS += CC=clang
 		PTR64=0
 	else ifeq ($(MSYSTEM),CLANG64)
 		MINGW64 ?= /clang64
 		PLATFLAGS += MINGW64=$(MINGW64)
 		LIBRETRO_CPU=x86_64
-		#mingw clang env has no gcc installed by default geanie will fail to compile without setting CC to clang as its set to gcc
 		PLATFLAGS += CC=clang
 	else ifeq ($(MSYSTEM),UCRT64)
 		MINGW64 ?= /ucrt64
 		PLATFLAGS += MINGW64=$(MINGW64)
 		LIBRETRO_CPU=x86_64
-		#mingw Overidew can be use here as we have gcc and clang
-		#the gcc verstion does not link
 		PLATFLAGS += OVERRIDE_CC=clang
 	endif
-#  These flags below dont make sense setting TARGETOS sets CROSS_BUILD which 
-# disables setting CC to OVERRIDE_CC  ....set OVERIDE_CC and  OVERIDE_CXX if using TARGETOS and MINGWXX=/path/ you plan on cross compiling 
-	#PLATFLAGS += TARGETOS=windows 
+
 	LLD := $(shell command -v lld 2> /dev/null)
 	ifneq ($(LLD),)
 		BUILDFLAGS += LDOPTS=-fuse-ld=lld
@@ -140,7 +135,7 @@ ifeq ($(platform),android-arm)
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
-	PTR64 := 
+	PTR64 :=
 endif
 ifeq ($(platform),android-arm64)
 	ANDROID_NDK_LLVM  ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
