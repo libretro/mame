@@ -165,8 +165,8 @@ ifeq ($(platform),osx)
 		LIBRETRO_CPU = arm64
 		LIBRETRO_OS  = osx-arm64
 		TARGET_RULE  = -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
-		OVERRIDE_CXX = clang $(TARGET_RULE)
-		CXX = clang++ $(TARGET_RULE)
+		OVERRIDE_CC = clang $(TARGET_RULE)
+		OVERRIDE_CXX = clang++ $(TARGET_RULE)
 		CFLAGS   += $(TARGET_RULE)
 		CPPFLAGS += $(TARGET_RULE)
 		CXXFLAGS += $(TARGET_RULE)
