@@ -147,6 +147,13 @@ ifeq ($(platform),android-x86_64)
 	PTR64 :=
 endif
 
+ifneq (ANDROID_NDK_HOME,)
+OK := $(shell if [ -d $(ANDROID_NDK_HOME) ]; then echo "ok"; fi)
+ifeq ($(OK),)
+$(error  path $(ANDROID_NDK_HOME) does not exist! please set ANDROID_NDK_HOME!)
+endif
+endif
+
 ifeq ($(platform),linux32)
 	PTR64 := 0
 endif
