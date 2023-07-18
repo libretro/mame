@@ -21,6 +21,11 @@ version of the hardware.
 
 */
 
+//android buildfix
+#if defined(PAGE_SIZE)
+#undef PAGE_SIZE
+#endif
+
 namespace {
 
 class msx_cart_msxdos2_base_device : public device_t, public msx_cart_interface

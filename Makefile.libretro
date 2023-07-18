@@ -1,6 +1,5 @@
 
 VERBOSE ?= 1
-RETRO ?= 1
 NOWERROR ?= 1
 CONFIG ?= libretro
 NO_USE_MIDI ?= 1
@@ -69,7 +68,7 @@ endif
 #
 ###########################################################################
 
-BUILDFLAGS = RETRO=$(RETRO) REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD="retro" NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
+BUILDFLAGS = REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD="retro" NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
 
 ifneq ($(PYTHON_EXECUTABLE),)
 	BUILDFLAGS += PYTHON_EXECUTABLE=$(PYTHON_EXECUTABLE)
@@ -112,41 +111,40 @@ ifneq ($(findstring win,$(platform)),)
 		PLATFLAGS += WINDRES="$(WINDRES)"
 	endif
 endif
-
+# android only needs a valid ANDROID_NDK_HOME set no paths are needed toolchain and makefile takes care of that
+# make CONFIG=libretero OSD=retro android-xxx is all thes required
+ 
 ifeq ($(platform),android-arm)
-	ANDROID_NDK_LLVM ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
-	ANDROID_NDK_ARM  ?= /opt/ndk/toolchains/arm-linux-androideabi-4.9/prebuilt/linux-x86_64
-	ANDROID_NDK_ROOT ?= /opt/ndk
-	PLATFLAGS += TARGETOS="android-arm" gcc="android-arm"
-	PLATFLAGS +=  ANDROID_NDK_LLVM="$(ANDROID_NDK_LLVM)"
-	PLATFLAGS +=  ANDROID_NDK_ARM="$(ANDROID_NDK_ARM)"
-	PLATFLAGS +=  ANDROID_NDK_ROOT="$(ANDROID_NDK_ROOT)"
+	ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += OVERRIDE_CC=clang ANDROID_NDK_HOME="$(ANDROID_NDK_HOME)"
+	PLATFLAGS += android-arm 
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 := 
 endif
 ifeq ($(platform),android-arm64)
-	ANDROID_NDK_LLVM  ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
-	ANDROID_NDK_ARM64 ?= /opt/ndk/toolchains/aarch64-linux-android-4.9/prebuilt/linux-x86_64
-	ANDROID_NDK_ROOT  ?= /opt/ndk
-	PLATFLAGS += TARGETOS="android-arm64" gcc="android-arm64"
-	PLATFLAGS += ANDROID_NDK_LLVM="$(ANDROID_NDK_LLVM)"
-	PLATFLAGS += ANDROID_NDK_ARM64="$(ANDROID_NDK_ARM64)"
-	PLATFLAGS += ANDROID_NDK_ROOT="$(ANDROID_NDK_ROOT)"
+	ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += OVERRIDE_CC=clang ANDROID_NDK_HOME="$(ANDROID_NDK_HOME)"
+	PLATFLAGS += android-arm64 
+	LIBRETRO_CPU :=
+	ARCH :=
+	LIBRETRO_OS :=
+	PTR64 :=
+endif
+ifeq ($(platform),android-x86)
+	ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += OVERRIDE_CC=clang ANDROID_NDK_HOME="$(ANDROID_NDK_HOME)"
+	PLATFLAGS += android-x86
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
 ifeq ($(platform),android-x86_64)
-	ANDROID_NDK_LLVM  ?= /opt/ndk/toolchains/llvm/prebuilt/linux-x86_64
-	ANDROID_NDK_X64 ?= /opt/ndk/toolchains/x86_64-4.9/prebuilt/linux-x86_64
-	ANDROID_NDK_ROOT  ?= /opt/ndk
-	PLATFLAGS += TARGETOS="android-x64" gcc="android-x64"
-	PLATFLAGS += ANDROID_NDK_LLVM="$(ANDROID_NDK_LLVM)"
-	PLATFLAGS += ANDROID_NDK_X64="$(ANDROID_NDK_X64)"
-	PLATFLAGS += ANDROID_NDK_ROOT="$(ANDROID_NDK_ROOT)"
+	ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += OVERRIDE_CC=clang ANDROID_NDK_HOME="$(ANDROID_NDK_HOME)"
+	PLATFLAGS += android-x64 
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=

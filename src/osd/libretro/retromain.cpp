@@ -196,7 +196,7 @@ int mmain(int argc, char *argv[])
 	diagnostics_module::get_instance()->init_crash_diagnostics();
 #endif
 
-#if defined(SDLMAME_ANDROID)
+#if defined(SDLMAME_ANDROID) && !defined(__LIBRETRO__)
 	/* Enable standard application logging */
 	SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION, SDL_LOG_PRIORITY_VERBOSE);
 #endif
