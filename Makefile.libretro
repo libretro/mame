@@ -114,7 +114,6 @@ endif
 # android only needs a valid ANDROID_NDK_HOME set no paths are needed toolchain and makefile takes care of that
 # make CONFIG=libretero OSD=retro android-xxx is all thes required
 
- ANDROID_NDK_ROOT=/test
 ifeq ($(platform),android-arm)
 #buildbot fix
 	ifneq ($(ANDROID_NDK_ROOT),) 
