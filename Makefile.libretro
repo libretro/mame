@@ -115,21 +115,24 @@ endif
 # make CONFIG=libretero OSD=retro android-xxx is all thes required
  
 ifeq ($(platform),android-arm)
-	export ANDROID_NDK_HOME ?= /opt/ndk	PLATFLAGS += android-arm 
+	export ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += android-arm 
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 := 
 endif
 ifeq ($(platform),android-arm64)
-	export ANDROID_NDK_HOME ?= /opt/ndk	PLATFLAGS += android-arm64 
+	export ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += android-arm64 
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
 ifeq ($(platform),android-x86)
-	export ANDROID_NDK_HOME ?= /opt/ndk	PLATFLAGS += android-x86
+	export ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += android-x86
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
