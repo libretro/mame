@@ -551,6 +551,14 @@ ifdef USE_SYSTEM_LIB_PUGIXML
 PARAMS += --with-system-pugixml='$(USE_SYSTEM_LIB_PUGIXML)'
 endif
 
+
+ifdef LIBRETRO_OS
+PARAMS += --LIBRETRO_OS=$(LIBRETRO_OS)
+endif
+
+ifdef LIBRETRO_CPU
+PARAMS += --LIBRETRO_CPU=$(LIBRETRO_CPU)
+endif
 #-------------------------------------------------
 # distribution may change things
 #-------------------------------------------------
