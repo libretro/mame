@@ -163,7 +163,7 @@ ifeq ($(platform),android-x86_64)
 	PTR64 :=
 endif
 
-ifneq (ANDROID_NDK_HOME,)
+ifneq ($(ANDROID_NDK_HOME),)
 OK := $(shell if [ -d $(ANDROID_NDK_HOME) ]; then echo "ok"; fi)
 ifeq ($(OK),)
 $(error  path $(ANDROID_NDK_HOME) does not exist! please set ANDROID_NDK_HOME!)
@@ -177,13 +177,11 @@ ifeq ($(platform),linux32)
 endif
 
 ifeq ($(platform),osx)
-  PLATFLAGS += DONT_USE_NETWORK=1
-
-   ifeq ($(CROSS_COMPILE),1)
+	PLATFLAGS += DONT_USE_NETWORK=1
+	ifeq ($(CROSS_COMPILE),1)
 		LIBRETRO_CPU = arm64
 		LIBRETRO_OS = osx-arm64
-		ARCH = arm64
-		TARGET_RULE   = -arch $(ARCH) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+		TARGET_RULE   = -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		CC = clang $(TARGET_RULE)
 		CXX = clang++ $(TARGET_RULE)
 		PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
@@ -196,25 +194,25 @@ ifeq ($(platform),osx)
 endif
 
 ifeq ($(platform),ios-arm64)
-  PLATFLAGS += DONT_USE_NETWORK=1
+	PLATFLAGS += DONT_USE_NETWORK=1
 	LIBRETRO_CPU = arm64
-	ARCH = arm64
+	PLATFLAGS += TARGETOS="macosx" 
 	LIBRETRO_OS = ios-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
-	CC = cc -arch arm64 -isysroot $(IOSSDK) -miphoneos-version-min=12.0
-	CXX = c++ -arch arm64 -isysroot $(IOSSDK) -miphoneos-version-min=12.0
+	CC = cc -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
+	CXX = c++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
 endif
 
 ifeq ($(platform),tvos-arm64)
-  PLATFLAGS += DONT_USE_NETWORK=1
+	PLATFLAGS += DONT_USE_NETWORK=1
 	LIBRETRO_CPU = arm64
-	ARCH = arm64
-	LIBRETRO_OS = ios-arm64
+	PLATFLAGS += TARGETOS="macosx" 
+	LIBRETRO_OS = tvos-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
-	CC = cc -arch arm64 -isysroot $(IOSSDK)
-	CXX = c++ -arch arm64 -isysroot $(IOSSDK)
+	CC = cc -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
+	CXX = c++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
 endif
@@ -266,10 +264,10 @@ all: build
 build:
 	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS)
 
-vs2015:
-	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS) vs2015
+vs2019:
+	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS) vs2019
 
 clean:
 	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS) clean
 
-.PHONY: all build clean vs2015
+.PHONY: all build clean vs2019

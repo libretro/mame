@@ -659,7 +659,7 @@ function toolchain(_buildDir, _subDir)
 			elseif LIBRETRO_OS=="ios" then
 				targetos = "ios"
 			elseif LIBRETRO_OS=="win" then
-				targetos = "win"
+				targetos = "windows"
 			end
 			_OPTIONS["targetos"] = targetos
 		end
@@ -672,7 +672,7 @@ function toolchain(_buildDir, _subDir)
 		end
 
 		-- MS and Apple don't need -fPIC, but pretty much everything else does.
-		if _OPTIONS["targetos"] ~= "win" and _OPTIONS["targetos"] ~= "macosx" then
+		if _OPTIONS["targetos"] ~= "windows" and _OPTIONS["targetos"] ~= "macosx" then
 			buildoptions { "-fPIC" }
 			linkoptions { "-fPIC" }
 		end
