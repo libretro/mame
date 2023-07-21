@@ -559,6 +559,19 @@ endif
 ifdef LIBRETRO_CPU
 PARAMS += --LIBRETRO_CPU=$(LIBRETRO_CPU)
 endif
+
+ifdef LIBRETRO_IOS
+PARAMS += --LIBRETRO_IOS=$(LIBRETRO_IOS)
+endif
+
+ifdef LIBRETRO_TVOS
+PARAMS += --LIBRETRO_TVOS=$(LIBRETRO_TVOS)
+endif
+
+ifdef LIBRETRO_OSX_ARM64
+PARAMS += --LIBRETRO_OSX_ARM64=$(LIBRETRO_OSX_ARM64)
+endif
+
 #-------------------------------------------------
 # distribution may change things
 #-------------------------------------------------
