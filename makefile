@@ -1211,7 +1211,7 @@ android-ndk:
 ifndef ANDROID_NDK_HOME
 	$(error ANDROID_NDK_HOME is not set)
 endif
-ifneq ($(OSD), retro) 
+ifneq ($(OSD), retro)
 ifndef SDL_INSTALL_ROOT
 	$(error SDL_INSTALL_ROOT is not set)
 endif
@@ -1230,7 +1230,7 @@ endif
 # android-arm
 #-------------------------------------------------
 
-ifeq ($(OSD), retro) 
+ifeq ($(OSD), retro)
 #RETRO HACK no sdl for libretro android
 $(PROJECTDIR)/$(MAKETYPE)-android-arm/Makefile: makefile $(SCRIPTS) $(GENIE)
 	$(SILENT) $(GENIE) $(PARAMS) $(TARGET_PARAMS) --gcc=android-arm --gcc_version=$(CLANG_VERSION) --osd=retro --targetos=android --PLATFORM=arm --NO_USE_MIDI=1 --NO_OPENGL=1 --USE_QTDEBUG=0 --DONT_USE_NETWORK=1 --NOASM=1 $(MAKETYPE)
@@ -1253,7 +1253,7 @@ endif # ifdef RETRO
 # android-arm64
 #-------------------------------------------------
 
-ifeq ($(OSD), retro) 
+ifeq ($(OSD), retro)
 #RETRO HACK no sdl for libretro android
 $(PROJECTDIR)/$(MAKETYPE)-android-arm64/Makefile: makefile $(SCRIPTS) $(GENIE)
 	$(SILENT) $(GENIE) $(PARAMS) $(TARGET_PARAMS) --gcc=android-arm64 --gcc_version=$(CLANG_VERSION) --osd=retro --targetos=android --PLATFORM=arm64 --NO_USE_MIDI=1 --NO_OPENGL=1 --USE_QTDEBUG=0 --DONT_USE_NETWORK=1 --NOASM=1 $(MAKETYPE)
@@ -1275,7 +1275,7 @@ endif # ifdef RETRO
 #-------------------------------------------------
 # android-x86
 #-------------------------------------------------
-ifeq ($(OSD), retro) 
+ifeq ($(OSD), retro)
 #RETRO HACK no sdl for libretro android
 $(PROJECTDIR)/$(MAKETYPE)-android-x86/Makefile: makefile $(SCRIPTS) $(GENIE)
 	$(SILENT)  $(GENIE) $(PARAMS) $(TARGET_PARAMS) --gcc=android-x86 --gcc_version=$(CLANG_VERSION) --osd=retro --targetos=android --PLATFORM=x86 --NO_USE_MIDI=1 --NO_OPENGL=1 --USE_QTDEBUG=0 --DONT_USE_NETWORK=1 --NOASM=1 $(MAKETYPE)
@@ -1298,7 +1298,7 @@ endif
 # android-x64
 #-------------------------------------------------
 
-ifeq ($(OSD), retro) 
+ifeq ($(OSD), retro)
 $(PROJECTDIR)/$(MAKETYPE)-android-x64/Makefile: makefile $(SCRIPTS) $(GENIE)
 	$(SILENT) $(GENIE) $(PARAMS) $(TARGET_PARAMS) --gcc=android-x64 --gcc_version=$(CLANG_VERSION) --osd=retro --targetos=android --PLATFORM=x64 --NO_USE_MIDI=1 --NO_OPENGL=1 --USE_QTDEBUG=0 --DONT_USE_NETWORK=1 --NOASM=1 $(MAKETYPE)
 
@@ -1585,12 +1585,14 @@ openbsd_x86_clang: generate $(PROJECTDIR)/$(MAKETYPE)-openbsd-clang/Makefile
 #-------------------------------------------------
 
 GENIE_SRC=$(wildcard 3rdparty/genie/src/host/*.c)
+#no idea why the old patch skipped since its for the host this we will need to make sure PTR64 is set
+#since this is only for the host genie compile the right flag should be there anyway.
 ifneq ($(MPARAM),)
 	ifneq ($(LIBRETRO_OS),$(filter $(LIBRETRO_OS),tvos-arm64 ios-arm64, osx ))
 		$(info Please make fix the makefile.libretro to not not include -m32 and -m64 on $(LIBRETRO_OS) build. Its has been unset for now )
 		MPARAM :=
 	endif
-endif 
+endif
 
 $(GENIE): $(GENIE_SRC)
 	$(SILENT) $(MAKE) $(MAKEPARAMS) -C 3rdparty/genie/build/gmake.$(GENIEOS) -f genie.make MPARAM=$(MPARAM)

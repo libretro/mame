@@ -119,23 +119,23 @@ endif
 
 ifeq ($(platform),android-arm)
 #buildbot fix
-	ifneq ($(ANDROID_NDK_ROOT),) 
+	ifneq ($(ANDROID_NDK_ROOT),)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
-	PLATFLAGS += android-arm 
+	PLATFLAGS += android-arm
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
-	PTR64 := 
+	PTR64 :=
 endif
 ifeq ($(platform),android-arm64)
 #buildbot fix
-	ifneq ($(ANDROID_NDK_ROOT),) 
+	ifneq ($(ANDROID_NDK_ROOT),)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
-	PLATFLAGS += android-arm64 
+	PLATFLAGS += android-arm64
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
@@ -143,7 +143,7 @@ ifeq ($(platform),android-arm64)
 endif
 ifeq ($(platform),android-x86)
 #buildbot fix
-	ifneq ($(ANDROID_NDK_ROOT),) 
+	ifneq ($(ANDROID_NDK_ROOT),)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
@@ -155,11 +155,11 @@ ifeq ($(platform),android-x86)
 endif
 ifeq ($(platform),android-x86_64)
 #buildbot fix
-	ifneq ($(ANDROID_NDK_ROOT),) 
+	ifneq ($(ANDROID_NDK_ROOT),)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
-	PLATFLAGS += android-x64 
+	PLATFLAGS += android-x64
 	LIBRETRO_CPU :=
 	ARCH :=
 	LIBRETRO_OS :=
@@ -170,7 +170,7 @@ ifneq ($(ANDROID_NDK_HOME),)
 OK := $(shell if [ -d $(ANDROID_NDK_HOME) ]; then echo "ok"; fi)
 ifeq ($(OK),)
 $(error  path $(ANDROID_NDK_HOME) does not exist! please set ANDROID_NDK_HOME!)
-else 
+else
 $(info  ANDROID_NDK_HOME path is a valid directory $(ANDROID_NDK_HOME))
 endif
 endif
@@ -192,8 +192,8 @@ ifeq ($(platform),osx)
 		CPPFLAGS += $(TARGET_RULE)
 		CXXFLAGS += $(TARGET_RULE)
 		LDFLAGS  += $(TARGET_RULE)
-		PLATFLAGS += TARGETOS="macosx" 
-		PTR64 :=
+		PLATFLAGS += TARGETOS="macosx"
+		PTR64 = 1
    endif
 
 endif
@@ -207,14 +207,14 @@ ifeq ($(platform),ios-arm64)
 	PLATFLAGS += USE_QTDEBUG=0
 	PLATFLAGS += LIBRETRO_IOS=1
 	LIBRETRO_CPU = arm64
-	PLATFLAGS += TARGETOS="macosx" 
+	PLATFLAGS += TARGETOS="macosx"
 	LIBRETRO_OS = ios-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
 	CC = cc -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	CXX = c++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
-	PTR64 :=
+	PTR64 =1
 endif
 
 ifeq ($(platform),tvos-arm64)
@@ -225,14 +225,14 @@ ifeq ($(platform),tvos-arm64)
 	PLATFLAGS += USE_QTDEBUG=0
 	PLATFLAGS += LIBRETRO_TVOS=1
 	LIBRETRO_CPU = arm64
-	PLATFLAGS += TARGETOS="macosx" 
+	PLATFLAGS += TARGETOS="macosx"
 	LIBRETRO_OS = tvos-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
 	CC = cc -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
 	CXX = c++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
-	PTR64 :=
+	PTR64 =1
 endif
 
 ifneq ($(LIBRETRO_CPU),)
