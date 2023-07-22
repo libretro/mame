@@ -13,6 +13,9 @@ REGENIE ?= 1
 GITHUB_REPO ?= https://github.com/libretro/mame/
 DEBUG ?= 0
 
+#see https://github.com/libretro/mame/blob/093209930f5fbdaee0d6f3a3666f3d70025d089f/3rdparty/genie/build/gmake.darwin/genie.make#L55C2-L55C47
+export LIBRETRO_OS
+
 ###########################################################################
 #
 #   LIBRETRO PLATFORM GUESSING
