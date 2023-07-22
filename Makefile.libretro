@@ -192,6 +192,8 @@ ifeq ($(platform),osx)
 		CPPFLAGS += $(TARGET_RULE)
 		CXXFLAGS += $(TARGET_RULE)
 		LDFLAGS  += $(TARGET_RULE)
+		PLATFLAGS += TARGETOS="macosx" 
+		PTR64 :=
    endif
 
 endif
@@ -206,6 +208,7 @@ ifeq ($(platform),ios-arm64)
 	CXX = c++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
+	PTR64 :=
 endif
 
 ifeq ($(platform),tvos-arm64)
@@ -218,6 +221,7 @@ ifeq ($(platform),tvos-arm64)
 	CXX = c++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
+	PTR64 :=
 endif
 
 ifneq ($(LIBRETRO_CPU),)
