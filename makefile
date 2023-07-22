@@ -1595,6 +1595,11 @@ openbsd_x86_clang: generate $(PROJECTDIR)/$(MAKETYPE)-openbsd-clang/Makefile
 
 GENIE_SRC=$(wildcard 3rdparty/genie/src/host/*.c)
 
+#do this here so we dont break upstream build it really should only filter libretro macos arm builds
+ifeq ($(OSD,retro)
+MPARAM :=
+endif
+
 $(GENIE): $(GENIE_SRC)
 	$(SILENT) $(MAKE) $(MAKEPARAMS) -C 3rdparty/genie/build/gmake.$(GENIEOS) -f genie.make MPARAM=$(MPARAM)
 
