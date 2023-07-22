@@ -598,6 +598,14 @@ configuration { "gmake or ninja" }
 
 dofile ("toolchain.lua")
 
+-- RETRO HACK
+if _OPTIONS["osd"]=="retro" then
+	if string.sub(_ACTION,1,4) ~= "vs20" then
+		buildoptions {
+			"-fPIC"
+		}
+	end
+
 	configuration { "*" }
 		defines {
 			"__LIBRETRO__",
