@@ -1594,6 +1594,12 @@ openbsd_x86_clang: generate $(PROJECTDIR)/$(MAKETYPE)-openbsd-clang/Makefile
 #-------------------------------------------------
 
 GENIE_SRC=$(wildcard 3rdparty/genie/src/host/*.c)
+ifneq ($(MPARAM),)
+	ifneq ($(LIBRETRO_OS),$(filter $(LIBRETRO_OS),tvos-arm64 ios-arm64, osx ))
+		$(info Please make fix the makefile.libretro to not not include -m32 and -m64 on $(LIBRETRO_OS) build. Its has been unset for now )
+		MPARAM :=
+	endif
+endif 
 
 $(GENIE): $(GENIE_SRC)
 	$(SILENT) $(MAKE) $(MAKEPARAMS) -C 3rdparty/genie/build/gmake.$(GENIEOS) -f genie.make MPARAM=$(MPARAM)
