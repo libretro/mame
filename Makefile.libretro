@@ -280,6 +280,7 @@ MAKEFILE :=
 all: build
 
 build:
+	$(MAKE) clean
 	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS)
 
 vs2019:
