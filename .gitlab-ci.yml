@@ -241,9 +241,9 @@ libretro-build-ios-arm64:
   extends:
     - .libretro-ios-arm64-make-default
     - .core-defs
-  cache:
-    <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-ios-arm64"
+#  cache:
+#    <<: *global_cache
+#    key: "$CI_COMMIT_REF_SLUG-ios-arm64"
   only:
     - master
     - /^libretro/mame.*$/
@@ -255,9 +255,9 @@ libretro-build-tvos-arm64:
   extends:
     - .libretro-tvos-arm64-make-default
     - .core-defs
-  cache:
-    <<: *global_cache
-    key: "$CI_COMMIT_REF_SLUG-tvos-arm64"
+#  cache:
+#    <<: *global_cache
+#    key: "$CI_COMMIT_REF_SLUG-tvos-arm64"
   only:
     - master
     - /^libretro/mame.*$/
