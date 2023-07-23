@@ -705,7 +705,14 @@ else
 		"LSB_FIRST",
 	}
 	-- For iOS in libretro, don't specify the arch since it's already specified in $(CC) and $(CXX)
-	if _OPTIONS["targetos"]=="macosx"  and _OPTIONS["LIBRETRO_IOS"] ~= "1" and _OPTIONS["LIBRETRO_TVOS"] ~= "1" and _OPTIONS["LIBRETRO_OSX_ARM64"] then
+	if _OPTIONS["targetos"]=="macosx"  and _OPTIONS["LIBRETRO_IOS"] ~= "1" and _OPTIONS["LIBRETRO_TVOS"] ~= "1" and _OPTIONS["LIBRETRO_OSX_ARM64"]~= "1" then
+		configuration { "arm64" }
+			buildoptions {
+				"-arch arm64",
+			}
+			linkoptions {
+				"-arch arm64",
+			}
 		configuration { "x64", "not arm64" }
 			buildoptions {
 				"-arch x86_64",
