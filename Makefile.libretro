@@ -200,6 +200,7 @@ endif
 APPLE_EXTRA_FLAGS += --NOASM=1 --DONT_USE_NETWORK=1  --NO_USE_MIDI=1 --NO_OPENGL=1 --USE_QTDEBUG=0 --LIBRETRO_IOS=1
 
 ifeq ($(platform),ios-arm64)
+	LIBRETRO_APPLE_PLATFORM = arm64-apple-ios14.2
 	PLATFLAGS += DONT_USE_NETWORK=1
 	PLATFLAGS += NOASM=1
 	PLATFLAGS += NO_USE_MIDI=1
@@ -210,14 +211,16 @@ ifeq ($(platform),ios-arm64)
 	PLATFLAGS += TARGETOS="macosx"
 	LIBRETRO_OS = ios-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
-	CC = clang -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
+	CC = clang -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	CXX = clang++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
 	PTR64 =1
 endif
 
+
 ifeq ($(platform),tvos-arm64)
+	LIBRETRO_APPLE_PLATFORM = arm64-apple-tvos14.2
 	PLATFLAGS += DONT_USE_NETWORK=1
 	PLATFLAGS += NOASM=1
 	PLATFLAGS += NO_USE_MIDI=1
@@ -228,7 +231,7 @@ ifeq ($(platform),tvos-arm64)
 	PLATFLAGS += TARGETOS="macosx"
 	LIBRETRO_OS = tvos-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
-	CC = clang -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
+	CC = clang -arch -target $(LIBRETRO_APPLE_PLATFORM) $(LIBRETRO_CPU) -isysroot $(IOSSDK)
 	CXX = clang++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
@@ -280,7 +283,6 @@ MAKEFILE :=
 all: build
 
 build:
-	$(MAKE) clean
 	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS)
 
 vs2019:
