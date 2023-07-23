@@ -231,7 +231,7 @@ ifeq ($(platform),tvos-arm64)
 	PLATFLAGS += TARGETOS="macosx"
 	LIBRETRO_OS = tvos-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
-	CC = clang -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) $(LIBRETRO_CPU) -isysroot $(IOSSDK)
+	CC = clang -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK)
 	CXX = clang++ -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM)  -isysroot $(IOSSDK)
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
