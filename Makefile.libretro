@@ -212,7 +212,7 @@ ifeq ($(platform),ios-arm64)
 	LIBRETRO_OS = ios-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
 	CC = clang -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
-	CXX = clang++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
+	CXX = clang++ -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
 	PTR64 =1
@@ -232,7 +232,7 @@ ifeq ($(platform),tvos-arm64)
 	LIBRETRO_OS = tvos-arm64
 	IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
 	CC = clang -arch -target $(LIBRETRO_APPLE_PLATFORM) $(LIBRETRO_CPU) -isysroot $(IOSSDK)
-	CXX = clang++ -arch $(LIBRETRO_CPU) -isysroot $(IOSSDK)
+	CXX = clang++ -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM)  -isysroot $(IOSSDK)
 	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
 	BUILDFLAGS += OPTIMIZE=z
 	PTR64 =1
