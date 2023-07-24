@@ -197,7 +197,7 @@ ifeq ($(platform),osx)
 	else
 		PLATFLAGS +=PLATFORM=x86
 	endif
-	ARCHOPTS =$(TARGET_RULE)
+	export ARCHOPTS =$(TARGET_RULE)
 endif
 
 ifeq ($(platform),ios-arm64)
@@ -225,7 +225,7 @@ ifeq ($(platform),ios-arm64)
 	PTR64 =1
 	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
 	PLATFLAGS +=macosx_arm64_clang
-	ARCHOPTS =$(TARGET_RULE)
+	export ARCHOPTS =$(TARGET_RULE)
 endif
 
 ifeq ($(platform),tvos-arm64)
@@ -249,7 +249,7 @@ ifeq ($(platform),tvos-arm64)
 	PTR64 =1
 	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
 	PLATFLAGS +=macosx_arm64_clang
-	ARCHOPTS =$(TARGET_RULE)
+	export ARCHOPTS =$(TARGET_RULE)
 endif
 
 ifneq ($(LIBRETRO_CPU),)
