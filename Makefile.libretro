@@ -27,6 +27,12 @@ export ARCHOPTS
 
 UNAME_S = $(shell uname -s)
 UNAME_M = $(shell uname -m)
+ifeq ($(platform),)
+$(error platform not set)
+else
+$(info platform=$(platform))
+$(info Defaults cc=$(cc) CC=$(CC) CFLAGS=$(CFLAGS) CCFLAGS=$(CCFLAGS) CXXFLAGS=$(CXXFLAGS) LDFLAGS=$(LDFLAGS) ARCH=$(ARCH) arch=$(arch))
+endif
 
 ifeq ($(platform),)
 	platform = unix
