@@ -206,7 +206,8 @@ ifeq ($(platform),ios-arm64)
 	#the ci should set above only osx does it so far unset if its added to the ci
 	TARGET_RULE =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#-arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0 was the flags used
-	#This is my first tmie touching mach related stuff, someone more knowlagable of the platfrom can tweak the settings.
+	#This is my first time touching mac related stuff, someone more knowlagable of the platfrom can tweak the settings. Again the llvm is a good place to start
+	# thats how i got the tagets needed.
 	CXX = clang++ -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
 	PLATFLAGS +=DONT_USE_NETWORK=1
 	PLATFLAGS +=NOASM=1
