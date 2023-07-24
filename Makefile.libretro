@@ -216,7 +216,7 @@ endif
 
 ifeq ($(platform),ios-arm64)
 	LIBRETRO_APPLE_PLATFORM = arm64-apple-ios14.2
-	LIBRETRO_APPLE_ISYSROOT :=  #$(shell xcodebuild -version -sdk iphoneos Path)
+	LIBRETRO_APPLE_ISYSROOT := $(shell xcodebuild -version -sdk iphoneos Path)
 	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#the ci should set above only osx does it so far unset if its added to the ci
 	#-isysroot $(LIBRETRO_APPLE_ISYSROOT)
