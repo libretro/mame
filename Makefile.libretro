@@ -16,7 +16,7 @@ DEBUG ?= 0
 #see https://github.com/libretro/mame/blob/093209930f5fbdaee0d6f3a3666f3d70025d089f/3rdparty/genie/build/gmake.darwin/genie.make#L55C2-L55C47
 export LIBRETRO_OS
 #this make file need dont better ad use vars instead of the way it done again can wait till the mac builds work
-export ARCHOPTS 
+export ARCHOPTS
 ###########################################################################
 #
 #   LIBRETRO PLATFORM GUESSING
@@ -185,14 +185,14 @@ ifeq ($(platform),osx)
 	PLATFLAGS += DONT_USE_NETWORK=1
 	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#PLATFLAGS +=OVERRIDE_CC=clang OVERRIDE_CXX=clang++
-	PLATFLAGS +=TARGETOS="macosx" 
+	PLATFLAGS +=TARGETOS="macosx"
 	ifeq ($(CROSS_COMPILE),1)
-		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts) 
+		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts)
 		#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.		LIBRETRO_CPU = arm64
 		LIBRETRO_OS = macosx
 		LIBRETRO_CPU =arm64
 		PLATFLAGS +=LIBRETRO_OSX_ARM64=1
-		PLATFLAGS +=PLATFORM=arm64 
+		PLATFLAGS +=PLATFORM=arm64
 		#this will be removed like x64 platfrom after the builds are working
 		ARCHOPTS +=-arch $(LIBRETRO_CPU)
 		#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
@@ -203,7 +203,7 @@ ifeq ($(platform),osx)
 		export ARCHITECTURE=_x64_clang
 		PLATFLAGS +=PLATFORM=x64
 		#we dont need to pass -arch as i fixed the condition and there and arm is added from upstream in the last pull req.
-		#There is no variable in the lua scrip to disable it the other platfrom will follow suit and just use PLATFORM when we are up and running. 
+		#There is no variable in the lua scrip to disable it the other platfrom will follow suit and just use PLATFORM when we are up and running.
 	endif
 	PTR64 = 1
 endif
@@ -224,14 +224,14 @@ ifeq ($(platform),ios-arm64)
 	PLATFLAGS +=NO_OPENGL=1
 	PLATFLAGS +=USE_QTDEBUG=0
 	PLATFLAGS +=LIBRETRO_IOS=1
-	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts) 
+	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts)
 	#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.
 	LIBRETRO_CPU =arm64
 	LIBRETRO_OS =ios-arm64
 	PLATFLAGS +=LIBRETRO_IOS=1
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
 	PLATFLAGS +=TARGETOS="macosx"
-	PLATFLAGS +=PLATFORM=arm64 
+	PLATFLAGS +=PLATFORM=arm64
 	PTR64 =1
 	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
 	PLATFLAGS +=macosx_arm64_clang
@@ -248,14 +248,14 @@ ifeq ($(platform),tvos-arm64)
 	PLATFLAGS +=NO_USE_MIDI=1
 	PLATFLAGS +=NO_OPENGL=1
 	PLATFLAGS +=USE_QTDEBUG=0
-	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts) 
+	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts)
 	#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.
 	LIBRETRO_CPU = arm64
 	LIBRETRO_OS =tvos-arm64
 	PLATFLAGS +=LIBRETRO_TVOS=1
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
 	PLATFLAGS +=TARGETOS =macosx
-	PLATFLAGS +=PLATFORM=arm64 
+	PLATFLAGS +=PLATFORM=arm64
 	#BUILDFLAGS += OPTIMIZE=z
 	PTR64 =1
 	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
