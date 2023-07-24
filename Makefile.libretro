@@ -65,6 +65,7 @@ ifeq ($(ARCH),x86)
 	PTR64 := 0
 endif
 
+
 ###########################################################################
 #
 #   BUILD FLAGS
@@ -181,64 +182,70 @@ endif
 
 ifeq ($(platform),osx)
 	PLATFLAGS += DONT_USE_NETWORK=1
+	TARGET_RULE =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+	PLATFLAGS +=OVERRIDE_CC=clang OVERRIDE_CXX=clang++
+	PLATFLAGS +=TARGETOS="macosx" 
+	PTR64 = 1
 	ifeq ($(CROSS_COMPILE),1)
-		LIBRETRO_CPU = arm64
+		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts) 
+		#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.		LIBRETRO_CPU = arm64
 		LIBRETRO_OS = osx-arm64
-		TARGET_RULE   = -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
-		CC = clang $(TARGET_RULE)
-		CXX = clang++ $(TARGET_RULE)
-		PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
-		CFLAGS   += $(TARGET_RULE)
-		CPPFLAGS += $(TARGET_RULE)
-		CXXFLAGS += $(TARGET_RULE)
-		LDFLAGS  += $(TARGET_RULE)
-		PLATFLAGS += TARGETOS="macosx"
-		PTR64 = 1
-   endif
-
+		PLATFLAGS +=LIBRETRO_OSX_ARM64=1
+		PLATFLAGS +=PLATFORM=arm64 
+		#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
+		PLATFLAGS +=macosx_arm64_clang
+	else
+		PLATFLAGS +=PLATFORM=x86
+	endif
+	ARCHOPTS =$(TARGET_RULE)
 endif
-APPLE_EXTRA_FLAGS += --NOASM=1 --DONT_USE_NETWORK=1  --NO_USE_MIDI=1 --NO_OPENGL=1 --USE_QTDEBUG=0 --LIBRETRO_IOS=1
 
 ifeq ($(platform),ios-arm64)
 	LIBRETRO_APPLE_PLATFORM = arm64-apple-ios14.2
-	PLATFLAGS += DONT_USE_NETWORK=1
-	PLATFLAGS += NOASM=1
-	PLATFLAGS += NO_USE_MIDI=1
-	PLATFLAGS += NO_OPENGL=1
-	PLATFLAGS += USE_QTDEBUG=0
-	PLATFLAGS += LIBRETRO_IOS=1
-	PLATFLAGS += LDOPTS="-arch $(LIBRETRO_CPU)"
-	LIBRETRO_CPU = arm64
-	PLATFLAGS += TARGETOS="macosx"
-	LIBRETRO_OS = ios-arm64
-	IOSSDK := $(shell xcodebuild -version -sdk iphoneos Path)
-	CC = clang -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
-	CXX = clang++ -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0
-	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
-	BUILDFLAGS += OPTIMIZE=z
-
+	LIBRETRO_APPLE_ISYSROOT := $(shell xcodebuild -version -sdk iphoneos Path)
+	#the ci should set above only osx does it so far unset if its added to the ci
+	TARGET_RULE =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+	PLATFLAGS +=DONT_USE_NETWORK=1
+	PLATFLAGS +=NOASM=1
+	PLATFLAGS +=NO_USE_MIDI=1
+	PLATFLAGS +=NO_OPENGL=1
+	PLATFLAGS +=USE_QTDEBUG=0
+	PLATFLAGS +=LIBRETRO_IOS=1
+	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts) 
+	#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.
+	LIBRETRO_CPU =arm64
+	LIBRETRO_OS =ios-arm64
+	PLATFLAGS +=LIBRETRO_IOS=1
+	PLATFLAGS +=TARGETOS="macosx"
+	PLATFLAGS +=PLATFORM=arm64 
 	PTR64 =1
+	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
+	PLATFLAGS +=macosx_arm64_clang
+	ARCHOPTS =$(TARGET_RULE)
 endif
-
 
 ifeq ($(platform),tvos-arm64)
 	LIBRETRO_APPLE_PLATFORM = arm64-apple-tvos14.2
-	PLATFLAGS += DONT_USE_NETWORK=1
-	PLATFLAGS += NOASM=1
-	PLATFLAGS += NO_USE_MIDI=1
-	PLATFLAGS += NO_OPENGL=1
-	PLATFLAGS += USE_QTDEBUG=0
-	PLATFLAGS += LIBRETRO_TVOS=1
-	PLATFLAGS += LDOPTS="-arch $(LIBRETRO_CPU)"
+	LIBRETRO_APPLE_ISYSROOT := $(shell xcodebuild -version -sdk appletvos Path)
+	TARGET_RULE =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+	#the ci should set above only osx does it so far unset if its udded to the ci
+	PLATFLAGS +=DONT_USE_NETWORK=1
+	PLATFLAGS +=NOASM=1
+	PLATFLAGS +=NO_USE_MIDI=1
+	PLATFLAGS +=NO_OPENGL=1
+	PLATFLAGS +=USE_QTDEBUG=0
+	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts) 
+	#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.
 	LIBRETRO_CPU = arm64
-	PLATFLAGS += TARGETOS="macosx"
-	LIBRETRO_OS = tvos-arm64
-	IOSSDK := $(shell xcodebuild -version -sdk appletvos Path)
-	CC = clang -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK)
-	CXX = clang++ -arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM)  -isysroot $(IOSSDK)
-	PLATFLAGS += OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)"
+	LIBRETRO_OS =tvos-arm64
+	PLATFLAGS +=LIBRETRO_TVOS=1
+	PLATFLAGS +=TARGETOS =macosx
+	PLATFLAGS +=PLATFORM=arm64 
 	#BUILDFLAGS += OPTIMIZE=z
 	PTR64 =1
+	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
+	PLATFLAGS +=macosx_arm64_clang
+	ARCHOPTS =$(TARGET_RULE)
 endif
 
 ifneq ($(LIBRETRO_CPU),)

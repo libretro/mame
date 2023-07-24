@@ -704,7 +704,7 @@ else
 	defines {
 		"LSB_FIRST",
 	}
-	-- For iOS in libretro, don't specify the arch since it's already specified in $(CC) and $(CXX)
+	-- This really isint neeeded anymore ive updated the makefiles to test this with the hack removed, lets just get the builds working first
 	if _OPTIONS["targetos"]=="macosx"  and _OPTIONS["LIBRETRO_IOS"] ~= "1" and _OPTIONS["LIBRETRO_TVOS"] ~= "1" and _OPTIONS["LIBRETRO_OSX_ARM64"]~= "1" then
 		configuration { "arm64" }
 			buildoptions {
