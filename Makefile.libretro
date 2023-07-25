@@ -17,6 +17,7 @@ DEBUG ?= 0
 export LIBRETRO_OS
 #this make file need dont better ad use vars instead of the way it done again can wait till the mac builds work
 export ARCHOPTS
+export ARCH
 ###########################################################################
 #
 #   LIBRETRO PLATFORM GUESSING
@@ -52,7 +53,15 @@ ifeq ($(platform),)
 endif
 ifeq ($(ARCH),)
 	LIBRETRO_CPU = $(ARCH)
+	#GENIE makefiles use this variable fr something else unset if set
+	ifeq ($(ARCH),x86)
+		PTR64 := 0
+	endif
+	ARCH:=
+$(info unsetting ARCH=$(ARCH))
 endif
+
+
 ifeq ($(LIBRETRO_CPU),)
 	ifeq ($(UNAME_M),)
 		ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
@@ -68,9 +77,6 @@ ifeq ($(LIBRETRO_CPU),)
 	endif
 endif
 
-ifeq ($(ARCH),x86)
-	PTR64 := 0
-endif
 
 
 ###########################################################################
@@ -133,7 +139,6 @@ ifeq ($(platform),android-arm)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-arm
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -145,7 +150,6 @@ ifeq ($(platform),android-arm64)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-arm64
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -157,7 +161,6 @@ ifeq ($(platform),android-x86)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-x86
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -169,7 +172,6 @@ ifeq ($(platform),android-x86_64)
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-x64
 	LIBRETRO_CPU :=
-	ARCH :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -269,7 +271,7 @@ ifeq ($(platform),tvos-arm64)
 endif
 
 ifneq ($(LIBRETRO_CPU),)
-	PLATFLAGS += ARCH="" LIBRETRO_CPU="$(LIBRETRO_CPU)"
+	PLATFLAGS += LIBRETRO_CPU="$(LIBRETRO_CPU)"
 endif
 ifneq ($(FORCE_DRC_C_BACKEND),)
 	PLATFLAGS += FORCE_DRC_C_BACKEND="$(FORCE_DRC_C_BACKEND)"
