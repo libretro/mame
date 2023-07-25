@@ -32,7 +32,7 @@ ifeq ($(platform),)
 $(error platform not set)
 else
 $(info platform=$(platform))
-$(info Defaults cc=$(cc) CC=$(CC) CFLAGS=$(CFLAGS) CCFLAGS=$(CCFLAGS) CXXFLAGS=$(CXXFLAGS) LDFLAGS=$(LDFLAGS) ARCH=$(ARCH) arch=$(arch))
+$(info Defaults cc=$(cc) CC=$(CC) CFLAGS=$(CFLAGS) CCFLAGS=$(CCFLAGS) CXXFLAGS=$(CXXFLAGS) LDFLAGS=$(LDFLAGS) ARCH=$(ARCH) arch=$(arch) NUMPROC=$(NUMPROC))
 endif
 
 ifeq ($(platform),)
