@@ -45,14 +45,14 @@ ifeq ($(platform),)
 		platform = linux32
 	endif
 endif
-ifeq ($(ARCH),)
+ifneq ($(ARCH),)
 	LIBRETRO_CPU = $(ARCH)
 	#GENIE makefiles use this variable fr something else unset if set
 	ifeq ($(ARCH),x86)
 		PTR64 := 0
 	endif
 	ARCH :=
-$(info unsetting ARCH=$(ARCH))
+$(info unsetting ARCH=$(LIBRETRO_CPU))
 endif
 
 ifeq ($(platform),)
