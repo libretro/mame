@@ -191,10 +191,10 @@ endif
 
 ifeq ($(platform),osx)
 	PLATFLAGS += DONT_USE_NETWORK=1
-	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#PLATFLAGS +=OVERRIDE_CC=clang OVERRIDE_CXX=clang++
 	PLATFLAGS +=TARGETOS="macosx"
 	ifeq ($(CROSS_COMPILE),1)
+		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts)
 		#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.		LIBRETRO_CPU = arm64
 		LIBRETRO_OS = macosx
@@ -208,7 +208,10 @@ ifeq ($(platform),osx)
 	else
 #		LIBRETRO_OS = macosx
 #		LIBRETRO_CPU =x86_64
-		export ARCHITECTURE=_x64_clang
+		#not set on x64 use the info from arm64 so we get the right target and path
+		LIBRETRO_APPLE_PLATFORM=x86_64-apple-macos10.15
+		LIBRETRO_APPLE_ISYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
+		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		PLATFLAGS +=PLATFORM=x64
 		#we dont need to pass -arch as i fixed the condition and there and arm is added from upstream in the last pull req.
 		#There is no variable in the lua scrip to disable it the other platfrom will follow suit and just use PLATFORM when we are up and running.
