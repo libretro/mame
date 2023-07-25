@@ -42,7 +42,7 @@ ifeq ($(platform),)
 	else ifneq ($(findstring win,$(UNAME_S)),)
 		platform = win
 	else ifeq ($(UNAME_M), "i686")
-		platform = linux32
+		platform = linux
 	endif
 endif
 ifneq ($(ARCH),)
@@ -186,6 +186,7 @@ endif
 endif
 
 ifeq ($(platform),linux32)
+TARGETOS = linux
 	PTR64 := 0
 endif
 
@@ -265,7 +266,7 @@ ifeq ($(platform),tvos-arm64)
 	LIBRETRO_OS =tvos-arm64
 	PLATFLAGS +=LIBRETRO_TVOS=1
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
-	PLATFLAGS +=TARGETOS =macosx
+	PLATFLAGS +=TARGETOS=macosx
 	PLATFLAGS +=PLATFORM=arm64
 	#BUILDFLAGS += OPTIMIZE=z
 	PTR64 =1
