@@ -540,10 +540,16 @@ if string.sub(_ACTION,1,4) == "vs20" and _OPTIONS["osd"]=="sdl" then
 end
 -- Build SDL2 for Android
 if _OPTIONS["osd"] == "retro" then
+	if _OPTIONS["targetos"]=="android" then
+		linkoptions {
+			"-static-libgcc -static-libstdc++"
+		}
+	end
 -- RETRO HACK no sdl for libretro android
 else
 if _OPTIONS["targetos"] == "android" then
 	_OPTIONS["with-bundled-sdl2"] = "1"
+
 end
 end
 -- RETRO HACK END no sdl for libretro android
