@@ -88,13 +88,15 @@ endif
 BUILDFLAGS = REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD="retro" NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
 
 ifneq ($(PYTHON_EXECUTABLE),)
-	BUILDFLAGS += PYTHON_EXECUTABLE=$(PYTHON_EXECUTABLE)
+	PYTHON_EXECUTABLE=$(PYTHON_EXECUTABLE)
 endif
 ifeq ($(DEBUG),1)
-	BUILDFLAGS += CONFIG=libretrodbg
-	BUILDFLAGS += SYMBOLS=1 SYMLEVEL=1 OPTIMIZE=g
+	CONFIG=libretrodbg
+	SYMBOLS=1
+	SYMLEVEL=1
+	OPTIMIZE=g
 else
-	BUILDFLAGS += CONFIG=libretro
+	CONFIG=libretro
 endif
 
 ###########################################################################
@@ -108,49 +110,50 @@ PLATFLAGS =
 ifneq ($(findstring win,$(platform)),)
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
-		PLATFLAGS += MINGW64="$(MINGW64)"
-		LIBRETRO_CPU = x86_64
+		LIBRETRO_CPU=x86_64
 	else ifeq ($(MSYSTEM),MINGW32)
 		MINGW32 ?= /mingw32
-		PLATFLAGS += MINGW32="$(MINGW32)"
-		LIBRETRO_CPU = x86
+		LIBRETRO_CPU=x86
 		PTR64=0
+	else ifeq ($(MSYSTEM),CLANG32)
+		MINGW32 ?= /clang32
+		LIBRETRO_CPU=x86
+		CC=clang
+		PTR64=0
+	else ifeq ($(MSYSTEM),CLANG64)
+		MINGW64 ?= /clang64
+		LIBRETRO_CPU=x86_64
+		CC=clang
+	else ifeq ($(MSYSTEM),UCRT64)
+		MINGW64 ?= /ucrt64
+		LIBRETRO_CPU=x86_64
+		OVERRIDE_CC=clang
 	endif
-	CC  ?= cc
-	CXX ?= cxx
-	AR  ?= ar
-	PLATFLAGS += TARGETOS="windows" OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)" "AR=$(AR)"
+
 	LLD := $(shell command -v lld 2> /dev/null)
 	ifneq ($(LLD),)
-		BUILDFLAGS += LDOPTS="-fuse-ld=lld"
+		LDOPTS=-fuse-ld=lld
 	endif
-	ifneq ($(WINDRES),)
-		PLATFLAGS += WINDRES="$(WINDRES)"
-	endif
+	LIBRETRO_OS = win
 endif
-# android only needs a valid ANDROID_NDK_HOME set no paths are needed toolchain and makefile takes care of that
-# make CONFIG=libretero OSD=retro android-xxx is all thes required
 
 ifeq ($(platform),android-arm)
-#buildbot fix
+	#buildbot fix
 	ifneq ($(ANDROID_NDK_ROOT),)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-arm
-	LIBRETRO_CPU :=
-	LIBRETRO_OS :=
 	PTR64 :=
 endif
+
 ifeq ($(platform),android-arm64)
-#buildbot fix
+	#buildbot fix
 	ifneq ($(ANDROID_NDK_ROOT),)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-arm64
-	LIBRETRO_CPU :=
-	LIBRETRO_OS :=
 	PTR64 :=
 endif
 ifeq ($(platform),android-x86)
@@ -160,8 +163,6 @@ ifeq ($(platform),android-x86)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-x86
-	LIBRETRO_CPU :=
-	LIBRETRO_OS :=
 	PTR64 :=
 endif
 ifeq ($(platform),android-x86_64)
@@ -171,8 +172,6 @@ ifeq ($(platform),android-x86_64)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += android-x64
-	LIBRETRO_CPU :=
-	LIBRETRO_OS :=
 	PTR64 :=
 endif
 
@@ -186,7 +185,8 @@ endif
 endif
 
 ifeq ($(platform),linux32)
-TARGETOS = linux
+	TARGETOS = linux
+	PLATFORM =x86
 	PTR64 := 0
 endif
 
