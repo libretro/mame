@@ -137,7 +137,7 @@ ifeq ($(platform),android-arm)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
-	PLATFLAGS += android-arm
+	PLATFLAGS += TARGETOS=android-arm gcc=android-arm PLATFORM=arm
 	LIBRETRO_CPU :=
 	LIBRETRO_OS :=
 	PTR64 :=
@@ -148,7 +148,7 @@ ifeq ($(platform),android-arm64)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
-	PLATFLAGS += android-arm64
+	PLATFLAGS += TARGETOS=android-arm64 gcc=android-arm64 PLATFORM=arm64
 	LIBRETRO_CPU :=
 	LIBRETRO_OS :=
 	PTR64 :=
@@ -159,8 +159,7 @@ ifeq ($(platform),android-x86)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
-	PLATFLAGS += android-x86
-	LIBRETRO_CPU :=
+	PLATFLAGS += TARGETOS=android-x86 gcc=android-x86 PLATFORM=x86
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -170,6 +169,7 @@ ifeq ($(platform),android-x86_64)
 	ANDROID_NDK_HOME=$(ANDROID_NDK_ROOT)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
+	PLATFLAGS += TARGETOS=android-x64 gcc=android-x64 PLATFORM=x64
 	PLATFLAGS += android-x64
 	LIBRETRO_CPU :=
 	LIBRETRO_OS :=
