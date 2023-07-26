@@ -119,7 +119,7 @@ ifneq ($(findstring win,$(platform)),)
 	ifneq ($(LLD),)
 		LDOPTS=-fuse-ld=lld
 	endif
-	LIBRETRO_OS = win
+	LIBRETRO_OS = windows
 endif
 
 ifeq ($(platform),android-arm)
