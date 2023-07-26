@@ -41,7 +41,7 @@ ifeq ($(platform),)
 		platform = osx
 	else ifneq ($(findstring win,$(UNAME_S)),)
 		platform = win
-	else ifeq ($(UNAME_M), "i686")
+	else ifeq ($(UNAME_M), i686)
 		platform = linux
 	endif
 endif
@@ -85,7 +85,7 @@ endif
 #
 ###########################################################################
 
-BUILDFLAGS = REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD="retro" NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
+BUILDFLAGS = REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD=retro NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
 
 ifneq ($(PYTHON_EXECUTABLE),)
 	BUILDFLAGS += PYTHON_EXECUTABLE=$(PYTHON_EXECUTABLE)
@@ -108,24 +108,24 @@ PLATFLAGS =
 ifneq ($(findstring win,$(platform)),)
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
-		PLATFLAGS += MINGW64="$(MINGW64)"
+		PLATFLAGS += MINGW64=$(MINGW64)
 		LIBRETRO_CPU = x86_64
 	else ifeq ($(MSYSTEM),MINGW32)
 		MINGW32 ?= /mingw32
-		PLATFLAGS += MINGW32="$(MINGW32)"
+		PLATFLAGS += MINGW32=$(MINGW32)
 		LIBRETRO_CPU = x86
 		PTR64=0
 	endif
 	CC  ?= cc
 	CXX ?= cxx
 	AR  ?= ar
-	PLATFLAGS += TARGETOS="windows" OVERRIDE_CC="$(CC)" OVERRIDE_CXX="$(CXX)" "AR=$(AR)"
+	PLATFLAGS += TARGETOS=windows OVERRIDE_CC=$(CC) OVERRIDE_CXX=$(CXX) AR=$(AR)
 	LLD := $(shell command -v lld 2> /dev/null)
 	ifneq ($(LLD),)
-		BUILDFLAGS += LDOPTS="-fuse-ld=lld"
+		BUILDFLAGS += LDOPTS=-fuse-ld=lld
 	endif
 	ifneq ($(WINDRES),)
-		PLATFLAGS += WINDRES="$(WINDRES)"
+		PLATFLAGS += WINDRES=$(WINDRES)
 	endif
 endif
 # android only needs a valid ANDROID_NDK_HOME set no paths are needed toolchain and makefile takes care of that
@@ -193,7 +193,7 @@ endif
 ifeq ($(platform),osx)
 	PLATFLAGS += DONT_USE_NETWORK=1
 	#PLATFLAGS +=OVERRIDE_CC=clang OVERRIDE_CXX=clang++
-	PLATFLAGS +=TARGETOS="macosx"
+	PLATFLAGS +=TARGETOS=macosx
 	ifeq ($(CROSS_COMPILE),1)
 		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts)
@@ -207,8 +207,8 @@ ifeq ($(platform),osx)
 		#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
 		PLATFLAGS +=macosx_arm64_clang
 	else
-#		LIBRETRO_OS = macosx
-#		LIBRETRO_CPU =x86_64
+		LIBRETRO_OS = macosx
+		LIBRETRO_CPU =x86_64
 		#not set on x64 use the info from arm64 so we get the right target and path
 		LIBRETRO_APPLE_PLATFORM=x86_64-apple-macos10.15
 		LIBRETRO_APPLE_ISYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
@@ -239,10 +239,10 @@ ifeq ($(platform),ios-arm64)
 	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts)
 	#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.
 	LIBRETRO_CPU = arm64
-	LIBRETRO_OS = ios-arm64
+	LIBRETRO_OS = macosx
 	PLATFLAGS +=LIBRETRO_IOS=1
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
-	PLATFLAGS +=TARGETOS="macosx"
+	PLATFLAGS +=TARGETOS=macosx
 	PLATFLAGS +=PLATFORM=arm64
 	PTR64 =1
 	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
@@ -263,7 +263,7 @@ ifeq ($(platform),tvos-arm64)
 	#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places(in the lua scripts)
 	#leave as is for now but add the the platfrom and remove the conditions in LUA when ready to test. LEts get the builds working.
 	LIBRETRO_CPU = arm64
-	LIBRETRO_OS =tvos-arm64
+	LIBRETRO_OS =macosx
 	PLATFLAGS +=LIBRETRO_TVOS=1
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
 	PLATFLAGS +=TARGETOS=macosx
@@ -275,14 +275,12 @@ ifeq ($(platform),tvos-arm64)
 endif
 
 ifneq ($(LIBRETRO_CPU),)
-	PLATFLAGS += LIBRETRO_CPU="$(LIBRETRO_CPU)"
+	PLATFLAGS += LIBRETRO_CPU=$(LIBRETRO_CPU)
 endif
 ifneq ($(FORCE_DRC_C_BACKEND),)
-	PLATFLAGS += FORCE_DRC_C_BACKEND="$(FORCE_DRC_C_BACKEND)"
+	PLATFLAGS += FORCE_DRC_C_BACKEND=$(FORCE_DRC_C_BACKEND)
 endif
-ifneq ($(LIBRETRO_OS),)
-	PLATFLAGS += LIBRETRO_OS="$(platform)"
-endif
+
 ifneq ($(PTR64),)
 	PLATFLAGS += PTR64=$(PTR64)
 endif
