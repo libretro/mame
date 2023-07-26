@@ -98,8 +98,6 @@ extern int lightgunX[8];
 extern int lightgunY[8];
 extern int lightgunBUT[4];
 
-extern unsigned short retrokbd_state[RETROK_LAST];
-
 extern int fb_width;
 extern int fb_height;
 extern float retro_aspect;
@@ -115,6 +113,8 @@ extern retro_environment_t environ_cb;
 extern retro_input_state_t input_state_cb;
 extern retro_input_poll_t input_poll_cb;
 
+extern void retro_keyboard_event(bool, unsigned, uint32_t, uint16_t);
+
 void retro_frame_draw_enable(bool enable);
 
 void *retro_get_fb_ptr(void);
@@ -129,6 +129,5 @@ int mmain(int argc, char *argv[]);
 #ifdef __cplusplus
 }
 #endif
-
 
 #endif

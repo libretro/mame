@@ -47,8 +47,7 @@ struct kt_table
    input_item_id mame_key;
 };
 
-extern unsigned short retrokbd_state[RETROK_LAST];
-extern unsigned short retrokbd_state2[RETROK_LAST];
+extern void retro_keyboard_event(bool, unsigned, uint32_t, uint16_t);
 extern kt_table const ktable[];
 
 extern int mouseLX[8];
@@ -58,9 +57,6 @@ extern int lightgunX[8];
 extern int lightgunY[8];
 
 extern Joystate joystate[8];
-
-extern int fb_width;
-extern int fb_height;
 
 template <typename Info>
 class retro_input_module : public input_module_impl<Info, retro_osd_interface>

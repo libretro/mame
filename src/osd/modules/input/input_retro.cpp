@@ -6,7 +6,6 @@
 
 #include "input_module.h"
 #include "modules/osdmodule.h"
-//#include "../lib/osdobj_common.h"
 #include "assignmenthelper.h"
 
 // emu
@@ -26,10 +25,11 @@
 #include "libretro/libretro-internal/libretro_shared.h"
 
 
-
 extern bool libretro_supports_bitmasks;
-unsigned short retrokbd_state[RETROK_LAST];
-unsigned short retrokbd_state2[RETROK_LAST];
+
+unsigned short retro_key_state[RETROK_LAST] = {0};
+unsigned short retro_key_event_state[RETROK_LAST] = {0};
+
 int mouseLX[8];
 int mouseLY[8];
 int lightgunX[8];
@@ -148,9 +148,7 @@ kt_table const ktable[] = {
 {"·",RETROK_COLON,ITEM_ID_COLON},
 {"\'",RETROK_QUOTE,ITEM_ID_QUOTE},
 {"BCKSLASH",RETROK_BACKSLASH,ITEM_ID_BACKSLASH},
-///**/BCKSLASH2*/RETROK_,ITEM_ID_BACKSLASH2},
 {",",RETROK_COMMA,ITEM_ID_COMMA},
-///**/STOP*/RETROK_,ITEM_ID_STOP},
 {"/",RETROK_SLASH,ITEM_ID_SLASH},
 {"SPACE",RETROK_SPACE,ITEM_ID_SPACE},
 {"INS",RETROK_INSERT,ITEM_ID_INSERT},
@@ -613,27 +611,37 @@ void retro_osd_interface::release_keys()
 		keybd->reset_devices();
 }
 
+void retro_keyboard_event(bool down, unsigned code,
+      uint32_t character, uint16_t mod)
+{
+   switch (code)
+   {
+      case RETROK_UNKNOWN:
+      case RETROK_PAUSE:
+         return;
+   }
+
+   retro_key_event_state[code] = down;
+}
+
 void retro_osd_interface::process_keyboard_state(running_machine &machine)
 {
-	/* TODO: handle mods:SHIFT/CTRL/ALT/META/NUMLOCK/CAPSLOCK/SCROLLOCK */
-	unsigned i = 0;
-	do
-	{
-		retrokbd_state[ktable[i].retro_key_name] = input_state_cb(0, RETRO_DEVICE_KEYBOARD, 0, ktable[i].retro_key_name) ? 0x80 : 0;
+   unsigned short i = 0;
 
-		if (retrokbd_state[ktable[i].retro_key_name] && !retrokbd_state2[ktable[i].retro_key_name])
-		{
-			//ui_ipt_pushchar=ktable[i].retro_key_name;
-			//FIXME remove up/dw/lf/rg char from input ui
-			machine.ui_input().push_char_event(osd_common_t::s_window_list.front()->target(), ktable[i].retro_key_name);
-			retrokbd_state2[ktable[i].retro_key_name] = 1;
-		}
-		else
-		if (!retrokbd_state[ktable[i].retro_key_name] && retrokbd_state2[ktable[i].retro_key_name])
-			retrokbd_state2[ktable[i].retro_key_name] = 0;
+   do
+   {
+      if (retro_key_event_state[ktable[i].retro_key_name] && !retro_key_state[ktable[i].retro_key_name])
+      {
+         retro_key_state[ktable[i].retro_key_name] = 0x80;
+         machine.ui_input().push_char_event(osd_common_t::s_window_list.front()->target(), ktable[i].retro_key_name);
+      }
+      else if (!retro_key_event_state[ktable[i].retro_key_name] && retro_key_state[ktable[i].retro_key_name])
+      {
+         retro_key_state[ktable[i].retro_key_name] = 0;
+      }
 
-		i++;
-	} while (ktable[i].retro_key_name != -1);
+      i++;
+   } while (ktable[i].retro_key_name != -1);
 }
 
 void retro_osd_interface::process_joypad_state(running_machine &machine)
@@ -911,8 +919,8 @@ public:
 
 	virtual void reset() override
 	{
-		memset(retrokbd_state, 0, sizeof(retrokbd_state));
-		memset(retrokbd_state2, 0, sizeof(retrokbd_state2));
+		memset(retro_key_state, 0, sizeof(retro_key_state));
+		memset(retro_key_event_state, 0, sizeof(retro_key_event_state));
 	}
 
 	virtual void configure(input_device &device) override
@@ -924,7 +932,7 @@ public:
 				std::string_view(),
 				ktable[i].mame_key,
 				generic_button_get_state<std::uint8_t>,
-				&retrokbd_state[ktable[i].retro_key_name]);
+				&retro_key_state[ktable[i].retro_key_name]);
 			i++;
 		} while (ktable[i].retro_key_name != -1);
 	}
@@ -955,8 +963,8 @@ public:
 
 		create_device<retro_keyboard_device>(DEVICE_CLASS_KEYBOARD, "RetroKeyboard0", "RetroKeyboard0");
 
-		memset(retrokbd_state, 0, sizeof(retrokbd_state));
-		memset(retrokbd_state2, 0, sizeof(retrokbd_state2));
+		memset(retro_key_state, 0, sizeof(retro_key_state));
+		memset(retro_key_event_state, 0, sizeof(retro_key_event_state));
 
 		m_global_inputs_enabled = true;
 	}

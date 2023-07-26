@@ -739,12 +739,14 @@ void retro_init(void)
    if (environ_cb(RETRO_ENVIRONMENT_GET_INPUT_BITMASKS, NULL))
       libretro_supports_bitmasks = true;
 
+   static struct retro_keyboard_callback keyboard_callback = {retro_keyboard_event};
+   environ_cb(RETRO_ENVIRONMENT_SET_KEYBOARD_CALLBACK, &keyboard_callback);
+
    memset(videoBuffer, 0, sizeof(videoBuffer));
    init_output_audio_buffer(2048);
 
    retro_pause = 0;
 }
-
 
 void retro_deinit(void)
 {
