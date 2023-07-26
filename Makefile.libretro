@@ -5,6 +5,8 @@ NO_USE_MIDI ?= 1
 NO_USE_PORTAUDIO ?= 1
 PTR64 ?= 1
 TARGET ?= mame
+OSD ?= mame
+
 # OS ?= linux
 # TARGETOS ?= linux
 PYTHON_EXECUTABLE ?= python3
@@ -87,23 +89,18 @@ endif
 ifneq ($(findstring win,$(platform)),)
 	ifeq ($(MSYSTEM),MINGW64)
 		MINGW64 ?= /mingw64
-		LIBRETRO_CPU=x86_64
 	else ifeq ($(MSYSTEM),MINGW32)
 		MINGW32 ?= /mingw32
-		LIBRETRO_CPU=x86
 		PTR64=0
 	else ifeq ($(MSYSTEM),CLANG32)
 		MINGW32 ?= /clang32
-		LIBRETRO_CPU=x86
 		CC=clang
 		PTR64=0
 	else ifeq ($(MSYSTEM),CLANG64)
 		MINGW64 ?= /clang64
-		LIBRETRO_CPU=x86_64
 		CC=clang
 	else ifeq ($(MSYSTEM),UCRT64)
 		MINGW64 ?= /ucrt64
-		LIBRETRO_CPU=x86_64
 		OVERRIDE_CC=clang
 	endif
 
@@ -170,7 +167,7 @@ endif
 ifeq ($(platform),osx)
 	DONT_USE_NETWORK=1
 	OVERRIDE_CC=clang OVERRIDE_CXX=clang++
-	TARGETOS="macosx"
+	TARGETOS=macosx
 	ifeq ($(CROSS_COMPILE),1)
 		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		#libretro cpu and and libretro os arent needed for the mac anymore builds, Ill need to make sure there not used in other places	(in the lua scripts)
@@ -190,7 +187,7 @@ ifeq ($(platform),osx)
 		LIBRETRO_APPLE_PLATFORM=x86_64-apple-macos10.15
 		LIBRETRO_APPLE_ISYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
-		PLATFORM=x64
+
 		#we dont need to pass -arch as i fixed the condition and there and arm is added from upstream in the last pull req.
 		#There is no variable in the lua scrip to disable it the other platfrom will follow suit and just use PLATFORM when we are up and running.
 	endif
@@ -231,7 +228,7 @@ ifeq ($(platform),tvos-arm64)
 	LIBRETRO_APPLE_ISYSROOT := $(shell xcodebuild -version -sdk appletvos Path)
 	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#the ci should set above only osx does it so far unset if its udded to the ci
-	OVERRIDE_CC=clang 
+	OVERRIDE_CC=clang
 	OVERRIDE_CXX=clang++
 	DONT_USE_NETWORK=1
 	NOASM=1
@@ -270,11 +267,11 @@ $(info ARCH=$(ARCH))
 $(info arch=$(arch))
 $(info NUMPROC=$(NUMPROC))
 $(info MSYSTEM=$(MSYSTEM))
-$(info LIBRETRO_OS=$(LIBRETRO_OS)) 
-$(info LIBRETRO_CPU=$(LIBRETRO_CPU)) 
-$(info PLATFORM=$(PLATFORM)) 
-$(info TARGETOS=$(TARGETOS)) 
-$(info ARCHOPT=$(ARCHOPT))
+$(info LIBRETRO_OS=$(LIBRETRO_OS))
+$(info LIBRETRO_CPU=$(LIBRETRO_CPU))
+$(info PLATFORM=$(PLATFORM))
+$(info TARGETOS=$(TARGETOS))
+$(info ARCHOPTS=$(ARCHOPTS))
 endif
 
 ###########################################################################
@@ -292,7 +289,7 @@ MAKEFILE :=
 all: build
 
 build:
-	$(MAKE) $(PLATFLAGS) 
+	$(MAKE) $(PLATFLAGS)
 
 vs2019:
 	$(MAKE) $(PLATFLAGS) $ vs2019
