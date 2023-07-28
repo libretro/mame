@@ -480,6 +480,18 @@ function toolchain(_buildDir, _subDir)
 
 	configuration { "android-*" }
 		objdir (_buildDir .. "android/obj/" .. _OPTIONS["PLATFORM"])
+		includedirs {
+			MAME_DIR .. "3rdparty/bgfx/3rdparty/khronos",
+			--  LIBRETRO: don't mess with NDK includir order
+			-- "$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libcxx/include",
+			-- "$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/include",
+			-- "$(ANDROID_NDK_HOME)/sysroot/usr/include",
+			-- "$(ANDROID_NDK_HOME)/sources/android/support/include",
+			-- "$(ANDROID_NDK_HOME)/sources/android/native_app_glue",
+		}
+		linkoptions {
+			"-nostdlib",
+		}
 		flags {
 			"NoImportLib",
 		}
@@ -494,12 +506,9 @@ function toolchain(_buildDir, _subDir)
 			"stdc++",
 		}
 		buildoptions_c {
-			"--gcc-toolchain=" .. androidToolchainRoot(),
-			"--sysroot=" .. androidToolchainRoot() .. "/sysroot",
+			"-Wno-strict-prototypes",
 		}
 		buildoptions {
-			"--gcc-toolchain=" .. androidToolchainRoot(),
-			"--sysroot=" .. androidToolchainRoot() .. "/sysroot",
 			"-fpic",
 			"-ffunction-sections",
 			"-funwind-tables",
@@ -514,8 +523,7 @@ function toolchain(_buildDir, _subDir)
 			"-Wno-unused-function",
 		}
 		linkoptions {
-			"--gcc-toolchain=" .. androidToolchainRoot(),
-			"--sysroot=" .. androidToolchainRoot() .. "/sysroot",
+			"-no-canonical-prefixes",
 			"-Wl,--no-undefined",
 			"-Wl,-z,noexecstack",
 			"-Wl,-z,relro",
@@ -523,12 +531,18 @@ function toolchain(_buildDir, _subDir)
 		}
 
 	configuration { "android-arm" }
+			libdirs {
+				os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a",
+				androidToolchainRoot() .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel,
+			}
+			includedirs {
+			}
 			buildoptions {
-				"--target=armv7-none-linux-android" .. androidApiLevel,
-				"-fsigned-char",
+				"--gcc-toolchain=" .. androidToolchainRoot(),
+				"-target armv7-linux-androideabi" .. androidApiLevel,
 				"-march=armv7-a",
 				"-mfloat-abi=softfp",
-				"-mfpu=neon",
+				"-mfpu=vfpv3-d16",
 				"-mthumb",
 			}
 			links {
@@ -537,38 +551,84 @@ function toolchain(_buildDir, _subDir)
 				"gcc",
 			}
 			linkoptions {
-				"--target=armv7-none-linux-android" .. androidApiLevel,
-				"-march=armv7-a",
+				"--gcc-toolchain=" .. androidToolchainRoot(),
+				"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel,
+
+				androidToolchainRoot()  .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel .. "/crtbegin_so.o",
+				androidToolchainRoot()  .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel .. "/crtend_so.o",
+				"-target armv7-linux-androideabi" .. androidApiLevel,
 			}
 
 	configuration { "android-arm64" }
+			libdirs {
+				os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/arm64-v8a",
+				androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel,
+			}
+			includedirs {
+			}
 			buildoptions {
-				"--target=aarch64-none-linux-android" .. androidApiLevel,
+				"--gcc-toolchain=" .. androidToolchainRoot(),
+				"-target aarch64-linux-android" .. androidApiLevel,
 				"-march=armv8-a",
 			}
+			links {
+				"gcc",
+			}
 			linkoptions {
-				"--target=aarch64-none-linux-android" .. androidApiLevel,
-				"-march=armv8-a",
+				"--gcc-toolchain=" .. androidToolchainRoot(),
+				"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel,
+				androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel .. "/crtbegin_so.o",
+				androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel .. "/crtend_so.o",
+				"-target aarch64-linux-android" .. androidApiLevel,
 			}
 
 	configuration { "android-x86" }
-		buildoptions {
-			"--target=i686-none-linux-android" .. androidApiLevel,
-			"-mtune=atom",
-			"-mstackrealign",
-			"-msse3",
-			"-mfpmath=sse",
-		}
-		linkoptions {
-			"--target=i686-none-linux-android" .. androidApiLevel,
-		}
+			libdirs {
+				os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/x86",
+				androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel,
+			}
+			includedirs {
+			}
+			buildoptions {
+				"--gcc-toolchain=" .. androidToolchainRoot(),
+				"-target i686-linux-android" .. androidApiLevel,
+				"-mtune=atom",
+				"-mstackrealign",
+				"-msse3",
+				"-mfpmath=sse",
+			}
+			links {
+				"gcc",
+			}
+			linkoptions {
+				"--gcc-toolchain=" .. androidToolchainRoot(),
+				"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel,
+				androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel .. "/crtbegin_so.o",
+				androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel .. "/crtend_so.o",
+				"-target i686-linux-android" .. androidApiLevel,
+			}
+
 
 	configuration { "android-x64" }
+		libdirs {
+			os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/x86_64",
+			androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel,
+		}
+		includedirs {
+		}
 		buildoptions {
-			"--target=x86_64-none-linux-android" .. androidApiLevel,
+			"--gcc-toolchain=" .. androidToolchainRoot(),
+			"-target x86_64-linux-android" .. androidApiLevel,
+		}
+		links {
+			"gcc",
 		}
 		linkoptions {
-			"--target=x86_64-none-linux-android" .. androidApiLevel,
+			"--gcc-toolchain=" .. androidToolchainRoot(),
+			"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel,
+			androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel .. "/crtbegin_so.o",
+			androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel .. "/crtend_so.o",
+			"-target x86_64-linux-android" .. androidApiLevel,
 		}
 
 	configuration { "asmjs" }

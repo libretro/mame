@@ -160,6 +160,7 @@ ifeq ($(platform),android-x86)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += TARGETOS=android-x86 gcc=android-x86 PLATFORM=x86
+	LIBRETRO_CPU :=
 	LIBRETRO_OS :=
 	PTR64 :=
 endif
@@ -170,7 +171,6 @@ ifeq ($(platform),android-x86_64)
 	endif
 	export ANDROID_NDK_HOME ?= /opt/ndk
 	PLATFLAGS += TARGETOS=android-x64 gcc=android-x64 PLATFORM=x64
-	PLATFLAGS += android-x64
 	LIBRETRO_CPU :=
 	LIBRETRO_OS :=
 	PTR64 :=
