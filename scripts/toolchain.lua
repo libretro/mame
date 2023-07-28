@@ -532,7 +532,7 @@ function toolchain(_buildDir, _subDir)
 
 	configuration { "android-arm" }
 			libdirs {
-				os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a",
+				"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a",
 				androidToolchainRoot() .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel,
 			}
 			includedirs {
@@ -561,7 +561,7 @@ function toolchain(_buildDir, _subDir)
 
 	configuration { "android-arm64" }
 			libdirs {
-				os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/arm64-v8a",
+				"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/arm64-v8a",
 				androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel,
 			}
 			includedirs {
@@ -584,7 +584,7 @@ function toolchain(_buildDir, _subDir)
 
 	configuration { "android-x86" }
 			libdirs {
-				os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/x86",
+				"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/x86",
 				androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel,
 			}
 			includedirs {
@@ -611,7 +611,7 @@ function toolchain(_buildDir, _subDir)
 
 	configuration { "android-x64" }
 		libdirs {
-			os.getenv("ANDROID_NDK_HOME") .. "/sources/cxx-stl/llvm-libc++/libs/x86_64",
+			"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/x86_64",
 			androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel,
 		}
 		includedirs {
