@@ -847,6 +847,10 @@ void screen_device::device_start()
 	if ((m_video_attributes & VIDEO_UPDATE_SCANLINE) != 0 || !m_scanline_cb.isunset())
 		m_scanline_timer = timer_alloc(FUNC(screen_device::scanline_tick), this);
 
+#ifdef __LIBRETRO__
+	screen_configured = 0;
+#endif
+
 	// configure the screen with the default parameters
 	configure(m_width, m_height, m_visarea, m_refresh);
 
@@ -975,6 +979,14 @@ TIMER_CALLBACK_MEMBER(screen_device::scanline_tick)
 
 void screen_device::configure(int width, int height, const rectangle &visarea, attoseconds_t frame_period)
 {
+#ifdef __LIBRETRO__
+	if (screen_configured
+			&& width == m_width
+			&& height == m_height
+			&& floorf(ATTOSECONDS_TO_HZ(frame_period)) == floorf(ATTOSECONDS_TO_HZ(m_frame_period)))
+		return;
+#endif
+
 	// validate arguments
 	assert(width > 0);
 	assert(height > 0);
@@ -1029,7 +1041,14 @@ void screen_device::configure(int width, int height, const rectangle &visarea, a
 	machine().video().update_refresh_speed();
 
 #ifdef __LIBRETRO__
-	retro_fps = ATTOSECONDS_TO_HZ(frame_period);
+	float retro_fps_new = ATTOSECONDS_TO_HZ(m_frame_period);
+	if (!screen_configured
+			&& retro_fps_new != retro_fps
+			&& retro_fps_new <= 120.0f
+			&& retro_fps_new >= 30.0f)
+		retro_fps = retro_fps_new;
+
+	screen_configured++;
 #endif
 }
 

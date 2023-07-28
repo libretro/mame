@@ -7,10 +7,6 @@
 
 #include "libretro-internal/libretro_shared.h"
 
-extern float sound_timer;
-extern float retro_fps;
-extern int video_changed;
-
 //============================================================
 //  Defines
 //============================================================

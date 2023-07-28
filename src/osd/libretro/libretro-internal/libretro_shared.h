@@ -55,6 +55,7 @@ enum
    RETRO_SETTING_LIGHTGUN_MODE_LIGHTGUN
 };
 
+extern bool retro_load_ok;
 extern int video_changed;
 extern int retro_pause;
 extern int mame_reset;
@@ -105,6 +106,9 @@ extern float retro_fps;
 extern float view_aspect;
 extern int rotation_mode;
 extern int thread_mode;
+extern float sound_timer;
+extern int screen_configured;
+
 static const char core[] = "mame";
 
 /* libretro callbacks */

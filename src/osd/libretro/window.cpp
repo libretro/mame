@@ -36,12 +36,13 @@
 #include "modules/render/drawretro.h"
 #include "modules/monitor/monitor_common.h"
 
+#include "libretro-internal/libretro_shared.h"
+
 extern int max_width;
 extern int max_height;
 extern int libretro_rotation_allow;
 extern int internal_rotation_allow;
 extern int norotate;
-extern bool retro_load_ok;
 
 //============================================================
 //  PARAMETERS
@@ -293,6 +294,9 @@ int retro_window_info::window_init()
 	// reset sound timer (set in `sound_manager::update` to `retro_fps`)
 	sound_timer = 0;
 
+	// reset screen configuration
+	screen_configured = 0;
+
 	// reset machine aspect (set in `retro_window_info::update()`)
 	view_aspect = 1;
 
@@ -481,11 +485,13 @@ void retro_window_info::update()
 			/* Update retro_fps */
 			if (screen)
 			{
-				float current_screen_refresh = screen->frame_period().as_hz();
+				float screen_refresh = screen->frame_period().as_hz();
 
-				if (current_screen_refresh != retro_fps)
+				if (screen_refresh != retro_fps
+						&& screen_refresh <= 120.0f
+						&& screen_refresh >= 30.0f)
 				{
-					retro_fps = current_screen_refresh;
+					retro_fps     = screen_refresh;
 					video_changed = 1;
 				}
 			}

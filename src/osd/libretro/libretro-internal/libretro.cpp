@@ -41,6 +41,7 @@ float view_aspect  = 1.0f;
 float retro_fps    = 60.0f;
 float sound_timer  = 50.0f; /* default STREAMS_UPDATE_ATTOTIME, changed later to `retro_fps` */
 int video_changed  = 0;
+int screen_configured = 0;
 
 static bool draw_this_frame;
 static int cpu_overclock = 100;
