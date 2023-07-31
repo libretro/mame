@@ -831,20 +831,15 @@ bool retro_load_game(const struct retro_game_info *info)
    extract_directory(g_rom_dir, info->path, sizeof(g_rom_dir));
    strcpy(RPATH, info->path);
 
-   bool updated = false;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated)
-   {
-      check_variables();
-      update_runtime_variables();
-   }
-
    int res = mmain2(1, RPATH);
 
    if (res != 0)
       exit(0);
    else
+   {
       retro_load_ok = true;
+      update_runtime_variables();
+   }
 
    return true;
 }
