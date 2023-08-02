@@ -907,8 +907,6 @@ namespace {
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_RECORD_MNG,        N_p("input-name", "Record MNG"),             input_seq(KEYCODE_F12, KEYCODE_LSHIFT, input_seq::not_code, KEYCODE_LCONTROL) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_RECORD_AVI,        N_p("input-name", "Record AVI"),             input_seq(KEYCODE_F12, KEYCODE_LSHIFT, KEYCODE_LCONTROL) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_TOGGLE_CHEAT,      N_p("input-name", "Toggle Cheat"),           input_seq(KEYCODE_F6) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_FOCUS_NEXT,        N_p("input-name", "UI Focus Next"),          input_seq(KEYCODE_TAB, input_seq::not_code, KEYCODE_LSHIFT, input_seq::not_code, KEYCODE_RSHIFT) ) \
-		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_FOCUS_PREV,        N_p("input-name", "UI Focus Previous"),      input_seq(KEYCODE_TAB, KEYCODE_LSHIFT, input_seq::or_code, KEYCODE_TAB, KEYCODE_RSHIFT) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_DISPLAY_COMMENT,   N_p("input-name", "UI Display Comment"),     input_seq(KEYCODE_SPACE) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_ZOOM_IN,           N_p("input-name", "UI Zoom In"),             input_seq(KEYCODE_EQUALS) ) \
 		INPUT_PORT_DIGITAL_TYPE( 0, UI,       UI_ZOOM_OUT,          N_p("input-name", "UI Zoom Out"),            input_seq(KEYCODE_MINUS) ) \

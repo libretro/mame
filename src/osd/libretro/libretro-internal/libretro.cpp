@@ -194,6 +194,24 @@ void retro_audio_queue(const int16_t *data, int32_t samples)
    output_audio_buffer.size += samples;
 }
 
+static const struct retro_controller_description default_controllers[] =
+{
+   { "RetroPad", RETRO_DEVICE_JOYPAD },
+   { "None", RETRO_DEVICE_NONE },
+   { NULL, 0 }
+};
+
+static void retro_set_inputs(void)
+{
+   const struct retro_controller_info ports[] =
+   {
+      { default_controllers, sizeof(default_controllers) / sizeof(default_controllers[0]) },
+      { NULL, 0 }
+   };
+
+   environ_cb(RETRO_ENVIRONMENT_SET_CONTROLLER_INFO, (void*)ports);
+}
+
 void retro_set_environment(retro_environment_t cb)
 {
    sprintf(option_buttons_profiles, "%s_%s", core, "buttons_profiles");
@@ -255,6 +273,8 @@ void retro_set_environment(retro_environment_t cb)
    environ_cb = cb;
 
    cb(RETRO_ENVIRONMENT_SET_VARIABLES, (void*)vars);
+
+   retro_set_inputs();
 }
 
 static void update_runtime_variables(void)
