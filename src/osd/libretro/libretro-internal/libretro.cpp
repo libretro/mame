@@ -20,6 +20,7 @@
 
 /* forward decls / externs / prototypes */
 
+extern bool fexists(std::string path);
 extern int mmain2(int argc, const char *argv[]);
 extern void retro_finish();
 extern void retro_main_loop();
@@ -62,7 +63,6 @@ static char option_cheats[50];
 static char option_throttle[50];
 static char option_bios[50];
 static char option_osd[50];
-static char option_cli[50];
 static char option_read_config[50];
 static char option_write_config[50];
 static char option_mame_paths[50];
@@ -230,7 +230,6 @@ void retro_set_environment(retro_environment_t cb)
    sprintf(option_throttle, "%s_%s", core, "throttle");
    sprintf(option_bios, "%s_%s", core, "boot_to_bios");
    sprintf(option_osd, "%s_%s", core, "boot_to_osd");
-   sprintf(option_cli, "%s_%s", core, "boot_from_cli");
    sprintf(option_read_config, "%s_%s", core, "read_config");
    sprintf(option_write_config, "%s_%s", core, "write_config");
    sprintf(option_mame_paths, "%s_%s", core, "mame_paths_enable");
@@ -258,7 +257,6 @@ void retro_set_environment(retro_environment_t cb)
       { option_throttle, "Enable Throttle; disabled|enabled" },
       { option_bios, "Boot to BIOS; disabled|enabled" },
       { option_osd, "Boot to OSD; disabled|enabled" },
-      { option_cli, "Boot from CLI; disabled|enabled" },
       { option_read_config, "Read Configuration; disabled|enabled" },
       { option_write_config, "Write Configuration; disabled|enabled" },
       { option_mame_paths, "MAME INI Paths; disabled|enabled" },
@@ -275,6 +273,9 @@ void retro_set_environment(retro_environment_t cb)
    cb(RETRO_ENVIRONMENT_SET_VARIABLES, (void*)vars);
 
    retro_set_inputs();
+
+   bool support_no_game = true;
+   environ_cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &support_no_game);
 }
 
 static void update_runtime_variables(void)
@@ -298,17 +299,6 @@ static void update_runtime_variables(void)
 static void check_variables(void)
 {
    struct retro_variable var = {0};
-
-   var.key   = option_cli;
-   var.value = NULL;
-
-   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
-   {
-      if (!strcmp(var.value, "enabled"))
-         experimental_cmdline = true;
-      if (!strcmp(var.value, "disabled"))
-         experimental_cmdline = false;
-   }
 
    var.key   = option_mouse;
    var.value = NULL;
@@ -830,6 +820,10 @@ bool retro_load_game(const struct retro_game_info *info)
    check_variables();
    retro_load_ok = false;
 
+   basename[0]  = '\0';
+   g_rom_dir[0] = '\0';
+   RPATH[0]     = '\0';
+
 //FIXME: re-add way to handle OGL
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
 #if defined(HAVE_OPENGLES)
@@ -848,16 +842,28 @@ bool retro_load_game(const struct retro_game_info *info)
       return false;
 #endif
 
-   extract_basename(basename, info->path, sizeof(basename));
-   extract_directory(g_rom_dir, info->path, sizeof(g_rom_dir));
-   strcpy(RPATH, info->path);
+   if (info)
+   {
+      extract_basename(basename, info->path, sizeof(basename));
+      extract_directory(g_rom_dir, info->path, sizeof(g_rom_dir));
+      strcpy(RPATH, info->path);
+   }
 
    int res = mmain2(1, RPATH);
 
+   /* Force success with empty content */
+   if (!RPATH[0])
+      res = 0;
+   /* Fake failure with non-existing content */
+   else if (RPATH[0] && !fexists(RPATH))
+      res = 1;
+
    if (res != 0)
    {
-      /* Must wait a bit for unload to finish */
+      /* Must wait a bit for failure to finish properly */
+      log_cb(RETRO_LOG_DEBUG, "%s osd_sleep\n", __func__);
       osd_sleep(osd_ticks_per_second());
+      log_cb(RETRO_LOG_DEBUG, "%s osd_sleep done\n", __func__);
       return false;
    }
 

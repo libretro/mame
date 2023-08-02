@@ -29,6 +29,18 @@
 #include "modules/lib/osdlib.h"
 #include "modules/diagnostics/diagnostics_module.h"
 
+bool fexists(std::string path)
+{
+	auto f = fopen(path.c_str(), "rb");
+	if(f != nullptr) {
+		fclose(f);
+		return true;
+	}
+	return false;
+}
+
+extern bool get_MgamePath(void);
+
 //============================================================
 // retro_output
 //============================================================
@@ -63,7 +75,11 @@ public:
 				break;	
 		}
 		
-		log_cb(lvl, buffer.str().c_str());
+		/* Prefer CLI output when using command line */
+		if (get_MgamePath() || lvl == RETRO_LOG_DEBUG)
+			log_cb(lvl, buffer.str().c_str());
+		else
+			printf("%s", buffer.str().c_str());
 	}
 };
 
