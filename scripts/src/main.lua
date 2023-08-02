@@ -65,8 +65,8 @@ end
 	if _OPTIONS["SYMBOLS"] then
 		configuration { "mingw*" }
 			postbuildcommands {
-				"$(SILENT) echo Dumping symbols.",
-				"$(SILENT) objdump --section=.text --line-numbers --syms --demangle $(TARGET) >$(subst .exe,.sym,$(TARGET))"
+				--"$(SILENT) echo Dumping symbols.",
+				--"$(SILENT) objdump --section=.text --line-numbers --syms --demangle $(TARGET) >$(subst .exe,.sym,$(TARGET))"
 			}
 	end
 
