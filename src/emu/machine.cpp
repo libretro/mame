@@ -1387,10 +1387,8 @@ void running_machine::emscripten_load(const char *name) {
 //**************************************************************************
 
 #if defined(__LIBRETRO__)
-extern void retro_finish();
 extern int RLOOP;
 extern int ENDEXEC;
-extern int retro_pause;
 
 void running_machine::retro_machine_exit()
 {

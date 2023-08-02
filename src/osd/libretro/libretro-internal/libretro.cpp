@@ -808,6 +808,7 @@ bool retro_load_game(const struct retro_game_info *info)
    char basename[256];
 
    check_variables();
+   retro_load_ok = false;
 
 //FIXME: re-add way to handle OGL
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
@@ -834,12 +835,14 @@ bool retro_load_game(const struct retro_game_info *info)
    int res = mmain2(1, RPATH);
 
    if (res != 0)
-      exit(0);
-   else
    {
-      retro_load_ok = true;
-      update_runtime_variables();
+      /* Must wait a bit for unload to finish */
+      osd_sleep(osd_ticks_per_second());
+      return false;
    }
+
+   retro_load_ok = true;
+   update_runtime_variables();
 
    return true;
 }
