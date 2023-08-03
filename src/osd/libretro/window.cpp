@@ -27,6 +27,7 @@
 #include "emuopts.h"
 #include "render.h"
 #include "rendlay.h"
+#include "rendutil.h"
 #include "ui/uimain.h"
 
 // OSD headers
@@ -43,6 +44,9 @@ extern int max_height;
 extern int libretro_rotation_allow;
 extern int internal_rotation_allow;
 extern int norotate;
+
+static int svg_width;
+static int svg_height;
 
 //============================================================
 //  PARAMETERS
@@ -276,6 +280,15 @@ int retro_window_info::window_init()
 
 	result = complete_create();
 
+	// store more reasonable geometry for SVG screens
+	const screen_device *screen = screen_device_enumerator(machine().root_device()).byindex(index());
+	if ((screen != nullptr) && (screen->screen_type() == SCREEN_TYPE_SVG))
+	{
+		const rectangle &visarea = screen->visible_area();
+		svg_width  = render_round_nearest(visarea.width());
+		svg_height = render_round_nearest(visarea.height());
+	}
+
 	if (!alternate_renderer)
 	{
 		// test correct aspect
@@ -380,11 +393,18 @@ void retro_window_info::update()
 			eff_aspect = 1.0f / eff_aspect;
 
 		target()->compute_minimum_size(temp_width, temp_height);
+		target()->set_keepaspect(false);
+
 		if (alternate_renderer)
 		{
 			temp_width  = fb_width;
 			temp_height = fb_height;
-			target()->set_keepaspect(false);
+		}
+		else if (svg_width)
+		{
+			/* Size limit for very big resolution SVG screens */
+			temp_width  = (temp_width > svg_width) ? svg_width : temp_width;
+			temp_height = (temp_height > svg_height) ? svg_height : temp_height;
 		}
 
 		if (temp_width != fb_width || temp_height != fb_height || eff_aspect != view_aspect)
@@ -421,21 +441,6 @@ void retro_window_info::update()
 					max_width     = fb_width;
 					max_height    = fb_height;
 					video_changed = 1;
-				}
-
-				/* Shrink maximum geometry in native resolution renderer */
-				if (!alternate_renderer)
-				{
-					if (fb_width < max_width || fb_height < max_height)
-					{
-						/* Don't shrink below 640x480 */
-						if (fb_width > 640 && fb_height > 480)
-						{
-							max_width     = fb_width;
-							max_height    = fb_height;
-							video_changed = 1;
-						}
-					}
 				}
 
 				/* No reason to call av_info when not yet running */
