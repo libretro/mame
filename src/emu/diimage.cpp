@@ -479,6 +479,11 @@ std::error_condition device_image_interface::image_checkhash()
 	u32 crcval;
 	if (!m_hash.crc(crcval) && is_readonly() && !m_created)
 	{
+#ifdef __LIBRETRO__
+		// because 'image_is_chd_type()' below does not actually work
+		if (core_filename_ends_with(m_image_name.c_str(), "chd"))
+			return std::error_condition();
+#endif
 		// do not cause a linear read of 600 megs please
 		// TODO: use SHA1 in the CHD header as the hash
 		if (image_is_chd_type())
