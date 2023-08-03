@@ -124,10 +124,20 @@ static int parsePath(char* path, char* gamePath, char* gameName)
    int i;
    int slashIndex = -1;
    int dotIndex   = -1;
+   int quoteIndex = -1;
    int len        = strlen(path);
 
    if (len < 1)
       return 0;
+
+   for (i = 0; i < len; i++)
+   {
+      if (path[i] == '\"')
+      {
+         quoteIndex = i;
+         break;
+      }
+   }
 
    for (i = len - 1; i >= 0; i--)
    {
@@ -137,8 +147,8 @@ static int parsePath(char* path, char* gamePath, char* gameName)
          break;
       }
       else
-         if (path[i] == '.')
-            dotIndex = i;
+      if (path[i] == '.')
+         dotIndex = i;
    }
    if (slashIndex < 0 && dotIndex > 0)
    {
@@ -151,8 +161,15 @@ static int parsePath(char* path, char* gamePath, char* gameName)
    if (slashIndex < 0 || dotIndex < 0)
       return 0;
 
-   strncpy(gamePath, path, slashIndex);
+   if (quoteIndex > -1)
+      strncpy(gamePath, path + (quoteIndex + 1), slashIndex - (quoteIndex + 1));
+   else
+      strncpy(gamePath, path, slashIndex);
    gamePath[slashIndex] = 0;
+
+   /* Replace initial content path */
+   strcpy(g_rom_dir, gamePath);
+
    strncpy(gameName, path + (slashIndex + 1), dotIndex - (slashIndex + 1));
    gameName[dotIndex - (slashIndex + 1)] = 0;
 
@@ -193,10 +210,20 @@ static int parseParentPath(char* path, char* parentPath)
 {
    int i, j = 0;
    int slashIndex[2] = {-1, -1};
+   int quoteIndex    = -1;
    int len = strlen(path);
 
    if (len < 1)
       return 0;
+
+   for (i = 0; i < len; i++)
+   {
+      if (path[i] == '\"')
+      {
+         quoteIndex = i;
+         break;
+      }
+   }
 
    for (i = len - 1; i >= 0; i--)
    {
@@ -215,7 +242,10 @@ static int parseParentPath(char* path, char* parentPath)
    if (slashIndex[0] < 0 || slashIndex[1] < 0)
       return 0;
 
-   strncpy(parentPath, path, slashIndex[1]);
+   if (quoteIndex > -1)
+      strncpy(parentPath, path + (quoteIndex + 1), slashIndex[1] - (quoteIndex + 1));
+   else
+      strncpy(parentPath, path, slashIndex[1]);
    return 1;
 }
 
@@ -775,6 +805,8 @@ static int execute_game_cmd(char* path)
 
          /* Prepend content path to cmd relative content path */
          if (     strstr(ARGUV[i], ".")
+               && !strstr(ARGUV[i], ":")
+               && ARGUV[i][0] != slash
                && !strstr(ARGUV[i], g_rom_dir)
                && i > 0
                && ARGUV[i-1][0] == '-')
@@ -843,11 +875,11 @@ int mmain2(int argc, const char *argv)
       log_cb(RETRO_LOG_INFO, "Starting game from cmd: \"%s\"\n", CMDFILE);
       result = execute_game_cmd(ARGUV[ARGUC-1]);
    }
-   else if (!MgamePath[0])
+   else if (!MgamePath[0] || strstr(argv, " -") || strstr(MgameName, core))
    {
       char argv_trimmed[512];
       char argv_first[512];
-      const char *a     = NULL;
+      char a[512];
       const char *first = NULL;
 
       strcpy(argv_first, argv);
@@ -856,16 +888,22 @@ int mmain2(int argc, const char *argv)
       /* Ignore first argument if 'mame' */
       if (first && core_filename_ends_with(first, core))
       {
-         a = strstr(argv, " ");
-         if (a[1])
-            a++;
+         const char *a_temp = NULL;
+         a_temp = strstr(argv, " ");
+         if (a_temp[1])
+            a_temp++;
+         strcpy(a, a_temp);
       }
-      else
+      else if (first)
       {
-         a = strstr(argv, "-");
+         const char *arg_ptr = strchr(argv, ' ');
+         extract_basename(a, first, sizeof(a));
+         if (arg_ptr)
+            strcat(a, arg_ptr);
       }
 
-      strcpy(argv_trimmed, (a) ? a : argv);
+      strcpy(argv_trimmed, (a[0]) ? a : argv);
+
       parse_cmdline(argv_trimmed);
       log_cb(RETRO_LOG_INFO, "Starting game from command line: \"%s\"\n", argv_trimmed);
       result = execute_game_cmd(ARGUV[ARGUC-1]);

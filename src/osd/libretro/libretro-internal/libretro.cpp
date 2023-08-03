@@ -20,8 +20,6 @@
 
 /* forward decls / externs / prototypes */
 
-extern bool fexists(std::string path);
-extern int mmain2(int argc, const char *argv[]);
 extern void retro_finish();
 extern void retro_main_loop();
 
@@ -90,7 +88,7 @@ unsigned int videoBuffer[4096*3072];
 #include "retroogl.c"
 #endif
 
-static void extract_basename(char *buf, const char *path, size_t size)
+void extract_basename(char *buf, const char *path, size_t size)
 {
    char *ext = NULL;
    const char *base = strrchr(path, '/');
@@ -111,7 +109,7 @@ static void extract_basename(char *buf, const char *path, size_t size)
       *ext = '\0';
 }
 
-static void extract_directory(char *buf, const char *path, size_t size)
+void extract_directory(char *buf, const char *path, size_t size)
 {
    char *base = NULL;
 
@@ -815,14 +813,9 @@ void retro_run(void)
 
 bool retro_load_game(const struct retro_game_info *info)
 {
-   char basename[256];
-
-   check_variables();
    retro_load_ok = false;
 
-   basename[0]  = '\0';
-   g_rom_dir[0] = '\0';
-   RPATH[0]     = '\0';
+   check_variables();
 
 //FIXME: re-add way to handle OGL
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
@@ -842,9 +835,11 @@ bool retro_load_game(const struct retro_game_info *info)
       return false;
 #endif
 
+   g_rom_dir[0] = '\0';
+   RPATH[0]     = '\0';
+
    if (info)
    {
-      extract_basename(basename, info->path, sizeof(basename));
       extract_directory(g_rom_dir, info->path, sizeof(g_rom_dir));
       strcpy(RPATH, info->path);
    }
@@ -854,9 +849,6 @@ bool retro_load_game(const struct retro_game_info *info)
    /* Force success with empty content */
    if (!RPATH[0])
       res = 0;
-   /* Fake failure with non-existing content */
-   else if (RPATH[0] && !fexists(RPATH))
-      res = 1;
 
    if (res != 0)
    {

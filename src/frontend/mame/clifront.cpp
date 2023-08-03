@@ -263,6 +263,10 @@ void cli_frontend::start_execution(mame_machine_manager *manager, const std::vec
 	if (!m_options.command().empty())
 	{
 		execute_commands(exename);
+#ifdef __LIBRETRO__
+		/* Signal 'retro_load_game' to not continue */
+		m_result = 1;
+#endif
 		return;
 	}
 

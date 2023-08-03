@@ -128,6 +128,11 @@ extern retro_input_poll_t input_poll_cb;
 
 extern void retro_keyboard_event(bool, unsigned, uint32_t, uint16_t);
 
+extern bool fexists(std::string path);
+extern int mmain2(int argc, const char *argv[]);
+extern void extract_basename(char *buf, const char *path, size_t size);
+extern void extract_directory(char *buf, const char *path, size_t size);
+
 void retro_frame_draw_enable(bool enable);
 
 void *retro_get_fb_ptr(void);
