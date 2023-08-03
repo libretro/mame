@@ -16,6 +16,7 @@
 #include "emu.h"
 #include "emuopts.h"
 
+#include "libretro/osdretro.h"
 #include "libretro-internal/libretro.h"
 
 extern void retro_audio_queue(const int16_t *data, int32_t samples);
@@ -87,8 +88,8 @@ void sound_retro::attenuate(int16_t *data, int bytes_to_copy)
 
 void sound_retro::set_mastervolume(int _attenuation)
 {
-	// clamp the attenuation to 0-32 range
-	attenuation = std::clamp(_attenuation, -32, 0);
+	// clamp the attenuation to '-32 + 12' range
+	attenuation = std::clamp(_attenuation, -32, RETRO_MAX_VOLUME);
 }
 
 MODULE_DEFINITION(SOUND_RETRO, sound_retro)

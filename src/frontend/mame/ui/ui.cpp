@@ -52,6 +52,9 @@
 #include <functional>
 #include <type_traits>
 
+#ifdef __LIBRETRO__
+#include "libretro/osdretro.h"
+#endif
 
 /***************************************************************************
     LOCAL VARIABLES
@@ -1473,7 +1476,11 @@ std::vector<ui::menu_item> mame_ui_manager::slider_init(running_machine &machine
 	m_sliders.clear();
 
 	// add overall volume
+#ifdef __LIBRETRO__
+	slider_alloc(_("Master Volume"), -32, 0, RETRO_MAX_VOLUME, 1, std::bind(&mame_ui_manager::slider_volume, this, _1, _2));
+#else
 	slider_alloc(_("Master Volume"), -32, 0, 0, 1, std::bind(&mame_ui_manager::slider_volume, this, _1, _2));
+#endif
 
 	// add per-channel volume
 	mixer_input info;
