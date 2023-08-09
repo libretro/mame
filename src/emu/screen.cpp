@@ -979,14 +979,6 @@ TIMER_CALLBACK_MEMBER(screen_device::scanline_tick)
 
 void screen_device::configure(int width, int height, const rectangle &visarea, attoseconds_t frame_period)
 {
-#ifdef __LIBRETRO__
-	if (screen_configured > 10
-			&& width == m_width
-			&& height == m_height
-			&& floorf(ATTOSECONDS_TO_HZ(frame_period)) == floorf(ATTOSECONDS_TO_HZ(m_frame_period)))
-		return;
-#endif
-
 	// validate arguments
 	assert(width > 0);
 	assert(height > 0);
@@ -1003,6 +995,15 @@ void screen_device::configure(int width, int height, const rectangle &visarea, a
 	m_width = width;
 	m_height = height;
 	m_visarea = visarea;
+
+#ifdef __LIBRETRO__
+	/* Performance hack fix for "pong" and "breakout" */
+	if (screen_configured > 10
+			&& width == m_width
+			&& height == m_height
+			&& floorf(ATTOSECONDS_TO_HZ(frame_period)) == floorf(ATTOSECONDS_TO_HZ(m_frame_period)))
+		return;
+#endif
 
 	// reallocate bitmap(s) if necessary
 	realloc_screen_bitmaps();
