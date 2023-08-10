@@ -244,6 +244,7 @@ ifeq ($(platform),ios-arm64)
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
 	PLATFLAGS +=TARGETOS=macosx
 	PLATFLAGS +=PLATFORM=arm64
+	BUILDFLAGS += OPTIMIZE=s
 	PTR64 =1
 	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
 	PLATFLAGS +=macosx_arm64_clang
@@ -268,7 +269,7 @@ ifeq ($(platform),tvos-arm64)
 	ARCHOPTS +=-arch $(LIBRETRO_CPU)
 	PLATFLAGS +=TARGETOS=macosx
 	PLATFLAGS +=PLATFORM=arm64
-	#BUILDFLAGS += OPTIMIZE=z
+	BUILDFLAGS += OPTIMIZE=s
 	PTR64 =1
 	#this isint needed but it confuses people and they assume ist a x64 instead of arm build when there is a makefile issue
 	PLATFLAGS +=macosx_arm64_clang
