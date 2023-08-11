@@ -276,8 +276,13 @@ void retro_set_environment(retro_environment_t cb)
    environ_cb(RETRO_ENVIRONMENT_SET_SUPPORT_NO_GAME, &support_no_game);
 }
 
-static void update_runtime_variables(void)
+static void update_runtime_variables(bool startup)
 {
+   // Skip at startup if using default speed, because
+   // games like 'dragoona' use a CPU timing boothack
+   if (startup && cpu_overclock == 100)
+      return;
+
    // update CPU Overclock
    if (mame_machine_manager::instance() != NULL && mame_machine_manager::instance()->machine() != NULL)
    {
@@ -780,7 +785,7 @@ void retro_run(void)
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated)
    {
       check_variables();
-      update_runtime_variables();
+      update_runtime_variables(false);
    }
 
    if (!retro_pause)
@@ -860,7 +865,7 @@ bool retro_load_game(const struct retro_game_info *info)
    }
 
    retro_load_ok = true;
-   update_runtime_variables();
+   update_runtime_variables(true);
 
    return true;
 }
