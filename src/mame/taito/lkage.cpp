@@ -86,9 +86,12 @@ TODO:
     The game works anyway, it never gives the usual Taito "BAD HW" message
     (because there is no test at 0x033b after call at routine at 0xde1d).
 
-  - lkageo, lkageo2, lkagem demo mode messes up, the rest of the game works ok.
-    Maybe it's MCU related? Since main char movement in demo depends on values
-    read from MCU.
+  - Sprite x alignment may be off by 1? An easy way to see it is on the lkage
+    title screen, and look at the left tree ninja stars. There's pcb footage that
+    looks like MAME (holes visible). And there's also pcb footage with the sprites
+    positioned 1 pixel to the left (like MAME with flip-screen).
+    Also see bygone pink energy orbs, alignment looks good on MAME on both normal
+    and flip-screen, but is no pcb reference AFAIK.
 
 ***************************************************************************/
 
@@ -100,6 +103,7 @@ TODO:
 #include "cpu/z80/z80.h"
 #include "machine/gen_latch.h"
 #include "machine/input_merger.h"
+#include "machine/watchdog.h"
 #include "sound/ay8910.h"
 #include "sound/msm5232.h"
 #include "sound/ta7630.h"
@@ -281,15 +285,16 @@ void lkage_state::machine_reset()
         0x08: ?
 
     m_vreg[1]: 0x7d
-        0xf0: background/foreground palette select
+        0xf0: tile palette select
         0x08: bg tile bank select
         0x07: priority config?
 
     m_vreg[2]: 0xf3
         0x03: flip screen x/y
         0xf0: normally 1111, but 1001 and 0001 inbetween stages (while the
-        backgrounds are are being redrawn). These bits are probably used to enable
-        individual layers, but we have no way of knowing the mapping.
+        backgrounds are are being redrawn). These bits are used to enable
+        individual layers. 0x10 is the text layer, 0x80 should be the sprites,
+        the other 2 bits uncertain.
 
 *******************************************************************************/
 
@@ -343,10 +348,13 @@ void lkage_state::video_start()
 	m_fg_tilemap->set_transparent_pen(0);
 	m_tx_tilemap->set_transparent_pen(0);
 
-	m_bg_tilemap->set_scrolldx(-5, +3 + 24);
-	m_fg_tilemap->set_scrolldx(-3, +1 + 24);
+	m_bg_tilemap->set_scrolldx(-5, -5 + 32);
+	m_fg_tilemap->set_scrolldx(-3, -3 + 28);
 	m_tx_tilemap->set_scrolldx(-1, -1 + 24);
 	m_sprite_dx[0] = -14; m_sprite_dx[1] = -14;
+
+	for (int i = 0; i < m_videoram.bytes(); i++)
+		m_videoram[i] = 0xff;
 }
 
 void lkagem_state::video_start()
@@ -375,14 +383,14 @@ void lkage_state::draw_sprites(screen_device &screen, bitmap_ind16 &bitmap, cons
 		int flipy = attributes & 0x02;
 		int const height = (attributes & 0x08) ? 2 : 1;
 		int sx = source[0] + m_sprite_dx[0];
-		int sy = 256 - (16 * height) - source[1];
+		int sy = 255 - (16 * height) - source[1];
 		int sprite_number = source[3] + ((attributes & 0x04) << 6);
 
 		int const priority_mask = (attributes & 0x80) ? (0xf0 | 0xcc) : 0xf0;
 
 		if (flip_screen_x())
 		{
-			sx = 255 - source[0] + m_sprite_dx[1];
+			sx = 256 - source[0] + m_sprite_dx[1];
 			flipx = !flipx;
 		}
 
@@ -440,7 +448,7 @@ uint32_t lkage_state::screen_update(screen_device &screen, bitmap_ind16 &bitmap,
 
 	m_bg_tilemap->set_palette_offset(0x300 + (m_vreg[1] & 0xf0));
 	m_fg_tilemap->set_palette_offset(0x200 + (m_vreg[1] & 0xf0));
-	m_tx_tilemap->set_palette_offset(0x110);
+	m_tx_tilemap->set_palette_offset(0x100 + (m_vreg[1] & 0xf0));
 
 	m_tx_tilemap->set_scrollx(0, m_scroll[0]);
 	m_tx_tilemap->set_scrolly(0, m_scroll[1]);
@@ -452,17 +460,19 @@ uint32_t lkage_state::screen_update(screen_device &screen, bitmap_ind16 &bitmap,
 	m_bg_tilemap->set_scrolly(0, m_scroll[5]);
 
 	screen.priority().fill(0, cliprect);
-	if ((m_vreg[2] & 0xf0) == 0xf0)
-	{
+	bitmap.fill(m_bg_tilemap->palette_offset(), cliprect);
+
+	if (m_vreg[2] & 0x40)
 		m_bg_tilemap->draw(screen, bitmap, cliprect, 0, 1);
+
+	if (m_vreg[2] & 0x20)
 		m_fg_tilemap->draw(screen, bitmap, cliprect, 0, (m_vreg[1] & 2) ? 2 : 4);
+
+	if (m_vreg[2] & 0x10)
 		m_tx_tilemap->draw(screen, bitmap, cliprect, 0, 4);
+
+	if (m_vreg[2] & 0x80)
 		draw_sprites(screen, bitmap, cliprect);
-	}
-	else
-	{
-		m_tx_tilemap->draw(screen, bitmap, cliprect, TILEMAP_DRAW_OPAQUE, 0);
-	}
 
 	return 0;
 }
@@ -514,7 +524,7 @@ void lkage_state::program_map(address_map &map)
 	map(0xf083, 0xf083).portr("SYSTEM");
 	map(0xf084, 0xf084).portr("P1");
 	map(0xf086, 0xf086).portr("P2");
-	map(0xf0a2, 0xf0a3).ram(); // unknown
+	map(0xf0a3, 0xf0a3).rw("watchdog", FUNC(watchdog_timer_device::reset_r), FUNC(watchdog_timer_device::reset_w));
 	map(0xf0c0, 0xf0c5).ram().share(m_scroll);
 	map(0xf0e1, 0xf0e1).nopw(); // pulsed
 	map(0xf100, 0xf15f).writeonly().share(m_spriteram);
@@ -693,7 +703,7 @@ static INPUT_PORTS_START( lkage )
 	PORT_DIPSETTING(    0x10, "4" )
 	PORT_DIPSETTING(    0x08, "5" )
 	PORT_DIPSETTING(    0x00, "255 (Cheat)")
-	PORT_DIPUNUSED( 0x20, IP_ACTIVE_LOW )
+	PORT_DIPUNUSED( 0x20, 0x20 )
 	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Flip_Screen ) )
 	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
@@ -738,11 +748,11 @@ static INPUT_PORTS_START( lkage )
 	PORT_DIPSETTING(    0x70, DEF_STR( 1C_8C ) )
 
 	PORT_START("DSW3")
-	PORT_DIPUNUSED( 0x01, IP_ACTIVE_LOW )
+	PORT_DIPUNUSED( 0x01, 0x01 )
 	PORT_DIPNAME( 0x02, 0x02, "Initial Season" )
 	PORT_DIPSETTING(    0x02, "Spring" )
 	PORT_DIPSETTING(    0x00, "Winter" )                    // same as if you saved the princess twice ("HOWEVER ...")
-	PORT_DIPUNUSED( 0x04, IP_ACTIVE_LOW )
+	PORT_DIPUNUSED( 0x04, 0x04 )
 	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Difficulty ) )       // see notes
 	PORT_DIPSETTING(    0x08, DEF_STR( Easy ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( Normal ) )
@@ -811,13 +821,9 @@ INPUT_PORTS_END
 
 static INPUT_PORTS_START( bygone )
 	PORT_START("DSW1")
-	PORT_DIPNAME( 0x01, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x02, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Free_Play ) ) //
+	PORT_DIPUNKNOWN( 0x01, 0x01 )
+	PORT_DIPUNKNOWN( 0x02, 0x02 )
+	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Free_Play ) )
 	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 	PORT_DIPNAME( 0x18, 0x18, DEF_STR( Lives ) )
@@ -825,7 +831,7 @@ static INPUT_PORTS_START( bygone )
 	PORT_DIPSETTING(    0x10, "4" )
 	PORT_DIPSETTING(    0x08, "5" )
 	PORT_DIPSETTING(    0x00, "255 (Cheat)")
-	PORT_DIPUNUSED( 0x20, IP_ACTIVE_LOW )
+	PORT_DIPUNKNOWN( 0x20, 0x20 )
 	PORT_DIPNAME( 0x40, 0x00, DEF_STR( Flip_Screen ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x40, DEF_STR( On ) )
@@ -870,30 +876,20 @@ static INPUT_PORTS_START( bygone )
 	PORT_DIPSETTING(    0x70, DEF_STR( 1C_8C ) )
 
 	PORT_START("DSW3")
-	PORT_DIPNAME( 0x01, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x02, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x04, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x08, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x10, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x10, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x20, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x20, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPUNKNOWN( 0x01, 0x01 )
+	PORT_DIPUNKNOWN( 0x02, 0x02 )
+	PORT_DIPNAME( 0x04, 0x00, DEF_STR( Allow_Continue ) )
+	PORT_DIPSETTING(    0x04, DEF_STR( No ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( Yes ) )
+	PORT_DIPNAME( 0x08, 0x08, "Freeze After Game Over")
+	PORT_DIPSETTING(    0x08, DEF_STR( No ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( Yes ) )
+	PORT_DIPUNKNOWN( 0x10, 0x10 )
+	PORT_DIPUNKNOWN( 0x20, 0x20 )
 	PORT_DIPNAME( 0x40, 0x40, "Invulnerability (Cheat)")
 	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_DIPNAME( 0x80, 0x00, DEF_STR( Unknown ) )
-	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
-	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPUNKNOWN( 0x80, 0x80 )
 
 	PORT_START("SYSTEM")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_START1 )
@@ -979,6 +975,8 @@ void lkage_state::lkage(machine_config &config)
 	m_audiocpu->set_addrmap(AS_PROGRAM, &lkage_state::sound_map); // IRQs are triggered by the YM2203
 
 	TAITO68705_MCU(config, m_bmcu, 12_MHz_XTAL / 4);
+
+	WATCHDOG_TIMER(config, "watchdog").set_vblank_count("screen", 128);
 
 	// video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
