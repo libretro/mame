@@ -1288,6 +1288,12 @@ public:
 				switch_ids[SWITCH_X],
 				switch_ids[SWITCH_B]);
 
+		// bonus AD stick Z
+		assignments.emplace_back(
+				IPT_AD_STICK_Z,
+				SEQ_TYPE_STANDARD,
+				input_seq(make_code(ITEM_CLASS_ABSOLUTE, ITEM_MODIFIER_NONE, axis_ids[AXIS_RSY])));
+
 		// trigger pedals
 		assignments.emplace_back(
 				IPT_PEDAL,

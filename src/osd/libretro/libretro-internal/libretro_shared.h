@@ -99,6 +99,7 @@ extern bool mame_4way_enable;
 extern char mame_4way_map[256];
 extern char joystick_deadzone[8];
 extern char joystick_saturation[8];
+extern char joystick_threshold[8];
 
 extern int mouseLX[8];
 extern int mouseLY[8];

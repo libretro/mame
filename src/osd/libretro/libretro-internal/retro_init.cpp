@@ -67,6 +67,7 @@ bool mame_4way_enable = false;
 char mame_4way_map[256];
 char joystick_deadzone[8];
 char joystick_saturation[8];
+char joystick_threshold[8];
 
 // emu flags
 static bool arcade = false;
@@ -453,6 +454,8 @@ static void Set_Default_Option(void)
    Add_Option(joystick_deadzone);
    Add_Option("-joystick_saturation");
    Add_Option(joystick_saturation);
+   Add_Option("-joystick_threshold");
+   Add_Option(joystick_threshold);
 
    if (mame_4way_enable)
    {

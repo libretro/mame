@@ -747,6 +747,10 @@ function toolchain(_buildDir, _subDir)
 			linkoptions { "-fPIC" }
 		end
 
+		buildoptions {
+			"-fsigned-char",
+		}
+
 		flags {
 			"NoPCH",
 		}
