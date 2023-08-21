@@ -71,7 +71,9 @@
 
 #include "emu.h"
 #include "cpu/sh/sh4.h"
+#include "machine/ram.h"
 #include "machine/timekpr.h"
+#include "video/mb86292.h"
 #include "screen.h"
 #include "speaker.h"
 
@@ -84,8 +86,12 @@ class alien_state : public driver_device
 {
 public:
 	alien_state(const machine_config &mconfig, device_type type, const char *tag)
-		: driver_device(mconfig, type, tag),
-			m_maincpu(*this, "maincpu")
+		: driver_device(mconfig, type, tag)
+		, m_maincpu(*this, "maincpu")
+		, m_screen(*this, "screen")
+		, m_gpu(*this, "gpu")
+//		, m_vram(*this, "vram%d", 0U)
+		, m_vram(*this, "vram")
 	{ }
 
 	void alien(machine_config &config);
@@ -101,6 +107,9 @@ private:
 
 	// devices
 	required_device<cpu_device> m_maincpu;
+	required_device<screen_device> m_screen;
+	required_device<mb86292_device> m_gpu;
+	required_device<ram_device> m_vram;
 
 	// driver_device overrides
 	virtual void machine_reset() override;
@@ -108,6 +117,7 @@ private:
 
 u32 alien_state::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
 {
+	m_gpu->screen_update(screen, bitmap, cliprect);
 	return 0;
 }
 
@@ -125,10 +135,11 @@ void alien_state::alien_map(address_map &map)
 	map(0x04a00000, 0x04a00007).nopw(); // FPGA config
 	map(0x08000000, 0x08000007).portr("DSW");
 	map(0x0c000000, 0x0cffffff).ram(); // main RAM
-	map(0x10000000, 0x107fffff).ram().share("vram1"); // GPU 1 VRAM
-	map(0x11fc0000, 0x11ffffff).ram().share("vregs1"); // GPU 1 regs
-	//map(0x12000000, 0x127fffff).ram(); // GPU 2 VRAM
-	//map(0x13fc0000, 0x13ffffff).ram(); // GPU 2 regs
+
+	map(0x10000000, 0x107fffff).rw(m_vram, FUNC(ram_device::read), FUNC(ram_device::write)); // GPU 1 VRAM
+	map(0x11fc0000, 0x11ffffff).m(m_gpu, FUNC(mb86292_device::vregs_map));  // GPU 1 regs
+//	map(0x12000000, 0x127fffff).ram().share(m_vram[1]); // GPU 2 VRAM
+//	map(0x13fc0000, 0x13ffffff).ram().share("vregs2");  // GPU 2 regs
 	//map(0x18000000, 0x1800000f).r(FUNC(alien_state::test_r)).nopw(); // Alien CF ATA, other games have it other way
 }
 
@@ -172,14 +183,23 @@ void alien_state::alien(machine_config &config)
 	m_maincpu->set_addrmap(AS_PROGRAM, &alien_state::alien_map);
 	m_maincpu->set_force_no_drc(true);
 
-	/* video hardware */
+	// Configured as FCRAM 16MBit with 8MB / 64-bit data bus thru MMR register
+	RAM(config, m_vram);
+	m_vram->set_default_size("8M");
+	m_vram->set_default_value(0);
 
-	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_refresh_hz(60);
-	screen.set_vblank_time(ATTOSECONDS_IN_USEC(0));
-	screen.set_screen_update(FUNC(alien_state::screen_update));
-	screen.set_size((32)*8, (32)*8);
-	screen.set_visarea_full();
+	/* video hardware */
+	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
+	// FIXME: configured by main GPU
+	m_screen->set_refresh_hz(60);
+	m_screen->set_vblank_time(ATTOSECONDS_IN_USEC(0));
+	m_screen->set_screen_update(FUNC(alien_state::screen_update));
+	m_screen->set_size((32)*8, (32)*8);
+	m_screen->set_visarea_full();
+
+	MB86292(config, m_gpu, 0);
+	m_gpu->set_screen(m_screen);
+	m_gpu->set_vram(m_vram);
 
 	/* sound hardware */
 	SPEAKER(config, "mono").front_center();

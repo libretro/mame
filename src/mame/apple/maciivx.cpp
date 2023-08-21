@@ -313,6 +313,7 @@ void maciivx_state::maciiv_base(machine_config &config)
 	m_scsihelp->timeout_error_callback().set(FUNC(maciivx_state::scsi_berr_w));
 
 	SOFTWARE_LIST(config, "hdd_list").set_original("mac_hdd");
+	SOFTWARE_LIST(config, "cd_list").set_original("mac_cdrom").set_filter("MC68030,MC68030_32");
 	SOFTWARE_LIST(config, "flop35hd_list").set_original("mac_hdflop");
 
 	SCC85C30(config, m_scc, C7M);
@@ -364,7 +365,7 @@ void maciivx_state::maciivx(machine_config &config)
 
 	maciiv_base(config);
 
-	EGRET(config, m_egret, EGRET_341S0851);
+	EGRET_V101(config, m_egret, XTAL(32'768));
 	m_egret->reset_callback().set(FUNC(maciivx_state::egret_reset_w));
 	m_egret->linechange_callback().set(m_macadb, FUNC(macadb_device::adb_linechange_w));
 	m_egret->via_clock_callback().set(m_vasp, FUNC(vasp_device::cb1_w));
