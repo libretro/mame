@@ -418,9 +418,9 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       NULL,
       "input",
       {
-         { "lightgun",   "Lightgun" },
-         { "touhscreen", "Touchscreen" },
-         { "none",       "None" },
+         { "lightgun",    "Lightgun" },
+         { "touchscreen", "Touchscreen" },
+         { "none",        "None" },
          { NULL, NULL },
       },
       "lightgun"
