@@ -76,7 +76,7 @@ struct retro_core_option_v2_category option_cats_us[] = {
    },
    {
       "hacks",
-      "Hacks",
+      "Emulation Hacks",
       "Configure emulation hack options."
    },
    { NULL, NULL, NULL },
