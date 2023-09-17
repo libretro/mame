@@ -1228,28 +1228,28 @@ public:
 		switch_ids[SWITCH_DPAD_UP] = device.add_item(
 			Buttons_Name[RETROPAD_PAD_UP],
 			std::string_view(),
-			static_cast<input_item_id>(ITEM_ID_HAT1UP + joy_count*4),
+			ITEM_ID_HAT1UP,
 			generic_button_get_state<std::uint8_t>,
 			&joystate[joy_count].button[RETROPAD_PAD_UP]);
 
 		switch_ids[SWITCH_DPAD_DOWN] = device.add_item(
 			Buttons_Name[RETROPAD_PAD_DOWN],
 			std::string_view(),
-			static_cast<input_item_id>(ITEM_ID_HAT1DOWN + joy_count*4),
+			ITEM_ID_HAT1DOWN,
 			generic_button_get_state<std::uint8_t>,
 			&joystate[joy_count].button[RETROPAD_PAD_DOWN]);
 
 		switch_ids[SWITCH_DPAD_LEFT] = device.add_item(
 			Buttons_Name[RETROPAD_PAD_LEFT],
 			std::string_view(),
-			static_cast<input_item_id>(ITEM_ID_HAT1LEFT + joy_count*4),
+			ITEM_ID_HAT1LEFT,
 			generic_button_get_state<std::uint8_t>,
 			&joystate[joy_count].button[RETROPAD_PAD_LEFT]);
 
 		switch_ids[SWITCH_DPAD_RIGHT] = device.add_item(
 			Buttons_Name[RETROPAD_PAD_RIGHT],
 			std::string_view(),
-			static_cast<input_item_id>(ITEM_ID_HAT1RIGHT + joy_count*4),
+			ITEM_ID_HAT1RIGHT,
 			generic_button_get_state<std::uint8_t>,
 			&joystate[joy_count].button[RETROPAD_PAD_RIGHT]);
 
