@@ -426,11 +426,11 @@ static void check_variables(void)
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
       if (!strcmp(var.value, "free"))
-         lightgun_offscreen_mode = 0;
+         lightgun_offscreen_mode = RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_FREE;
       else if (!strcmp(var.value, "fixed (top left)"))
-         lightgun_offscreen_mode = 1;
+         lightgun_offscreen_mode = RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_TOP_LEFT;
       else
-         lightgun_offscreen_mode = 2;
+         lightgun_offscreen_mode = RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_BOTTOM_RIGHT;
    }
 
    var.key   = CORE_NAME "_rotation_mode";

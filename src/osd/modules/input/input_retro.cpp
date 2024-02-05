@@ -704,204 +704,195 @@ void retro_osd_interface::process_joypad_state(running_machine &machine)
 
 void retro_osd_interface::process_mouse_state(running_machine &machine)
 {
-   unsigned i;
-   auto &window = osd_common_t::window_list().front();
+	unsigned i;
+	auto &window = osd_common_t::window_list().front();
 
-   for(i = 0;i < 8; i++)
-   {
-         static int mbL[8] = {0}, mbR[8] = {0}, mbM[8] = {0};
-         int mouse_l[8];
-         int mouse_r[8];
-	     int mouse_m[8];
-         int16_t mouse_x[8];
-         int16_t mouse_y[8];
+	if (!mouse_enable)
+		return;
 
-         if (!mouse_enable)
-            return;
+	for (i = 0; i < 8; i++)
+	{
+		static int vmx  = fb_width/2, vmy  = fb_height/2;
+		static int ovmx = fb_width/2, ovmy = fb_height/2;
+		static int mbL[8] = {0}, mbR[8] = {0}, mbM[8] = {0};
+		int mouse_l[8];
+		int mouse_r[8];
+		int mouse_m[8];
+		int16_t mouse_x[8];
+		int16_t mouse_y[8];
 
-         mouse_x[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
-         mouse_y[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
-         mouse_l[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT);
-         mouse_r[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_RIGHT);
-         mouse_m[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_MIDDLE);
-         mouseLX[i] = mouse_x[i] * osd::input_device::RELATIVE_PER_PIXEL;
-         mouseLY[i] = mouse_y[i] * osd::input_device::RELATIVE_PER_PIXEL;
+		mouse_x[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_X);
+		mouse_y[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_Y);
+		mouse_l[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_LEFT);
+		mouse_r[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_RIGHT);
+		mouse_m[i] = input_state_cb(i, RETRO_DEVICE_MOUSE, 0, RETRO_DEVICE_ID_MOUSE_MIDDLE);
+		mouseLX[i] = mouse_x[i] * osd::input_device::RELATIVE_PER_PIXEL;
+		mouseLY[i] = mouse_y[i] * osd::input_device::RELATIVE_PER_PIXEL;
 
-         static int vmx=fb_width/2,vmy=fb_height/2;
-         static int ovmx=fb_width/2,ovmy=fb_height/2;
+		vmx += mouse_x[0];
+		vmy += mouse_y[0];
 
-         vmx+=mouse_x[0];
-         vmy+=mouse_y[0];
-         if(vmx>fb_width)vmx=fb_width-1;
-         if(vmy>fb_height)vmy=fb_height-1;
-         if(vmx<0)vmx=0;
-         if(vmy<0)vmy=0;
+		if (vmx > fb_width)
+			vmx = fb_width - 1;
+		if (vmy > fb_height)
+			vmy = fb_height - 1;
 
-         if (vmx != ovmx || vmy != ovmy)
-         {
-	        int cx = -1, cy = -1;
-	        if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-					machine.ui_input().push_mouse_move_event(window->target(), cx, cy);
-         }
-         ovmx=vmx;
-         ovmy=vmy;
+		if (vmx < 0)
+			vmx = 0;
+		if (vmy < 0)
+			vmy = 0;
 
-         if(mbL[i]==0 && mouse_l[i])
-         {
-            mbL[i]=1;
-            mousestate[i].mouseBUT[0]=0x80;
+		if (vmx != ovmx || vmy != ovmy)
+		{
+			int cx = -1, cy = -1;
+			if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
+				machine.ui_input().push_mouse_move_event(window->target(), cx, cy);
+		}
 
-			if(i==0)
+		ovmx = vmx;
+		ovmy = vmy;
+
+		if (!mbL[i] && mouse_l[i])
+		{
+			mbL[i] = 1;
+			mousestate[i].mouseBUT[0] = 0x80;
+
+			if (i == 0)
 			{
 				int cx = -1, cy = -1;
 				//FIXME doubleclick
 				if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-						machine.ui_input().push_mouse_down_event(window->target(), cx, cy);
+					machine.ui_input().push_mouse_down_event(window->target(), cx, cy);
 			}
-         }
-         else if(mbL[i]==1 && !mouse_l[i])
-         {
-            mousestate[i].mouseBUT[0]=0;
-            mbL[i]=0;
+		}
+		else if (mbL[i] && !mouse_l[i])
+		{
+			mbL[i] = 0;
+			mousestate[i].mouseBUT[0] = 0;
 
-			if(i==0)
+			if (i == 0)
 			{
 				int cx = -1, cy = -1;
 				if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-						machine.ui_input().push_mouse_up_event(window->target(), cx, cy);
+					machine.ui_input().push_mouse_up_event(window->target(), cx, cy);
 			}
-		 }
+		}
 
-         if(mbR[i]==0 && mouse_r[i])
-         {
-            mbR[i]=1;
-            mousestate[i].mouseBUT[1]=0x80;
+		if (!mbR[i] && mouse_r[i])
+		{
+			mbR[i] = 1;
+			mousestate[i].mouseBUT[1] = 0x80;
 
-			if(i==0)
+			if (i == 0)
 			{
 				int cx = -1, cy = -1;
 				if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-						machine.ui_input().push_mouse_rdown_event(window->target(), cx, cy);
+					machine.ui_input().push_mouse_rdown_event(window->target(), cx, cy);
 			}
-		 }
-         else if(mbR[i]==1 && !mouse_r[i])
-         {
-            mousestate[i].mouseBUT[1]=0;
-            mbR[i]=0;
+		}
+		else if (mbR[i] && !mouse_r[i])
+		{
+			mbR[i] = 0;
+			mousestate[i].mouseBUT[1] = 0;
 
-			if(i==0)
+			if (i == 0)
 			{
 				int cx = -1, cy = -1;
 				if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-						machine.ui_input().push_mouse_rup_event(window->target(), cx, cy);
+					machine.ui_input().push_mouse_rup_event(window->target(), cx, cy);
 			}
-		 }
-	   
-         if(mbM[i]==0 && mouse_m[i])
-         {
-            mbM[i]=1;
-            mousestate[i].mouseBUT[2]=0x80;
-         }
-         else if(mbM[i]==1 && !mouse_m[i])
-         {
-            mousestate[i].mouseBUT[2]=0;
-            mbM[i]=0;
-         }
-   }
+		}
+
+		if (!mbM[i] && mouse_m[i])
+		{
+			mbM[i] = 1;
+			mousestate[i].mouseBUT[2] = 0x80;
+		}
+		else if (mbM[i] && !mouse_m[i])
+		{
+			mbM[i] = 0;
+			mousestate[i].mouseBUT[2] = 0;
+		}
+	}
 }
 
 void retro_osd_interface::process_lightgun_state(running_machine &machine)
 {
-   unsigned i,j;
-   for(j = 0;j < 8; j++)
-   {
-      int16_t gun_x_raw[8], gun_y_raw[8];
+	unsigned i, j;
 
-      if ( lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_DISABLED ) {
-         return;
-      }
+	if (lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_DISABLED)
+		return;
 
-      for (i = 0; i < 4; i++) {
-         lightgunstate[j].lightgunBUT[i] = 0;
-      }
+	for (j = 0; j < 8; j++)
+	{
+		int16_t gun_x_raw[8], gun_y_raw[8];
+		bool offscreen = false;
+		bool reload = false;
 
-      if ( lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_POINTER ) {
-         gun_x_raw[j] = input_state_cb(j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
-         gun_y_raw[j] = input_state_cb(j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
+		for (i = 0; i < 4; i++)
+			lightgunstate[j].lightgunBUT[i] = 0;
 
-         // handle pointer presses
-         // use multi-touch to support different button inputs
-         int touch_count[8];
-		 touch_count[j] = input_state_cb( j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_COUNT );
-         if ( touch_count[j] > 0 && touch_count[j] <= 4 ) {
-            lightgunstate[j].lightgunBUT[touch_count[j]-1] = 0x80;
-         }
-      } else { // lightgun is default when enabled
-         gun_x_raw[j] = input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_X );
-         gun_y_raw[j] = input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_Y );
+		if (lightgun_mode == RETRO_SETTING_LIGHTGUN_MODE_POINTER)
+		{
+			gun_x_raw[j] = input_state_cb(j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_X);
+			gun_y_raw[j] = input_state_cb(j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_Y);
 
-         if ( input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_TRIGGER ) || input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ) ) {
-            lightgunstate[j].lightgunBUT[0] = 0x80;
-         }
-         if ( input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_AUX_A ) ) {
-            lightgunstate[j].lightgunBUT[1] = 0x80;
-         }
-      }
+			// handle pointer presses
+			// use multi-touch to support different button inputs
+			int touch_count[8];
+			touch_count[j] = input_state_cb(j, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_COUNT);
+			if (touch_count[j] > 0 && touch_count[j] <= 4)
+				lightgunstate[j].lightgunBUT[touch_count[j]-1] = 0x80;
+		}
+		else
+		{
+			gun_x_raw[j] = input_state_cb(j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_X);
+			gun_y_raw[j] = input_state_cb(j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SCREEN_Y);
 
-      //Place the cursor at a corner of the screen designated by "Lightgun offscreen position" when the cursor touches a min/max value
-      //The LIGHTGUN_RELOAD input will fire a shot at the bottom-right corner if "Lightgun offscreen position" is set to "fixed (bottom right)"
-	  //That same input will fire a shot at the top-left corner otherwise
-	  //The reload feature of some games fails at the top-left corner
-      if (input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN ) && !input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ))
-	  {
-		 if (lightgun_offscreen_mode == 1)
-		 {
-		    lightgunX[j] = -65535;
-	        lightgunY[j] = -65535;
-		 }
-		 else if (lightgun_offscreen_mode == 2)
-		 {
-		    lightgunX[j] = 65535;
-	        lightgunY[j] = 65535;
-		 }
-		 else
-		 {
-            lightgunX[j] = gun_x_raw[j] * 2;
-            lightgunY[j] = gun_y_raw[j] * 2;
-		 }
-	  }
-	  else if (input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN ) && input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ) )
-	  {
-		 if (lightgun_offscreen_mode == 2)
-		 {
-		    lightgunX[j] = 65535;
-	        lightgunY[j] = 65535;
-		 }
-		 else
-		 {
-		    lightgunX[j] = -65535;
-	        lightgunY[j] = -65535;
-		 }
-	  }
-	  else if (!input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN ) && input_state_cb( j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD ) )
-	  {
-		 if (lightgun_offscreen_mode == 2)
-		 {
-		    lightgunX[j] = 65535;
-	        lightgunY[j] = 65535;
-		 }
-		 else
-		 {
-		    lightgunX[j] = -65535;
-	        lightgunY[j] = -65535;
-		 }
-	  }
-	  else
-	  {
-         lightgunX[j] = gun_x_raw[j] * 2;
-         lightgunY[j] = gun_y_raw[j] * 2;
-	  }
-   }
+			offscreen = input_state_cb(j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_IS_OFFSCREEN);
+			reload    = input_state_cb(j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD);
+
+			if (input_state_cb(j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_TRIGGER) || reload)
+			    lightgunstate[j].lightgunBUT[0] = 0x80;
+
+			if (input_state_cb(j, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_AUX_A))
+				lightgunstate[j].lightgunBUT[1] = 0x80;
+		}
+
+		lightgunX[j] = gun_x_raw[j] * 2;
+		lightgunY[j] = gun_y_raw[j] * 2;
+
+		// Place the cursor at a corner of the screen designated by "Lightgun offscreen position" when the cursor touches a min/max value
+		// The LIGHTGUN_RELOAD input will fire a shot at the designated offscreen position
+		// Free position is untouched when not offscreen, and goes to bottom right when offscreen, otherwise offscreen reloading is impossible
+		// The reload feature of some games fails at the top-left corner
+		if (offscreen)
+		{
+			if (lightgun_offscreen_mode == RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_TOP_LEFT)
+			{
+				lightgunX[j] = -65535;
+				lightgunY[j] = -65535;
+			}
+			else
+			{
+				lightgunX[j] = 65535;
+				lightgunY[j] = 65535;
+			}
+		}
+		else if (!offscreen && reload)
+		{
+			if (lightgun_offscreen_mode == RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_TOP_LEFT)
+			{
+				lightgunX[j] = -65535;
+				lightgunY[j] = -65535;
+			}
+			else if (lightgun_offscreen_mode == RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_BOTTOM_RIGHT)
+			{
+				lightgunX[j] = 65535;
+				lightgunY[j] = 65535;
+			}
+		}
+	}
 }
 
 

@@ -17,20 +17,20 @@
 
 typedef struct joystate_t
 {
-   int button[RETRO_MAX_BUTTONS];
-   int a1[2];
-   int a2[2];
-   int a3[2];
+	int button[RETRO_MAX_BUTTONS];
+	int a1[2];
+	int a2[2];
+	int a3[2];
 } Joystate;
 
 typedef struct mousestate_t
 {
-   int mouseBUT[4];
+	int mouseBUT[4];
 } Mousestate;
 
 typedef struct lightgunstate_t
 {
-   int lightgunBUT[4];
+	int lightgunBUT[4];
 } Lightgunstate;
 
 struct KeyPressEventArgs
@@ -42,9 +42,9 @@ struct KeyPressEventArgs
 
 struct kt_table
 {
-   const char *mame_key_name;
-   int retro_key_name;
-   input_item_id mame_key;
+	const char *mame_key_name;
+	int retro_key_name;
+	input_item_id mame_key;
 };
 
 extern void retro_keyboard_event(bool, unsigned, uint32_t, uint16_t);

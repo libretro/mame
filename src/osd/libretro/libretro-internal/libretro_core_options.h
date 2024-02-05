@@ -418,12 +418,12 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       NULL,
       "input",
       {
+         { "none",        "None" },
          { "lightgun",    "Lightgun" },
          { "touchscreen", "Touchscreen" },
-         { "none",        "None" },
          { NULL, NULL },
       },
-      "lightgun"
+      "none"
    },
    {
       CORE_NAME "_lightgun_offscreen_mode",

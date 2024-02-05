@@ -48,7 +48,7 @@ int mame_reset = -1;
 
 /* core options */
 int  lightgun_mode = RETRO_SETTING_LIGHTGUN_MODE_DISABLED;
-int  lightgun_offscreen_mode = 1;
+int  lightgun_offscreen_mode = RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_FREE;
 bool mouse_enable = false;
 bool cheats_enable = false;
 bool alternate_renderer = false;
