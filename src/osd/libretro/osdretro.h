@@ -98,6 +98,7 @@ public:
 	void process_keyboard_state(running_machine &machine);
  	void process_joypad_state(running_machine &machine);
 	void process_lightgun_state(running_machine &machine);
+	void retro_push_char(running_machine &machine, int retro_key_name);
 
 	virtual bool has_focus() const override { return true; }
 	void release_keys();

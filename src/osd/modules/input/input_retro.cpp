@@ -27,8 +27,9 @@
 
 extern bool libretro_supports_bitmasks;
 
-unsigned short retro_key_state[RETROK_LAST] = {0};
-unsigned short retro_key_event_state[RETROK_LAST] = {0};
+static unsigned short retro_key_state[RETROK_LAST] = {0};
+static unsigned short retro_key_event_state[RETROK_LAST] = {0};
+static bool retro_key_capslock = false;
 
 int mouseLX[8];
 int mouseLY[8];
@@ -624,23 +625,62 @@ void retro_keyboard_event(bool down, unsigned code,
          return;
    }
 
+   retro_key_capslock = (down && code == RETROK_CAPSLOCK) || (mod & RETROKMOD_CAPSLOCK);
    retro_key_event_state[code] = down;
 }
+
+void retro_osd_interface::retro_push_char(running_machine &machine, int retro_key_name)
+{
+   char32_t push_char = retro_key_name;
+   bool shifted = retro_key_capslock || retro_key_state[RETROK_LSHIFT] || retro_key_state[RETROK_RSHIFT];
+
+   /* Case shift for letters */
+   if (shifted)
+   {
+      if (push_char > 0x60 && push_char < 0x7B)
+         push_char -= 0x20;
+      else if (push_char > 0x30 && push_char < 0x3A)
+         push_char -= 0x10;
+   }
+
+   /* Allow only practical chars and backspace */
+   if ((push_char > 0x1F && push_char < 0x80) || push_char == 0x8)
+      machine.ui_input().push_char_event(osd_common_t::s_window_list.front()->target(), push_char);
+}
+
+#define PUSH_CHAR_REPEAT_TRIGGER 10
 
 void retro_osd_interface::process_keyboard_state(running_machine &machine)
 {
    unsigned short i = 0;
+   static unsigned char repeat = 0;
+   static unsigned char repeat_trigger = PUSH_CHAR_REPEAT_TRIGGER;
 
    do
    {
       if (retro_key_event_state[ktable[i].retro_key_name] && !retro_key_state[ktable[i].retro_key_name])
       {
          retro_key_state[ktable[i].retro_key_name] = 0x80;
-         machine.ui_input().push_char_event(osd_common_t::s_window_list.front()->target(), ktable[i].retro_key_name);
+         retro_push_char(machine, ktable[i].retro_key_name);
+         repeat_trigger = PUSH_CHAR_REPEAT_TRIGGER;
+         repeat = 0;
       }
       else if (!retro_key_event_state[ktable[i].retro_key_name] && retro_key_state[ktable[i].retro_key_name])
       {
          retro_key_state[ktable[i].retro_key_name] = 0;
+         repeat_trigger = PUSH_CHAR_REPEAT_TRIGGER;
+         repeat = 0;
+      }
+      else if (retro_key_event_state[ktable[i].retro_key_name] && retro_key_state[ktable[i].retro_key_name])
+      {
+         repeat++;
+         if (repeat > repeat_trigger)
+         {
+            retro_push_char(machine, ktable[i].retro_key_name);
+            repeat = 0;
+            if (repeat_trigger)
+               repeat_trigger--;
+         }
       }
 
       i++;
