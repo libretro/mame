@@ -277,8 +277,12 @@ int mmain(int argc, char *argv[])
 //  constructor
 //============================================================
 
-retro_osd_interface::retro_osd_interface(retro_options &options)
-	: osd_common_t(options), m_options(options)
+retro_osd_interface::retro_osd_interface(retro_options &options) :
+	osd_common_t(options),
+	m_options(options),
+	m_last_click_time(std::chrono::steady_clock::time_point::min()),
+	m_last_click_x(0),
+	m_last_click_y(0)
 {
 }
 

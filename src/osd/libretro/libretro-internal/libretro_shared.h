@@ -3,10 +3,6 @@
 
 #include "libretro.h"
 
-#ifndef RETRO_MAX_BUTTONS
-#define RETRO_MAX_BUTTONS 16
-#endif
-
 #ifndef USE_XINPUT
 #define USE_XINPUT 0
 #endif
@@ -105,14 +101,6 @@ extern char mame_4way_map[256];
 extern char joystick_deadzone[8];
 extern char joystick_saturation[8];
 extern char joystick_threshold[8];
-
-extern int mouseLX[8];
-extern int mouseLY[8];
-extern int mouseBUT[4];
-
-extern int lightgunX[8];
-extern int lightgunY[8];
-extern int lightgunBUT[4];
 
 extern int fb_width;
 extern int fb_height;

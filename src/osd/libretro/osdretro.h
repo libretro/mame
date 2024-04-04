@@ -4,6 +4,7 @@
 #include "modules/lib/osdobj_common.h"
 #include "modules/osdmodule.h"
 #include "modules/font/font_module.h"
+#include <chrono>
 
 #include "libretro-internal/libretro_shared.h"
 
@@ -20,7 +21,6 @@
 
 #define RETROOPTION_SCALEMODE             "scalemode"
 
-
 #define RETROOPTION_SIXAXIS               "sixaxis"
 #define RETROOPTION_JOYINDEX              "joy_idx"
 #define RETROOPTION_KEYBINDEX             "keyb_idx"
@@ -32,7 +32,6 @@
 #define RETROOPTION_AUDIODRIVER           "audiodriver"
 #define RETROOPTION_VIDEODRIVER           "videodriver"
 #define RETROOPTION_RENDERDRIVER          "renderdriver"
-
 
 #define RETROOPTVAL_SOFT                  "soft"
 
@@ -120,6 +119,10 @@ private:
 	void output_oslog(const char *buffer);
 
 	retro_options &m_options;
+
+	std::chrono::steady_clock::time_point m_last_click_time;
+	int m_last_click_x;
+	int m_last_click_y;
 };
 
 //============================================================
