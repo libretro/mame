@@ -39,10 +39,10 @@ enum
 	AXIS_L2,            // half-axes for triggers
 	AXIS_R2,
 
-	AXIS_LSX,           // full-precision axes
-	AXIS_LSY,
-	AXIS_RSX,
-	AXIS_RSY,
+	AXIS_LX,            // full-precision axes
+	AXIS_LY,
+	AXIS_RX,
+	AXIS_RY,
 
 	AXIS_TOTAL
 };
@@ -79,7 +79,7 @@ enum
 };
 
 #define RETRO_MAX_PLAYERS 8
-#define RETRO_MAX_JOYPAD_BUTTONS SWITCH_TOTAL
+#define RETRO_MAX_JOYSTICK_BUTTONS SWITCH_TOTAL
 #define RETRO_MAX_MOUSE_BUTTONS MOUSE_BUTTONS_TOTAL
 #define RETRO_MAX_LIGHTGUN_BUTTONS LIGHTGUN_BUTTONS_TOTAL
 
@@ -87,27 +87,27 @@ enum
 //  TYPEDEFS
 //============================================================
 
-typedef struct joystate_t
+typedef struct joystickstate_t
 {
-	int button[RETRO_MAX_JOYPAD_BUTTONS];
+	int button[RETRO_MAX_JOYSTICK_BUTTONS];
 	int a1[2];
 	int a2[2];
 	int a3[2];
-} Joystate;
+} joystickstate_t;
 
 typedef struct mousestate_t
 {
 	int x;
 	int y;
 	int button[RETRO_MAX_MOUSE_BUTTONS];
-} Mousestate;
+} mousestate_t;
 
 typedef struct lightgunstate_t
 {
 	int x;
 	int y;
 	int button[RETRO_MAX_LIGHTGUN_BUTTONS];
-} Lightgunstate;
+} lightgunstate_t;
 
 struct KeyPressEventArgs
 {

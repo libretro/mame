@@ -30,13 +30,13 @@ static unsigned short retro_key_state[RETROK_LAST] = {0};
 static unsigned short retro_key_event_state[RETROK_LAST] = {0};
 static bool retro_key_capslock = false;
 
-Joystate joystate[RETRO_MAX_PLAYERS];
-Mousestate mousestate[RETRO_MAX_PLAYERS];
-Lightgunstate lightgunstate[RETRO_MAX_PLAYERS];
+joystickstate_t joystickstate[RETRO_MAX_PLAYERS];
+mousestate_t mousestate[RETRO_MAX_PLAYERS];
+lightgunstate_t lightgunstate[RETRO_MAX_PLAYERS];
 
-unsigned mouse_count = 0;
-unsigned joy_count = 0;
-unsigned lightgun_count = 0;
+uint8_t mouse_count = 0;
+uint8_t joystick_count = 0;
+uint8_t lightgun_count = 0;
 
 keyboard_table_t const keyboard_table[] =
 {
@@ -154,11 +154,11 @@ keyboard_table_t const keyboard_table[] =
 
 const char *mouse_button_name[RETRO_MAX_MOUSE_BUTTONS] =
 {
-	"Left",
-	"Right",
-	"Middle",
-	"Button 4",
-	"Button 5",
+	"L",
+	"R",
+	"M",
+	"4",
+	"5",
 	"Wheel Up",
 	"Wheel Down",
 	"Wheel Left",
@@ -179,7 +179,7 @@ const char *lightgun_button_name[RETRO_MAX_LIGHTGUN_BUTTONS] =
 	"D-Pad Right"
 };
 
-const char *joypad_button_name[RETRO_MAX_JOYPAD_BUTTONS] =
+const char *joystick_button_name[RETRO_MAX_JOYSTICK_BUTTONS] =
 {
 	"B",
 	"Y",
@@ -640,7 +640,7 @@ void retro_osd_interface::process_keyboard_state(running_machine &machine)
    } while (keyboard_table[i].retro_key_name != -1);
 }
 
-void retro_osd_interface::process_joypad_state(running_machine &machine)
+void retro_osd_interface::process_joystick_state(running_machine &machine)
 {
    unsigned i, j;
    int analog_l2, analog_r2;
@@ -656,7 +656,7 @@ void retro_osd_interface::process_joypad_state(running_machine &machine)
       for (j = 0; j < RETRO_MAX_PLAYERS; j++)
       {
          ret[j] = 0;
-         for (i = 0; i < RETRO_MAX_JOYPAD_BUTTONS; i++)
+         for (i = 0; i < RETRO_MAX_JOYSTICK_BUTTONS; i++)
             if (input_state_cb(j, RETRO_DEVICE_JOYPAD, 0, i))
                ret[j] |= (1 << i);
       }
@@ -664,18 +664,18 @@ void retro_osd_interface::process_joypad_state(running_machine &machine)
 
    for (j = 0; j < RETRO_MAX_PLAYERS; j++)
    {
-      for (i = 0; i < RETRO_MAX_JOYPAD_BUTTONS; i++)
+      for (i = 0; i < RETRO_MAX_JOYSTICK_BUTTONS; i++)
       {
          if (ret[j] & (1 << i))
-            joystate[j].button[i] = 0x80;
+            joystickstate[j].button[i] = 0x80;
          else
-            joystate[j].button[i] = 0;
+            joystickstate[j].button[i] = 0;
       }
 
-      joystate[j].a1[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X)), -32767, 32767);
-      joystate[j].a1[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y)), -32767, 32767);
-      joystate[j].a2[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X)), -32767, 32767);
-      joystate[j].a2[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y)), -32767, 32767);
+      joystickstate[j].a1[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X)), -32767, 32767);
+      joystickstate[j].a1[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y)), -32767, 32767);
+      joystickstate[j].a2[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X)), -32767, 32767);
+      joystickstate[j].a2[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y)), -32767, 32767);
 
       analog_l2 = input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_BUTTON, RETRO_DEVICE_ID_JOYPAD_L2);
       analog_r2 = input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_BUTTON, RETRO_DEVICE_ID_JOYPAD_R2);
@@ -693,8 +693,8 @@ void retro_osd_interface::process_joypad_state(running_machine &machine)
             analog_r2 = 32767;
       }
 
-      joystate[j].a3[0] = -normalize_absolute_axis(analog_l2, -32767, 32767);
-      joystate[j].a3[1] = -normalize_absolute_axis(analog_r2, -32767, 32767);
+      joystickstate[j].a3[0] = -normalize_absolute_axis(analog_l2, -32767, 32767);
+      joystickstate[j].a3[1] = -normalize_absolute_axis(analog_r2, -32767, 32767);
    }
 }
 
@@ -1211,7 +1211,7 @@ public:
 
 	virtual void reset() override
 	{
-		memset(&joystate, 0, sizeof(joystate));
+		memset(&joystickstate, 0, sizeof(joystickstate));
 	}
 
 	virtual void configure(osd::input_device &device)
@@ -1223,141 +1223,141 @@ public:
 		std::fill(std::begin(switch_ids), std::end(switch_ids), ITEM_ID_INVALID);
 
 		// axes
-		axis_ids[AXIS_LSX] = device.add_item(
-			"LSX",
+		axis_ids[AXIS_LX] = device.add_item(
+			"LX",
 			std::string_view(),
 			static_cast<input_item_id>(ITEM_ID_XAXIS),
 			generic_axis_get_state<std::int32_t>,
-			&joystate[joy_count].a1[0]);
-		axis_ids[AXIS_LSY] = device.add_item(
-			"LSY",
+			&joystickstate[joystick_count].a1[0]);
+		axis_ids[AXIS_LY] = device.add_item(
+			"LY",
 			std::string_view(),
 			static_cast<input_item_id>(ITEM_ID_YAXIS),
 			generic_axis_get_state<std::int32_t>,
-			&joystate[joy_count].a1[1]);
+			&joystickstate[joystick_count].a1[1]);
 
-		axis_ids[AXIS_RSX] = device.add_item(
-			"RSX",
+		axis_ids[AXIS_RX] = device.add_item(
+			"RX",
 			std::string_view(),
 			static_cast<input_item_id>(ITEM_ID_RXAXIS),
 			generic_axis_get_state<std::int32_t>,
-			&joystate[joy_count].a2[0]);
-		axis_ids[AXIS_RSY] = device.add_item(
-			"RSY",
+			&joystickstate[joystick_count].a2[0]);
+		axis_ids[AXIS_RY] = device.add_item(
+			"RY",
 			std::string_view(),
 			static_cast<input_item_id>(ITEM_ID_RYAXIS),
 			generic_axis_get_state<std::int32_t>,
-			&joystate[joy_count].a2[1]);
+			&joystickstate[joystick_count].a2[1]);
 
 		axis_ids[AXIS_L2] = device.add_item(
 			"L2",
 			std::string_view(),
 			static_cast<input_item_id>(ITEM_ID_RZAXIS),
 			generic_axis_get_state<std::int32_t>,
-			&joystate[joy_count].a3[0]);
+			&joystickstate[joystick_count].a3[0]);
 		axis_ids[AXIS_R2] = device.add_item(
 			"R2",
 			std::string_view(),
 			static_cast<input_item_id>(ITEM_ID_ZAXIS),
 			generic_axis_get_state<std::int32_t>,
-			&joystate[joy_count].a3[1]);
+			&joystickstate[joystick_count].a3[1]);
 
 		for (int j = 0; j < 6; j++)
 		{
 			switch_ids[j] = device.add_item(
-				joypad_button_name[button_mapping[j]],
+				joystick_button_name[button_mapping[j]],
 				std::string_view(),
 				(input_item_id)(ITEM_ID_BUTTON1 + j),
 				generic_button_get_state<std::int32_t>,
-				&joystate[joy_count].button[button_mapping[j]]);
+				&joystickstate[joystick_count].button[button_mapping[j]]);
 
 			add_button_assignment(assignments, ioport_type(IPT_BUTTON1 + j), { switch_ids[j] });
 		}
 
 		switch_ids[SWITCH_START] = device.add_item(
-			joypad_button_name[RETROPAD_START],
+			joystick_button_name[RETROPAD_START],
 			std::string_view(),
 			ITEM_ID_START,
 			generic_button_get_state<std::int32_t>,
-			&joystate[joy_count].button[RETROPAD_START]);
+			&joystickstate[joystick_count].button[RETROPAD_START]);
 		add_button_assignment(assignments, IPT_START, { switch_ids[SWITCH_START] });
 
 		switch_ids[SWITCH_SELECT] = device.add_item(
-			joypad_button_name[RETROPAD_SELECT],
+			joystick_button_name[RETROPAD_SELECT],
 			std::string_view(),
 			ITEM_ID_SELECT,
 			generic_button_get_state<std::int32_t>,
-			&joystate[joy_count].button[RETROPAD_SELECT]);
+			&joystickstate[joystick_count].button[RETROPAD_SELECT]);
 		add_button_assignment(assignments, IPT_SELECT, { switch_ids[SWITCH_SELECT] });
 
 		switch_ids[SWITCH_L2] = device.add_item(
-			joypad_button_name[RETROPAD_L2],
+			joystick_button_name[RETROPAD_L2],
 			std::string_view(),
 			ITEM_ID_BUTTON7,
 			generic_button_get_state<std::int32_t>,
-			&joystate[joy_count].button[RETROPAD_L2]);
+			&joystickstate[joystick_count].button[RETROPAD_L2]);
 		add_button_assignment(assignments, ioport_type(IPT_BUTTON7), { switch_ids[SWITCH_L2] });
 
 		switch_ids[SWITCH_R2] = device.add_item(
-			joypad_button_name[RETROPAD_R2],
+			joystick_button_name[RETROPAD_R2],
 			std::string_view(),
 			ITEM_ID_BUTTON8,
 			generic_button_get_state<std::int32_t>,
-			&joystate[joy_count].button[RETROPAD_R2]);
+			&joystickstate[joystick_count].button[RETROPAD_R2]);
 		add_button_assignment(assignments, ioport_type(IPT_BUTTON8), { switch_ids[SWITCH_R2] });
 
 		switch_ids[SWITCH_L3] = device.add_item(
-			joypad_button_name[RETROPAD_L3],
+			joystick_button_name[RETROPAD_L3],
 			std::string_view(),
 			ITEM_ID_BUTTON9,
 			generic_button_get_state<std::int32_t>,
-			&joystate[joy_count].button[RETROPAD_L3]);
+			&joystickstate[joystick_count].button[RETROPAD_L3]);
 		add_button_assignment(assignments, IPT_BUTTON9, { switch_ids[SWITCH_L3] });
 
 		switch_ids[SWITCH_R3] = device.add_item(
-			joypad_button_name[RETROPAD_R3],
+			joystick_button_name[RETROPAD_R3],
 			std::string_view(),
 			ITEM_ID_BUTTON10,
 			generic_button_get_state<std::int32_t>,
-			&joystate[joy_count].button[RETROPAD_R3]);
+			&joystickstate[joystick_count].button[RETROPAD_R3]);
 		add_button_assignment(assignments, IPT_BUTTON10, { switch_ids[SWITCH_R3] });
 
 		// d-pad
 		switch_ids[SWITCH_DPAD_UP] = device.add_item(
-			joypad_button_name[RETROPAD_PAD_UP],
+			joystick_button_name[RETROPAD_PAD_UP],
 			std::string_view(),
 			ITEM_ID_HAT1UP,
 			generic_button_get_state<std::uint8_t>,
-			&joystate[joy_count].button[RETROPAD_PAD_UP]);
+			&joystickstate[joystick_count].button[RETROPAD_PAD_UP]);
 
 		switch_ids[SWITCH_DPAD_DOWN] = device.add_item(
-			joypad_button_name[RETROPAD_PAD_DOWN],
+			joystick_button_name[RETROPAD_PAD_DOWN],
 			std::string_view(),
 			ITEM_ID_HAT1DOWN,
 			generic_button_get_state<std::uint8_t>,
-			&joystate[joy_count].button[RETROPAD_PAD_DOWN]);
+			&joystickstate[joystick_count].button[RETROPAD_PAD_DOWN]);
 
 		switch_ids[SWITCH_DPAD_LEFT] = device.add_item(
-			joypad_button_name[RETROPAD_PAD_LEFT],
+			joystick_button_name[RETROPAD_PAD_LEFT],
 			std::string_view(),
 			ITEM_ID_HAT1LEFT,
 			generic_button_get_state<std::uint8_t>,
-			&joystate[joy_count].button[RETROPAD_PAD_LEFT]);
+			&joystickstate[joystick_count].button[RETROPAD_PAD_LEFT]);
 
 		switch_ids[SWITCH_DPAD_RIGHT] = device.add_item(
-			joypad_button_name[RETROPAD_PAD_RIGHT],
+			joystick_button_name[RETROPAD_PAD_RIGHT],
 			std::string_view(),
 			ITEM_ID_HAT1RIGHT,
 			generic_button_get_state<std::uint8_t>,
-			&joystate[joy_count].button[RETROPAD_PAD_RIGHT]);
+			&joystickstate[joystick_count].button[RETROPAD_PAD_RIGHT]);
 
-		joy_count++;
+		joystick_count++;
 
 		// directions, analog stick
 		add_directional_assignments(
 				assignments,
-				axis_ids[AXIS_LSX],
-				axis_ids[AXIS_LSY],
+				axis_ids[AXIS_LX],
+				axis_ids[AXIS_LY],
 				ITEM_ID_INVALID,
 				ITEM_ID_INVALID,
 				ITEM_ID_INVALID,
@@ -1376,10 +1376,10 @@ public:
 		// twin stick
 		add_twin_stick_assignments(
 				assignments,
-				axis_ids[AXIS_LSX],
-				axis_ids[AXIS_LSY],
-				axis_ids[AXIS_RSX],
-				axis_ids[AXIS_RSY],
+				axis_ids[AXIS_LX],
+				axis_ids[AXIS_LY],
+				axis_ids[AXIS_RX],
+				axis_ids[AXIS_RY],
 				switch_ids[SWITCH_DPAD_LEFT],
 				switch_ids[SWITCH_DPAD_RIGHT],
 				switch_ids[SWITCH_DPAD_UP],
@@ -1393,7 +1393,7 @@ public:
 		assignments.emplace_back(
 				IPT_AD_STICK_Z,
 				SEQ_TYPE_STANDARD,
-				input_seq(make_code(ITEM_CLASS_ABSOLUTE, ITEM_MODIFIER_NONE, axis_ids[AXIS_RSY])));
+				input_seq(make_code(ITEM_CLASS_ABSOLUTE, ITEM_MODIFIER_NONE, axis_ids[AXIS_RY])));
 
 		// trigger pedals
 		assignments.emplace_back(
@@ -1458,7 +1458,7 @@ public:
 
 		char defname[32];
 
-		joy_count = 0;
+		joystick_count = 0;
 
 		if (buttons_profiles)
 			Input_Binding(machine);
@@ -1529,12 +1529,6 @@ public:
 			generic_axis_get_state<std::int32_t>,
 			&lightgunstate[lightgun_count].y);
 
-		// also assign lightguns to AD sticks
-		assignments.emplace_back(IPT_AD_STICK_X, SEQ_TYPE_STANDARD, input_seq(GUNCODE_X_INDEXED(lightgun_count)));
-		assignments.emplace_back(IPT_AD_STICK_Y, SEQ_TYPE_STANDARD, input_seq(GUNCODE_Y_INDEXED(lightgun_count)));
-
-		device.set_default_assignments(std::move(assignments));
-
 		for (int button = 0; button < RETRO_MAX_LIGHTGUN_BUTTONS; button++)
 		{
 			lightgunstate[lightgun_count].button[button] = 0;
@@ -1542,10 +1536,28 @@ public:
 			device.add_item(
 				lightgun_button_name[button],
 				std::string_view(),
-				static_cast<input_item_id>(ITEM_ID_BUTTON1 + button),
+				(input_item_id)(ITEM_ID_BUTTON1 + button),
 				generic_button_get_state<std::int32_t>,
 				&lightgunstate[lightgun_count].button[button]);
 		}
+
+		// assign lightgun to AD stick
+		assignments.emplace_back(IPT_AD_STICK_X, SEQ_TYPE_STANDARD, input_seq(GUNCODE_X_INDEXED(lightgun_count)));
+		assignments.emplace_back(IPT_AD_STICK_Y, SEQ_TYPE_STANDARD, input_seq(GUNCODE_Y_INDEXED(lightgun_count)));
+
+		// assign remaining lightgun buttons
+		assignments.emplace_back(IPT_BUTTON3, SEQ_TYPE_STANDARD, input_seq(GUNCODE_BUTTON3_INDEXED(lightgun_count)));
+		assignments.emplace_back(IPT_BUTTON4, SEQ_TYPE_STANDARD, input_seq(GUNCODE_BUTTON4_INDEXED(lightgun_count)));
+
+		assignments.emplace_back(IPT_START, SEQ_TYPE_STANDARD, input_seq(GUNCODE_BUTTON5_INDEXED(lightgun_count)));
+		assignments.emplace_back(IPT_SELECT, SEQ_TYPE_STANDARD, input_seq(GUNCODE_BUTTON6_INDEXED(lightgun_count)));
+
+		assignments.emplace_back(IPT_JOYSTICK_UP, SEQ_TYPE_STANDARD, input_code(DEVICE_CLASS_LIGHTGUN, lightgun_count, ITEM_CLASS_SWITCH, ITEM_MODIFIER_NONE, ITEM_ID_BUTTON7));
+		assignments.emplace_back(IPT_JOYSTICK_DOWN, SEQ_TYPE_STANDARD, input_code(DEVICE_CLASS_LIGHTGUN, lightgun_count, ITEM_CLASS_SWITCH, ITEM_MODIFIER_NONE, ITEM_ID_BUTTON8));
+		assignments.emplace_back(IPT_JOYSTICK_LEFT, SEQ_TYPE_STANDARD, input_code(DEVICE_CLASS_LIGHTGUN, lightgun_count, ITEM_CLASS_SWITCH, ITEM_MODIFIER_NONE, ITEM_ID_BUTTON9));
+		assignments.emplace_back(IPT_JOYSTICK_RIGHT, SEQ_TYPE_STANDARD, input_code(DEVICE_CLASS_LIGHTGUN, lightgun_count, ITEM_CLASS_SWITCH, ITEM_MODIFIER_NONE, ITEM_ID_BUTTON10));
+
+		device.set_default_assignments(std::move(assignments));
 
 		lightgun_count++;
 	}
@@ -1614,7 +1626,7 @@ void retro_osd_interface::poll_inputs(running_machine &machine)
 {
 	process_mouse_state(machine);
 	process_keyboard_state(machine);
-	process_joypad_state(machine);
+	process_joystick_state(machine);
 	process_lightgun_state(machine);
 }
 

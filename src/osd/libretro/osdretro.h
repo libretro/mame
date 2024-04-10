@@ -95,7 +95,7 @@ public:
 	void poll_inputs(running_machine &machine);
  	void process_mouse_state(running_machine &machine);
 	void process_keyboard_state(running_machine &machine);
- 	void process_joypad_state(running_machine &machine);
+	void process_joystick_state(running_machine &machine);
 	void process_lightgun_state(running_machine &machine);
 	void retro_push_char(running_machine &machine, int retro_key_name);
 

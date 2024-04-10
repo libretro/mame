@@ -390,6 +390,20 @@ void retro_osd_interface::customize_input_type_list(std::vector<input_type_entry
 				}
 				break;
 
+			// Add default lightgun port 1+2 Start+Select to global "other" controls
+			case IPT_START1:
+				entry.defseq(SEQ_TYPE_STANDARD).set(KEYCODE_1, input_seq::or_code, JOYCODE_START_INDEXED(0), input_seq::or_code, GUNCODE_BUTTON5_INDEXED(0));
+				break;
+			case IPT_START2:
+				entry.defseq(SEQ_TYPE_STANDARD).set(KEYCODE_2, input_seq::or_code, JOYCODE_START_INDEXED(1), input_seq::or_code, GUNCODE_BUTTON5_INDEXED(1));
+				break;
+			case IPT_COIN1:
+				entry.defseq(SEQ_TYPE_STANDARD).set(KEYCODE_5, input_seq::or_code, JOYCODE_SELECT_INDEXED(0), input_seq::or_code, GUNCODE_BUTTON6_INDEXED(0));
+				break;
+			case IPT_COIN2:
+				entry.defseq(SEQ_TYPE_STANDARD).set(KEYCODE_6, input_seq::or_code, JOYCODE_SELECT_INDEXED(1), input_seq::or_code, GUNCODE_BUTTON6_INDEXED(1));
+				break;
+
 			// Select + X
 			case IPT_UI_MENU:
 				entry.defseq(SEQ_TYPE_STANDARD).set(KEYCODE_TAB, input_seq::or_code, JOYCODE_SELECT, JOYCODE_BUTTON3);
