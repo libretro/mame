@@ -276,8 +276,8 @@ end
 		MAME_DIR .. "src/mame/cave/ep1c12_blit6.cpp",
 		MAME_DIR .. "src/mame/cave/ep1c12_blit7.cpp",
 		MAME_DIR .. "src/mame/cave/ep1c12_blit8.cpp",
-		MAME_DIR .. "src/mame/cave/ep1c12in.hxx",
-		MAME_DIR .. "src/mame/cave/ep1c12pixel.hxx",
+		MAME_DIR .. "src/mame/cave/ep1c12in.ipp",
+		MAME_DIR .. "src/mame/cave/ep1c12pixel.ipp",
 	}
 --end
 
