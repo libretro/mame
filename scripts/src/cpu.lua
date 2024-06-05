@@ -903,12 +903,20 @@ if CPUS["SH"] then
 		MAME_DIR .. "src/devices/cpu/sh/sh7042.h",
 		MAME_DIR .. "src/devices/cpu/sh/sh_adc.cpp",
 		MAME_DIR .. "src/devices/cpu/sh/sh_adc.h",
+		MAME_DIR .. "src/devices/cpu/sh/sh_bsc.cpp",
+		MAME_DIR .. "src/devices/cpu/sh/sh_bsc.h",
 		MAME_DIR .. "src/devices/cpu/sh/sh_cmt.cpp",
 		MAME_DIR .. "src/devices/cpu/sh/sh_cmt.h",
+		MAME_DIR .. "src/devices/cpu/sh/sh_dmac.cpp",
+		MAME_DIR .. "src/devices/cpu/sh/sh_dmac.h",
 		MAME_DIR .. "src/devices/cpu/sh/sh_intc.cpp",
 		MAME_DIR .. "src/devices/cpu/sh/sh_intc.h",
+		MAME_DIR .. "src/devices/cpu/sh/sh_mtu.cpp",
+		MAME_DIR .. "src/devices/cpu/sh/sh_mtu.h",
 		MAME_DIR .. "src/devices/cpu/sh/sh_port.cpp",
 		MAME_DIR .. "src/devices/cpu/sh/sh_port.h",
+		MAME_DIR .. "src/devices/cpu/sh/sh_sci.cpp",
+		MAME_DIR .. "src/devices/cpu/sh/sh_sci.h",
 		MAME_DIR .. "src/devices/cpu/sh/sh7604_bus.cpp",
 		MAME_DIR .. "src/devices/cpu/sh/sh7604_bus.h",
 		MAME_DIR .. "src/devices/cpu/sh/sh7604_sci.cpp",
@@ -1575,6 +1583,23 @@ if opt_tool(CPUS, "PSX") then
 end
 
 --------------------------------------------------
+-- MIPS-X
+--@src/devices/cpu/mipsx/mipsx.h,CPUS["MIPSX"] = true
+--------------------------------------------------
+
+if CPUS["MIPSX"] then
+	files {
+		MAME_DIR .. "src/devices/cpu/mipsx/mipsx.cpp",
+		MAME_DIR .. "src/devices/cpu/mipsx/mipsx.h",
+	}
+end
+
+if opt_tool(CPUS, "MIPSX") then
+	table.insert(disasm_files , MAME_DIR .. "src/devices/cpu/mipsx/mipsxdasm.cpp")
+	table.insert(disasm_files , MAME_DIR .. "src/devices/cpu/mipsx/mipsxdasm.h")
+end
+
+--------------------------------------------------
 -- Mitsubishi MELPS 4 series
 --@src/devices/cpu/melps4/melps4.h,CPUS["MELPS4"] = true
 --------------------------------------------------
@@ -2017,6 +2042,8 @@ if CPUS["M680X0"] then
 		MAME_DIR .. "src/devices/cpu/m68000/m68008-sip8.cpp",
 		MAME_DIR .. "src/devices/cpu/m68000/m68008.h",
 		MAME_DIR .. "src/devices/cpu/m68000/m68008.cpp",
+		MAME_DIR .. "src/devices/cpu/m68000/m68000musashi.h",
+		MAME_DIR .. "src/devices/cpu/m68000/m68000musashi.cpp",
 		MAME_DIR .. "src/devices/cpu/m68000/m68010.h",
 		MAME_DIR .. "src/devices/cpu/m68000/m68010.cpp",
 		MAME_DIR .. "src/devices/cpu/m68000/m68020.h",

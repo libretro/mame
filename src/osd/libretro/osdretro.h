@@ -108,10 +108,6 @@ public:
 
 	virtual void process_events() override {}
 
-protected:
-	virtual void build_slider_list() override;
-	virtual void update_slider_list() override;
-
 private:
 	virtual void osd_exit() override;
 

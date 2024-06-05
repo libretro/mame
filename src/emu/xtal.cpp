@@ -164,6 +164,7 @@ const double XTAL::known_xtals[] = {
 	  8'960'000, /* 8.96_MHz_XTAL          Casio CZ-101 (divided by 2 for Music LSI) */
 	  9'000'000, /* 9_MHz_XTAL             Homedata PCBs */
 	  9'216'000, /* 9.216_MHz_XTAL         Univac UTS 20 */
+	  9'263'750, /* 9.263750_MHz_XTAL      Sai Yu Gou Ma Roku bootleg */
 	  9'400'000, /* 9.4_MHz_XTAL           Yamaha MU-5 and TG-100 */
 	  9'426'500, /* 9.4265_MHz_XTAL        Yamaha DX7, and DX9 */
 	  9'600'000, /* 9.6_MHz_XTAL           WD37C65 second clock (for 300 KB/sec rate) */
@@ -430,6 +431,7 @@ const double XTAL::known_xtals[] = {
 	 34'000'000, /* 34_MHz_XTAL            Gaelco PCBs */
 	 34'291'712, /* 34.291712_MHz_XTAL     Fairlight CMI master card */
 	 34'846'000, /* 34.846_MHz_XTAL        Visual 550 */
+	 35'452'500, /* 35.4525_MHz_XTAL       Nokia MikroMikko 2 */
 	 35'469'000, /* 35.469_MHz_XTAL        ZX Spectrum +2/+3 (~8x PAL subcarrier) */
 	 35'640'000, /* 35.640_MHz_XTAL        HDS200 132-column display clock */
 	 35'834'400, /* 35.8344_MHz_XTAL       Tab Products E-22 132-column display clock */

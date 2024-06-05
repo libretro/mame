@@ -109,30 +109,6 @@ bool retro_osd_interface::window_init()
 	return true;
 }
 
-void retro_osd_interface::update_slider_list()
-{
-	for (const auto &window : osd_common_t::window_list())
-	{
-		// check if any window has dirty sliders
-		if (window->renderer().sliders_dirty())
-		{
-			build_slider_list();
-			return;
-		}
-	}
-}
-
-void retro_osd_interface::build_slider_list()
-{
-	m_sliders.clear();
-
-	for (const auto &window : osd_common_t::window_list())
-	{
-		std::vector<ui::menu_item> window_sliders = window->renderer().get_slider_list();
-		m_sliders.insert(m_sliders.end(), window_sliders.begin(), window_sliders.end());
-	}
-}
-
 //============================================================
 //  window_exit
 //  (main thread)
@@ -154,8 +130,6 @@ void retro_window_info::capture_pointer()
 {
 	if (!m_mouse_captured)
 	{
-//		SDL_SetWindowGrab(platform_window<SDL_Window*>(), SDL_TRUE);
-//		SDL_SetRelativeMouseMode(SDL_TRUE);
 		m_mouse_captured = true;
 	}
 }
@@ -164,8 +138,6 @@ void retro_window_info::release_pointer()
 {
 	if (m_mouse_captured)
 	{
-//		SDL_SetWindowGrab(platform_window<SDL_Window*>(), SDL_FALSE);
-//		SDL_SetRelativeMouseMode(SDL_FALSE);
 		m_mouse_captured = false;
 	}
 }
@@ -174,7 +146,6 @@ void retro_window_info::hide_pointer()
 {
 	if (!m_mouse_hidden)
 	{
-//		SDL_ShowCursor(SDL_DISABLE);
 		m_mouse_hidden = true;
 	}
 }
@@ -183,7 +154,6 @@ void retro_window_info::show_pointer()
 {
 	if (m_mouse_hidden)
 	{
-//		SDL_ShowCursor(SDL_ENABLE);
 		m_mouse_hidden = false;
 	}
 }

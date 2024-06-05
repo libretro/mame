@@ -69,7 +69,6 @@ bool retro_osd_interface::video_init()
 	for (index = 0; index < video_config.numscreens; index++)
 	{
 		osd_window_config conf;
-		memset(&conf, 0, sizeof(conf));
 		get_resolution(options().resolution(), options().resolution(index), &conf, true);
 
 		// create window ...

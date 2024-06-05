@@ -79,6 +79,7 @@ att/att3b2.cpp
 att/att4425.cpp
 att/att610.cpp
 att/att630.cpp
+att/blit.cpp
 att/unixpc.cpp
 ausnz/amust.cpp
 ausnz/applix.cpp
@@ -311,10 +312,14 @@ handheld/talkingfb.cpp
 handheld/teammate.cpp
 handheld/wildfire.cpp
 hds/hds200.cpp
-heathkit/et3400.cpp
-heathkit/h19.cpp
-heathkit/h8.cpp
-heathkit/h89.cpp
+heathzenith/et3400.cpp
+heathzenith/h19.cpp
+heathzenith/h8.cpp
+heathzenith/h89.cpp
+heathzenith/mdt60.cpp
+heathzenith/z100.cpp
+heathzenith/z22.cpp
+heathzenith/z29.cpp
 hec2hrp/hec2hrp.cpp
 hegenerglaser/academy.cpp
 hegenerglaser/amsterdam.cpp
@@ -604,6 +609,7 @@ osborne/vixen.cpp
 osi/osi.cpp
 palm/palm.cpp
 palm/palmz22.cpp
+philips/philipsbo.cpp
 pc/asst128.cpp
 pc/at.cpp
 pc/atpci.cpp
@@ -786,7 +792,7 @@ skeleton/aid80f.cpp
 skeleton/airbase99.cpp
 skeleton/alcat7100.cpp
 skeleton/alesis_qs.cpp
-skeleton/alfaskop41xx.cpp
+skeleton/alfaskop_s41_kb.cpp
 skeleton/alphasma.cpp
 skeleton/alphasma3k.cpp
 skeleton/am1000.cpp
@@ -796,7 +802,6 @@ skeleton/ax20.cpp
 skeleton/basf7100.cpp
 skeleton/bert.cpp
 skeleton/bitgraph.cpp
-skeleton/blit.cpp
 skeleton/bpmmicro.cpp
 skeleton/br8641.cpp
 skeleton/busicom.cpp
@@ -877,7 +882,6 @@ skeleton/jonos.cpp
 skeleton/juku.cpp
 skeleton/junior80.cpp
 skeleton/kron.cpp
-skeleton/learnwin.cpp
 skeleton/lee1214.cpp
 skeleton/lee1220.cpp
 skeleton/lft.cpp
@@ -918,7 +922,6 @@ skeleton/pdt3100.cpp
 skeleton/pencil2.cpp
 skeleton/perq.cpp
 skeleton/pes.cpp
-skeleton/philipsbo.cpp
 skeleton/picno.cpp
 skeleton/plan80.cpp
 skeleton/pm68k.cpp
@@ -977,7 +980,6 @@ skeleton/vd56sp.cpp
 skeleton/vector3.cpp
 skeleton/vectrix.cpp
 skeleton/vp415.cpp
-skeleton/vsmilepro.cpp
 skeleton/xbase09.cpp
 skeleton/xor100.cpp
 skeleton/zeebo_qualcomm_adreno130.cpp
@@ -1227,6 +1229,7 @@ vtech/inteladv.cpp
 vtech/iqunlim.cpp
 vtech/laser3k.cpp
 vtech/lcmate2.cpp
+vtech/learnwin.cpp
 vtech/pc2000.cpp
 vtech/pc4.cpp
 vtech/phusion.cpp
@@ -1235,6 +1238,7 @@ vtech/socrates.cpp
 vtech/storio.cpp
 vtech/vsmile.cpp
 vtech/vsmileb.cpp
+vtech/vsmilepro.cpp
 vtech/vtech_eu3a12.cpp
 vtech/vtech_innotab.cpp
 vtech/vtech1.cpp
@@ -1278,10 +1282,6 @@ yamaha/ymsy35.cpp
 yamaha/ymtx81z.cpp
 yamaha/ymvl1.cpp
 yamaha/ymvl70.cpp
-zenith/mdt60.cpp
-zenith/z100.cpp
-zenith/z22.cpp
-zenith/z29.cpp
 zpa/iq151.cpp
 zvt/pp01.cpp
 

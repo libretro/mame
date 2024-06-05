@@ -862,6 +862,7 @@ gaelco/gaelco.cpp
 gaelco/gaelco2.cpp
 -aligatorp
 -chmppool
+-jungleani
 -play2000_50i
 -srollnd
 
@@ -982,6 +983,7 @@ igs/goldstar.cpp          // fruit
 -cmasterbv
 -cmfb55
 -cmtetrisb
+-cmtetriskr
 -cmv4a
 -crazybonb
 -eldoradd
@@ -1103,6 +1105,8 @@ irem/m63.cpp
 irem/m72.cpp
 -hharryb2
 -loht_ms
+
+//irem/m78.cpp           // mnw
 
 irem/m90.cpp
 
@@ -1332,7 +1336,7 @@ konami/jailbrek.cpp
 
 konami/junofrst.cpp
 
-konami/konamigq.cpp          // chd untested
+konami/konamigq.cpp
 
 konami/konamigs.cpp          // chd untested
 
@@ -1841,6 +1845,7 @@ misc/carrera.cpp
 //misc/castle.cpp          // mnw
 
 misc/cb2001.cpp          // fruit
+-ndongmul2
 -scherrym
 
 //misc/chameleonrx1.cpp          //no screen
@@ -2310,14 +2315,6 @@ misc/quizpun2.cpp
 
 misc/re900.cpp          // gambling
 
-//misc/rf51w14cg.cpp          // no screen
-
-//misc/rfslots8085.cpp          // no screen
-
-//misc/rfslotsmcs48.cpp          // no screen
-
-//misc/rfslotspcpent.cpp          // black screen
-
 //misc/rgum.cpp          // mnw
 
 //misc/roul.cpp          // gambling, how to use?
@@ -2755,6 +2752,8 @@ nichibutsu/pastelg.cpp          // poker, mahjong
 
 nichibutsu/seicross.cpp
 
+nichibutsu/shettle.cpp
+
 nichibutsu/terracre.cpp
 
 nichibutsu/tubep.cpp
@@ -2893,6 +2892,8 @@ pc/calchase.cpp          // calchase: BOOT to start game
 //pc/fruitpc.cpp          // cannot find boot device
 
 //pc/igspc.cpp          // chd, mnw
+
+//pc/conliner.cpp          // no screen
 
 //pc/pangofun.cpp          // missing floppy
 
@@ -3157,6 +3158,16 @@ rare/btoads.cpp
 rare/kinst.cpp
 
 rare/xtheball.cpp
+
+//recfranco/rf51w14cg.cpp              // no screen
+
+//recfranco/rfjailbrk.cpp              // no screen
+
+//recfranco/rfslots8085.cpp            // no screen
+
+//recfranco/rfslotsmcs48.cpp           // no screen
+
+//recfranco/rfslotspcpent.cpp          // black screen
 
 sanritsu/appoooh.cpp
 
@@ -3759,15 +3770,21 @@ sigma/spiders.cpp
 
 //skeleton/caramball.cpp          // no screen
 
+//skeleton/cubieboard4.cpp        // no screen
+
 //skeleton/design.cpp             // not a game
 
 //skeleton/elcirculo.cpp          // no screen
+
+//skeleton/ganbaremo.cpp          // no screen
 
 //skeleton/happyvideo.cpp         // no screen
 
 //skeleton/kkcount.cpp            // no screen
 
 //skeleton/minihock.cpp           // no screen
+
+//skeleton/ramstar.cpp            // black screen
 
 //skeleton/seoul88.cpp            // bad gfx&inputs
 
@@ -4074,6 +4091,8 @@ tch/speedspn.cpp
 tch/topdrive.cpp
 
 tch/wheelfir.cpp
+-kongball
+-radendur
 
 tecfri/ambush.cpp
 
