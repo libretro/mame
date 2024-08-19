@@ -382,6 +382,8 @@ void Input_Binding(running_machine &machine)
               !core_stricmp(machine.system().parent, "xmvsf") ||
               !core_stricmp(machine.system().name, "astrass") ||
               !core_stricmp(machine.system().parent, "astrass") ||
+              !core_stricmp(machine.system().name, "bestbest") ||
+              !core_stricmp(machine.system().parent, "bestbest") ||
               !core_stricmp(machine.system().name, "brival") ||
               !core_stricmp(machine.system().parent, "brival") ||
               !core_stricmp(machine.system().name, "btlkroad") ||
@@ -402,6 +404,12 @@ void Input_Binding(running_machine &machine)
               !core_stricmp(machine.system().parent, "groovef") ||
               !core_stricmp(machine.system().name, "kaiserkn") ||
               !core_stricmp(machine.system().parent, "kaiserkn") ||
+              !core_stricmp(machine.system().name, "kinst") ||
+              !core_stricmp(machine.system().parent, "kinst") ||
+              !core_stricmp(machine.system().name, "kinst2") ||
+              !core_stricmp(machine.system().parent, "kinst2") ||
+              !core_stricmp(machine.system().name, "suikoenb") ||
+              !core_stricmp(machine.system().parent, "suikoenb") ||
               !core_stricmp(machine.system().name, "ssoldier") ||
               !core_stricmp(machine.system().parent, "ssoldier")
            )
@@ -481,32 +489,6 @@ void Input_Binding(running_machine &machine)
       button_mapping[2] = RETROPAD_Y;
       button_mapping[3] = RETROPAD_X;
       button_mapping[4] = RETROPAD_L;
-      button_mapping[5] = RETROPAD_R;
-   }
-   else if (
-              !core_stricmp(machine.system().name, "kinst") ||
-              !core_stricmp(machine.system().parent, "kinst")
-           )
-   {
-      /* Killer Instinct 1 */
-      button_mapping[0] = RETROPAD_L;
-      button_mapping[1] = RETROPAD_Y;
-      button_mapping[2] = RETROPAD_X;
-      button_mapping[3] = RETROPAD_R;
-      button_mapping[4] = RETROPAD_B;
-      button_mapping[5] = RETROPAD_A;
-   }
-   else if (
-              !core_stricmp(machine.system().name, "kinst2") ||
-              !core_stricmp(machine.system().parent, "kinst2")
-           )
-   {
-      /* Killer Instinct 2 */
-      button_mapping[0] = RETROPAD_L;
-      button_mapping[1] = RETROPAD_Y;
-      button_mapping[2] = RETROPAD_X;
-      button_mapping[3] = RETROPAD_B;
-      button_mapping[4] = RETROPAD_A;
       button_mapping[5] = RETROPAD_R;
    }
    else if (
