@@ -249,7 +249,10 @@ atari/starwars.cpp
 
 atari/subs.cpp
 
-//atari/tank8.cpp         //freezes when start pressed
+atari/tank8.cpp
+-tank8a
+-tank8b
+-tank8d
 
 atari/tempest.cpp
 
@@ -884,6 +887,8 @@ gaelco/mastboy.cpp
 
 gaelco/mastboyo.cpp
 
+//gaelco/radikaldarts.cpp          // chd, mnw
+
 //gaelco/rollext.cpp          // black screen
 
 gaelco/splash.cpp
@@ -964,6 +969,7 @@ ice/lethalj.cpp
 igs/dunhuang.cpp          // mahjong
 
 igs/funtech.cpp          // poker
+-poker21
 
 igs/goldstar.cpp          // fruit
 -3cdpoker
@@ -1029,6 +1035,7 @@ igs/igs009.cpp
 igs/igs011.cpp
 
 igs/igs017.cpp
+-slqz2a
 -tarzana
 -tarzan
 
@@ -1041,6 +1048,10 @@ igs/igs_fear.cpp
 -icescape
 
 //igs/igs_m027.cpp          // white screen
+
+//igs/igs_m027_link.cpp     // white screen or no screen
+
+//igs/igs_m027xa.cpp        // white screen, no inputs
 
 //igs/igs_m036.cpp          // black screen
 
@@ -1065,6 +1076,7 @@ igs/pgm2.cpp
 //igs/pgm3.cpp          // chd, mnw
 
 igs/spoker.cpp          // poker, some mnw
+-jinhulu2
 -spk102ua
 -spk200ua
 -spk201ua
@@ -1108,6 +1120,7 @@ irem/m63.cpp
 irem/m72.cpp
 -hharryb2
 -loht_ms
+-lohtb
 
 //irem/m78.cpp           // mnw
 
@@ -1508,7 +1521,7 @@ konami/surpratk.cpp
 
 //konami/tasman.cpp          // hang after hw test
 
-//konami/tgtpanic.cpp          // hangs on boot screen
+konami/tgtpanic.cpp          // hacked to get it working
 
 konami/thunderx.cpp
 
@@ -1601,6 +1614,7 @@ merit/merit.cpp          // mostly gambling
 -dodgectyb
 -dodgectyc
 -mosdraw
+-tictacuk
 -unkmerit
 
 //merit/merit3xx.cpp          // black screen
@@ -2309,8 +2323,6 @@ misc/quizo.cpp
 
 misc/quizpun2.cpp
 -quizpun
-
-//misc/radikaldarts.cpp          // chd, mnw
 
 //misc/rawthrillspc.cpp          // chd, mnw
 
@@ -3781,6 +3793,8 @@ sigma/spiders.cpp
 
 //skeleton/boo.cpp                // black screen
 
+//skeleton/boramz80.cpp           // black screen
+
 //skeleton/caramball.cpp          // no screen
 
 //skeleton/cubieboard4.cpp        // no screen
@@ -3799,6 +3813,8 @@ sigma/spiders.cpp
 
 //skeleton/minihock.cpp           // no screen
 
+//skeleton/pullttrigger.cpp       // no screen
+
 //skeleton/ramstar.cpp            // black screen
 
 //skeleton/seoul88.cpp            // bad gfx&inputs
@@ -3808,6 +3824,8 @@ sigma/spiders.cpp
 //skeleton/ticz80.cpp             // black screen
 
 //skeleton/tvcobrasd.cpp          // no screen
+
+//skeleton/whtm68k.cpp            // bad gfx
 
 snk/bbusters.cpp
 
