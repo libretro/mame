@@ -377,7 +377,9 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "input",
       {
          { "disabled", NULL },
-         { "enabled",  NULL },
+         { "4way",     NULL },
+         { "strict",   NULL },
+         { "qbert",    NULL },
          { NULL, NULL },
       },
       "disabled"
