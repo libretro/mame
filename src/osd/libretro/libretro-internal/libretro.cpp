@@ -658,7 +658,7 @@ void retro_get_system_info(struct retro_system_info *info)
 
    info->library_name     = "MAME";
    info->library_version  = build_version;
-   info->valid_extensions = "chd|cmd|zip|7z";
+   info->valid_extensions = "cmd|zip|7z";
    info->need_fullpath    = true;
    info->block_extract    = true;
 }
