@@ -31,12 +31,7 @@
 
 bool fexists(std::string path)
 {
-	auto f = fopen(path.c_str(), "rb");
-	if(f != nullptr) {
-		fclose(f);
-		return true;
-	}
-	return false;
+    return osd_stat(path) ? true : false;
 }
 
 extern bool get_MgamePath(void);
