@@ -72,7 +72,29 @@ apple/superga2.cpp
 
 aristocrat/caswin.cpp
 
-//atari/a2600.cpp              // not a game
+astrocorp/astrcorp.cpp          // gambling
+-gostopac
+-hapfarm
+-magibombd
+-magibombc
+-magibombb
+-magibomba
+-magibombf
+-magibombg
+-monkeyl
+-monkeyla
+-speedmst
+-speedmsta
+-speedmstb
+-westvent
+-winbingoa
+-wwitch
+
+//astrocorp/astropc.cpp          // no screen
+
+//astrocorp/hummer.cpp          // black screen
+
+//atari/a2600.cpp               // not a game
 
 atari/akkaarrh.cpp
 
@@ -360,6 +382,7 @@ bmc/koftball.cpp          // weird inputs
 -jxzh
 
 bmc/popobear.cpp
+-magkengo
 
 capcom/1942.cpp
 
@@ -685,6 +708,7 @@ excellent/dblcrown.cpp          // poker
 excellent/gcpinbal.cpp
 
 excellent/lastbank.cpp
+-fever13
 
 excellent/witch.cpp
 -pbchmp95
@@ -1036,8 +1060,8 @@ igs/igs011.cpp
 
 igs/igs017.cpp
 -slqz2a
--tarzana
 -tarzan
+-tarzana
 
 igs/igspoker.cpp          // poker
 -cpoker210ks
@@ -1047,11 +1071,25 @@ igs/igspoker.cpp          // poker
 igs/igs_fear.cpp
 -icescape
 
-//igs/igs_m027.cpp          // white screen
+igs/igs_m027.cpp
+-amazoni2
+-amazonia
+-amazonkp
+-extradrw
+-gonefsh2
+-klxyj
+-luckycrs
+-olympic5
+-olympic5a
+-sdwx
 
 //igs/igs_m027_link.cpp     // white screen or no screen
 
-//igs/igs_m027xa.cpp        // white screen, no inputs
+igs/igs_m027xa.cpp
+-crzybugsj
+-haunthig
+-haunthiga
+-wldfruit
 
 //igs/igs_m036.cpp          // black screen
 
@@ -1801,26 +1839,6 @@ misc/artmagic.cpp
 
 //misc/astrafr.cpp          // fruit, no screen
 
-misc/astrcorp.cpp          // gambling
--gostopac
--hapfarm
--magibombd
--magibombc
--magibombb
--magibomba
--magibombf
--magibombg
--monkeyl
--monkeyla
--speedmst
--speedmsta
--speedmstb
--westvent
--winbingoa
--wwitch
-
-//misc/astropc.cpp          // no screen
-
 //misc/atronic.cpp          // hang at start
 
 misc/attckufo.cpp
@@ -1864,8 +1882,10 @@ misc/carrera.cpp
 //misc/castle.cpp          // mnw
 
 misc/cb2001.cpp          // fruit
+-cb5
 -ndongmul2
--scherrym
+-scherrymp
+-scherrymp10u
 
 //misc/chameleonrx1.cpp          //no screen
 
@@ -2900,9 +2920,13 @@ pacman/schick.cpp
 pc/calchase.cpp            // calchase: BOOT to start game
 -hostinv
 
+//pc/champ2.cpp            // hang on boot screen
+
 //pc/cuttherope.cpp        // skel,chd, assume no screen
 
 //pc/dawg.cpp              // black screen
+
+pc/filetto.cpp 
 
 //pc/fruitpc.cpp           // cannot find boot device
 
@@ -2923,8 +2947,6 @@ pc/pcat_nit.cpp            // use -mouse
 -streetg2r5
 -streetgr3
 
-pc/pcxt.cpp
-
 //pc/przone.cpp           // chd, skel
 
 //pc/quakeat.cpp          // black screen
@@ -2932,6 +2954,8 @@ pc/pcxt.cpp
 //pc/queen.cpp            // black screen
 
 //pc/sis630.cpp           // chd, mnw
+
+pc/tetriskr.cpp
 
 pce/ggconnie.cpp
 -fishingm
@@ -3409,6 +3433,7 @@ sega/naomi.cpp
 -mushikeo
 -mushik2e
 -mushik4e
+-mushik4t
 -mushik2k
 -mushi2eo
 -mushi2k5
@@ -3777,13 +3802,13 @@ sigma/nyny.cpp
 
 sigma/r2dtank.cpp
 
-//sigma/sigma21.cpp          // black screen
+//sigma/sigma21.cpp               // black screen
 
-//sigma/sigmab31.cpp          // gambling, no screen
+//sigma/sigmab31.cpp              // gambling, no screen
 
-//sigma/sigmab52.cpp          // poker, mnw
+//sigma/sigmab52.cpp              // poker, mnw
 
-//sigma/sigmab88.cpp           // black screen
+//sigma/sigmab88.cpp              // black screen
 
 sigma/sigmab98.cpp
 
@@ -3800,6 +3825,8 @@ sigma/spiders.cpp
 //skeleton/cubieboard4.cpp        // no screen
 
 //skeleton/design.cpp             // not a game
+
+//skeleton/dyna_d0404.cpp         // black screen
 
 //skeleton/elcirculo.cpp          // no screen
 
@@ -3820,6 +3847,8 @@ sigma/spiders.cpp
 //skeleton/seoul88.cpp            // bad gfx&inputs
 
 //skeleton/sterz80.cpp            // black screen
+
+//skeleton/syvg.cpp               // black screen
 
 //skeleton/ticz80.cpp             // black screen
 

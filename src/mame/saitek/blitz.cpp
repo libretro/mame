@@ -116,6 +116,12 @@ private:
 	void p6_w(u8 data);
 };
 
+
+
+/*******************************************************************************
+    Initialization
+*******************************************************************************/
+
 void blitz_state::machine_start()
 {
 	m_out_lcd.resolve();
@@ -280,7 +286,7 @@ static INPUT_PORTS_START( blitz )
 	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_UNKNOWN)
 
 	PORT_START("POWER")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_OTHER) PORT_CODE(KEYCODE_F1) PORT_CHANGED_MEMBER(DEVICE_SELF, blitz_state, power_off, 0) PORT_NAME("Power Off")
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, blitz_state, power_off, 0)
 INPUT_PORTS_END
 
 
