@@ -221,9 +221,9 @@ ifeq ($(platform),osx)
 endif
 
 ifeq ($(platform),ios-arm64)
-	LIBRETRO_APPLE_PLATFORM = arm64-apple-ios14.2
+	LIBRETRO_APPLE_PLATFORM = arm64-apple-ios12.0
 	LIBRETRO_APPLE_ISYSROOT := $(shell xcodebuild -version -sdk iphoneos Path)
-	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT) -miphoneos-version-min=12.0
 	#the ci should set above only osx does it so far unset if its added to the ci
 	#-isysroot $(LIBRETRO_APPLE_ISYSROOT)
 	#-arch $(LIBRETRO_CPU) -target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(IOSSDK) -miphoneos-version-min=12.0 was the flags used
@@ -251,9 +251,9 @@ ifeq ($(platform),ios-arm64)
 endif
 
 ifeq ($(platform),tvos-arm64)
-	LIBRETRO_APPLE_PLATFORM = arm64-apple-tvos14.2
+	LIBRETRO_APPLE_PLATFORM = arm64-apple-tvos11.0
 	LIBRETRO_APPLE_ISYSROOT := $(shell xcodebuild -version -sdk appletvos Path)
-	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
+	ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT) -mappletvos-version-min=11.0
 	#the ci should set above only osx does it so far unset if its udded to the ci
 	PLATFLAGS +=OVERRIDE_CC=clang OVERRIDE_CXX=clang++
 	PLATFLAGS +=DONT_USE_NETWORK=1
