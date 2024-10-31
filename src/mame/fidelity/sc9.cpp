@@ -85,7 +85,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(sc9c_change_cpu_freq);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 	// devices/pointers
 	required_device<cpu_device> m_maincpu;
@@ -98,8 +98,8 @@ protected:
 	u8 m_led_data = 0;
 
 	// address maps
-	void sc9_map(address_map &map);
-	void sc9d_map(address_map &map);
+	void sc9_map(address_map &map) ATTR_COLD;
+	void sc9d_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	void control_w(u8 data);
@@ -217,7 +217,7 @@ static INPUT_PORTS_START( sc9c )
 	PORT_INCLUDE( sc9 )
 
 	PORT_START("CPU")
-	PORT_CONFNAME( 0x03, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, sc9_state, sc9c_change_cpu_freq, 0) // factory set
+	PORT_CONFNAME( 0x03, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(sc9_state::sc9c_change_cpu_freq), 0) // factory set
 	PORT_CONFSETTING(    0x00, "1.5MHz" )
 	PORT_CONFSETTING(    0x01, "1.6MHz" )
 	PORT_CONFSETTING(    0x02, "1.9MHz" )

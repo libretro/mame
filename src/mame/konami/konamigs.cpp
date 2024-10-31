@@ -88,16 +88,16 @@ protected:
 	required_device<screen_device> m_screen;
 	optional_device<hopper_device> m_hopper;
 
-	void main_map_common(address_map &map);
-	void main_map(address_map &map);
-	void main_map_medal(address_map &map);
-	void main_port(address_map &map);
-	void main_port_medal(address_map &map);
-	void ymz280b_map(address_map &map);
-	void ymz280b_map_medal(address_map &map);
+	void main_map_common(address_map &map) ATTR_COLD;
+	void main_map(address_map &map) ATTR_COLD;
+	void main_map_medal(address_map &map) ATTR_COLD;
+	void main_port(address_map &map) ATTR_COLD;
+	void main_port_medal(address_map &map) ATTR_COLD;
+	void ymz280b_map(address_map &map) ATTR_COLD;
+	void ymz280b_map_medal(address_map &map) ATTR_COLD;
 
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	u8 ymzram_r(offs_t offset);
 	void ymzram_w(offs_t offset, u8 data);
@@ -886,13 +886,13 @@ static INPUT_PORTS_START( ddrkids )
 	PORT_DIPUNKNOWN_DIPLOC( 0x8000, 0x0000, "SW2:8" )
 
 	PORT_START("RTCW")
-	PORT_BIT( 0x08, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, set_dir_line)
-	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, set_cs_line)
-	PORT_BIT( 0x02, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, write_bit)
-	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, set_clock_line)
+	PORT_BIT( 0x08, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::set_dir_line))
+	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::set_cs_line))
+	PORT_BIT( 0x02, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::write_bit))
+	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::set_clock_line))
 
 	PORT_START("RTCR")
-	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("rtc", rtc4553_device, read_bit)
+	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::read_bit))
 	PORT_BIT( 0xfe, IP_ACTIVE_HIGH, IPT_UNKNOWN )
 INPUT_PORTS_END
 
@@ -907,7 +907,7 @@ static INPUT_PORTS_START( muscl )
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_COIN3 ) PORT_NAME("Medal")
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_COIN2 ) // looks like not regular coin in to play, but coins for medals exchange
 	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_COIN1 )
-	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("hopper", hopper_device, line_r)
+	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("hopper", FUNC(hopper_device::line_r))
 	PORT_BIT( 0x78, IP_ACTIVE_LOW, IPT_UNKNOWN ) // unused
 
 	PORT_START("DSW")
@@ -970,13 +970,13 @@ static INPUT_PORTS_START( muscl )
 	PORT_DIPSETTING(      0x0000, DEF_STR( On ) )
 
 	PORT_START("RTCW")
-	PORT_BIT( 0x08, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, set_dir_line)
-	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, set_cs_line)
-	PORT_BIT( 0x02, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, write_bit)
-	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", rtc4553_device, set_clock_line)
+	PORT_BIT( 0x08, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::set_dir_line))
+	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::set_cs_line))
+	PORT_BIT( 0x02, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::write_bit))
+	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::set_clock_line))
 
 	PORT_START("RTCR")
-	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("rtc", rtc4553_device, read_bit)
+	PORT_BIT( 0x01, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("rtc", FUNC(rtc4553_device::read_bit))
 	PORT_BIT( 0xfe, IP_ACTIVE_HIGH, IPT_UNKNOWN )
 INPUT_PORTS_END
 

@@ -116,7 +116,7 @@ public:
 	void init_const();
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 	virtual void machine_reset() override { m_power = true; }
 
 private:
@@ -131,9 +131,9 @@ private:
 	u8 m_inp_mux = 0;
 
 	// address maps
-	void const_map(address_map &map);
-	void ssensor4_map(address_map &map);
-	void sconst_map(address_map &map);
+	void const_map(address_map &map) ATTR_COLD;
+	void ssensor4_map(address_map &map) ATTR_COLD;
+	void sconst_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	void mux_w(u8 data);
@@ -320,7 +320,7 @@ static INPUT_PORTS_START( ssensor4 )
 	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_W) PORT_NAME("Hint")
 
 	PORT_START("POWER") // needs to be triggered for nvram to work
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, const_state, power_off, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(const_state::power_off), 0)
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( nconstq )
@@ -345,7 +345,7 @@ static INPUT_PORTS_START( sconst )
 	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_3) PORT_NAME("Print List / Acc. Time / Pawn")
 
 	PORT_START("POWER")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, const_state, power_off, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(const_state::power_off), 0)
 INPUT_PORTS_END
 
 

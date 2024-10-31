@@ -125,10 +125,10 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(coin_inserted);
 
 protected:
-	virtual void machine_start() override;
-	virtual void video_start() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void video_start() override ATTR_COLD;
 
-	virtual void machine_reset() override;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	void flipscreen_w(int state);
@@ -146,8 +146,8 @@ private:
 	TILEMAP_MAPPER_MEMBER(tilemap_scan);
 	u32 screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
-	void audio_map(address_map &map);
-	void shared_map(address_map &map);
+	void audio_map(address_map &map) ATTR_COLD;
+	void shared_map(address_map &map) ATTR_COLD;
 
 	required_device<cpu_device> m_mastercpu;
 	required_device<cpu_device> m_slavecpu;
@@ -407,7 +407,7 @@ static INPUT_PORTS_START( flower )
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_UNKNOWN )
 
 	PORT_START("DSW1")
-	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_COIN1 ) PORT_CHANGED_MEMBER(DEVICE_SELF, flower_state, coin_inserted, 0)
+	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_COIN1 ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(flower_state::coin_inserted), 0)
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_START1  )
 	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_START2 )
 	PORT_DIPNAME( 0x08, 0x08, "Energy Decrease" )       PORT_DIPLOCATION("SW2:4")

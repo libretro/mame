@@ -101,8 +101,8 @@ public:
 	void galileo(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -120,7 +120,7 @@ private:
 	u8 m_inp_mux = 0;
 	u8 m_led_data[2] = { };
 
-	void main_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
 
 	void update_display();
 	void mux_w(u8 data);
@@ -351,7 +351,7 @@ static INPUT_PORTS_START( leonardo )
 	PORT_CONFSETTING(    0x04, DEF_STR( Normal ) )
 
 	PORT_START("RESET")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_I) PORT_CHANGED_MEMBER(DEVICE_SELF, leo_state, go_button, 0) PORT_NAME("Go")
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_I) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(leo_state::go_button), 0) PORT_NAME("Go")
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( galileo ) // same buttons, but different locations
@@ -384,7 +384,7 @@ static INPUT_PORTS_START( galileo ) // same buttons, but different locations
 	PORT_BIT(0x04, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_V) PORT_NAME("Set Up")
 
 	PORT_MODIFY("RESET")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_G) PORT_CHANGED_MEMBER(DEVICE_SELF, leo_state, go_button, 0) PORT_NAME("Go")
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_G) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(leo_state::go_button), 0) PORT_NAME("Go")
 INPUT_PORTS_END
 
 

@@ -73,8 +73,8 @@ public:
 	void tapatune_base(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	required_device<cpu_device> m_maincpu;
@@ -120,9 +120,9 @@ private:
 	MC6845_BEGIN_UPDATE(crtc_begin_update);
 	MC6845_UPDATE_ROW(crtc_update_row);
 
-	void maincpu_io_map(address_map &map);
-	void maincpu_map(address_map &map);
-	void video_map(address_map &map);
+	void maincpu_io_map(address_map &map) ATTR_COLD;
+	void maincpu_map(address_map &map) ATTR_COLD;
+	void video_map(address_map &map) ATTR_COLD;
 };
 
 
@@ -508,7 +508,7 @@ static INPUT_PORTS_START( tapatune )
 	PORT_START("COINS")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_COIN1 )
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_COIN2 )
-	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ticket", ticket_dispenser_device, line_r)
+	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ticket", FUNC(ticket_dispenser_device::line_r))
 	PORT_BIT( 0xf8, IP_ACTIVE_LOW, IPT_UNUSED )
 
 	PORT_START("BUTTONS")

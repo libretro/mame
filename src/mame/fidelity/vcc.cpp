@@ -151,7 +151,7 @@ public:
 	void vcc(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -167,8 +167,8 @@ private:
 	u8 m_inp_mux = 0;
 
 	// address maps
-	void main_map(address_map &map);
-	void main_io(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
+	void main_io(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	void update_display();
@@ -309,7 +309,7 @@ static INPUT_PORTS_START( vcc )
 	PORT_BIT(0x08, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("H8") PORT_CODE(KEYCODE_8) PORT_CODE(KEYCODE_8_PAD) PORT_CODE(KEYCODE_H)
 
 	PORT_START("RESET") // is not on matrix IN.0 d0
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, vcc_state, reset_button, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(vcc_state::reset_button), 0)
 INPUT_PORTS_END
 
 

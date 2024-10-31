@@ -4,6 +4,9 @@
 
 Basic Master Jr. (MB-6885) (c) 1982? Hitachi
 
+Notes:
+- MON G command ends with space key, not enter (will otherwise just ignore the command).
+
 TODO:
 - Identify and improve Sound DAC details;
 - Keyboard eats inputs if typed relatively fast (verify);
@@ -14,7 +17,6 @@ TODO:
 - Floppy adapter MP-1803, thru expansion bus;
 - Border color for MP-1710;
 - Printer, MP-1041/MP-1045;
-- Hookup SW list;
 
 **************************************************************************************************/
 
@@ -53,13 +55,13 @@ public:
 	static constexpr feature_type unemulated_features() { return feature::PRINTER; }
 
 protected:
-	virtual void video_start() override;
-	virtual void video_reset() override;
+	virtual void video_start() override ATTR_COLD;
+	virtual void video_reset() override ATTR_COLD;
 
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 private:
-	void main_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
 
 	required_device<cpu_device> m_maincpu;
 	required_device<cassette_image_device> m_cassette;
@@ -94,7 +96,7 @@ private:
 	u8 m_color_mode = 0U;
 	u8 m_tile_latch = 0U;
 	u8 m_screen_mode = 0U;
-	void mp1710_map(address_map &map);
+	void mp1710_map(address_map &map) ATTR_COLD;
 	void screen_mode_w(u8 data);
 	void screen_reverse_w(u8 data);
 	u32 screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
@@ -419,7 +421,7 @@ static INPUT_PORTS_START( bmjr )
 
 	PORT_START("BREAK")
 	PORT_BIT(0x7f, IP_ACTIVE_HIGH, IPT_UNKNOWN ) // TODO: read by timer irq service
-	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_KEYBOARD ) PORT_NAME("Break") PORT_CHANGED_MEMBER(DEVICE_SELF, bmjr_state, break_key_pressed, 0)
+	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_KEYBOARD ) PORT_NAME("Break") PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(bmjr_state::break_key_pressed), 0)
 INPUT_PORTS_END
 
 static const gfx_layout bmjr_charlayout =

@@ -465,14 +465,14 @@ public:
 	int ds2430_combined_r();
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	virtual uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect);
 
 	required_device<voodoo_3_device> m_voodoo;
 private:
-	void mpc8240_soc_map(address_map &map);
+	void mpc8240_soc_map(address_map &map) ATTR_COLD;
 
 	void unk2_w(offs_t offset, uint64_t data, uint64_t mem_mask = ~0);
 	uint64_t voodoo3_io_r(offs_t offset, uint64_t mem_mask = ~0);
@@ -515,9 +515,9 @@ private:
 	uint32_t m_voodoo3_pci_reg[0x100];
 	uint32_t m_mpc8240_regs[256/4];
 
-	void viper_map(address_map &map);
-	void viper_ppp_map(address_map &map);
-	void omz3d_map(address_map &map);
+	void viper_map(address_map &map) ATTR_COLD;
+	void viper_ppp_map(address_map &map) ATTR_COLD;
+	void omz3d_map(address_map &map) ATTR_COLD;
 
 	TIMER_CALLBACK_MEMBER(epic_global_timer_callback);
 	TIMER_CALLBACK_MEMBER(i2c_timer_callback);
@@ -653,7 +653,7 @@ public:
 
 protected:
 	virtual uint32_t screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect) override;
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 private:
 	std::unique_ptr<bitmap_rgb32> m_voodoo_buf;
 	std::unique_ptr<bitmap_rgb32> m_ttl_buf;
@@ -1880,7 +1880,7 @@ static INPUT_PORTS_START( viper )
 	PORT_DIPSETTING( 0x08, DEF_STR( Off ) )
 	PORT_DIPSETTING( 0x00, DEF_STR( On ) )
 	PORT_BIT( 0x10, IP_ACTIVE_HIGH, IPT_UNKNOWN )
-	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ds2430", ds2430a_device, data_r)
+	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ds2430", FUNC(ds2430a_device::data_r))
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN ) // if this bit is 0, loads a disk copier instead
 	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_UNKNOWN )
 
@@ -2165,7 +2165,7 @@ INPUT_PORTS_START( p9112 )
 	PORT_INCLUDE( p911 )
 
 	PORT_MODIFY("IN2")
-	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(viper_state, ds2430_combined_r)
+	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(FUNC(viper_state::ds2430_combined_r))
 INPUT_PORTS_END
 
 INPUT_PORTS_START( mfightc )

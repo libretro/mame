@@ -92,8 +92,8 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(change_cpu_freq);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -114,7 +114,7 @@ private:
 	u32 m_prev_pc = 0;
 	u64 m_prev_cycle = 0;
 
-	void main_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	u32 input_r();
@@ -283,7 +283,7 @@ static INPUT_PORTS_START( tasc )
 	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_R) PORT_NAME("Right Clock")
 
 	PORT_START("CPU")
-	PORT_CONFNAME( 0x01, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, tasc_state, change_cpu_freq, 0)
+	PORT_CONFNAME( 0x01, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(tasc_state::change_cpu_freq), 0)
 	PORT_CONFSETTING(    0x00, "30MHz (R30)" )
 	PORT_CONFSETTING(    0x01, "40MHz (R40)" )
 INPUT_PORTS_END

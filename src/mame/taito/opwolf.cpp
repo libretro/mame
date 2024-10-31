@@ -332,8 +332,8 @@ public:
 	ioport_value opwolf_gun_y_r();
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	uint16_t cchip_r(offs_t offset);
@@ -353,11 +353,11 @@ private:
 	void opwolf_msm5205_vck(msm5205_device *device, int chip);
 	template<int N> void msm5205_vck_w(int state);
 
-	void opwolf_map(address_map &map);
-	void opwolf_sound_z80_map(address_map &map);
-	void opwolfb_map(address_map &map);
-	void opwolfb_sub_z80_map(address_map &map);
-	void opwolfp_map(address_map &map);
+	void opwolf_map(address_map &map) ATTR_COLD;
+	void opwolf_sound_z80_map(address_map &map) ATTR_COLD;
+	void opwolfb_map(address_map &map) ATTR_COLD;
+	void opwolfb_sub_z80_map(address_map &map) ATTR_COLD;
+	void opwolfp_map(address_map &map) ATTR_COLD;
 
 	/* memory pointers */
 	optional_shared_ptr<uint8_t> m_cchip_ram;
@@ -549,11 +549,11 @@ static INPUT_PORTS_START( opwolf )
 	PORT_BIT( 0x80, IP_ACTIVE_LOW,  IPT_UNKNOWN )
 
 	PORT_START("IN2")
-	PORT_BIT( 0x01ff, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(opwolf_state, opwolf_gun_x_r)
+	PORT_BIT( 0x01ff, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(opwolf_state::opwolf_gun_x_r))
 	PORT_BIT( 0xfe00, IP_ACTIVE_LOW,  IPT_UNUSED )
 
 	PORT_START("IN3")
-	PORT_BIT( 0x01ff, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(opwolf_state, opwolf_gun_y_r)
+	PORT_BIT( 0x01ff, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(opwolf_state::opwolf_gun_y_r))
 	PORT_BIT( 0xfe00, IP_ACTIVE_LOW,  IPT_UNUSED )
 
 	PORT_START(P1X_PORT_TAG)  /* P1X (span allows you to shoot enemies behind status bar) */

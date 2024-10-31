@@ -113,9 +113,9 @@ public:
 
 protected:
 	// initialization
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
-	virtual void video_start() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
+	virtual void video_start() override ATTR_COLD;
 
 private:
 	// devices, memory pointers
@@ -158,8 +158,8 @@ private:
 	void cvsd_tick(int state);
 
 	// address maps
-	void main_map(address_map &map);
-	void sound_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
+	void sound_map(address_map &map) ATTR_COLD;
 };
 
 void olibochu_state::machine_start()
@@ -512,7 +512,7 @@ static INPUT_PORTS_START( olibochu )
 	PORT_DIPUNUSED_DIPLOC( 0x80, 0x80, "DSW3:8" )
 
 	PORT_START("CONF")
-	PORT_CONFNAME( 0x01, 0x01, "Palette" ) PORT_CHANGED_MEMBER(DEVICE_SELF, olibochu_state, palette_changed, 0)
+	PORT_CONFNAME( 0x01, 0x01, "Palette" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(olibochu_state::palette_changed), 0)
 	PORT_CONFSETTING(    0x01, "Oli-Boo-Chu" )
 	PORT_CONFSETTING(    0x00, "Punching Kid" )
 INPUT_PORTS_END
@@ -521,7 +521,7 @@ static INPUT_PORTS_START( punchkid )
 	PORT_INCLUDE( olibochu )
 
 	PORT_MODIFY("CONF") // change the default
-	PORT_CONFNAME( 0x01, 0x00, "Palette" ) PORT_CHANGED_MEMBER(DEVICE_SELF, olibochu_state, palette_changed, 0)
+	PORT_CONFNAME( 0x01, 0x00, "Palette" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(olibochu_state::palette_changed), 0)
 	PORT_CONFSETTING(    0x01, "Oli-Boo-Chu" )
 	PORT_CONFSETTING(    0x00, "Punching Kid" )
 INPUT_PORTS_END

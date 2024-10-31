@@ -117,7 +117,7 @@ public:
 	void init_ssystem3() { m_xor_kludge = true; }
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -143,9 +143,9 @@ private:
 	bool m_xor_kludge = false;
 
 	// address maps
-	void ssystem3_map(address_map &map);
-	void ssystem4_map(address_map &map);
-	void chessunit_map(address_map &map);
+	void ssystem3_map(address_map &map) ATTR_COLD;
+	void ssystem4_map(address_map &map) ATTR_COLD;
+	void chessunit_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	void lcd1_output_w(u32 data) { m_lcd1_data = data; }
@@ -441,7 +441,7 @@ static INPUT_PORTS_START( ssystem3 )
 	PORT_CONFNAME( 0x01, 0x01, "Memory Unit" )
 	PORT_CONFSETTING(    0x00, DEF_STR( Off ) )
 	PORT_CONFSETTING(    0x01, DEF_STR( On ) )
-	PORT_CONFNAME( 0x02, 0x02, "Chess Unit" ) PORT_CHANGED_MEMBER(DEVICE_SELF, ssystem3_state, cu_plug, 0)
+	PORT_CONFNAME( 0x02, 0x02, "Chess Unit" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(ssystem3_state::cu_plug), 0)
 	PORT_CONFSETTING(    0x00, DEF_STR( Off ) )
 	PORT_CONFSETTING(    0x02, DEF_STR( On ) )
 	PORT_BIT(0x80, IP_ACTIVE_LOW, IPT_CUSTOM)

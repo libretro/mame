@@ -345,7 +345,7 @@ public:
 	void tndrcade(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 	u16 ipl1_ack_r();
 	void ipl1_ack_w(u16 data = 0);
@@ -365,8 +365,8 @@ protected:
 
 	TIMER_DEVICE_CALLBACK_MEMBER(tndrcade_sub_interrupt);
 
-	void tndrcade_map(address_map &map);
-	void tndrcade_sub_map(address_map &map);
+	void tndrcade_map(address_map &map) ATTR_COLD;
+	void tndrcade_sub_map(address_map &map) ATTR_COLD;
 
 	required_device<cpu_device> m_maincpu;
 	required_device<cpu_device> m_subcpu;
@@ -435,12 +435,12 @@ protected:
 	TIMER_DEVICE_CALLBACK_MEMBER(seta_sub_interrupt);
 	TIMER_DEVICE_CALLBACK_MEMBER(calibr50_interrupt);
 
-	void calibr50_map(address_map &map);
-	void calibr50_sub_map(address_map &map);
-	void downtown_map(address_map &map);
-	void downtown_sub_map(address_map &map);
-	void metafox_sub_map(address_map &map);
-	void twineagl_sub_map(address_map &map);
+	void calibr50_map(address_map &map) ATTR_COLD;
+	void calibr50_sub_map(address_map &map) ATTR_COLD;
+	void downtown_map(address_map &map) ATTR_COLD;
+	void downtown_sub_map(address_map &map) ATTR_COLD;
+	void metafox_sub_map(address_map &map) ATTR_COLD;
+	void twineagl_sub_map(address_map &map) ATTR_COLD;
 
 	required_device<x1_012_device> m_tiles;
 	required_device<x1_010_device> m_x1snd;
@@ -470,7 +470,7 @@ public:
 	ioport_value trackball_y_r();
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	u16 dsw_r(offs_t offset);
@@ -483,7 +483,7 @@ private:
 
 	void usclssic_set_pens();
 
-	void usclssic_map(address_map &map);
+	void usclssic_map(address_map &map) ATTR_COLD;
 
 	required_device<upd4701_device> m_upd4701;
 	required_device<hc157_device> m_buttonmux;
@@ -1593,10 +1593,10 @@ INPUT_PORTS_END
 
 static INPUT_PORTS_START( usclssic )
 	PORT_START("TRACKX")
-	PORT_BIT( 0xfff, 0x000, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(usclssic_state, trackball_x_r)
+	PORT_BIT( 0xfff, 0x000, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(usclssic_state::trackball_x_r))
 
 	PORT_START("TRACKY")
-	PORT_BIT( 0xfff, 0x000, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(usclssic_state, trackball_y_r)
+	PORT_BIT( 0xfff, 0x000, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(usclssic_state::trackball_y_r))
 
 	PORT_START("TRACK1_X")     // muxed port 0
 	PORT_BIT( 0xfff, 0x000, IPT_TRACKBALL_X ) PORT_SENSITIVITY(70) PORT_KEYDELTA(30)
@@ -1611,12 +1611,12 @@ static INPUT_PORTS_START( usclssic )
 	PORT_BIT( 0xfff, 0x000, IPT_TRACKBALL_Y ) PORT_SENSITIVITY(70) PORT_KEYDELTA(30) PORT_COCKTAIL
 
 	PORT_START("BUTTONS")
-	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNKNOWN ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", hc157_device, a0_w)
-	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_BUTTON1 ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", hc157_device, a1_w)
-	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_START1 ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", hc157_device, a2_w)
-	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNKNOWN ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", hc157_device, b0_w)
-	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_BUTTON1 ) PORT_COCKTAIL PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", hc157_device, b1_w)
-	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_START2 ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", hc157_device, b2_w)
+	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNKNOWN ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", FUNC(hc157_device::a0_w))
+	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_BUTTON1 ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", FUNC(hc157_device::a1_w))
+	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_START1 ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", FUNC(hc157_device::a2_w))
+	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNKNOWN ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", FUNC(hc157_device::b0_w))
+	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_BUTTON1 ) PORT_COCKTAIL PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", FUNC(hc157_device::b1_w))
+	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_START2 ) PORT_WRITE_LINE_DEVICE_MEMBER("buttonmux", FUNC(hc157_device::b2_w))
 
 	PORT_START("COINS")
 	PORT_BIT( 0x0001, IP_ACTIVE_LOW,  IPT_UNKNOWN  )    // tested (sound related?)

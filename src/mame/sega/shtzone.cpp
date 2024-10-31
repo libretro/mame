@@ -88,8 +88,8 @@ public:
 	ioport_value gun_tl_p2_r();
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 	virtual void device_post_load() override;
 
 private:
@@ -108,7 +108,7 @@ private:
 	uint8_t cart_r(offs_t offset);
 	void int_callback(int state);
 
-	void prg_map(address_map &map);
+	void prg_map(address_map &map) ATTR_COLD;
 };
 
 
@@ -221,8 +221,8 @@ static INPUT_PORTS_START( shtzone )
 	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_UNKNOWN ) // "
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_UNKNOWN ) // "
 	// directly tied from Light Phaser TL pins
-	PORT_BIT( 0x10, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(shtzone_state, gun_tl_p1_r)
-	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(shtzone_state, gun_tl_p2_r)
+	PORT_BIT( 0x10, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(shtzone_state::gun_tl_p1_r))
+	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(shtzone_state::gun_tl_p2_r))
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN ) // does nothing in test mode
 	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_UNKNOWN ) // active high or nothing on screen (?)
 

@@ -66,7 +66,7 @@ public:
 	void ccx(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -83,10 +83,10 @@ private:
 	u8 m_7seg_data = 0;
 
 	// address maps
-	void acr_map(address_map &map);
-	void ccx_map(address_map &map);
-	void main_trampoline(address_map &map);
-	void main_io(address_map &map);
+	void acr_map(address_map &map) ATTR_COLD;
+	void ccx_map(address_map &map) ATTR_COLD;
+	void main_trampoline(address_map &map) ATTR_COLD;
+	void main_io(address_map &map) ATTR_COLD;
 
 	u8 main_trampoline_r(offs_t offset);
 	void main_trampoline_w(offs_t offset, u8 data);
@@ -247,7 +247,7 @@ static INPUT_PORTS_START( ccx )
 	PORT_BIT(0x08, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("H8") PORT_CODE(KEYCODE_8) PORT_CODE(KEYCODE_8_PAD) PORT_CODE(KEYCODE_H)
 
 	PORT_START("RESET") // is not on matrix IN.0 d0
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, ccx_state, reset_button, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(ccx_state::reset_button), 0)
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( acr )
@@ -276,7 +276,7 @@ static INPUT_PORTS_START( acr )
 	PORT_BIT(0x08, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("3") PORT_CODE(KEYCODE_3) PORT_CODE(KEYCODE_3_PAD)
 
 	PORT_START("RESET") // is not on matrix IN.0 d0
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, ccx_state, reset_button, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(ccx_state::reset_button), 0)
 INPUT_PORTS_END
 
 

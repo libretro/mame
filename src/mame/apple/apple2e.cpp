@@ -287,8 +287,8 @@ public:
 	TIMER_DEVICE_CALLBACK_MEMBER(accel_timer);
 	TIMER_DEVICE_CALLBACK_MEMBER(ay3600_repeat);
 
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	u8 ram0000_r(offs_t offset);
 	void ram0000_w(offs_t offset, u8 data);
@@ -394,13 +394,13 @@ public:
 	void tk3000(machine_config &config);
 	void apple2ee(machine_config &config);
 	void apple2eepal(machine_config &config);
-	void apple2c_map(address_map &map);
-	void apple2c_memexp_map(address_map &map);
-	void base_map(address_map &map);
-	void laser128_map(address_map &map);
-	void ace500_map(address_map &map);
-	void ace2200_map(address_map &map);
-	void spectred_keyb_map(address_map &map);
+	void apple2c_map(address_map &map) ATTR_COLD;
+	void apple2c_memexp_map(address_map &map) ATTR_COLD;
+	void base_map(address_map &map) ATTR_COLD;
+	void laser128_map(address_map &map) ATTR_COLD;
+	void ace500_map(address_map &map) ATTR_COLD;
+	void ace2200_map(address_map &map) ATTR_COLD;
+	void spectred_keyb_map(address_map &map) ATTR_COLD;
 	void init_laser128();
 	void init_128ex();
 	void init_pal();
@@ -1778,33 +1778,38 @@ void apple2e_state::do_io(int offset, bool is_iic)
 		return;
 	}
 
+	if ((offset & 0xf0) == 0x20) // tape out / ROM bank on IIc/IIc+
+	{
+		if (m_cassette)
+		{
+			// Officially Apple only documents this softswitch at $c020 but
+			// all models with a tape interface will respond to any of the $c02x
+			// addresses.
+			m_cassette_state ^= 1;
+			m_cassette->output(m_cassette_state ? 1.0f : -1.0f);
+		}
+
+		if (is_iic)
+		{
+			// Apple IIc Tech Reference 1st edition lists this softswitch at $c028 while
+			// the 2nd edition lists it at $c02x.  Both the IIc and IIc Plus will respond to
+			// $c02x.
+			m_romswitch = !m_romswitch;
+			update_slotrom_banks();
+			lcrom_update();
+
+			// MIG is reset when ROMSWITCH turns off
+			if ((m_isiicplus) && !(m_romswitch))
+			{
+				m_migpage = 0;
+				m_intdrive = false;
+				m_35sel = false;
+			}
+		}
+	}
+
 	switch (offset)
 	{
-		case 0x20:
-			if (m_cassette)
-			{
-				m_cassette_state ^= 1;
-				m_cassette->output(m_cassette_state ? 1.0f : -1.0f);
-			}
-			break;
-
-		case 0x28:
-			if (is_iic)
-			{
-				m_romswitch = !m_romswitch;
-				update_slotrom_banks();
-				lcrom_update();
-
-				// MIG is reset when ROMSWITCH turns off
-				if ((m_isiicplus) && !(m_romswitch))
-				{
-					m_migpage = 0;
-					m_intdrive = false;
-					m_35sel = false;
-				}
-			}
-			break;
-
 		case 0x40:  // utility strobe (not available on IIc)
 			if (!is_iic)
 			{

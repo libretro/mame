@@ -178,7 +178,7 @@ public:
 	{ }
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 	required_device<cpu_device> m_maincpu;
 	required_device<x1_001_device> m_spritegen;
@@ -201,8 +201,8 @@ public:
 	void champbwl(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	uint8_t trackball_r();
@@ -211,7 +211,7 @@ private:
 
 	void screen_vblank(int state);
 
-	void prg_map(address_map &map);
+	void prg_map(address_map &map) ATTR_COLD;
 
 	required_ioport_array<2> m_inputs;
 	required_ioport_array<2> m_fakex;
@@ -238,7 +238,7 @@ private:
 
 	void screen_vblank(int state);
 
-	void prg_map(address_map &map);
+	void prg_map(address_map &map) ATTR_COLD;
 };
 
 
@@ -481,7 +481,7 @@ static INPUT_PORTS_START( doraemon )
 	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_SERVICE1 )
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_UNKNOWN  )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON3  )
-	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM  ) PORT_READ_LINE_DEVICE_MEMBER("hopper", ticket_dispenser_device, line_r) // sensor
+	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_CUSTOM  ) PORT_READ_LINE_DEVICE_MEMBER("hopper", FUNC(ticket_dispenser_device::line_r)) // sensor
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN  )
 	PORT_SERVICE_NO_TOGGLE( 0x80, IP_ACTIVE_LOW )
 INPUT_PORTS_END

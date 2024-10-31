@@ -1341,7 +1341,7 @@ static INPUT_PORTS_START( system32_generic )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_SERVICE3 ) PORT_NAME("Push SW1 (Service)") // on PCB
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_SERVICE4 ) PORT_NAME("Push SW2 (Test)") // on PCB
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("mainpcb:eeprom", eeprom_serial_93cxx_device, do_read)
+	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("mainpcb:eeprom", FUNC(eeprom_serial_93cxx_device::do_read))
 INPUT_PORTS_END
 
 
@@ -1395,7 +1395,7 @@ static INPUT_PORTS_START( system32_generic_slave )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_OTHER ) PORT_NAME("slavepcb:Push SW1 (Service)") PORT_CODE(KEYCODE_OPENBRACE)
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_OTHER ) PORT_NAME("slavepcb:Push SW2 (Test)") PORT_CODE(KEYCODE_CLOSEBRACE)
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("slavepcb:eeprom", eeprom_serial_93cxx_device, do_read)
+	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("slavepcb:eeprom", FUNC(eeprom_serial_93cxx_device::do_read))
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( multi32_generic )
@@ -1425,7 +1425,7 @@ static INPUT_PORTS_START( multi32_generic )
 	PORT_BIT( 0x4f, IP_ACTIVE_LOW, IPT_UNUSED )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_OTHER ) PORT_NAME("Push SW3 (Service)") PORT_CODE(KEYCODE_OPENBRACE)
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_OTHER ) PORT_NAME("Push SW4 (Test)") PORT_CODE(KEYCODE_CLOSEBRACE)
-	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("mainpcb:eeprom", eeprom_serial_93cxx_device, do_read)
+	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("mainpcb:eeprom", FUNC(eeprom_serial_93cxx_device::do_read))
 INPUT_PORTS_END
 
 
@@ -5044,7 +5044,7 @@ ROM_START( scross )
 	ROM_LOAD( "mpr-15031.ic1", 0x000000, 0x100000, CRC(6af139dc) SHA1(2378c2ad0c52c114eb93206a6fbee723c038d030) )
 	ROM_LOAD( "mpr-15032.ic2", 0x200000, 0x100000, CRC(915d6096) SHA1(e1f670949b1254f5a3c3131993ca9b3baa4d9f6b) )
 
-	ROM_REGION( 0x20000, "user2", 0 ) /*  comms board? - might not belong to this game, just going based on epr number  */
+	ROM_REGION( 0x20000, "user2", 0 ) /* comms board confirmed */
 	ROM_LOAD( "epr-15033.ic17", 0x00000, 0x20000, CRC(dc19ac00) SHA1(16bbb5af034e5419673e637be30283b73ab7b290) )
 ROM_END
 
@@ -5113,6 +5113,9 @@ ROM_START( scrossu )
 	ROM_REGION( 0x400000, "mainpcb:sega", 0 ) /* Sega PCM sound data */
 	ROM_LOAD( "mpr-15031.ic1", 0x000000, 0x100000, CRC(6af139dc) SHA1(2378c2ad0c52c114eb93206a6fbee723c038d030) )
 	ROM_LOAD( "mpr-15032.ic2", 0x200000, 0x100000, CRC(915d6096) SHA1(e1f670949b1254f5a3c3131993ca9b3baa4d9f6b) )
+
+	ROM_REGION( 0x20000, "user2", 0 ) /* comms board confirmed */
+	ROM_LOAD( "epr-15033.ic17", 0x00000, 0x20000, CRC(dc19ac00) SHA1(16bbb5af034e5419673e637be30283b73ab7b290) )
 ROM_END
 
 
@@ -6009,7 +6012,7 @@ GAME( 1992, orunnersu, orunners, sega_multi32_analog,       orunners, segas32_ne
 GAME( 1992, orunnersj, orunners, sega_multi32_analog,       orunners, segas32_new_state, init_orunners, ROT0, "Sega", "OutRunners (Japan)", MACHINE_IMPERFECT_GRAPHICS )
 
 GAME( 1992, scross,    0,        sega_multi32_analog,       scross,   segas32_new_state, init_scross,   ROT0, "Sega", "Stadium Cross (World)", MACHINE_IMPERFECT_GRAPHICS )
-GAME( 1992, scrossa,   scross,   sega_multi32_analog,       scross,   segas32_new_state, init_scross,   ROT0, "Sega", "Stadium Cross (World, alt)", MACHINE_IMPERFECT_GRAPHICS )
+GAME( 1992, scrossa,   scross,   sega_multi32_analog,       scross,   segas32_new_state, init_scross,   ROT0, "Sega", "Stadium Cross (World, linkable)", MACHINE_IMPERFECT_GRAPHICS )
 GAME( 1992, scrossu,   scross,   sega_multi32_analog,       scross,   segas32_new_state, init_scross,   ROT0, "Sega", "Stadium Cross (US)", MACHINE_IMPERFECT_GRAPHICS )
 
 GAME( 1992, titlef,    0,        sega_multi32,              titlef,   segas32_new_state, init_titlef,   ROT0, "Sega",   "Title Fight (World)", MACHINE_IMPERFECT_GRAPHICS )

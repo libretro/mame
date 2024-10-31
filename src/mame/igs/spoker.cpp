@@ -76,9 +76,9 @@ public:
 	int hopper_r();
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
-	virtual void video_start() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
+	virtual void video_start() override ATTR_COLD;
 
 	required_device<cpu_device> m_maincpu;
 	required_device<gfxdecode_device> m_gfxdecode;
@@ -120,9 +120,9 @@ protected:
 	TILE_GET_INFO_MEMBER(get_fg_tile_info);
 
 	uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
-	void _3super8_portmap(address_map &map);
-	void program_map(address_map &map);
-	void spoker_portmap(address_map &map);
+	void _3super8_portmap(address_map &map) ATTR_COLD;
+	void program_map(address_map &map) ATTR_COLD;
+	void spoker_portmap(address_map &map) ATTR_COLD;
 };
 
 class spokeru_state : public spoker_state
@@ -135,15 +135,15 @@ public:
 	void init_spokeru();
 
 protected:
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 
-	void portmap(address_map &map);
+	void portmap(address_map &map) ATTR_COLD;
 
 	void coins_w(uint8_t data);
 	void nmi_video_leds_w(uint8_t data);
 
 private:
-	void program_map(address_map &map);
+	void program_map(address_map &map) ATTR_COLD;
 };
 
 class jinhulu2_state : public spokeru_state
@@ -160,7 +160,7 @@ public:
 private:
 	void nmi_w(uint8_t data);
 
-	void portmap(address_map &map);
+	void portmap(address_map &map) ATTR_COLD;
 };
 
 class jb_state : public spokeru_state
@@ -175,7 +175,7 @@ public:
 	void jb(machine_config &config);
 
 protected:
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 
 private:
 	required_shared_ptr_array<uint8_t, 3> m_reel_ram;
@@ -187,7 +187,7 @@ private:
 	template<uint8_t Reel> void reel_ram_w(offs_t offset, uint8_t data);
 	uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
-	void portmap(address_map &map);
+	void portmap(address_map &map) ATTR_COLD;
 };
 
 
@@ -537,10 +537,10 @@ void jinhulu2_state::portmap(address_map &map)
 	map(0x4001, 0x4001).portr("DSW2");
 	map(0x4002, 0x4002).portr("DSW3");
 	map(0x5001, 0x5001).portr("SERVICE");
+	map(0x5010, 0x5010).rw("oki", FUNC(okim6295_device::read), FUNC(okim6295_device::write));
 	//map(0x5030, 0x5030).w(FUNC()); // TODO: almost surely same protections as seen in igspoker.cpp and igs011.cpp. Probably the IGS003
 	//map(0x5031, 0x5031).r(FUNC()); // TODO: "
 	map(0x5031, 0x5031).w(FUNC(jinhulu2_state::nmi_w));
-	//map(0x????, 0x????).rw("oki", FUNC(okim6295_device::read), FUNC(okim6295_device::write));
 	map(0x7000, 0x77ff).ram().w(FUNC(jinhulu2_state::fg_tile_w)).share(m_fg_tile_ram);
 	map(0x7800, 0x7fff).ram().w(FUNC(jinhulu2_state::fg_color_w)).share(m_fg_color_ram);
 }
@@ -671,8 +671,8 @@ static INPUT_PORTS_START( spoker ) // this has every hold key which also does an
 
 	PORT_START("SERVICE")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNKNOWN  )
-	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_SERVICE1 ) PORT_NAME("Memory Clear") // stats, memory
-	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_CUSTOM  ) PORT_READ_LINE_MEMBER(spoker_state, hopper_r) PORT_NAME("HPSW")   // hopper sensor
+	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_MEMORY_RESET ) // stats, memory
+	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_CUSTOM  ) PORT_READ_LINE_MEMBER(FUNC(spoker_state::hopper_r)) PORT_NAME("HPSW")   // hopper sensor
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_UNKNOWN  )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_GAMBLE_PAYOUT )
 	PORT_SERVICE_NO_TOGGLE( 0x20, IP_ACTIVE_LOW )
@@ -766,7 +766,7 @@ static INPUT_PORTS_START( 3super8 )
 
 	PORT_START("IN0")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNKNOWN  )
-	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_CUSTOM  ) PORT_READ_LINE_MEMBER(spoker_state, hopper_r) PORT_NAME("HPSW")   // hopper sensor
+	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_CUSTOM  ) PORT_READ_LINE_MEMBER(FUNC(spoker_state::hopper_r)) PORT_NAME("HPSW")   // hopper sensor
 	PORT_SERVICE( 0x04, IP_ACTIVE_LOW )
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_GAMBLE_BOOK ) PORT_NAME("Statistics")
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_COIN1   )
@@ -940,8 +940,8 @@ static INPUT_PORTS_START( jb )
 
 	PORT_START("SERVICE")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_SERVICE1 )      PORT_NAME("Memory Clear")    // stats, memory
-	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_CUSTOM  ) PORT_READ_LINE_MEMBER(spoker_state, hopper_r) PORT_NAME("HPSW")   // hopper sensor
+	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_MEMORY_RESET )    // stats, memory
+	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_CUSTOM  ) PORT_READ_LINE_MEMBER(FUNC(spoker_state::hopper_r)) PORT_NAME("HPSW")   // hopper sensor
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_GAMBLE_PAYOUT ) PORT_NAME("Pay Out")
 	PORT_SERVICE_NO_TOGGLE( 0x20, IP_ACTIVE_LOW )   // test (press during boot)
@@ -1657,6 +1657,6 @@ GAME( 1993?, spk115it,   spk306us, spoker,   spoker,   spoker_state,   init_spk1
 GAME( 1993?, spk114it,   spk306us, spoker,   spk114it, spoker_state,   init_spk114it, ROT0,  "IGS",       "Super Poker (v114IT)",     MACHINE_SUPPORTS_SAVE )
 GAME( 1996,  spk102ua,   spk306us, spokeru,  spoker,   spokeru_state,  init_spokeru,  ROT0,  "IGS",       "Super Poker (v102UA)",     MACHINE_SUPPORTS_SAVE )
 GAME( 1996,  spk100,     spk306us, spoker,   spk114it, spoker_state,   init_spk100,   ROT0,  "IGS",       "Super Poker (v100)",       MACHINE_SUPPORTS_SAVE )
-GAME( 1993?, 3super8,    0,        _3super8, 3super8,  spoker_state,   init_3super8,  ROT0,  "<unknown>", "3 Super 8 (Italy)",        MACHINE_NOT_WORKING | MACHINE_IMPERFECT_GRAPHICS | MACHINE_IMPERFECT_SOUND | MACHINE_SUPPORTS_SAVE ) //roms are badly dumped
+GAME( 1993?, 3super8,    0,        _3super8, 3super8,  spoker_state,   init_3super8,  ROT0,  "<unknown>", "3 Super 8 (Italy)",        MACHINE_NOT_WORKING | MACHINE_IMPERFECT_GRAPHICS | MACHINE_IMPERFECT_SOUND | MACHINE_SUPPORTS_SAVE ) // ROMs are badly dumped
 GAME( 1997,  jbell,      0,        jb,       jb,       jb_state,       init_spokeru,  ROT0,  "IGS",       "Jingle Bell (v200US)",     MACHINE_SUPPORTS_SAVE )
-GAME( 1995,  jinhulu2,   0,        jinhulu2, spoker,   jinhulu2_state, init_jinhulu2, ROT0,  "IGS",       "Jin Hu Lu 2 (v412GS)",     MACHINE_NOT_WORKING | MACHINE_SUPPORTS_SAVE ) // needs decryption
+GAME( 1995,  jinhulu2,   0,        jinhulu2, spoker,   jinhulu2_state, init_jinhulu2, ROT0,  "IGS",       "Jin Hu Lu 2 (v412GS)",     MACHINE_NOT_WORKING | MACHINE_SUPPORTS_SAVE ) // tries to link to something?

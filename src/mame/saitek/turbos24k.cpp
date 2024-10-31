@@ -59,7 +59,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(go_button);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -76,7 +76,7 @@ private:
 	u8 m_led_data[2] = { };
 	u16 m_lcd_data[4] = { };
 
-	void main_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	template<int N> void lcd_output_w(offs_t offset, u16 data);
@@ -288,7 +288,7 @@ static INPUT_PORTS_START( turbos24k )
 	PORT_CONFSETTING(    0x04, DEF_STR( Normal ) )
 
 	PORT_START("RESET")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_Y) PORT_CHANGED_MEMBER(DEVICE_SELF, turbos24k_state, go_button, 0) PORT_NAME("Go")
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_Y) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(turbos24k_state::go_button), 0) PORT_NAME("Go")
 INPUT_PORTS_END
 
 

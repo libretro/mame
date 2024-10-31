@@ -80,7 +80,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(power_switch);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 	virtual void machine_reset() override { set_power(true); }
 
 private:
@@ -105,8 +105,8 @@ private:
 	u32 m_lcd_data = 0;
 	u8 m_lcd_segs2 = 0;
 
-	void diamond_map(address_map &map);
-	void diamond2_map(address_map &map);
+	void diamond_map(address_map &map) ATTR_COLD;
+	void diamond2_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	void standby(int state);
@@ -383,8 +383,8 @@ static INPUT_PORTS_START( diamond )
 	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_I) PORT_NAME("Save Game / Pawn")
 
 	PORT_START("POWER")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_ON) PORT_CHANGED_MEMBER(DEVICE_SELF, diamond_state, power_switch, 1)
-	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, diamond_state, power_switch, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_ON) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(diamond_state::power_switch), 1)
+	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(diamond_state::power_switch), 0)
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( diamond2 )

@@ -79,8 +79,8 @@ public:
 	void ren(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -101,7 +101,7 @@ private:
 	u8 m_inp_mux = 0;
 	u8 m_led_data[2] = { };
 
-	void main_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
 
 	void lcd_pwm_w(offs_t offset, u8 data);
 	void lcd_output_w(offs_t offset, u64 data);
@@ -377,11 +377,11 @@ static INPUT_PORTS_START( ren )
 	PORT_CONFSETTING(    0x00, DEF_STR( Normal ) )
 
 	PORT_START("RESET")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_G) PORT_CHANGED_MEMBER(DEVICE_SELF, ren_state, go_button, 0) PORT_NAME("Go")
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_G) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(ren_state::go_button), 0) PORT_NAME("Go")
 
 	PORT_START("VIEW")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CHANGED_MEMBER(DEVICE_SELF, ren_state, change_view<+1>, 0)
-	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CHANGED_MEMBER(DEVICE_SELF, ren_state, change_view<-1>, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(ren_state::change_view<+1>), 0)
+	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(ren_state::change_view<-1>), 0)
 INPUT_PORTS_END
 
 

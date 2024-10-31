@@ -320,6 +320,12 @@ inline void upd7220_device::dequeue(uint8_t *data, int *flag)
 		if (m_fifo_ptr == -1)
 			m_sr &= ~UPD7220_SR_DATA_READY;
 	}
+	else
+	{
+		// TODO: underflow details
+		// pc9821:skinpan does SR checks over the wrong port during intro ...
+		*data = 0xff;
+	}
 }
 
 
@@ -329,7 +335,7 @@ inline void upd7220_device::dequeue(uint8_t *data, int *flag)
 
 inline void upd7220_device::update_vsync_timer(int state)
 {
-	int next_y = state ? m_vs : 0;
+	int next_y = state ? (m_vs + m_vbp) : 0;
 
 	attotime duration = screen().time_until_pos(next_y, 0);
 
@@ -1180,6 +1186,11 @@ void upd7220_device::process_fifo()
 			m_ra[3] = 0x19;
 			m_ead = 0;
 			m_mask = 0;
+			// FIFO, Command Processor and internal counters are cleared by this
+			// - pc9801rs BIOS starts up a DMAW command that spindiz2 will dislike during its boot sequences
+			m_sr &= ~UPD7220_SR_DRAWING_IN_PROGRESS;
+			fifo_clear();
+			stop_dma();
 			break;
 
 		case 9:
@@ -1365,9 +1376,19 @@ void upd7220_device::process_fifo()
 		break;
 
 	case COMMAND_PITCH: /* pitch specification */
-		if (flag == FIFO_PARAMETER)
+		// pc9801:burai writes a spurious extra value during intro, effectively ignored
+		// (only first value matters)
+		if (flag == FIFO_PARAMETER && m_param_ptr == 2)
 		{
 			m_pitch = (m_pitch & 0x100) | data;
+
+			if (m_pitch < 2)
+			{
+				// TODO: a pitch of zero will lead to a MAME crash in draw_graphics_line
+				// Coerce a fail-safe minimum, what should really happen is to be verified ...
+				popmessage("%s pitch == 0!", this->tag());
+				m_pitch = 2;
+			}
 
 			LOG("uPD7220 PITCH: %u\n", m_pitch);
 		}
@@ -1822,7 +1843,7 @@ void upd7220_device::update_graphics(bitmap_rgb32 &bitmap, const rectangle &clip
 				for(int z = 0; z <= m_disp; ++z)
 				{
 					int yval = (y*zoom)+z + (bsy + m_vbp);
-					if(yval <= cliprect.bottom())
+					if(yval <= cliprect.bottom() && (yval - m_vbp) < m_al)
 						draw_graphics_line(bitmap, addr, yval, wd, mixed);
 				}
 			}

@@ -70,9 +70,9 @@ public:
 	ioport_value keyboard_r();
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
-	virtual void video_start() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
+	virtual void video_start() override ATTR_COLD;
 
 private:
 	required_device<cpu_device> m_maincpu;
@@ -104,8 +104,8 @@ private:
 	uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 	void vblank_irq(int state);
 	void draw_sprites(bitmap_ind16 &bitmap, const rectangle &cliprect);
-	void io_map(address_map &map);
-	void prg_map(address_map &map);
+	void io_map(address_map &map) ATTR_COLD;
+	void prg_map(address_map &map) ATTR_COLD;
 };
 
 
@@ -362,7 +362,7 @@ static INPUT_PORTS_START( mjkjidai )
 	PORT_BIT( 0xc0, IP_ACTIVE_LOW, IPT_UNUSED )
 
 	PORT_START("KEYBOARD")
-	PORT_BIT( 0x3f, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CUSTOM_MEMBER(mjkjidai_state, keyboard_r)
+	PORT_BIT( 0x3f, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CUSTOM_MEMBER(FUNC(mjkjidai_state::keyboard_r))
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_MEMORY_RESET )   // reinitialize NVRAM and reset the game
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_COIN1 )
 

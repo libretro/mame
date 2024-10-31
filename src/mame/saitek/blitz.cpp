@@ -72,7 +72,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(power_off) { m_power = false; }
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 	virtual void machine_reset() override { m_power = true; }
 
 private:
@@ -286,7 +286,7 @@ static INPUT_PORTS_START( blitz )
 	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_UNKNOWN)
 
 	PORT_START("POWER")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, blitz_state, power_off, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_POWER_OFF) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(blitz_state::power_off), 0)
 INPUT_PORTS_END
 
 

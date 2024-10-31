@@ -81,8 +81,8 @@ public:
 	void excali64(machine_config &config);
 
 protected:
-	virtual void machine_reset() override;
-	virtual void machine_start() override;
+	virtual void machine_reset() override ATTR_COLD;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	void excali64_palette(palette_device &palette);
@@ -106,8 +106,8 @@ private:
 	void crtc_vs(int state);
 	void motor_w(int state);
 
-	void io_map(address_map &map);
-	void mem_map(address_map &map);
+	void io_map(address_map &map) ATTR_COLD;
+	void mem_map(address_map &map) ATTR_COLD;
 
 	u8 m_sys_status = 0U;
 	u8 m_kbdrow = 0U;
@@ -629,6 +629,7 @@ void excali64_state::excali64(machine_config &config)
 	/* Devices */
 	CASSETTE(config, m_cass);
 	m_cass->add_route(ALL_OUTPUTS, "mono", 0.05);
+	m_cass->set_default_state(CASSETTE_STOPPED | CASSETTE_MOTOR_ENABLED | CASSETTE_SPEAKER_ENABLED);
 
 	WD2793(config, m_fdc, 16_MHz_XTAL / 8);
 	m_fdc->drq_wr_callback().set(m_dma, FUNC(z80dma_device::rdy_w));

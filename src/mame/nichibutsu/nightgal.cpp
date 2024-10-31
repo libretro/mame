@@ -101,24 +101,24 @@ private:
 
 	void ngalsumr_prot_latch_w(uint8_t data);
 	uint8_t ngalsumr_prot_value_r();
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
-	virtual void video_start() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
+	virtual void video_start() override ATTR_COLD;
 	void nightgal_palette(palette_device &palette) const;
 	uint32_t screen_update_nightgal(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
-	void common_nsc_map(address_map &map);
-	void common_sexygal_io(address_map &map);
-	void royalqn_io(address_map &map);
-	void royalqn_map(address_map &map);
-	void royalqn_nsc_map(address_map &map);
-	void sexygal_audio_map(address_map &map);
-	void sexygal_io(address_map &map);
-	void sexygal_map(address_map &map);
-	void sexygal_nsc_map(address_map &map);
-	void sgaltrop_io(address_map &map);
-	void sgaltrop_nsc_map(address_map &map);
-	void sweetgal_map(address_map &map);
+	void common_nsc_map(address_map &map) ATTR_COLD;
+	void common_sexygal_io(address_map &map) ATTR_COLD;
+	void royalqn_io(address_map &map) ATTR_COLD;
+	void royalqn_map(address_map &map) ATTR_COLD;
+	void royalqn_nsc_map(address_map &map) ATTR_COLD;
+	void sexygal_audio_map(address_map &map) ATTR_COLD;
+	void sexygal_io(address_map &map) ATTR_COLD;
+	void sexygal_map(address_map &map) ATTR_COLD;
+	void sexygal_nsc_map(address_map &map) ATTR_COLD;
+	void sgaltrop_io(address_map &map) ATTR_COLD;
+	void sgaltrop_nsc_map(address_map &map) ATTR_COLD;
+	void sweetgal_map(address_map &map) ATTR_COLD;
 
 	required_ioport m_io_cr_clear;
 	required_ioport m_io_coins;
@@ -741,7 +741,7 @@ static INPUT_PORTS_START( sexygal )
 	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Unknown ) )
 	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("blitter", jangou_blitter_device, status_r)
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("blitter", FUNC(jangou_blitter_device::status_r))
 INPUT_PORTS_END
 
 void nightgal_state::machine_start()

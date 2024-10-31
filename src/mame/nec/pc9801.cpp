@@ -605,7 +605,8 @@ uint8_t pc9801_state::f0_r(offs_t offset)
 	{
 		// iterate thru all devices to check if an AMD98 is present
 		// TODO: move to cbus
-		for (pc9801_amd98_device &amd98 : device_type_enumerator<pc9801_amd98_device>(machine().root_device()))
+		// TODO: is this really part of PC-98 spec or it's coming from the device itself, as dip/jumper?
+		for (amd98_device &amd98 : device_type_enumerator<amd98_device>(machine().root_device()))
 		{
 			logerror("%s: Read AMD98 ID %s\n", machine().describe_context(), amd98.tag());
 			return 0x18; // return the right ID
@@ -644,6 +645,7 @@ void pc9801_state::pc9801_common_io(address_map &map)
 	map(0x0060, 0x0063).rw(m_hgdc[0], FUNC(upd7220_device::read), FUNC(upd7220_device::write)).umask16(0x00ff); //upd7220 character ports / <undefined>
 	map(0x0064, 0x0064).w(FUNC(pc9801_state::vrtc_clear_w));
 //  map(0x006c, 0x006f) border color / <undefined>
+	map(0x006c, 0x006f).w(FUNC(pc9801_state::border_color_w)).umask16(0x00ff);
 	// TODO: PC-98Bible suggests that $73 timer #1 is unavailable on non-vanilla models (verify on HW)
 	// (can be accessed only thru the $3fdb alias)
 	map(0x0070, 0x0077).rw(m_pit, FUNC(pit8253_device::read), FUNC(pit8253_device::write)).umask16(0xff00);
@@ -674,15 +676,11 @@ void pc9801_state::pc9801_io(address_map &map)
  *
  ************************************/
 
-// TODO: it's possible that the offset calculation is actually linear.
+// TODO: convert to device
 // TODO: having this non-linear makes the system to boot in BASIC for PC-9821. Perhaps it stores settings? How to change these?
 uint8_t pc9801vm_state::pc9801rs_knjram_r(offs_t offset)
 {
 	uint32_t pcg_offset;
-
-	pcg_offset = (m_font_addr & 0x7fff) << 5;
-	pcg_offset|= offset & 0x1e;
-	pcg_offset|= m_font_lr;
 
 	if(!(m_font_addr & 0xff))
 	{
@@ -690,25 +688,27 @@ uint8_t pc9801vm_state::pc9801rs_knjram_r(offs_t offset)
 		return m_char_rom[(m_font_addr >> 8) * (8 << char_size) + (char_size * 0x800) + ((offset >> 1) & 0xf)];
 	}
 
+	pcg_offset = (m_font_addr & 0x7f7f) << 5;
+	pcg_offset|= offset & 0x1e;
+
+	// 8x16 charset selector
+	// telenetm defintely mirrors offset & 1 for 8x16 romaji title songs, would otherwise blank them out
+	if((m_font_addr & 0x7c00) == 0x0800)
+		return m_kanji_rom[pcg_offset | 0];
+
+	// rxtrain wants the LR setting for PCG area ...
 	if((m_font_addr & 0xff00) == 0x5600 || (m_font_addr & 0xff00) == 0x5700)
-		return m_kanji_rom[pcg_offset];
+		return m_kanji_rom[pcg_offset | m_font_lr];
 
-	// TODO: do we really need to recalculate?
-	pcg_offset = (m_font_addr & 0x7fff) << 5;
-	pcg_offset|= (offset & 0x1e);
-	// telenetm defintely needs this for 8x16 romaji title songs, otherwise it blanks them out
-	// (pc9801vm never reads this area btw)
-	pcg_offset|= (offset & m_font_lr) & 1;
-//  pcg_offset|= (m_font_lr);
-
-	return m_kanji_rom[pcg_offset];
+	// ... but mezaset2 don't, implying it just read this linearly
+	return m_kanji_rom[pcg_offset | (offset & 1)];
 }
 
 void pc9801vm_state::pc9801rs_knjram_w(offs_t offset, uint8_t data)
 {
 	uint32_t pcg_offset;
 
-	pcg_offset = (m_font_addr & 0x7fff) << 5;
+	pcg_offset = (m_font_addr & 0x7f7f) << 5;
 	pcg_offset|= offset & 0x1e;
 	pcg_offset|= m_font_lr;
 
@@ -950,7 +950,8 @@ template <unsigned port> u8 pc9801vm_state::fdc_2hd_2dd_ctrl_r()
 
 TIMER_CALLBACK_MEMBER(pc9801vm_state::fdc_trigger)
 {
-	// TODO: sorcer definitely expects this irq to be taken
+	// TODO: sorcer/hydlide definitely expects the XTMASK irq to be taken
+	// NOTE: should probably trigger the FDC irq depending on mode, i.e. use fdc_irq_w fn
 	if (BIT(m_fdc_2hd_ctrl, 2))
 	{
 		m_pic2->ir2_w(0);
@@ -978,6 +979,8 @@ template <unsigned port> void pc9801vm_state::fdc_2hd_2dd_ctrl_w(u8 data)
 		m_fdc_2hd->subdevice<floppy_connector>("1")->get_device()->mon_w(data & 8 ? CLEAR_LINE : ASSERT_LINE);
 	}
 
+	// TODO: this looks awfully similar to pc88va DMA mode, including same bits for trigger and irq mask.
+	// NOTE: 100 msec too slow
 	if (port == 0 && !prev_trig && cur_trig)
 	{
 		m_fdc_timer->reset();
@@ -1876,15 +1879,15 @@ static void pc9801_cbus_devices(device_slot_interface &device)
 {
 	// official HW
 //  PC-9801-14
-	device.option_add("pc9801_26", PC9801_26);
+	device.option_add("pc9801_26",  PC9801_26);
 	device.option_add("pc9801_55u", PC9801_55U);
 	device.option_add("pc9801_55l", PC9801_55L);
-	device.option_add("pc9801_86", PC9801_86);
+	device.option_add("pc9801_86",  PC9801_86);
 	device.option_add("pc9801_118", PC9801_118);
 	device.option_add("pc9801_spb", PC9801_SPEAKBOARD);
 //  Spark Board
-	device.option_add("pc9801_amd98", PC9801_AMD98); // AmuseMent boarD
-	device.option_add("mpu_pc98", MPU_PC98);
+	device.option_add("amd98",      AMD98);
+	device.option_add("mpu_pc98",   MPU_PC98);
 
 	// doujinshi HW
 // MAD Factory / Doujin Hard (同人ハード)
@@ -2376,6 +2379,10 @@ void pc9801vm_state::pc9801rs(machine_config &config)
 
 	m_fdc_2hd->intrq_wr_callback().set(FUNC(pc9801vm_state::fdc_irq_w));
 	m_fdc_2hd->drq_wr_callback().set(FUNC(pc9801vm_state::fdc_drq_w));
+	// ch. 3 used when in 2DD mode (mightyhd, rogue)
+	// TODO: should lock as everything else depending on mode bit 0
+	m_dmac->in_ior_callback<3>().set(m_fdc_2hd, FUNC(upd765a_device::dma_r));
+	m_dmac->out_iow_callback<3>().set(m_fdc_2hd, FUNC(upd765a_device::dma_w));
 
 	m_hgdc[1]->set_addrmap(0, &pc9801vm_state::upd7220_grcg_2_map);
 

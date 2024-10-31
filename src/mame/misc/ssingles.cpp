@@ -190,7 +190,7 @@ public:
 	ioport_value controls_r();
 
 protected:
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 
 private:
 	required_device<cpu_device> m_maincpu;
@@ -222,10 +222,10 @@ private:
 	MC6845_UPDATE_ROW(ssingles_update_row);
 	MC6845_UPDATE_ROW(atamanot_update_row);
 
-	void atamanot_io_map(address_map &map);
-	void atamanot_map(address_map &map);
-	void ssingles_io_map(address_map &map);
-	void ssingles_map(address_map &map);
+	void atamanot_io_map(address_map &map) ATTR_COLD;
+	void atamanot_map(address_map &map) ATTR_COLD;
+	void ssingles_io_map(address_map &map) ATTR_COLD;
+	void ssingles_map(address_map &map) ATTR_COLD;
 };
 
 //fake palette
@@ -435,7 +435,7 @@ static INPUT_PORTS_START( ssingles )
 	PORT_START("INPUTS")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_COIN1 )
 	PORT_BIT( 0x02, IP_ACTIVE_HIGH, IPT_UNKNOWN ) // must be LOW
-	PORT_BIT( 0x1c, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(ssingles_state, controls_r)
+	PORT_BIT( 0x1c, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(ssingles_state::controls_r))
 	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_BUTTON4 )
 	PORT_BIT( 0x40, IP_ACTIVE_HIGH, IPT_BUTTON2 )
 	PORT_BIT( 0x80, IP_ACTIVE_HIGH, IPT_BUTTON3 )

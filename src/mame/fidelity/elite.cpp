@@ -133,8 +133,8 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(change_cpu_freq);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	// devices/pointers
 	optional_device<i8255_device> m_ppi8255;
@@ -152,10 +152,10 @@ protected:
 	u8 m_inp_mux = 0;
 
 	// address maps
-	void pc_map(address_map &map);
-	void eas_map(address_map &map);
-	void eag_map(address_map &map);
-	void eag2100_map(address_map &map);
+	void pc_map(address_map &map) ATTR_COLD;
+	void eas_map(address_map &map) ATTR_COLD;
+	void eag_map(address_map &map) ATTR_COLD;
+	void eag2100_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	void update_display();
@@ -384,7 +384,7 @@ static INPUT_PORTS_START( eas )
 	PORT_BIT(0x04, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_V) PORT_NAME("RV")
 
 	PORT_START("CPU")
-	PORT_CONFNAME( 0x03, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, elite_state, change_cpu_freq, 0) // factory set
+	PORT_CONFNAME( 0x03, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(elite_state::change_cpu_freq), 0) // factory set
 	PORT_CONFSETTING(    0x00, "3MHz (EAS)" )
 	PORT_CONFSETTING(    0x01, "3.57MHz (EWC)" )
 	PORT_CONFSETTING(    0x02, "4MHz (EAS-C)" )
@@ -394,7 +394,7 @@ static INPUT_PORTS_START( ewc )
 	PORT_INCLUDE( eas )
 
 	PORT_MODIFY("CPU") // default to 3.57MHz
-	PORT_CONFNAME( 0x03, 0x01, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, elite_state, change_cpu_freq, 0) // factory set
+	PORT_CONFNAME( 0x03, 0x01, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(elite_state::change_cpu_freq), 0) // factory set
 	PORT_CONFSETTING(    0x00, "3MHz (EAS)" )
 	PORT_CONFSETTING(    0x01, "3.57MHz (EWC)" )
 	PORT_CONFSETTING(    0x02, "4MHz (EAS-C)" )
@@ -404,7 +404,7 @@ static INPUT_PORTS_START( easc )
 	PORT_INCLUDE( eas )
 
 	PORT_MODIFY("CPU") // default to 4MHz
-	PORT_CONFNAME( 0x03, 0x02, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, elite_state, change_cpu_freq, 0) // factory set
+	PORT_CONFNAME( 0x03, 0x02, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(elite_state::change_cpu_freq), 0) // factory set
 	PORT_CONFSETTING(    0x00, "3MHz (EAS)" )
 	PORT_CONFSETTING(    0x01, "3.57MHz (EWC)" )
 	PORT_CONFSETTING(    0x02, "4MHz (EAS-C)" )

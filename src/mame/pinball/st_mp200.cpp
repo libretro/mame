@@ -104,8 +104,8 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(self_test);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	u8 u10_a_r();
@@ -120,8 +120,8 @@ private:
 	void u11_ca2_w(int state);
 	void u11_cb2_w(int state);
 
-	void mem_map(address_map &map);
-	void sam4_map(address_map &map);
+	void mem_map(address_map &map) ATTR_COLD;
+	void sam4_map(address_map &map) ATTR_COLD;
 
 	u8 m_u10a = 0U;
 	u8 m_u10b = 0U;
@@ -186,8 +186,8 @@ void st_mp200_state::sam4_map(address_map &map)
 
 static INPUT_PORTS_START( mp200 )
 	PORT_START("TEST")
-	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_KEYPAD ) PORT_CODE(KEYCODE_0_PAD) PORT_NAME("Self Test") PORT_IMPULSE(1) PORT_CHANGED_MEMBER(DEVICE_SELF, st_mp200_state, self_test, 0)
-	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_KEYPAD ) PORT_CODE(KEYCODE_1_PAD) PORT_NAME("Activity") PORT_IMPULSE(1) PORT_CHANGED_MEMBER(DEVICE_SELF, st_mp200_state, activity_test, 0)
+	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_KEYPAD ) PORT_CODE(KEYCODE_0_PAD) PORT_NAME("Self Test") PORT_IMPULSE(1) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(st_mp200_state::self_test), 0)
+	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_KEYPAD ) PORT_CODE(KEYCODE_1_PAD) PORT_NAME("Activity") PORT_IMPULSE(1) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(st_mp200_state::activity_test), 0)
 
 	PORT_START("DSW0")
 	PORT_DIPNAME( 0x1f, 0x02, "Coin Slot 2")

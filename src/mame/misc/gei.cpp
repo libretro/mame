@@ -167,7 +167,7 @@ public:
 
 protected:
 	virtual void machine_start() override { m_lamps.resolve(); }
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 
 private:
 	uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
@@ -189,15 +189,15 @@ private:
 
 	INTERRUPT_GEN_MEMBER(vblank_irq);
 
-	void amuse1_map(address_map &map);
-	void amuse_map(address_map &map);
-	void findout_map(address_map &map);
-	void gepoker_map(address_map &map);
-	void getrivia_map(address_map &map);
-	void gselect_map(address_map &map);
-	void quizvid_map(address_map &map);
-	void sprtauth_map(address_map &map);
-	void suprpokr_map(address_map &map);
+	void amuse1_map(address_map &map) ATTR_COLD;
+	void amuse_map(address_map &map) ATTR_COLD;
+	void findout_map(address_map &map) ATTR_COLD;
+	void gepoker_map(address_map &map) ATTR_COLD;
+	void getrivia_map(address_map &map) ATTR_COLD;
+	void gselect_map(address_map &map) ATTR_COLD;
+	void quizvid_map(address_map &map) ATTR_COLD;
+	void sprtauth_map(address_map &map) ATTR_COLD;
+	void suprpokr_map(address_map &map) ATTR_COLD;
 
 	bitmap_ind16 m_bitmap;
 
@@ -591,7 +591,7 @@ static INPUT_PORTS_START(trivia_standard)
 	PORT_START("IN0")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_COIN1 ) PORT_IMPULSE(2)
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_COIN2 ) PORT_IMPULSE(2)
-	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ticket", ticket_dispenser_device, line_r)
+	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ticket", FUNC(ticket_dispenser_device::line_r))
 	PORT_SERVICE( 0x08, IP_ACTIVE_LOW )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_UNKNOWN )
@@ -699,7 +699,7 @@ static INPUT_PORTS_START( getrivia )
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_BUTTON6 ) PORT_IMPULSE(2) PORT_CONDITION("DSWA", 0x40, EQUALS, 0x00) PORT_NAME ("Start in no coins mode")
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_COIN2 ) PORT_IMPULSE(2) PORT_CONDITION("DSWA", 0x40, EQUALS, 0x40)
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_UNKNOWN ) PORT_CONDITION("DSWA", 0x40, EQUALS, 0x00)
-	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ticket", ticket_dispenser_device, line_r)
+	PORT_BIT( 0x04, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("ticket", FUNC(ticket_dispenser_device::line_r))
 	PORT_SERVICE( 0x08, IP_ACTIVE_LOW )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_UNKNOWN )
