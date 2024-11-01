@@ -432,6 +432,8 @@ capcom/kenseim.cpp          // controls are terrible
 
 capcom/lastduel.cpp
 
+//capcom/lastduel_ms.cpp          // black screen
+
 capcom/lwings.cpp
 
 capcom/mitchell.cpp
@@ -495,6 +497,9 @@ cinematronics/jack.cpp
 
 cinematronics/leland.cpp
 -aafbb
+
+cirsa/cirsa2080606.cpp 
+-maquinati
 
 //cirsa/cirsa820xxx.cpp          // no screen
 
@@ -1059,6 +1064,7 @@ igs/igs009.cpp
 igs/igs011.cpp
 
 igs/igs017.cpp
+-jking302us
 -slqz2a
 -tarzan
 -tarzana
@@ -1080,14 +1086,17 @@ igs/igs_m027.cpp
 -klxyj
 -luckycrs
 -olympic5
+-olympic5107us
 -olympic5a
 -sdwx
+
+//igs/igs_m027_023vid.cpp   // skel, roms undumped
 
 //igs/igs_m027_link.cpp     // white screen or no screen
 
 igs/igs_m027xa.cpp
--crzybugsj
 -haunthig
+-haunthig101us
 -haunthiga
 -wldfruit
 
@@ -1711,6 +1720,8 @@ midway/balsente.cpp
 -triviaes4
 -triviaes5
 
+//midway/cashline.cpp             // no screen
+
 midway/gridlee.cpp
 
 midway/mcr.cpp
@@ -1883,9 +1894,13 @@ misc/carrera.cpp
 
 misc/cb2001.cpp          // fruit
 -cb5
+-mystjb
 -ndongmul2
+-scherrym
+-scherrym12
 -scherrymp
 -scherrymp10u
+-tripjack
 
 //misc/chameleonrx1.cpp          //no screen
 
@@ -2663,28 +2678,14 @@ namco/namcos22.cpp
 namco/namcos23.cpp
 -500gp
 -aking
--crszone
--crszonev3a
--crszonev3b
--crszonev3b2
 -crszonev2a
--crszonev4a
 -downhill
 -downhillu
--finfurl
--finfurl2
 -finfurl2j
 -gunwars
 -gunwarsa
--motoxgo
--motoxgov1a
--motoxgov1a2
--motoxgov2a
--motoxgov2a2
--panicprk
--panicprkj
--panicprkj2
 -raceon
+-raceonj
 -rapidrvr
 -rapidrvrp
 -rapidrvrv2c
@@ -3272,6 +3273,7 @@ sega/kopunch.cpp          // seems ok now, wait for RD to flash then pound on ct
 //sega/lindbergh.cpp          // no screen, most have chd, very slow
 
 sega/megadriv_acbl.cpp
+-srssf2mb
 -twinktmb
 
 sega/megadriv_sunmix.cpp
@@ -3820,13 +3822,19 @@ sigma/spiders.cpp
 
 //skeleton/boramz80.cpp           // black screen
 
+//skeleton/bullion2.cpp           // no screen
+
 //skeleton/caramball.cpp          // no screen
+
+//skeleton/cle68k.cpp             // black screen
 
 //skeleton/cubieboard4.cpp        // no screen
 
 //skeleton/design.cpp             // not a game
 
 //skeleton/dyna_d0404.cpp         // black screen
+
+//skeleton/dyna_d0703.cpp         // black screen
 
 //skeleton/elcirculo.cpp          // no screen
 
@@ -4250,6 +4258,8 @@ toaplan/toaplan2.cpp
 
 toaplan/twincobr.cpp
 
+//toaplan/twincobr_ms.cpp         // black screen
+
 toaplan/wardner.cpp
 
 unico/drgnmst.cpp
@@ -4331,6 +4341,8 @@ vsystem/ojankohs.cpp          // mahjong
 vsystem/pipedrm.cpp
 
 vsystem/pspikes.cpp
+
+//vsystem/pspikes_ms.cpp          // black screen
 
 vsystem/rpunch.cpp
 -svolleybl
