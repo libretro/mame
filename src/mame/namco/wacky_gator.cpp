@@ -53,8 +53,8 @@ public:
 	void wackygtr(machine_config &config);
 
 private:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	void adpcm_int(int state);
 	void sample_ctrl_w(uint8_t data);
@@ -76,7 +76,7 @@ private:
 
 	TIMER_DEVICE_CALLBACK_MEMBER(nmi_timer)     { m_maincpu->pulse_input_line(INPUT_LINE_NMI, attotime::zero); }
 
-	void program_map(address_map &map);
+	void program_map(address_map &map) ATTR_COLD;
 
 	required_device<cpu_device> m_maincpu;
 	required_device<msm5205_device> m_msm;
@@ -217,13 +217,13 @@ void wackygtr_state::set_lamps(int p, uint8_t value)
 
 static INPUT_PORTS_START( wackygtr )
 	PORT_START("IN0")
-	PORT_BIT(0x1f, IP_ACTIVE_LOW, IPT_CUSTOM) PORT_CUSTOM_MEMBER(wackygtr_state, alligators_rear_sensors_r)
+	PORT_BIT(0x1f, IP_ACTIVE_LOW, IPT_CUSTOM) PORT_CUSTOM_MEMBER(FUNC(wackygtr_state::alligators_rear_sensors_r))
 	PORT_BIT(0x20, IP_ACTIVE_LOW, IPT_SERVICE)
 	PORT_BIT(0x40, IP_ACTIVE_LOW, IPT_SERVICE1)
 	PORT_BIT(0x80, IP_ACTIVE_LOW, IPT_COIN1)
 
 	PORT_START("IN1")
-	PORT_BIT(0x1f, IP_ACTIVE_LOW, IPT_CUSTOM) PORT_CUSTOM_MEMBER(wackygtr_state, alligators_front_sensors_r)
+	PORT_BIT(0x1f, IP_ACTIVE_LOW, IPT_CUSTOM) PORT_CUSTOM_MEMBER(FUNC(wackygtr_state::alligators_front_sensors_r))
 	PORT_DIPNAME( 0xe0, 0x00, DEF_STR( Coin_A ) ) PORT_DIPLOCATION("SW:1,2,3")
 	PORT_DIPSETTING(    0x00, DEF_STR( 1C_1C ) )
 	PORT_DIPSETTING(    0x20, DEF_STR( 1C_1C ) )

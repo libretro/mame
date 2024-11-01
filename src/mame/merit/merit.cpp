@@ -143,7 +143,7 @@ public:
 	int rndbit_r();
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 	required_shared_ptr<uint8_t> m_ram_attr;
 	required_shared_ptr<uint8_t> m_ram_video;
@@ -153,7 +153,7 @@ protected:
 	uint8_t palette_r(offs_t offset);
 	void palette_w(offs_t offset, uint8_t data);
 
-	void bigappg_io_map(address_map &map);
+	void bigappg_io_map(address_map &map) ATTR_COLD;
 
 private:
 	memory_share_creator<uint8_t> m_ram_palette;
@@ -175,12 +175,12 @@ private:
 	MC6845_BEGIN_UPDATE(crtc_begin_update);
 	MC6845_UPDATE_ROW(crtc_update_row);
 	MC6845_UPDATE_ROW(crtc_update_row_no_u40);
-	void bigappg_map(address_map &map);
-	void couple_map(address_map &map);
-	void riviera_map(address_map &map);
-	void misdraw_map(address_map &map);
-	void pitboss_map(address_map &map);
-	void pitboss_io_map(address_map &map);
+	void bigappg_map(address_map &map) ATTR_COLD;
+	void couple_map(address_map &map) ATTR_COLD;
+	void riviera_map(address_map &map) ATTR_COLD;
+	void misdraw_map(address_map &map) ATTR_COLD;
+	void pitboss_map(address_map &map) ATTR_COLD;
+	void pitboss_io_map(address_map &map) ATTR_COLD;
 };
 
 class merit_banked_state : public merit_state
@@ -194,14 +194,14 @@ public:
 	void casino5(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	required_memory_bank_array<2> m_rombank;
 
 	void bank_w(uint8_t data);
 
-	void casino5_map(address_map &map);
+	void casino5_map(address_map &map) ATTR_COLD;
 };
 
 class merit_quiz_state : public merit_state
@@ -222,7 +222,7 @@ public:
 	template <uint8_t Key> void init_key();
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	memory_bank_creator m_questions_bank;
@@ -235,12 +235,12 @@ private:
 	void med_offset_w(offs_t offset, uint8_t data);
 	void high_offset_w(offs_t offset, uint8_t data);
 
-	void dtrvwz5_map(address_map &map);
-	void phrcraze_io_map(address_map &map);
-	void phrcraze_map(address_map &map);
-	void tictac_map(address_map &map);
-	void trvwhiz_map(address_map &map);
-	void trvwhziv_map(address_map &map);
+	void dtrvwz5_map(address_map &map) ATTR_COLD;
+	void phrcraze_io_map(address_map &map) ATTR_COLD;
+	void phrcraze_map(address_map &map) ATTR_COLD;
+	void tictac_map(address_map &map) ATTR_COLD;
+	void trvwhiz_map(address_map &map) ATTR_COLD;
+	void trvwhziv_map(address_map &map) ATTR_COLD;
 };
 
 
@@ -702,7 +702,7 @@ static INPUT_PORTS_START( meritpoker )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(merit_state, rndbit_r)
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(FUNC(merit_state::rndbit_r))
 
 	PORT_START("DSW")
 	PORT_DIPUNKNOWN_DIPLOC( 0x01, IP_ACTIVE_LOW, "SW1:1" )
@@ -937,7 +937,7 @@ static INPUT_PORTS_START( pitboss ) // PCB pinout maps 12 lamp outputs - Where a
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON5 ) PORT_COCKTAIL PORT_CODE(KEYCODE_G) PORT_NAME("P2 Button 5")
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_BUTTON6 ) PORT_COCKTAIL PORT_CODE(KEYCODE_W) PORT_NAME("P2 Play")
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(merit_state, rndbit_r)
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(FUNC(merit_state::rndbit_r))
 
 	PORT_START("DSW")
 	PORT_DIPNAME( 0x01, 0x01, DEF_STR( Coin_A ) )   PORT_DIPLOCATION("SW:1")
@@ -1000,7 +1000,7 @@ static INPUT_PORTS_START( mroundup ) // TODO: Find were Player 2 "Play" is mappe
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON5 ) PORT_COCKTAIL PORT_CODE(KEYCODE_G) PORT_NAME("P2 Button 5")
 	PORT_BIT( 0x20, IP_ACTIVE_HIGH, IPT_UNKNOWN ) // pulling this LOW causes "unauthorized conversion" msg.
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(merit_state, rndbit_r)
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(FUNC(merit_state::rndbit_r))
 
 	PORT_START("DSW")
 	PORT_DIPNAME( 0x01, 0x01, "Enable Draw Poker" )     PORT_DIPLOCATION("SW1:1")
@@ -1181,7 +1181,7 @@ static INPUT_PORTS_START( casino5 )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(merit_state, rndbit_r)
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(FUNC(merit_state::rndbit_r))
 
 	PORT_START("DSW")
 	PORT_DIPNAME( 0x01, 0x01, "Enable Draw Poker" )     PORT_DIPLOCATION("SW1:1")
@@ -1245,7 +1245,7 @@ static INPUT_PORTS_START( merittrivia )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_BUTTON5 ) PORT_COCKTAIL PORT_CODE(KEYCODE_G)
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(merit_state, rndbit_r)
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(FUNC(merit_state::rndbit_r))
 
 	PORT_START("DSW")
 	PORT_DIPNAME( 0x01, 0x00, DEF_STR( Demo_Sounds ) )  PORT_DIPLOCATION("SW1:1")
@@ -1488,7 +1488,7 @@ static INPUT_PORTS_START( couple )
 	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Unknown ) )
 	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
-	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(merit_state, rndbit_r)
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_MEMBER(FUNC(merit_state::rndbit_r))
 INPUT_PORTS_END
 
 // Different DSWs

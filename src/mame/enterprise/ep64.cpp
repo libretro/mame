@@ -159,7 +159,8 @@ Notes: (All IC's shown)
 #include "cpu/z80/z80.h"
 #include "imagedev/cassette.h"
 #include "machine/ram.h"
-#include "sound/dave.h"
+
+#include "dave.h"
 #include "nick.h"
 
 #include "softlist_dev.h"
@@ -214,8 +215,8 @@ private:
 	required_memory_region m_rom;
 	required_ioport_array<10> m_y;
 
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	uint8_t rd0_r();
 	void wr0_w(uint8_t data);
@@ -226,11 +227,11 @@ private:
 
 	void write_centronics_busy(int state);
 	int m_centronics_busy;
-	void dave_128k_mem(address_map &map);
-	void dave_64k_mem(address_map &map);
-	void dave_io(address_map &map);
-	void ep64_io(address_map &map);
-	void ep64_mem(address_map &map);
+	void dave_128k_mem(address_map &map) ATTR_COLD;
+	void dave_64k_mem(address_map &map) ATTR_COLD;
+	void dave_io(address_map &map) ATTR_COLD;
+	void ep64_io(address_map &map) ATTR_COLD;
+	void ep64_mem(address_map &map) ATTR_COLD;
 };
 
 
@@ -595,6 +596,7 @@ void ep64_state::ep64(machine_config &config)
 	// sound hardware
 	SPEAKER(config, "lspeaker").front_left();
 	SPEAKER(config, "rspeaker").front_right();
+
 	DAVE(config, m_dave, XTAL(8'000'000));
 	m_dave->set_addrmap(AS_PROGRAM, &ep64_state::dave_64k_mem);
 	m_dave->set_addrmap(AS_IO, &ep64_state::dave_io);

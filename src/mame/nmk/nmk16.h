@@ -12,6 +12,7 @@
 
 #include "seibusound.h"
 
+#include "cpu/m6805/m68705.h"
 #include "machine/gen_latch.h"
 #include "machine/timer.h"
 #include "sound/okim6295.h"
@@ -62,6 +63,7 @@ public:
 	void gunnailb(machine_config &config);
 	void hachamf(machine_config &config);
 	void bjtwin(machine_config &config);
+	void cactus(machine_config &config);
 	void ssmissin(machine_config &config);
 	void bioship(machine_config &config);
 	void macross2(machine_config &config);
@@ -100,8 +102,8 @@ public:
 	void init_acrobatmbl();
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	TIMER_DEVICE_CALLBACK_MEMBER(nmk16_scanline);
 	TIMER_DEVICE_CALLBACK_MEMBER(nmk16_hacky_scanline);
@@ -220,51 +222,51 @@ protected:
 	void decode_tdragonb();
 	void decode_ssmissin();
 
-	void acrobatm_map(address_map &map);
-	void acrobatmbl_map(address_map &map);
-	void bioship_map(address_map &map);
-	void bjtwin_map(address_map &map);
-	void gunnail_map(address_map &map);
-	void gunnailb_map(address_map &map);
-	void gunnailb_sound_map(address_map &map);
-	void gunnailb_sound_io_map(address_map &map);
-	void hachamf_map(address_map &map);
-	void macross2_map(address_map &map);
-	void macross2_sound_io_map(address_map &map);
-	void macross2_sound_map(address_map &map);
-	void macross_map(address_map &map);
-	void manybloc_map(address_map &map);
-	void mustang_map(address_map &map);
-	void mustangb_map(address_map &map);
-	void mustangb3_map(address_map &map);
-	void mustangb3_sound_map(address_map &map);
-	void oki1_map(address_map &map);
-	void oki2_map(address_map &map);
-	void powerins_map(address_map &map);
-	void powerins_sound_map(address_map &map);
-	void powerins_bootleg_audio_io_map(address_map &map);
-	void powerinsa_map(address_map &map);
-	void powerinsa_oki_map(address_map &map);
-	void raphero_map(address_map &map);
-	void raphero_sound_mem_map(address_map &map);
-	void ssmissin_map(address_map &map);
-	void ssmissin_sound_map(address_map &map);
-	void strahl_map(address_map &map);
-	void strahljbl_map(address_map &map);
-	void tdragon2_map(address_map &map);
-	void tdragon3h_map(address_map &map);
-	void tdragon3h_sound_io_map(address_map &map);
-	void tdragon_map(address_map &map);
-	void tdragonb_map(address_map &map);
-	void tdragonb2_map(address_map &map);
-	void tdragonb2_oki_map(address_map &map);
-	void tdragonb3_map(address_map &map);
-	void tharrier_map(address_map &map);
-	void tharrier_sound_io_map(address_map &map);
-	void tharrier_sound_map(address_map &map);
-	void twinactn_map(address_map &map);
-	void vandyke_map(address_map &map);
-	void vandykeb_map(address_map &map);
+	void acrobatm_map(address_map &map) ATTR_COLD;
+	void acrobatmbl_map(address_map &map) ATTR_COLD;
+	void bioship_map(address_map &map) ATTR_COLD;
+	void bjtwin_map(address_map &map) ATTR_COLD;
+	void gunnail_map(address_map &map) ATTR_COLD;
+	void gunnailb_map(address_map &map) ATTR_COLD;
+	void gunnailb_sound_map(address_map &map) ATTR_COLD;
+	void gunnailb_sound_io_map(address_map &map) ATTR_COLD;
+	void hachamf_map(address_map &map) ATTR_COLD;
+	void macross2_map(address_map &map) ATTR_COLD;
+	void macross2_sound_io_map(address_map &map) ATTR_COLD;
+	void macross2_sound_map(address_map &map) ATTR_COLD;
+	void macross_map(address_map &map) ATTR_COLD;
+	void manybloc_map(address_map &map) ATTR_COLD;
+	void mustang_map(address_map &map) ATTR_COLD;
+	void mustangb_map(address_map &map) ATTR_COLD;
+	void mustangb3_map(address_map &map) ATTR_COLD;
+	void mustangb3_sound_map(address_map &map) ATTR_COLD;
+	void oki1_map(address_map &map) ATTR_COLD;
+	void oki2_map(address_map &map) ATTR_COLD;
+	void powerins_map(address_map &map) ATTR_COLD;
+	void powerins_sound_map(address_map &map) ATTR_COLD;
+	void powerins_bootleg_audio_io_map(address_map &map) ATTR_COLD;
+	void powerinsa_map(address_map &map) ATTR_COLD;
+	void powerinsa_oki_map(address_map &map) ATTR_COLD;
+	void raphero_map(address_map &map) ATTR_COLD;
+	void raphero_sound_mem_map(address_map &map) ATTR_COLD;
+	void ssmissin_map(address_map &map) ATTR_COLD;
+	void ssmissin_sound_map(address_map &map) ATTR_COLD;
+	void strahl_map(address_map &map) ATTR_COLD;
+	void strahljbl_map(address_map &map) ATTR_COLD;
+	void tdragon2_map(address_map &map) ATTR_COLD;
+	void tdragon3h_map(address_map &map) ATTR_COLD;
+	void tdragon3h_sound_io_map(address_map &map) ATTR_COLD;
+	void tdragon_map(address_map &map) ATTR_COLD;
+	void tdragonb_map(address_map &map) ATTR_COLD;
+	void tdragonb2_map(address_map &map) ATTR_COLD;
+	void tdragonb2_oki_map(address_map &map) ATTR_COLD;
+	void tdragonb3_map(address_map &map) ATTR_COLD;
+	void tharrier_map(address_map &map) ATTR_COLD;
+	void tharrier_sound_io_map(address_map &map) ATTR_COLD;
+	void tharrier_sound_map(address_map &map) ATTR_COLD;
+	void twinactn_map(address_map &map) ATTR_COLD;
+	void vandyke_map(address_map &map) ATTR_COLD;
+	void vandykeb_map(address_map &map) ATTR_COLD;
 };
 
 class tdragon_prot_state : public nmk16_state
@@ -280,12 +282,12 @@ public:
 	void hachamf_prot(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	optional_device<tlcs90_device> m_protcpu;
 
-	void tdragon_prot_map(address_map &map);
+	void tdragon_prot_map(address_map &map) ATTR_COLD;
 
 	void mcu_side_shared_w(offs_t offset, u8 data);
 	u8 mcu_side_shared_r(offs_t offset);
@@ -315,7 +317,7 @@ public:
 
 protected:
 	virtual void device_post_load() override;
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	void base_nmk214_215(machine_config &config);
@@ -378,10 +380,10 @@ private:
 	void video_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect, int dsw_flipscreen, int xoffset, int yoffset, int attr_mask);
 	void redhawki_video_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
-	void afega_map(address_map &map);
-	void afega_sound_cpu(address_map &map);
-	void firehawk_map(address_map &map);
-	void firehawk_sound_cpu(address_map &map);
+	void afega_map(address_map &map) ATTR_COLD;
+	void afega_sound_cpu(address_map &map) ATTR_COLD;
+	void firehawk_map(address_map &map) ATTR_COLD;
+	void firehawk_sound_cpu(address_map &map) ATTR_COLD;
 };
 
 class nmk16_tomagic_state : public nmk16_state
@@ -396,9 +398,49 @@ public:
 	void init_tomagic();
 
 private:
-	void tomagic_map(address_map &map);
-	void tomagic_sound_map(address_map &map);
-	void tomagic_sound_io_map(address_map &map);
+	void tomagic_map(address_map &map) ATTR_COLD;
+	void tomagic_sound_map(address_map &map) ATTR_COLD;
+	void tomagic_sound_io_map(address_map &map) ATTR_COLD;
+};
+
+class tharrierb_state : public nmk16_state
+{
+public:
+	tharrierb_state(const machine_config &mconfig, device_type type, const char *tag) :
+		nmk16_state(mconfig, type, tag),
+		m_mcu(*this, "mcu"),
+		m_inputs(*this, { "DSW1", "DSW2", "BUTTONS", "P1", "P2" })
+	{}
+
+	void tharrierb(machine_config &config);
+
+protected:
+	virtual void machine_start() override ATTR_COLD;
+
+private:
+	required_device<m68705r_device> m_mcu;
+	required_ioport_array<5> m_inputs;
+
+	u8 m_mcu_out_latch_msb = 0;
+	u8 m_mcu_out_latch_lsb = 0;
+	u8 m_mcu_in_latch = 0;
+
+	u8 m_mcu_portc = 0;
+
+	void tharrierb_map(address_map &map) ATTR_COLD;
+
+	// maincpu access
+	u16 mcu_status_r(offs_t offset, u16 mem_mask);
+	u16 mcu_data_r(offs_t offset, u16 mem_mask);
+	void mcu_control_w(offs_t offset, u16 data, u16 mem_mask);
+	void mcu_data_w(offs_t offset, u16 data, u16 mem_mask);
+
+	// 68705 mcu access
+	void mcu_porta_w(u8 data);
+	u8 mcu_portb_r();
+	void mcu_portb_w(u8 data);
+	void mcu_portc_w(u8 data);
+	u8 mcu_portd_r();
 };
 
 #endif //MAME_NMK_NMK16_H

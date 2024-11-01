@@ -92,7 +92,7 @@ public:
 	void cc10c(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -106,9 +106,9 @@ private:
 	u8 m_7seg_data = 0;
 
 	// address maps
-	void main_map(address_map &map);
-	void main_io(address_map &map);
-	void cc10c_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
+	void main_io(address_map &map) ATTR_COLD;
+	void cc10c_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	void update_display();
@@ -222,7 +222,7 @@ static INPUT_PORTS_START( cc1 )
 	PORT_BIT(0x04, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("CL") PORT_CODE(KEYCODE_DEL) PORT_CODE(KEYCODE_BACKSPACE)
 
 	PORT_START("RESET")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, cc1_state, reset_button, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("RE") PORT_CODE(KEYCODE_R) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(cc1_state::reset_button), 0)
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( cc3 )

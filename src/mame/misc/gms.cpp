@@ -143,7 +143,7 @@ public:
 	void init_super555();
 
 protected:
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 
 	optional_shared_ptr_array<uint16_t, 2> m_vidram;
 	required_shared_ptr_array<uint16_t, 4> m_reelram;
@@ -163,7 +163,7 @@ protected:
 	tilemap_t *m_reel_tilemap[4];
 	tilemap_t *m_tilemap[2]{};
 
-	void super555_mem(address_map &map);
+	void super555_mem(address_map &map) ATTR_COLD;
 
 	template <uint8_t Which> void vram_w(offs_t offset, uint16_t data, uint16_t mem_mask);
 	template <uint8_t Which> void reelram_w(offs_t offset, uint16_t data, uint16_t mem_mask);
@@ -173,10 +173,10 @@ private:
 	uint16_t m_input_matrix = 0;
 	//uint16_t m_prot_data = 0;
 
-	void mcu_io(address_map &map);
-	void rbmk_mem(address_map &map);
-	void rbspm_mem(address_map &map);
-	void ssanguoj_mem(address_map &map);
+	void mcu_io(address_map &map) ATTR_COLD;
+	void rbmk_mem(address_map &map) ATTR_COLD;
+	void rbspm_mem(address_map &map) ATTR_COLD;
+	void ssanguoj_mem(address_map &map) ATTR_COLD;
 
 	uint16_t unk_r();
 	uint16_t input_matrix_r();
@@ -206,10 +206,10 @@ public:
 	void magslot(machine_config &config);
 
 protected:
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 
 private:
-	void magslot_mem(address_map &map);
+	void magslot_mem(address_map &map) ATTR_COLD;
 
 	TILE_GET_INFO_MEMBER(get_tile1_info);
 };
@@ -482,7 +482,7 @@ static INPUT_PORTS_START( rbmk )
 	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read)
+	PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read))
 
 	// Only 4 DIP banks are actually populated on PCBs (2 empty spaces), but test mode reads all 6.
 	// Dips based on manuals for both rbmk and rbspm
@@ -678,7 +678,7 @@ static INPUT_PORTS_START( ssanguoj )
 	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read)
+	PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read))
 
 	// Only 4 DIP banks are actually populated on PCBs (2 empty spaces), but test mode reads all 6.
 	// TODO: dips
@@ -870,7 +870,7 @@ static INPUT_PORTS_START( magslot )
 	PORT_BIT( 0x1000, IP_ACTIVE_LOW, IPT_UNKNOWN ) // but recognized for password entering
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN ) // but recognized for password entering
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN ) // but recognized for password entering
-	PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read) // TODO: verify
+	PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read)) // TODO: verify
 
 	// 3 8-dip banks on PCB
 	PORT_START("DSW1") // Game setup is password protected, needs reverse engineering of the password
@@ -989,7 +989,7 @@ static INPUT_PORTS_START( super555 )
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read) // TODO: verify
+	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read)) // TODO: verify
 
 
 	// There are 4 banks of 8 DIP switches on the PCB but only 3 are shown in test mode. DIP switch settings as per test mode.
@@ -1112,7 +1112,7 @@ static INPUT_PORTS_START( sscs )
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read) // TODO: verify
+	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read)) // TODO: verify
 
 
 	// There are 4 banks of 8 DIP switches on PCB, but only 3 are shown in test mode.
@@ -1234,7 +1234,7 @@ static INPUT_PORTS_START( sc2in1 )
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read) // TODO: verify
+	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read)) // TODO: verify
 
 
 	// Only 1 8-DIP bank on PCB. Dips' effects as per test mode.
@@ -1291,7 +1291,7 @@ static INPUT_PORTS_START( ballch )
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read) // TODO: verify
+	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read)) // TODO: verify
 
 
 	// There are 3 8-DIP banks on PCB. Dips' effects as per test mode.
@@ -1408,7 +1408,7 @@ static INPUT_PORTS_START( cots )
 	PORT_BIT( 0x2000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x4000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", eeprom_serial_93cxx_device, do_read) // TODO: verify
+	//PORT_BIT( 0x8000, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("eeprom", FUNC(eeprom_serial_93cxx_device::do_read)) // TODO: verify
 
 
 	// There are 3 8-DIP banks on PCB, but settings seem to be selected via test mode?

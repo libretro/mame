@@ -413,8 +413,8 @@ public:
 	void kurukuru(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	required_device<cpu_device> m_maincpu;
@@ -435,14 +435,14 @@ private:
 	void ym2149_bout_w(uint8_t data);
 
 	void kurukuru_msm5205_vck(int state);
-	void kurukuru_audio_io(address_map &map);
-	void kurukuru_audio_map(address_map &map);
-	void kurukuru_io(address_map &map);
-	void kurukuru_map(address_map &map);
-	void ppj_audio_io(address_map &map);
-	void ppj_audio_map(address_map &map);
-	void ppj_io(address_map &map);
-	void ppj_map(address_map &map);
+	void kurukuru_audio_io(address_map &map) ATTR_COLD;
+	void kurukuru_audio_map(address_map &map) ATTR_COLD;
+	void kurukuru_io(address_map &map) ATTR_COLD;
+	void kurukuru_map(address_map &map) ATTR_COLD;
+	void ppj_audio_io(address_map &map) ATTR_COLD;
+	void ppj_audio_map(address_map &map) ATTR_COLD;
+	void ppj_io(address_map &map) ATTR_COLD;
+	void ppj_map(address_map &map) ATTR_COLD;
 };
 
 #define MAIN_CLOCK      XTAL(21'477'272)
@@ -684,7 +684,7 @@ static INPUT_PORTS_START( kurukuru )
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_COIN2 )   PORT_NAME(u8"¥10 In")                                 // edge connector pin 16 bottom
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNUSED )                                                        // edge connector pin 17 top (active)
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_COIN3 )   PORT_NAME(u8"¥100 In") PORT_IMPULSE(2)                // edge connector pin 17 bottom
-	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("hopper", ticket_dispenser_device, line_r)    // hopper feedback, edge connector pin 24 top
+	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("hopper", FUNC(ticket_dispenser_device::line_r))    // hopper feedback, edge connector pin 24 top
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_GAMBLE_PAYOUT )                                                 // edge connector pin 24 bottom
 
 	PORT_START("DSW1")  // found in the PCB: 11111111
@@ -764,7 +764,7 @@ static INPUT_PORTS_START( ppj )
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_COIN2 )   PORT_NAME(u8"¥10 In")                                 // edge connector pin 16 bottom
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_UNUSED )                                                        // edge connector pin 17 top (active)
 	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_COIN3 )   PORT_NAME(u8"¥100 In") PORT_IMPULSE(2)                // edge connector pin 17 bottom
-	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("hopper", ticket_dispenser_device, line_r)  // hopper feedback, edge connector pin 24 top
+	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_READ_LINE_DEVICE_MEMBER("hopper", FUNC(ticket_dispenser_device::line_r))  // hopper feedback, edge connector pin 24 top
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_GAMBLE_PAYOUT )                                                 // edge connector pin 24 bottom
 
 	PORT_START("DSW1")  // found in the PCB: 00000000 (arranged for sale since they are uncommon settings)

@@ -44,11 +44,11 @@
 
 #include "video/upd7220.h"
 
+#include "bus/cbus/amd98.h"
 #include "bus/cbus/pc9801_26.h"
 #include "bus/cbus/pc9801_55.h"
 #include "bus/cbus/pc9801_86.h"
 #include "bus/cbus/pc9801_118.h"
-#include "bus/cbus/pc9801_amd98.h"
 #include "bus/cbus/mpu_pc98.h"
 #include "bus/cbus/pc9801_cbus.h"
 #include "pc9801_kbd.h"
@@ -196,8 +196,8 @@ protected:
 
 	void pit_clock_config(machine_config &config, const XTAL clock);
 
-	void pc9801_common_io(address_map &map);
-	void ipl_bank(address_map &map);
+	void pc9801_common_io(address_map &map) ATTR_COLD;
+	void ipl_bank(address_map &map) ATTR_COLD;
 
 	uint8_t pc9801_a0_r(offs_t offset);
 	void pc9801_a0_w(offs_t offset, uint8_t data);
@@ -209,8 +209,8 @@ protected:
 	virtual u8 ppi_prn_portb_r();
 
 private:
-	void pc9801_io(address_map &map);
-	void pc9801_map(address_map &map);
+	void pc9801_io(address_map &map) ATTR_COLD;
+	void pc9801_map(address_map &map) ATTR_COLD;
 
 	void nmi_ctrl_w(offs_t offset, uint8_t data);
 
@@ -277,12 +277,12 @@ private:
 
 //  Video
 protected:
-	void upd7220_1_map(address_map &map);
-	void upd7220_2_map(address_map &map);
+	void upd7220_1_map(address_map &map) ATTR_COLD;
+	void upd7220_2_map(address_map &map) ATTR_COLD;
 
 	UPD7220_DISPLAY_PIXELS_MEMBER( hgdc_display_pixels );
 
-	virtual void video_start() override;
+	virtual void video_start() override ATTR_COLD;
 	void pc9801_palette(palette_device &palette) const;
 
 	uint8_t *m_char_rom = nullptr;
@@ -309,6 +309,8 @@ protected:
 	uint8_t m_ex_video_ff[128];
 	u8 m_vram_bank = 0;
 	u8 m_vram_disp = 0;
+
+	virtual void border_color_w(offs_t offset, u8 data);
 
 private:
 	UPD7220_DRAW_TEXT_LINE_MEMBER( hgdc_draw_text );
@@ -382,10 +384,10 @@ public:
 protected:
 	TIMER_CALLBACK_MEMBER(fdc_trigger);
 
-	void pc9801rs_io(address_map &map);
-	void pc9801rs_map(address_map &map);
-	void pc9801ux_io(address_map &map);
-	void pc9801ux_map(address_map &map);
+	void pc9801rs_io(address_map &map) ATTR_COLD;
+	void pc9801rs_map(address_map &map) ATTR_COLD;
+	void pc9801ux_io(address_map &map) ATTR_COLD;
+	void pc9801ux_map(address_map &map) ATTR_COLD;
 
 	uint16_t grcg_gvram_r(offs_t offset, uint16_t mem_mask = ~0);
 	void grcg_gvram_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
@@ -395,13 +397,15 @@ protected:
 	uint16_t upd7220_grcg_r(offs_t offset, uint16_t mem_mask = ~0);
 	void upd7220_grcg_w(offs_t offset, uint16_t data, uint16_t mem_mask = ~0);
 
-	void upd7220_grcg_2_map(address_map &map);
+	void upd7220_grcg_2_map(address_map &map) ATTR_COLD;
 
 	void pc9801_ide(machine_config &config);
 	static void cdrom_headphones(device_t *device);
 
 	void pc9801rs_video_ff_w(offs_t offset, uint8_t data);
 	void pc9801rs_a0_w(offs_t offset, uint8_t data);
+
+	virtual void border_color_w(offs_t offset, u8 data) override;
 
 	uint8_t ide_ctrl_r();
 	void ide_ctrl_w(uint8_t data);
@@ -509,7 +513,7 @@ public:
 	void pc9801us(machine_config &config);
 
 protected:
-	void pc9801us_io(address_map &map);
+	void pc9801us_io(address_map &map) ATTR_COLD;
 
 	DECLARE_MACHINE_START(pc9801us);
 
@@ -541,8 +545,8 @@ public:
 	void pc9801bx2(machine_config &config);
 
 protected:
-	void pc9801bx2_io(address_map &map);
-	void pc9801bx2_map(address_map &map);
+	void pc9801bx2_io(address_map &map) ATTR_COLD;
+	void pc9801bx2_map(address_map &map) ATTR_COLD;
 
 	DECLARE_MACHINE_START(pc9801bx2);
 	DECLARE_MACHINE_RESET(pc9801bx2);

@@ -111,7 +111,7 @@ protected:
 
 	void update_firewire_irq();
 
-	void zeus2_map(address_map &map);
+	void zeus2_map(address_map &map) ATTR_COLD;
 	void midzeus2(machine_config &config);
 
 	uint32_t    m_disk_asic[0x10]{};
@@ -162,7 +162,7 @@ private:
 	uint32_t analog_r(offs_t offset);
 	void analog_w(uint32_t data);
 
-	void crusnexo_map(address_map &map);
+	void crusnexo_map(address_map &map) ATTR_COLD;
 
 	uint8_t     m_keypad_select = 0;
 	uint8_t     m_crusnexo_leds_select = 0;
@@ -192,7 +192,7 @@ private:
 	uint32_t trackball_r(offs_t offset);
 	uint32_t grid_keypad_r(offs_t offset);
 
-	void thegrid_map(address_map &map);
+	void thegrid_map(address_map &map) ATTR_COLD;
 
 	required_ioport m_io_49way_x;
 	required_ioport m_io_49way_y;
@@ -1210,7 +1210,7 @@ static INPUT_PORTS_START( crusnexo )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNKNOWN )
 
 	PORT_START("IN2")
-	PORT_BIT( 0x0007, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CUSTOM_MEMBER(crusnexo_state, keypad_r )
+	PORT_BIT( 0x0007, IP_ACTIVE_HIGH, IPT_CUSTOM) PORT_CUSTOM_MEMBER(FUNC(crusnexo_state::keypad_r))
 	PORT_BIT( 0xfff8, IP_ACTIVE_LOW, IPT_UNUSED )
 
 	PORT_START("KEYPAD")
@@ -1326,7 +1326,7 @@ static INPUT_PORTS_START( thegrid )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_UNUSED )
 
 	PORT_START("IN2")
-	PORT_BIT( 0x00ff, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(thegrid_state, custom_49way_r)
+	PORT_BIT( 0x00ff, IP_ACTIVE_LOW, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(thegrid_state::custom_49way_r))
 	PORT_BIT( 0xff00, IP_ACTIVE_LOW, IPT_UNUSED )
 
 	PORT_START("49WAYX")

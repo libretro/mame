@@ -79,7 +79,7 @@ public:
 	void theboat(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	template <int P> void input_select_w(u8 data);
@@ -87,8 +87,8 @@ private:
 	void bank_select_w(u8 data);
 	u8 bank_r(offs_t offset);
 
-	void mem_map(address_map &map);
-	void io_map(address_map &map);
+	void mem_map(address_map &map) ATTR_COLD;
+	void io_map(address_map &map) ATTR_COLD;
 
 	required_ioport_array<6> m_player_inputs[2];
 	required_region_ptr<u8> m_banked_rom;
@@ -171,7 +171,7 @@ static INPUT_PORTS_START(theboat)
 	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_GAMBLE_BOOK)  PORT_NAME("Analyze / Bookkeeping")
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_OTHER )       PORT_NAME("P2 Pay Out")  PORT_CODE(KEYCODE_I)
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_COIN3 )       PORT_IMPULSE(10)  PORT_NAME("P1 Key Up (10 credits)")
-	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_CUSTOM )      PORT_READ_LINE_DEVICE_MEMBER("hopper", ticket_dispenser_device, line_r)
+	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_CUSTOM )      PORT_READ_LINE_DEVICE_MEMBER("hopper", FUNC(ticket_dispenser_device::line_r))
 	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_COIN2 )       PORT_IMPULSE(3)  PORT_NAME("P2 Coin (1 credit)")
 	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_OTHER )       PORT_NAME("P1 Pay Out")  PORT_CODE(KEYCODE_U)
 

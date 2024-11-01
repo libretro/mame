@@ -86,8 +86,8 @@ public:
 	void montreux(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	required_device<arm_cpu_device> m_maincpu;
@@ -110,7 +110,7 @@ private:
 	u32 m_prev_pc = 0;
 	u64 m_prev_cycle = 0;
 
-	void risc2500_mem(address_map &map);
+	void risc2500_mem(address_map &map) ATTR_COLD;
 
 	void lcd_palette(palette_device &palette) const;
 	SED1520_UPDATE_CB(screen_update_cb);
@@ -389,7 +389,7 @@ static INPUT_PORTS_START( risc2500 )
 	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("Off")      PORT_CODE(KEYCODE_F)
 
 	PORT_START("RESET")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("On")       PORT_CODE(KEYCODE_O) PORT_CHANGED_MEMBER(DEVICE_SELF, risc2500_state, on_button, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("On")       PORT_CODE(KEYCODE_O) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(risc2500_state::on_button), 0)
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( montreux ) // on/off buttons have different labels
@@ -399,7 +399,7 @@ static INPUT_PORTS_START( montreux ) // on/off buttons have different labels
 	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("Stop")     PORT_CODE(KEYCODE_S)
 
 	PORT_MODIFY("RESET")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("Go")       PORT_CODE(KEYCODE_G) PORT_CHANGED_MEMBER(DEVICE_SELF, risc2500_state, on_button, 0)
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_NAME("Go")       PORT_CODE(KEYCODE_G) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(risc2500_state::on_button), 0)
 INPUT_PORTS_END
 
 

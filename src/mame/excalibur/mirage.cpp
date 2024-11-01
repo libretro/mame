@@ -76,8 +76,8 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(on_button);
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
 	// devices/pointers
@@ -144,7 +144,7 @@ void mirage_state::machine_start()
 {
 	init_motors();
 
-	// resolve handlers
+	// resolve outputs
 	m_out_lcd.resolve();
 	m_piece_hand.resolve();
 	m_out_motor.resolve();
@@ -551,7 +551,7 @@ static INPUT_PORTS_START( mirage )
 	PORT_CONFNAME( 0x01, 0x00, "Battery Status" )
 	PORT_CONFSETTING(    0x01, "Low" )
 	PORT_CONFSETTING(    0x00, DEF_STR( Normal ) )
-	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_F1) PORT_CHANGED_MEMBER(DEVICE_SELF, mirage_state, on_button, 0) PORT_NAME("On / Off")
+	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_F1) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(mirage_state::on_button), 0) PORT_NAME("On / Off")
 INPUT_PORTS_END
 
 

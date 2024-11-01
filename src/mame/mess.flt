@@ -141,11 +141,11 @@ cce/mc1000.cpp
 ccs/ccs2810.cpp
 ceres/ceres.cpp
 chess/ave_arb.cpp
-chess/cking_master.cpp
 chess/compuchess.cpp
 chess/conchess.cpp
 chess/conic_cchess2.cpp
 chess/conic_cchess3.cpp
+chess/krypton_regency.cpp
 chess/regence.cpp
 chess/tasc.cpp
 chromatics/cgc7900.cpp

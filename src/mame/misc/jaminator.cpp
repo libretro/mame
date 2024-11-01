@@ -72,13 +72,13 @@ public:
 	ioport_value link_data_r() { return m_link_data; }
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 private:
-	void main_map(address_map &map);
-	void io_map(address_map &map);
-	void sound_map(address_map &map);
+	void main_map(address_map &map) ATTR_COLD;
+	void io_map(address_map &map) ATTR_COLD;
+	void sound_map(address_map &map) ATTR_COLD;
 
 	required_device<i8039_device> m_maincpu;
 	required_device<cf61909_device> m_devo;
@@ -155,21 +155,21 @@ static INPUT_PORTS_START( jaminator )
 	PORT_BIT(0x8, IP_ACTIVE_HIGH, IPT_OTHER  ) PORT_CODE(KEYCODE_EQUALS) PORT_NAME("Fret 12")
 
 	PORT_START("COL7")
-	PORT_BIT(0xf, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(jaminator_state, bender_r)
+	PORT_BIT(0xf, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(jaminator_state::bender_r))
 
 	PORT_START("BENDER")
 	PORT_BIT(0xff, 0x78, IPT_PADDLE) PORT_NAME("Bender Bar") PORT_SENSITIVITY(100) PORT_KEYDELTA(10) PORT_MINMAX(0x00, 0xef)
 
 	PORT_START("P1")
-	PORT_BIT(0x0f, IP_ACTIVE_LOW,  IPT_CUSTOM ) PORT_CUSTOM_MEMBER(jaminator_state, input_r)
+	PORT_BIT(0x0f, IP_ACTIVE_LOW,  IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(jaminator_state::input_r))
 	PORT_BIT(0x10, IP_ACTIVE_LOW,  IPT_OUTPUT ) // link cable clock
-	PORT_BIT(0x20, IP_ACTIVE_LOW,  IPT_OUTPUT ) PORT_WRITE_LINE_MEMBER(jaminator_state, link_data_w)
+	PORT_BIT(0x20, IP_ACTIVE_LOW,  IPT_OUTPUT ) PORT_WRITE_LINE_MEMBER(FUNC(jaminator_state::link_data_w))
 	PORT_BIT(0x40, IP_ACTIVE_LOW,  IPT_BUTTON1) PORT_NAME("Select")
-	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(jaminator_state, link_data_r)
+	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_CUSTOM ) PORT_CUSTOM_MEMBER(FUNC(jaminator_state::link_data_r))
 
 	PORT_START("P2")
 	PORT_BIT(0x0f, IP_ACTIVE_HIGH, IPT_UNUSED )
-	PORT_BIT(0xf0, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_MEMBER(jaminator_state, input_sel_w)
+	PORT_BIT(0xf0, IP_ACTIVE_HIGH, IPT_OUTPUT ) PORT_WRITE_LINE_MEMBER(FUNC(jaminator_state::input_sel_w))
 
 	/*
 	* T0 is connected to pin 1 on the link port, which is pulled up by a 10k resistor.

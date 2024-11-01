@@ -164,7 +164,7 @@ The MCUs used were not imported from Sharp, but cloned by USSR, renamed to
 
 void hh_sm510_state::machine_start()
 {
-	// resolve handlers
+	// resolve outputs
 	m_out_x.resolve();
 
 	// determine number of input lines (set it in the subclass constructor if different)
@@ -6874,7 +6874,7 @@ public:
 	void tgaiden(machine_config &config);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 private:
 	// R2 connects to a single LED behind the screen

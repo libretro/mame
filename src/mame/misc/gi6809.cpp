@@ -125,20 +125,20 @@ public:
 	void init_cast();
 
 protected:
-	virtual void machine_start() override;
-	virtual void machine_reset() override;
+	virtual void machine_start() override ATTR_COLD;
+	virtual void machine_reset() override ATTR_COLD;
 
 	void gi6809_base(machine_config &config);
 
 private:
 
 	// Address Maps
-	void glckmain_map(address_map &map);
-	void glckslave_map(address_map &map);
-	void castmain_map(address_map &map);
-	void castslave_map(address_map &map);
-	void jestmain_map(address_map &map);
-	void jestslave_map(address_map &map);
+	void glckmain_map(address_map &map) ATTR_COLD;
+	void glckslave_map(address_map &map) ATTR_COLD;
+	void castmain_map(address_map &map) ATTR_COLD;
+	void castslave_map(address_map &map) ATTR_COLD;
+	void jestmain_map(address_map &map) ATTR_COLD;
+	void jestslave_map(address_map &map) ATTR_COLD;
 
 	// Devices
 	required_device<cpu_device> m_maincpu;
@@ -499,7 +499,7 @@ static INPUT_PORTS_START( castawayt )
 	PORT_MODIFY("IN0-1")
 	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_UNKNOWN )
-	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_CUSTOM )   PORT_READ_LINE_DEVICE_MEMBER("hopper", ticket_dispenser_device, line_r)
+	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_CUSTOM )   PORT_READ_LINE_DEVICE_MEMBER("hopper", FUNC(ticket_dispenser_device::line_r))
 	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_UNKNOWN )
 	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_OTHER )    PORT_NAME("Hopper Weight")   PORT_CODE(KEYCODE_T)
 

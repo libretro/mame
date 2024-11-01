@@ -253,7 +253,7 @@ public:
 	DECLARE_INPUT_CHANGED_MEMBER(rsc_init_board);
 
 protected:
-	virtual void machine_start() override;
+	virtual void machine_start() override ATTR_COLD;
 
 	// devices/pointers
 	required_device<cpu_device> m_maincpu;
@@ -270,9 +270,9 @@ protected:
 	u8 m_inp_mux = 0;
 
 	// address maps
-	void csc_map(address_map &map);
-	void csce_map(address_map &map);
-	void rsc_map(address_map &map);
+	void csc_map(address_map &map) ATTR_COLD;
+	void csce_map(address_map &map) ATTR_COLD;
+	void rsc_map(address_map &map) ATTR_COLD;
 
 	// I/O handlers
 	u16 read_inputs();
@@ -567,7 +567,7 @@ static INPUT_PORTS_START( su9 )
 	PORT_BIT(0x20, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_6) PORT_CODE(KEYCODE_6_PAD) PORT_NAME("PB / King")
 
 	PORT_START("CPU")
-	PORT_CONFNAME( 0x03, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, csc_state, su9_change_cpu_freq, 0) // factory set
+	PORT_CONFNAME( 0x03, 0x00, "CPU Frequency" ) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(csc_state::su9_change_cpu_freq), 0) // factory set
 	PORT_CONFSETTING(    0x00, "1.95MHz (original)" )
 	PORT_CONFSETTING(    0x01, "2.5MHz (Deluxe)" )
 	PORT_CONFSETTING(    0x02, "3MHz (Septennial)" )
@@ -585,8 +585,8 @@ static INPUT_PORTS_START( rsc )
 	PORT_BIT(0x80, IP_ACTIVE_HIGH, IPT_KEYPAD) PORT_CODE(KEYCODE_R) PORT_CODE(KEYCODE_N) PORT_NAME("RE")
 
 	PORT_START("BOARD")
-	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_OTHER) PORT_CHANGED_MEMBER(DEVICE_SELF, csc_state, rsc_init_board, 0) PORT_NAME("Board Reset A")
-	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_OTHER) PORT_CHANGED_MEMBER(DEVICE_SELF, csc_state, rsc_init_board, 1) PORT_NAME("Board Reset B")
+	PORT_BIT(0x01, IP_ACTIVE_HIGH, IPT_OTHER) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(csc_state::rsc_init_board), 0) PORT_NAME("Board Reset A")
+	PORT_BIT(0x02, IP_ACTIVE_HIGH, IPT_OTHER) PORT_CHANGED_MEMBER(DEVICE_SELF, FUNC(csc_state::rsc_init_board), 1) PORT_NAME("Board Reset B")
 INPUT_PORTS_END
 
 
