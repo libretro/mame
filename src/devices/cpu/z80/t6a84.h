@@ -21,6 +21,10 @@
 
 #include "z80.h"
 
+//android buildfix
+#if defined(PAGE_SIZE)
+#undef PAGE_SIZE
+#endif
 
 /***************************************************************************
     TYPE DEFINITIONS
