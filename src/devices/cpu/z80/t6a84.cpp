@@ -6,6 +6,11 @@
 
 ***************************************************************************/
 
+//android buildfix
+#if defined(PAGE_SIZE)
+#undef PAGE_SIZE
+#endif
+
 #include "emu.h"
 #include "t6a84.h"
 
