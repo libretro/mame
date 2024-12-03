@@ -880,7 +880,6 @@ skeleton/itt3030.cpp
 skeleton/itt9216.cpp
 skeleton/jade.cpp
 skeleton/jonos.cpp
-skeleton/juku.cpp
 skeleton/junior80.cpp
 skeleton/kron.cpp
 skeleton/lee1214.cpp
@@ -1180,6 +1179,7 @@ ussr/ie15.cpp
 ussr/im01.cpp
 ussr/intellect02.cpp
 ussr/irisha.cpp
+ussr/juku.cpp
 ussr/krokha.cpp
 ussr/lviv.cpp
 ussr/mikro80.cpp
