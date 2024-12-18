@@ -24,6 +24,7 @@
 #endif
 
 #define CORE_NAME "mame"
+#define RETRO_PATH_MAX 512
 
 enum
 {
@@ -73,7 +74,7 @@ extern bool retro_load_ok;
 extern int video_changed;
 extern int retro_pause;
 extern int mame_reset;
-extern char g_rom_dir[1024];
+extern char g_rom_dir[RETRO_PATH_MAX];
 extern char mediaType[10];
 extern const char *retro_save_directory;
 extern const char *retro_system_directory;
