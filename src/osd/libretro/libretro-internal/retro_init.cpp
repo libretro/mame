@@ -3,6 +3,8 @@
 #endif
 #include <stdint.h>
 #include <string.h>
+#include <fstream>
+#include <string>
 
 #include "osdepend.h"
 #include "emu.h"
@@ -31,6 +33,8 @@
 #define UINT8 uint8_t
 #define INT8 int8_t
 
+#define ARGC_SIZE 128
+
 #ifdef _WIN32
 const char slash      = '\\';
 const char *slash_str = "\\";
@@ -39,14 +43,10 @@ const char slash      = '/';
 const char *slash_str = "/";
 #endif
 
-/* Args for commandline */
-static char ARGUV[32][1024];
-static unsigned char ARGUC=0;
-
-/* state */
+// state
 int mame_reset = -1;
 
-/* core options */
+// core options
 int  lightgun_mode = RETRO_SETTING_LIGHTGUN_MODE_DISABLED;
 int  lightgun_offscreen_mode = RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_FREE;
 bool mouse_enable = false;
@@ -77,25 +77,32 @@ int rotation_mode = ROTATION_MODE_LIBRETRO;
 int libretro_rotation_allow = 0;
 int internal_rotation_allow = 0;
 int thread_mode = 0;
+
 // rom file name and path
-char g_rom_dir[1024];
-char cmd_rom_dir[512];
+char g_rom_dir[RETRO_PATH_MAX];
+static char cmd_rom_dir[RETRO_PATH_MAX];
 char mediaType[10];
-static char MgamePath[1024];
-static char MparentPath[1024];
-static char MgameName[512];
-static char MsystemName[512];
-static char gameName[1024];
+static char MgamePath[RETRO_PATH_MAX];
+static char MparentPath[RETRO_PATH_MAX];
+static char MgameName[RETRO_PATH_MAX];
+static char MsystemName[RETRO_PATH_MAX];
+static char gameName[RETRO_PATH_MAX];
 
 bool get_MgamePath(void)
 {
    return (MgamePath[0]) ? true : false;
 }
 
+// args for commandline
+static char ARGUV[ARGC_SIZE][RETRO_PATH_MAX];
+static unsigned char ARGUC = 0;
+
 // args for cores
-static char XARGV[64][1024];
-static const char* xargv_cmd[64];
-int PARAMCOUNT = 0;
+static char XARGV[ARGC_SIZE][RETRO_PATH_MAX];
+static unsigned char XARGC = 0;
+static const char* xargv_cmd[ARGC_SIZE];
+
+static char CMDFILE[4096];
 
 // path configuration
 #define NB_OPTPATH 14
@@ -384,7 +391,7 @@ void Extract_AllPath(const char *srcpath)
 
 static void Add_Option(const char *option)
 {
-   sprintf(XARGV[PARAMCOUNT++], "%s", option);
+   sprintf(XARGV[XARGC++], "%s", option);
 }
 
 static void Set_Rotation_Option(int gameRot)
@@ -477,7 +484,7 @@ static void Set_Default_Option(void)
 {
    /* some hardcoded default options. */
 
-   PARAMCOUNT = 0;
+   XARGC = 0;
    Add_Option(CORE_NAME);
 
    Add_Option("-joystick");
@@ -542,7 +549,7 @@ static void Set_Default_Option(void)
 static void Set_Path_Option(void)
 {
    int i;
-   char tmp_dir[2048];
+   char tmp_dir[4096];
 
    if (mame_paths_enable)
       return;
@@ -598,7 +605,7 @@ static void Set_Path_Option(void)
 
 static int execute_game(char *path)
 {
-   char tmp_dir[2048];
+   char tmp_dir[4096];
    int gameRot     = 0;
    int driverIndex = 0;
    FirstTimeUpdate = 1;
@@ -670,10 +677,27 @@ static int execute_game(char *path)
    return 0;
 }
 
+static int loadcmdfile(char *argv)
+{
+   std::ifstream cmdfile(argv);
+   std::string cmdstr;
+
+   if (cmdfile.is_open())
+   {
+      std::getline(cmdfile, cmdstr);
+      cmdfile.close();
+
+      snprintf(CMDFILE, sizeof(CMDFILE), "%s", cmdstr.c_str());
+      return 1;
+   }
+
+   return 0;
+}
+
 static void parse_cmdline(const char *argv)
 {
    int c,c2;
-   static char buffer[512*4];
+   char buffer[4096];
    enum states
    {
       DULL,
@@ -684,8 +708,8 @@ static void parse_cmdline(const char *argv)
    char *p2 = NULL;
    char *start_of_word = NULL;
 
-   strcpy(buffer,argv);
-   strcat(buffer," \0");
+   strcpy(buffer, argv);
+   strcat(buffer, " \0");
 
    for (p = buffer; *p != '\0'; p++)
    {
@@ -896,34 +920,6 @@ static int execute_game_cmd(char *path)
    return 0;
 }
 
-#include <fstream>
-#include <string>
-static char CMDFILE[512];
-
-int loadcmdfile(char *argv)
-{
-   std::ifstream cmdfile(argv);
-   std::string cmdstr;
-
-   if (cmdfile.is_open())
-   {
-      std::getline(cmdfile, cmdstr);
-      cmdfile.close();
-
-      sprintf(CMDFILE, "%s", cmdstr.c_str());
-
-      return 1;
-   }
-
-   return 0;
-}
-
-
-/*
-#ifdef __cplusplus
-extern "C"
-#endif
-*/
 int mmain2(int argc, const char *argv)
 {
    unsigned i = 0;
@@ -953,14 +949,14 @@ int mmain2(int argc, const char *argv)
    }
    else
    {
-      char argv_trimmed[512];
+      char argv_trimmed[RETRO_PATH_MAX];
 
       argv_trimmed[0] = '\0';
 
       if (argv[0])
       {
-         char argv_first[512];
-         char a[512];
+         char argv_first[RETRO_PATH_MAX];
+         char a[RETRO_PATH_MAX];
          const char *first = NULL;
 
          strcpy(argv_first, argv);
@@ -994,14 +990,14 @@ int mmain2(int argc, const char *argv)
    if (result < 0)
       return result;
 
-   for (i = 0; i < 64; i++)
+   for (i = 0; i < ARGC_SIZE; i++)
       xargv_cmd[i] = NULL;
 
-   if (PARAMCOUNT)
+   if (XARGC)
    {
       log_cb(RETRO_LOG_DEBUG, "Parameters:\n");
 
-      for (i = 0; i < PARAMCOUNT; i++)
+      for (i = 0; i < XARGC; i++)
       {
          xargv_cmd[i] = (char*)(XARGV[i]);
          log_cb(RETRO_LOG_DEBUG, "  %s\n", XARGV[i]);
@@ -1009,7 +1005,7 @@ int mmain2(int argc, const char *argv)
    }
 
    // launch mmain from retromain
-   result = mmain(PARAMCOUNT, (char **)xargv_cmd);
+   result = mmain(XARGC, (char **)xargv_cmd);
 
    return result/*==0?0:1*/;
 }
