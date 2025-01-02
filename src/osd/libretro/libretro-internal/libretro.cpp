@@ -288,6 +288,7 @@ static void retro_autoloadfastforwarding(void)
 static const struct retro_controller_description default_controllers[] =
 {
    { "RetroPad", RETRO_DEVICE_JOYPAD },
+   { "Keyboard", RETRO_DEVICE_KEYBOARD },
    { "None", RETRO_DEVICE_NONE },
    { NULL, 0 }
 };
