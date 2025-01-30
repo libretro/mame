@@ -1043,7 +1043,7 @@ void screen_device::configure(int width, int height, const rectangle &visarea, a
 	machine().video().update_refresh_speed();
 
 #ifdef __LIBRETRO__
-	float retro_fps_new = ATTOSECONDS_TO_HZ(m_frame_period);
+	double retro_fps_new = ATTOSECONDS_TO_HZ(m_frame_period);
 	if (!screen_configured
 			&& retro_fps_new != retro_fps
 			&& retro_fps_new <= 120.0f

@@ -1520,11 +1520,11 @@ void sound_manager::update(s32 param)
 	LOG("sound_update\n");
 
 #ifdef __LIBRETRO__
-	/* Adjust sound timer to every frame */
+	/* Adjust sound timer to 5 times per frame */
 	if (sound_timer != retro_fps)
 	{
 		sound_timer = retro_fps;
-		m_update_timer->adjust(attotime::from_hz(sound_timer), 0, attotime::from_hz(sound_timer));
+		m_update_timer->adjust(attotime::from_hz(sound_timer * 5), 0, attotime::from_hz(sound_timer * 5));
 	}
 #endif
 

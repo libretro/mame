@@ -43,8 +43,8 @@ int max_height     = fb_height;
 float retro_aspect = (float)4.0f / (float)3.0f;
 float view_aspect  = 1.0f;
 float sample_rate  = 48000.0f;
-float retro_fps    = 60.0f;
-float sound_timer  = 50.0f; /* default STREAMS_UPDATE_ATTOTIME, changed later to `retro_fps` */
+double retro_fps   = 60.0f;
+double sound_timer = 50.0f; /* default STREAMS_UPDATE_ATTOTIME, changed later to `retro_fps` */
 int video_changed  = 0;
 int screen_configured = 0;
 

@@ -106,11 +106,11 @@ extern char joystick_threshold[8];
 extern int fb_width;
 extern int fb_height;
 extern float retro_aspect;
-extern float retro_fps;
 extern float view_aspect;
+extern double retro_fps;
+extern double sound_timer;
 extern int rotation_mode;
 extern int thread_mode;
-extern float sound_timer;
 extern int screen_configured;
 
 extern const char *slash_str;
