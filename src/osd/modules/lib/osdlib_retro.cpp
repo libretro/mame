@@ -119,6 +119,57 @@ void osd_break_into_debugger(const char *message)
 }
 
 //============================================================
+//  osd_get_cache_line_size
+//============================================================
+
+std::pair<std::error_condition, unsigned> osd_get_cache_line_size() noexcept
+{
+#if defined(_WIN32)
+	DWORD resultsize = 0;
+	if (GetLogicalProcessorInformation(nullptr, &resultsize) || (ERROR_INSUFFICIENT_BUFFER != GetLastError()) || !resultsize)
+		return std::make_pair(std::errc::operation_not_permitted, 0U);
+
+	auto const result = reinterpret_cast<SYSTEM_LOGICAL_PROCESSOR_INFORMATION *>(std::malloc(resultsize));
+	if (!result)
+		return std::make_pair(std::errc::not_enough_memory, 0U);
+
+	if (!GetLogicalProcessorInformation(result, &resultsize))
+	{
+		std::free(result);
+		return std::make_pair(std::errc::operation_not_permitted, 0U);
+	}
+
+	for (unsigned i = 0; i < (resultsize / sizeof(result[0])); ++i)
+	{
+		if ((RelationCache == result[i].Relationship) && (1 == result[i].Cache.Level))
+		{
+			unsigned const linesize = result[i].Cache.LineSize;
+			std::free(result);
+			return std::make_pair(std::error_condition(), linesize);
+		}
+	}
+
+	std::free(result);
+	return std::make_pair(std::errc::operation_not_permitted, 0U);
+#elif defined(__linux__)
+	FILE *const f = std::fopen("/sys/devices/system/cpu/cpu0/cache/index0/coherency_line_size", "r");
+	if (!f)
+		return std::make_pair(std::error_condition(errno, std::generic_category()), 0U);
+
+	unsigned result = 0;
+	auto const cnt = std::fscanf(f, "%u", &result);
+	std::fclose(f);
+	if (1 == cnt)
+		return std::make_pair(std::error_condition(), result);
+	else
+		return std::make_pair(std::errc::io_error, 0U);
+#else // defined(__linux__)
+	return std::make_pair(std::errc::not_supported, 0U);
+#endif
+}
+
+
+//============================================================
 //  osd_get_clipboard_text
 //============================================================
 
