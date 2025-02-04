@@ -106,7 +106,6 @@ banctec/banctec.cpp
 bandai/design_master.cpp
 bandai/rx78.cpp
 bandai/sv8000.cpp
-bandai/tamag1.cpp
 bandai/wswan.cpp
 be/bebox.cpp
 beehive/microb.cpp
@@ -494,6 +493,7 @@ mips/mips.cpp
 misc/3do.cpp
 misc/eva.cpp
 misc/h01x.cpp
+misc/mindset.cpp
 misc/monon_color.cpp
 misc/mtu130.cpp
 misc/triton.cpp
@@ -897,7 +897,6 @@ skeleton/micromon.cpp
 skeleton/micronic.cpp
 skeleton/mightyframe.cpp
 skeleton/milwaukee.cpp
-skeleton/mindset.cpp
 skeleton/mini2440.cpp
 skeleton/miniframe.cpp
 skeleton/miuchiz.cpp

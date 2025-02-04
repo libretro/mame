@@ -78,14 +78,15 @@ aristocrat/caswin.cpp
 astrocorp/astrcorp.cpp          // gambling
 -gostopac
 -hapfarm
--magibombd
--magibombc
--magibombb
 -magibomba
--magibombf
+-magibombd
 -magibombg
+-magibombm
 -monkeyl
 -monkeyla
+-monkeylb
+-monkeylc
+-monkeyld
 -speedmst
 -speedmsta
 -speedmstb
@@ -355,6 +356,8 @@ barcrest/mpu4dealem.cpp          // fruit
 bfm/bfcobra.cpp
 -beeline
 -inquiztr
+-inquiztr11
+-inquiztr12a
 
 //bfm/bfmsys83.cpp          // fruit, no screen
 
@@ -723,8 +726,6 @@ excellent/gcpinbal.cpp
 excellent/lastbank.cpp
 
 excellent/witch.cpp
--witchb
--witchs
 
 exidy/carpolo.cpp
 
@@ -1013,8 +1014,11 @@ igs/goldstar.cpp          // fruit
 -animalw
 -aplan
 -bonusch
+-bonuscha
 -cb3c
 -cb3f
+-cb3s51
+-cbaai
 -cherry96
 -chryangl
 -chryangla
@@ -1022,6 +1026,7 @@ igs/goldstar.cpp          // fruit
 -cmast92
 -cmast92a
 -cmast97
+-cmast97a
 -cmast97i
 -cmast99
 -cmast99b
@@ -1031,11 +1036,17 @@ igs/goldstar.cpp          // fruit
 -cmtetriskr
 -cmv4a
 -crazybonb
+-cutylinea
+-cutylineb
 -eldoradd
 -eldoraddo
 -eldoraddoa
 -eldoraddob
+-eldoraddoc
+-f16s8l
 -feverch
+-fevercha
+-feverchtw
 -halltsk
 -jkrmast
 -jkrmasta
@@ -1055,6 +1066,8 @@ igs/goldstar.cpp          // fruit
 -pkrmasta
 -rolling
 -roypok96c
+-skillch
+-skillcha
 -srmagic
 -super7
 -super9
@@ -1062,6 +1075,8 @@ igs/goldstar.cpp          // fruit
 -super972
 -ss2001
 -tcl
+-top7
+-top7a
 -war3cb
 -wcat3
 -wcat3a
@@ -1907,10 +1922,12 @@ misc/carrera.cpp
 misc/cb2001.cpp          // fruit
 -cb4
 -cb5
+-cb5_11
 -crzybell
 -dynastye
 -mystjb
 -ndongmul2
+-nmondop
 -scherrym
 -scherrym12
 -scherrymp
@@ -2440,7 +2457,7 @@ misc/smsmcorp.cpp
 
 //misc/spdamjes.cpp          // no screen
 
-//misc/spool99.cpp          // poker, mnw
+misc/spool99.cpp          // poker
 
 misc/sprcros2.cpp
 
@@ -3183,6 +3200,7 @@ playmark/powerbal.cpp
 playmark/sderby.cpp
 -croupierb
 -magictch
+-magictcha
 
 playmark/sslam.cpp
 
