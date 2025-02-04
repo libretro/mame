@@ -155,22 +155,6 @@ if (SOUNDS["TIA"]~=null) then
 	}
 end
 
-
-
----------------------------------------------------
--- Amiga audio hardware
---@src/devices/machine/8364_paula.h,SOUNDS["PAULA_8364"] = true
----------------------------------------------------
-
-if (SOUNDS["PAULA_8364"]~=null) then
-	files {
-		MAME_DIR .. "src/devices/machine/8364_paula.cpp",
-		MAME_DIR .. "src/devices/machine/8364_paula.h",
-	}
-end
-
-
-
 ---------------------------------------------------
 -- Bally Astrocade sound system
 --@src/devices/sound/astrocde.h,SOUNDS["ASTROCADE"] = true
@@ -1425,18 +1409,6 @@ if (SOUNDS["AD1848"]~=null) then
 end
 
 ---------------------------------------------------
--- UPD1771
---@src/devices/sound/upd1771.h,SOUNDS["UPD1771"] = true
----------------------------------------------------
-
-if (SOUNDS["UPD1771"]~=null) then
-	files {
-		MAME_DIR .. "src/devices/sound/upd1771.cpp",
-		MAME_DIR .. "src/devices/sound/upd1771.h",
-	}
-end
-
----------------------------------------------------
 -- GB_SOUND
 --@src/devices/sound/gb.h,SOUNDS["GB_SOUND"] = true
 ---------------------------------------------------
@@ -1528,6 +1500,18 @@ if (SOUNDS["LC82310"]~=null) then
 	files {
 		MAME_DIR .. "src/devices/sound/lc82310.cpp",
 		MAME_DIR .. "src/devices/sound/lc82310.h",
+	}
+end
+
+---------------------------------------------------
+-- NEC uPD931
+--@src/devices/sound/upd931.h,SOUNDS["UPD931"] = true
+---------------------------------------------------
+
+if (SOUNDS["UPD931"]~=null) then
+	files {
+		MAME_DIR .. "src/devices/sound/upd931.cpp",
+		MAME_DIR .. "src/devices/sound/upd931.h",
 	}
 end
 

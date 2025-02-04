@@ -82,6 +82,8 @@ TODO:
 #include "emu.h"
 #include "dynax.h"
 
+#include "mjdipsw.h"
+
 #include "mahjong.h"
 
 #include "cpu/tlcs90/tlcs90.h"
@@ -1577,13 +1579,6 @@ INPUT_PORTS_END
 		PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_COIN1 )                                                                  /* Coin         */ \
 		PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_SERVICE1 )                                                               /* Service      */
 
-#define MAHJONG_ODDS_RATE(shift, loc) \
-		PORT_DIPNAME( 0x03 << shift, 0x00 << shift, "Odds Rate" ) PORT_DIPLOCATION(loc) \
-		PORT_DIPSETTING(             0x03 << shift, "1 2 4 8 12 16 24 32" ) \
-		PORT_DIPSETTING(             0x00 << shift, "1 2 3 5 8 15 30 50" ) \
-		PORT_DIPSETTING(             0x01 << shift, "1 2 3 5 10 25 50 100" ) \
-		PORT_DIPSETTING(             0x02 << shift, "1 2 3 5 10 50 100 200" )
-
 static INPUT_PORTS_START( cdracula )
 	PORT_START("P1")
 	PORT_BIT(  0x01, IP_ACTIVE_LOW, IPT_JOYSTICK_UP ) PORT_PLAYER(1)
@@ -1949,7 +1944,7 @@ static INPUT_PORTS_START( hjingi )
 //  PORT_DIPSETTING(    0x00, DEF_STR( ) )
 	PORT_DIPNAME( 0x08, 0x08, "Payout Variation" )           PORT_DIPLOCATION("DIPSW 2:4")        // 配当の波
 	PORT_DIPSETTING(    0x00, "Small" )                                                           // 小さい
-	PORT_DIPSETTING(    0x08, "Big" )                                                             // 大きい
+	PORT_DIPSETTING(    0x08, "Large" )                                                           // 大きい
 	PORT_DIPNAME( 0x10, 0x10, "Double-Up Game Payout Rate" ) PORT_DIPLOCATION("DIPSW 2:5")        // ＷＵＰゲーム配当率
 	PORT_DIPSETTING(    0x00, DEF_STR(Low) )                                                      // 低い
 	PORT_DIPSETTING(    0x10, DEF_STR(High) )                                                     // 高い
@@ -3040,7 +3035,7 @@ static INPUT_PORTS_START( mjelct3 )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 
 	PORT_START("DSW2")  /* 7c22 (select = 80) */
-	MAHJONG_YAKUMAN_BONUS(0, "SW2:1,2,3")
+	MAHJONG_YAKUMAN_BONUS(0, 0x04, "SW2:1,2,3")
 	PORT_DIPNAME( 0x08, 0x08, "Yakuman Bonuses Per Cycle" )    PORT_DIPLOCATION("SW2:4")
 	PORT_DIPSETTING(    0x08, "1" )
 	PORT_DIPSETTING(    0x00, "2" )
@@ -3167,7 +3162,7 @@ static INPUT_PORTS_START( mjelctrn )
 	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 
 	PORT_START("DSW2")  /* 7c22 (select = 80) */
-	MAHJONG_YAKUMAN_BONUS(0, "SW2:1,2,3")
+	MAHJONG_YAKUMAN_BONUS(0, 0x04, "SW2:1,2,3")
 	PORT_DIPNAME( 0x08, 0x08, "Yakuman Bonuses Per Cycle" )    PORT_DIPLOCATION("SW2:4")
 	PORT_DIPSETTING(    0x08, "1" )
 	PORT_DIPSETTING(    0x00, "2" )
@@ -3259,7 +3254,7 @@ static INPUT_PORTS_START( majxtal7 )
 	PORT_DIPSETTING(    0x00, DEF_STR(On) )
 
 	PORT_START("DSW2") /* select = 80 */
-	MAHJONG_YAKUMAN_BONUS(0, "DIP3:1,2,3")
+	MAHJONG_YAKUMAN_BONUS(0, 0x04, "DIP3:1,2,3")
 	PORT_DIPNAME( 0x08, 0x08, "Yakuman Bonuses Per Cycle" )    PORT_DIPLOCATION("DIP3:4")
 	PORT_DIPSETTING(    0x08, "1" )
 	PORT_DIPSETTING(    0x00, "2" )
@@ -3433,7 +3428,7 @@ static INPUT_PORTS_START( tenkai )
 	PORT_DIPSETTING(    0x08, "2" )                                                               // レート　２
 	PORT_DIPSETTING(    0x04, "3" )                                                               // レート　３
 	PORT_DIPSETTING(    0x00, "5" )                                                               // レート　５
-	MAHJONG_YAKUMAN_BONUS(4, "SW 2:5,6,7")                                                        // 役満ボーナスの設定周期
+	MAHJONG_YAKUMAN_BONUS(4, 0x04, "SW 2:5,6,7")                                                  // 役満ボーナスの設定周期
 	PORT_DIPNAME( 0x80, 0x00, "Yakuman Bonuses Per Cycle" )     PORT_DIPLOCATION("SW 2:8")        // 役満ボーナスの回数設定周期毎に
 	PORT_DIPSETTING(    0x00, "1" )                                                               // １回
 	PORT_DIPSETTING(    0x80, "2" )                                                               // ２回
@@ -3492,7 +3487,7 @@ static INPUT_PORTS_START( tenkai )
 
 	PORT_START("DSW4")  /* (top) */
 	MAHJONG_NOTE_CREDITS(0, "SW 1:9", "DSW1", 0)                                                  // ＮＯＴＥ　ＲＡＴＥ
-	PORT_DIPNAME( 0x02, 0x02, DEF_STR( Flip_Screen ) )          PORT_DIPLOCATION("SW 1:10")       // モニター画面反転
+	PORT_DIPNAME( 0x02, 0x02, DEF_STR(Flip_Screen) )            PORT_DIPLOCATION("SW 1:10")       // モニター画面反転
 	PORT_DIPSETTING(    0x02, DEF_STR(Off) )                                                      // 通常
 	PORT_DIPSETTING(    0x00, DEF_STR(On) )                                                       // 反転
 	PORT_DIPNAME( 0x04, 0x00, "Computer Strength" )             PORT_DIPLOCATION("SW 2:9")        // コンピューターの強さ
@@ -3604,7 +3599,7 @@ static INPUT_PORTS_START( mjreach )
 	PORT_DIPSETTING(    0x08, "2" )                                                                // レート２
 	PORT_DIPSETTING(    0x04, "3" )                                                                // レート３
 	PORT_DIPSETTING(    0x00, "5" )                                                                // レート５
-	MAHJONG_YAKUMAN_BONUS(4, "DIP-SW2:5,6,7")                                                      // 役満ボーナスチャンスの設定周期
+	MAHJONG_YAKUMAN_BONUS(4, 0x04, "DIP-SW2:5,6,7")                                                // 役満ボーナスチャンスの設定周期
 	PORT_DIPNAME( 0x80, 0x00, "Yakuman Bonuses Per Cycle" )     PORT_DIPLOCATION("DIP-SW2:8")      // 役満ボーナスの回数設定周期毎に
 	PORT_DIPSETTING(    0x00, "1" )                                                                // １回
 	PORT_DIPSETTING(    0x80, "2" )                                                                // ２回
@@ -3719,7 +3714,7 @@ static INPUT_PORTS_START( gekisha )
 	PORT_DIPSETTING(    0x00, "Active High" )
 
 	PORT_START("DSW3")  // $7c22
-	MAHJONG_YAKUMAN_BONUS(0, "SW3:1,2,3") // 役満ボーナスの設定
+	MAHJONG_YAKUMAN_BONUS(0, 0x04, "SW3:1,2,3") // 役満ボーナスの設定
 	PORT_DIPNAME( 0x08, 0x08, "Yakuman Bonuses Per Cycle" ) PORT_DIPLOCATION("SW3:4")// 役満ボーナスの回数設定周期毎に
 	PORT_DIPSETTING(    0x08, "1" ) // １回
 	PORT_DIPSETTING(    0x00, "2" ) // ２回
@@ -4354,12 +4349,12 @@ void jantouki_state::machine_reset()
 void jantouki_state::jantouki(machine_config &config)
 {
 	/* basic machine hardware */
-	Z80(config, m_maincpu, 22000000 / 4);   /* 5.5MHz */
+	Z80(config, m_maincpu, 22000000 / 8);   /* 2.75MHz */
 	m_maincpu->set_addrmap(AS_PROGRAM, &jantouki_state::jantouki_mem_map);
 	m_maincpu->set_addrmap(AS_IO, &jantouki_state::jantouki_io_map);
 	m_maincpu->set_irq_acknowledge_callback("mainirq", FUNC(rst_pos_buffer_device::inta_cb));   // IM 0 needs an opcode on the data bus
 
-	Z80(config, m_soundcpu, 22000000 / 4);  /* 5.5MHz */
+	Z80(config, m_soundcpu, 22000000 / 8);  /* 2.75MHz */
 	m_soundcpu->set_addrmap(AS_PROGRAM, &jantouki_state::jantouki_sound_mem_map);
 	m_soundcpu->set_addrmap(AS_IO, &jantouki_state::jantouki_sound_io_map);
 	m_soundcpu->set_irq_acknowledge_callback("soundirq", FUNC(rst_pos_buffer_device::inta_cb)); // IM 0 needs an opcode on the data bus
