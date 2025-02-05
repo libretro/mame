@@ -771,10 +771,6 @@ function toolchain(_buildDir, _subDir)
 		}
 	configuration { "libretro" }
 		targetdir (_buildDir .. "libretro" .. "/bin")
-		flags {
-			"Optimize",
-		}
-
 
 -- END   libretro overrides to MAME's GENie build
 
