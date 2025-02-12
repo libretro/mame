@@ -504,7 +504,7 @@ void retro_window_info::update()
 			/* Update retro_fps */
 			if (screen)
 			{
-				float screen_refresh = screen->frame_period().as_hz();
+				double screen_refresh = screen->frame_period().as_hz();
 
 				if (screen_refresh != retro_fps
 						&& screen_refresh <= 120.0f
