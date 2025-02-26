@@ -13,15 +13,6 @@ adp/adp.cpp                 // gambling
 
 //adp/stellafr.cpp          // fruit, no screen
 
-alba/albazg.cpp          // weird jp gambling
-
-//alba/hanadojo.cpp                    // black screen
-
-alba/rmhaihai.cpp          // mahjong
--rmhaihaibl
-
-alba/vsmjtria.cpp          // mahjong
-
 alliedleisure/ace.cpp
 
 //alliedleisure/aleisttl.cpp          // black screen
@@ -391,6 +382,7 @@ bmc/koftball.cpp          // weird inputs
 bmc/popobear.cpp
 -magkengo
 -magkengou
+-qiwang
 
 capcom/1942.cpp
 
@@ -411,6 +403,7 @@ capcom/cbasebal.cpp
 capcom/commando.cpp
 
 capcom/cps1.cpp
+-3wondersbi
 -pmonster
 -sf2amf
 -sf2stt
@@ -720,6 +713,8 @@ excellent/d9final.cpp          // gambling
 excellent/dblcrown.cpp          // poker
 
 //excellent/es9501.cpp                 // black screen
+
+//excellent/es8906.cpp                 // black screen
 
 excellent/gcpinbal.cpp
 
@@ -1140,6 +1135,7 @@ igs/pgm.cpp
 -kovlsqh
 -kovlsqh2
 -kovqhsgs
+-kovqhsgs302
 
 igs/pgm2.cpp
 -bubucar
@@ -1156,17 +1152,15 @@ igs/spoker.cpp          // poker, some mnw
 
 //igt/drw80pkr.cpp          // poker, need setup
 
+igt/fortune1.cpp          // poker
+
 //igt/gkigt.cpp          // mnw
 
 //igt/peplus.cpp          // fruit, how to use?
 
 //igt/splus.cpp          // fruit, mech, mnw
 
-igt/videopkr.cpp          // poker
--bpoker
-
 irem/m10.cpp
--ipminvad1
 
 irem/m107.cpp
 -kftgoal
@@ -1362,7 +1356,7 @@ konami/chqflag.cpp
 
 konami/circusc.cpp
 
-konami/cobra.cpp          // chd untested
+konami/cobra.cpp
 -racjamdx
 
 konami/combatsc.cpp
@@ -1921,6 +1915,7 @@ misc/carrera.cpp
 
 misc/cb2001.cpp          // fruit
 -cb4
+-cb4a
 -cb5
 -cb5_11
 -crzybell
@@ -2278,8 +2273,6 @@ misc/mirax.cpp
 
 misc/mjsenpu.cpp          // mahjong
 
-misc/mole.cpp
-
 misc/mosaic.cpp
 
 misc/mpu12wbk.cpp          // fruit
@@ -2460,11 +2453,6 @@ misc/smsmcorp.cpp
 misc/spool99.cpp          // poker
 
 misc/sprcros2.cpp
-
-misc/ssingles.cpp
--atamanot
-
-misc/sstrangr.cpp
 
 //misc/startouch.cpp          // chd, mnw
 
@@ -2991,6 +2979,7 @@ pc/pcat_nit.cpp            // use -mouse
 pc/tetriskr.cpp
 
 pce/ggconnie.cpp
+-bmanroul
 -fishingm
 -ggconnie
 -smf
@@ -3006,6 +2995,7 @@ philips/cdi.cpp        // chd, tested
 -cdi910
 -cdimono1
 -cdimono2
+-gpi1200
 -quizardi_10
 -quizardff
 
@@ -3211,6 +3201,7 @@ promat/3x3puzzl.cpp
 promat/gstream.cpp
 
 psikyo/psikyo.cpp
+-tengaibl
 
 psikyo/psikyo4.cpp
 
@@ -3794,11 +3785,15 @@ seibu/wiz.cpp
 
 seta/albazc.cpp
 
+seta/albazg.cpp          // weird jp gambling
+
 seta/champbwl.cpp
 
 seta/downtown.cpp
 
 seta/hanaawas.cpp
+
+//seta/hanadojo.cpp                    // black screen
 
 seta/jclub2.cpp          // gambling
 
@@ -3810,8 +3805,12 @@ seta/macs.cpp          // mahjong
 
 //seta/namcoeva.cpp      // no inputs
 
+seta/rmhaihai.cpp          // mahjong
+-rmhaihaibl
+
 seta/seta.cpp
 -inttoote
+-setaroulm
 -zingzipbl
 
 seta/seta2.cpp
@@ -3822,6 +3821,8 @@ seta/seta2.cpp
 seta/simple_st0016.cpp
 
 seta/speedatk.cpp
+-hanaren2
+-harashi
 
 seta/speglsht.cpp
 
@@ -3834,6 +3835,8 @@ seta/srmp6.cpp          // mahjong
 seta/ssv.cpp
 
 seta/thedealr.cpp          // poker
+
+seta/vsmjtria.cpp          // mahjong
 
 sigma/nyny.cpp
 
@@ -3940,8 +3943,6 @@ snk/snk6502.cpp
 snk/snk68.cpp
 
 sony/taitogn.cpp
--otenamhf
--sianniv
 
 sony/zn.cpp
 
@@ -4468,6 +4469,13 @@ wing/pinkiri8.cpp          // mahjong, bad gfx
 //wing/slotcarn.cpp          // fruit-poker, bad gfx
 
 wing/superwng.cpp
+
+yachiyo/mole.cpp
+
+yachiyo/ssingles.cpp
+-atamanot
+
+yachiyo/sstrangr.cpp
 
 yunsung/nmg5.cpp
 
