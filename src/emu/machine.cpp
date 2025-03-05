@@ -1394,6 +1394,7 @@ void running_machine::emscripten_load(const char *name) {
 //**************************************************************************
 
 #if defined(__LIBRETRO__)
+extern int POSTNOTIFY;
 extern int RLOOP;
 extern int ENDEXEC;
 
@@ -1418,7 +1419,12 @@ void running_machine::retro_loop()
 	// get most recent input now 
 	m_manager.osd().input_update(true);
 	// perform tasks for this frame
-	call_notifiers(MACHINE_NOTIFY_FRAME);
+	// except start using this "next frame input response" pre-frame notify
+	// after allowing a few startup frames for hiscore plugin to init properly
+	if (POSTNOTIFY)
+		POSTNOTIFY--;
+	else
+		call_notifiers(MACHINE_NOTIFY_FRAME);
 
 	while (RLOOP == 1)
 	{

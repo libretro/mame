@@ -29,6 +29,9 @@
 
 #include "rendersw.hxx"
 
+#if defined(__LIBRETRO__)
+extern int POSTNOTIFY;
+#endif
 
 //**************************************************************************
 //  DEBUGGING
@@ -257,7 +260,10 @@ void video_manager::frame_update(bool from_debugger)
 
 	if (!from_debugger)
 	{
-#if !defined(__LIBRETRO__)
+#if defined(__LIBRETRO__)
+		if (POSTNOTIFY)
+			machine().call_notifiers(MACHINE_NOTIFY_FRAME);
+#else
 		// perform tasks for this frame
 		machine().call_notifiers(MACHINE_NOTIFY_FRAME);
 #endif
