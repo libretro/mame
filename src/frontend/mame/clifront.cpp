@@ -1569,7 +1569,7 @@ void cli_frontend::verifysoftlist(const std::vector<std::string> &args)
 
 void cli_frontend::version(const std::vector<std::string> &args)
 {
-	osd_printf_info("%s", emulator_info::get_build_version());
+	osd_printf_info("%s\n", emulator_info::get_build_version());
 }
 
 
