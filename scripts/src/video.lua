@@ -1721,6 +1721,21 @@ if (VIDEOS["ZR36110"]~=null) then
 	}
 end
 
+--------------------------------------------------
+--
+--@src/devices/video/bt450.h,VIDEOS["BT450"] = true
+--------------------------------------------------
+
+if (VIDEOS["BT450"]~=null) then
+	files {
+		MAME_DIR .. "src/devices/video/bt450.cpp",
+		MAME_DIR .. "src/devices/video/bt450.h",
+	}
+end
+
+
+
+
 -- cv1k/ep1c12 subtarget hack
 if _OPTIONS["subtarget"]=="arcade" then
 	files {

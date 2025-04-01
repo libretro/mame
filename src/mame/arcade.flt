@@ -384,6 +384,24 @@ bmc/popobear.cpp
 -magkengou
 -qiwang
 
+bordun/att.cpp
+
+bordun/skylncr.cpp
+-blshark
+-miaction
+-olymp
+-score5
+-seadevil
+-sonikfig
+-spcliner
+-speedway
+-speedwaya
+-sstar97a
+-sstar97jb
+-superb2k
+-tigerslt
+-rolla
+
 capcom/1942.cpp
 
 capcom/1943.cpp
@@ -657,6 +675,7 @@ dynax/ddenlovr.cpp
 -momotaro
 
 dynax/dynax.cpp          // 99% mahjong
+-mjelct3bl
 -ougonhaib3
 -tenkai2b
 
@@ -676,6 +695,7 @@ dynax/royalmah.cpp          // mahjong
 -janohb
 
 edevices/diverboy.cpp
+-tumblebed
 
 edevices/fantland.cpp
 
@@ -1053,6 +1073,7 @@ igs/goldstar.cpp          // fruit
 -magoddsd
 -mbs2euro
 -megaline
+-mtonic2
 -nd8lines
 -nfm
 -nfma
@@ -1077,20 +1098,22 @@ igs/goldstar.cpp          // fruit
 -wcat3a
 -wcherry
 
-igs/igs009.cpp
+//igs/igs009.cpp
 
 igs/igs011.cpp
 
-igs/igs017.cpp
--jking302us
--slqz2a
--tarzan
--tarzana
+//igs/igs017.cpp
+//-jking302us
+//-slqz2a
+//-tarzan
+//-tarzana
 
 igs/igspoker.cpp          // poker
 -cpoker210ks
 -kungfua
 -stellecu
+
+//igs/igs_68k_023vid.cpp     // no inputs
 
 igs/igs_fear.cpp
 -icescape
@@ -1099,6 +1122,7 @@ igs/igs_m027.cpp
 -amazoni2
 -amazonia
 -amazonkp
+-cjddz213cn
 -extradrw
 -gonefsh2
 -klxyj
@@ -1109,6 +1133,9 @@ igs/igs_m027.cpp
 -sdwx
 
 igs/igs_m027_023vid.cpp
+
+igs/igs_m027_033vid.cpp
+-huahuas5
 
 //igs/igs_m027_link.cpp     // white screen or no screen
 
@@ -1130,6 +1157,7 @@ igs/lordgun.cpp
 igs/pgm.cpp
 -dmnfrntpcb
 -martmasttw
+-kovgsyx
 -kovlsjb
 -kovlsjba
 -kovlsqh
@@ -1142,13 +1170,17 @@ igs/pgm2.cpp
 
 //igs/pgm3.cpp          // chd, mnw
 
-igs/spoker.cpp          // poker, some mnw
--jinhulu2
--spk102ua
--spk200ua
--spk201ua
--spk203us
--spk205us
+//igs/spoker.cpp          // poker, some mnw
+//-cjdh6
+//-jinhulu2
+//-jinhulu2100gi
+//-jinhulu2120gi
+//-jinhulu2101is
+//-spk102ua
+//-spk200ua
+//-spk201ua
+//-spk203us
+//-spk205us
 
 //igt/drw80pkr.cpp          // poker, need setup
 
@@ -1429,6 +1461,7 @@ konami/konamigv.cpp          // chd untested
 -btchamp
 
 konami/konamigx.cpp
+-sexyparoebl
 
 konami/konamim2.cpp          // chd
 -totlvica
@@ -2424,20 +2457,6 @@ misc/shangkid.cpp
 misc/skimaxx.cpp
 
 misc/skyarmy.cpp
-
-misc/skylncr.cpp
--blshark
--miaction
--olymp
--score5
--seadevil
--sonikfig
--spcliner
--speedway
--speedwaya
--superb2k
--tigerslt
--rolla
 
 misc/sliver.cpp          // adult
 
@@ -3819,6 +3838,7 @@ seta/seta2.cpp
 -staraudi
 
 seta/simple_st0016.cpp
+-crownpkr
 
 seta/speedatk.cpp
 -hanaren2
@@ -3880,13 +3900,15 @@ sigma/spiders.cpp
 
 //skeleton/extrema_m27sv.cpp      // black screen
 
-//skeleton/falconun.cpp                // black screen
+//skeleton/falconun.cpp           // black screen
 
 //skeleton/flashvga2.cpp          // black screen
 
 //skeleton/ganbaremo.cpp          // no screen
 
 //skeleton/happyvideo.cpp         // no screen
+
+//skeleton/huangyeh_m68k.cpp      // black screen
 
 //skeleton/kkcount.cpp            // no screen
 
@@ -3904,15 +3926,19 @@ sigma/spiders.cpp
 
 //skeleton/seoul88.cpp            // bad gfx&inputs
 
+//skeleton/sgm.cpp                // black screen
+
 //skeleton/sterz80.cpp            // black screen
 
 //skeleton/syvg.cpp               // black screen
 
 //skeleton/ticz80.cpp             // black screen
 
+//skeleton/turnierdart.cpp        // no screen
+
 //skeleton/tvcobrasd.cpp          // no screen
 
-//skeleton/venteta.cpp                 // black screen
+//skeleton/venteta.cpp            // black screen
 
 //skeleton/vgame.cpp              // black screen
 
@@ -4207,12 +4233,16 @@ taito/wgp.cpp          // bad text colours
 
 taito/wyvernf0.cpp
 
+tatsumi/apache3.cpp     
+
+tatsumi/cyclwarr.cpp    
+
 tatsumi/kingdrby.cpp          // gambling
 -cowrace
 
 tatsumi/lockon.cpp
 
-tatsumi/tatsumi.cpp
+tatsumi/roundup5.cpp    
 
 tatsumi/tx1.cpp
 
@@ -4374,9 +4404,6 @@ universal/cosmic.cpp
 universal/cosmicg.cpp
 
 universal/docastle.cpp
--asoccer
--idsoccera
--idsoccert
 
 universal/getaway.cpp
 

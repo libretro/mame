@@ -49,6 +49,7 @@ TODO:
 #include "bus/spectrum/zxbus.h"
 #include "cpu/z80/z84c015.h"
 #include "machine/ds128x.h"
+#include "machine/input_merger.h"
 #include "sound/ay8910.h"
 #include "sound/dac.h"
 
@@ -80,6 +81,7 @@ public:
 		: spectrum_128_state(mconfig, type, tag)
 		, m_maincpu(*this, "maincpu")
 		, m_isa(*this, "isa%u", 0U)
+		, m_irqs(*this, "irqs")
 		, m_rtc(*this, "rtc")
 		, m_ata(*this, "ata%u", 1U)
 		, m_beta(*this, BETA_DISK_TAG)
@@ -207,6 +209,7 @@ private:
 	u8 kbd_fe_r(offs_t offset);
 	void on_kbd_data(int state);
 
+	required_device<input_merger_device> m_irqs;
 	required_device<ds12885_device> m_rtc;
 	required_device_array<ata_interface_device, 2> m_ata;
 	required_device<beta_disk_device> m_beta;
@@ -220,7 +223,6 @@ private:
 	required_device<device_palette_interface> m_palette;
 	required_device<gfxdecode_device> m_gfxdecode;
 	tilemap_t *m_tilemap;
-	memory_region *m_rom;
 	memory_share_creator<u8> m_vram;
 	memory_share_creator<u8> m_fastram;
 	memory_bank_creator m_bank0_fastram;
@@ -295,7 +297,6 @@ private:
 	bool m_cbl_wae;
 	emu_timer *m_cbl_timer = nullptr;
 	emu_timer *m_acc_timer = nullptr;
-	bool m_hold_irq;
 };
 
 void sprinter_state::update_memory()
@@ -788,8 +789,7 @@ void sprinter_state::dcp_w(offs_t offset, u8 data)
 		else
 		{
 			rate = attotime::never;
-			if (m_hold_irq)
-				m_irq_off_timer->adjust(attotime::zero);
+			m_irqs->in_clear<2>();
 		}
 		m_cbl_timer->adjust(rate, 0, rate);
 		break;
@@ -1457,13 +1457,12 @@ void sprinter_state::machine_start()
 	save_item(NAME(m_cbl_cnt));
 	save_item(NAME(m_cbl_wa));
 	save_item(NAME(m_cbl_wae));
-	save_item(NAME(m_hold_irq));
 
 	m_beta->enable();
 
 	// reconfigure ROMs
-	m_rom = memregion("maincpu");
-	m_bank_rom[0]->configure_entries(0, m_rom->bytes() / 0x4000, m_rom->base(), 0x4000);
+	memory_region *rom = memregion("maincpu");
+	m_bank_rom[0]->configure_entries(0, rom->bytes() / 0x4000, rom->base(), 0x4000);
 	m_bank0_fastram->configure_entries(0, m_fastram.bytes() / 0x4000, m_fastram.target(), 0x4000);
 	for (auto i = 0; i < 4; i++)
 		m_bank_ram[i]->configure_entries(0, m_ram->size() / 0x4000, m_ram->pointer(), 0x4000);
@@ -1517,7 +1516,6 @@ void sprinter_state::machine_reset()
 
 	m_cbl_xx = 0;
 	m_cbl_wa = 0;
-	m_hold_irq = 0;
 
 	m_ata_selected = 0;
 
@@ -1644,7 +1642,10 @@ void sprinter_state::on_kbd_data(int state)
 		m_kbd_data_cnt++;
 		m_kbd_data_cnt %= 11;
 		if (!m_kbd_data_cnt)
-			irq_on(0);
+		{
+			m_irqs->in_set<1>();
+			m_irq_off_timer->adjust(attotime::from_ticks(32, m_maincpu->unscaled_clock()));
+		}
 	}
 }
 
@@ -1660,20 +1661,17 @@ void sprinter_state::do_mem_wait(u8 cpu_taken = 0)
 
 TIMER_CALLBACK_MEMBER(sprinter_state::irq_on)
 {
-	if (!m_hold_irq)
-	{
-		m_joy1_ctrl = m_joy2_ctrl = 0;
-		m_maincpu->set_input_line(INPUT_LINE_IRQ0, ASSERT_LINE);
-		m_irq_off_timer->adjust(attotime::from_ticks(32, m_maincpu->unscaled_clock()));
-	}
+	m_irqs->in_set<0>();
+	m_irq_off_timer->adjust(attotime::from_ticks(32, m_maincpu->unscaled_clock()));
+
+	m_joy1_ctrl = m_joy2_ctrl = 0;
 	update_int(false);
 }
 
 TIMER_CALLBACK_MEMBER(sprinter_state::irq_off)
 {
-	m_irq_off_timer->reset(); // in case it's called from INT Ack, not by timer itself
-	m_hold_irq = 0;
-	m_maincpu->set_input_line(INPUT_LINE_IRQ0, CLEAR_LINE);
+	m_irqs->in_clear<0>(); // screen
+	m_irqs->in_clear<1>(); // keyboard
 }
 
 TIMER_CALLBACK_MEMBER(sprinter_state::cbl_tick)
@@ -1691,9 +1689,7 @@ TIMER_CALLBACK_MEMBER(sprinter_state::cbl_tick)
 	if (cbl_int_ena() && !(m_cbl_cnt & 0x7f))
 	{
 		m_cbl_wa = m_cbl_cnt ^ 0x80;
-		m_hold_irq = 1;
-		m_maincpu->set_input_line(INPUT_LINE_IRQ0, ASSERT_LINE);
-		m_irq_off_timer->reset();
+		m_irqs->in_set<2>();
 	}
 }
 
@@ -1883,13 +1879,17 @@ void sprinter_state::sprinter(machine_config &config)
 
 	m_ram->set_default_size("64M");
 
+	INPUT_MERGER_ANY_HIGH(config, m_irqs).output_handler().set_inputline(m_maincpu, INPUT_LINE_IRQ0);
+
 	Z84C015(config.replace(), m_maincpu, X_SP / 12); // 3.5MHz default
 	m_maincpu->set_m1_map(&sprinter_state::map_fetch);
 	m_maincpu->set_memory_map(&sprinter_state::map_mem);
 	m_maincpu->set_io_map(&sprinter_state::map_io);
 	m_maincpu->nomreq_cb().set_nop();
 	m_maincpu->set_irq_acknowledge_callback(NAME([](device_t &, int){ return 0xff; }));
-	m_maincpu->irqack_cb().set(FUNC(sprinter_state::irq_off));
+	m_maincpu->irqack_cb().set(m_irqs, FUNC(input_merger_any_high_device::in_clear<2>));
+	m_maincpu->irqack_cb().append(m_irqs, FUNC(input_merger_any_high_device::in_clear<1>));
+	m_maincpu->irqack_cb().append(m_irqs, FUNC(input_merger_any_high_device::in_clear<0>));
 
 	DS12885(config, m_rtc, XTAL(32'768)); // should be DS12887A
 	ATA_INTERFACE(config, m_ata[0]).options(sprinter_ata_devices, "hdd", "hdd", false);
