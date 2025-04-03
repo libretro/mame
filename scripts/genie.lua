@@ -891,7 +891,7 @@ if _OPTIONS["OPTIMIZE"] then
 	if _OPTIONS["LTO"]=="1" then
 		buildoptions {
 -- windows native mingw GCC 5.2 fails with -flto=x with x > 1. bug unfixed as of this commit
-			"-flto=1",
+			"-flto=auto",
 -- if ld fails, just buy more RAM or uncomment this!
 --          "-Wl,-no-keep-memory",
 			"-Wl,-v",
@@ -914,7 +914,7 @@ if _OPTIONS["OPTIMIZE"] then
 		}
 -- same flags are needed by linker
 		linkoptions {
-			"-flto=1",
+			"-flto=auto",
 --          "-Wl,-no-keep-memory",
 			"-Wl,-v",
 			"-Wl,-allow-multiple-definition",

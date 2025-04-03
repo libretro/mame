@@ -1,11 +1,15 @@
 
 VERBOSE ?= 1
+RETRO ?= 1
 NOWERROR ?= 1
 CONFIG ?= libretro
 NO_USE_MIDI ?= 1
 NO_USE_PORTAUDIO ?= 1
 PTR64 ?= 1
 TARGET ?= mame
+SUBTARGET ?= mess
+SOURCES ?= src/mame/philips/cdi.cpp
+SAME_SYSTEM ?= same_cdi
 # OS ?= linux
 # TARGETOS ?= linux
 PYTHON_EXECUTABLE ?= python3
@@ -85,7 +89,7 @@ endif
 #
 ###########################################################################
 
-BUILDFLAGS = REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD=retro NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
+BUILDFLAGS = RETRO=$(RETRO) REGENIE=$(REGENIE) VERBOSE=$(VERBOSE) NOWERROR=$(NOWERROR) OSD=retro NO_USE_MIDI=$(NO_USE_MIDI) NO_USE_PORTAUDIO=$(NO_USE_PORTAUDIO)
 
 ifneq ($(PYTHON_EXECUTABLE),)
 	BUILDFLAGS += PYTHON_EXECUTABLE=$(PYTHON_EXECUTABLE)
@@ -94,7 +98,7 @@ ifeq ($(DEBUG),1)
 	BUILDFLAGS += CONFIG=libretrodbg
 	BUILDFLAGS += SYMBOLS=1 SYMLEVEL=1 OPTIMIZE=g
 else
-	BUILDFLAGS += CONFIG=libretro
+	BUILDFLAGS += CONFIG=libretro OPTIMIZE=2 LTO=1
 endif
 
 ###########################################################################
@@ -319,6 +323,15 @@ all: build
 
 build:
 	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS)
+
+	@echo "Renaming compiled target"
+	@mv $(SUBTARGET)_libretro.dylib $(SAME_SYSTEM)_libretro.dylib 2> /dev/null || true
+	@mv $(SUBTARGET)_libretro_ios.dylib $(SAME_SYSTEM)_libretro_ios.dylib 2> /dev/null || true
+	@mv $(SUBTARGET)_libretro_tvos.dylib $(SAME_SYSTEM)_libretro_tvos.dylib 2> /dev/null || true
+	@mv $(SUBTARGET)_libretro.dll $(SAME_SYSTEM)_libretro.dll 2> /dev/null || true
+	@mv $(SUBTARGET)_libretro.so $(SAME_SYSTEM)_libretro.so 2> /dev/null || true
+	@mv $(SUBTARGET)_libretro_android.so $(SAME_SYSTEM)_libretro_android.so 2> /dev/null || true
+	@echo "Done!"
 
 vs2019:
 	$(MAKE) $(BUILDFLAGS) $(PLATFLAGS) $(TARGETFLAGS) vs2019
