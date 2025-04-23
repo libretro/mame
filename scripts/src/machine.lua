@@ -55,8 +55,6 @@ files {
 	MAME_DIR .. "src/devices/imagedev/magtape.h",
 	MAME_DIR .. "src/devices/imagedev/memcard.cpp",
 	MAME_DIR .. "src/devices/imagedev/memcard.h",
-	MAME_DIR .. "src/devices/imagedev/mfmhd.cpp",
-	MAME_DIR .. "src/devices/imagedev/mfmhd.h",
 	MAME_DIR .. "src/devices/imagedev/microdrv.cpp",
 	MAME_DIR .. "src/devices/imagedev/microdrv.h",
 	MAME_DIR .. "src/devices/imagedev/midiin.cpp",
