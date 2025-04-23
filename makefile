@@ -500,36 +500,21 @@ endif
 # which 3rdparty library to build;
 #  link against system (common) library otherwise
 #-------------------------------------------------
+PARAMS += --with-system-zlib='1'
+PARAMS += --with-system-zstd='1'
+PARAMS += --with-system-flac='1'
+PARAMS += --with-system-rapidjson='1'
+PARAMS += --with-system-pugixml='1'
+PARAMS += --with-system-sqlite3='1'
+PARAMS += --with-system-expat='1'
+PARAMS += --with-system-jpeg='1'
+
 ifdef USE_SYSTEM_LIB_ASIO
 PARAMS += --with-system-asio='$(USE_SYSTEM_LIB_ASIO)'
 endif
 
-ifdef USE_SYSTEM_LIB_EXPAT
-PARAMS += --with-system-expat='$(USE_SYSTEM_LIB_EXPAT)'
-endif
-
-ifdef USE_SYSTEM_LIB_ZLIB
-PARAMS += --with-system-zlib='$(USE_SYSTEM_LIB_ZLIB)'
-endif
-
-ifdef USE_SYSTEM_LIB_ZSTD
-PARAMS += --with-system-zstd='$(USE_SYSTEM_LIB_ZSTD)'
-endif
-
-ifdef USE_SYSTEM_LIB_JPEG
-PARAMS += --with-system-jpeg='$(USE_SYSTEM_LIB_JPEG)'
-endif
-
-ifdef USE_SYSTEM_LIB_FLAC
-PARAMS += --with-system-flac='$(USE_SYSTEM_LIB_FLAC)'
-endif
-
 ifdef USE_SYSTEM_LIB_LUA
 PARAMS += --with-system-lua='$(USE_SYSTEM_LIB_LUA)'
-endif
-
-ifdef USE_SYSTEM_LIB_SQLITE3
-PARAMS += --with-system-sqlite3='$(USE_SYSTEM_LIB_SQLITE3)'
 endif
 
 ifdef USE_SYSTEM_LIB_PORTMIDI
@@ -548,13 +533,6 @@ ifdef USE_SYSTEM_LIB_GLM
 PARAMS += --with-system-glm='$(USE_SYSTEM_LIB_GLM)'
 endif
 
-ifdef USE_SYSTEM_LIB_RAPIDJSON
-PARAMS += --with-system-rapidjson='$(USE_SYSTEM_LIB_RAPIDJSON)'
-endif
-
-ifdef USE_SYSTEM_LIB_PUGIXML
-PARAMS += --with-system-pugixml='$(USE_SYSTEM_LIB_PUGIXML)'
-endif
 
 
 ifdef LIBRETRO_OS
