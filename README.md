@@ -1,3 +1,7 @@
+# **CDi core for libretro based off libretro-mame** #
+
+This is a standalone libretro core emulating Philips CD-i machines specially tailored for REG-Linux system.
+
 # **Notice** #
 
 Before sending bug reports to the this bug tracker, make sure the bugs are reproducible in the latest standalone release.
