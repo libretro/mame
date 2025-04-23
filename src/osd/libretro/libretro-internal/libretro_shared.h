@@ -23,7 +23,7 @@
 #define PIXEL_TYPE UINT16
 #endif
 
-#define CORE_NAME "mame"
+#define CORE_NAME "same_cdi"
 #define RETRO_PATH_MAX 512
 
 enum
