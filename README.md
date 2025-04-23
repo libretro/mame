@@ -1,8 +1,12 @@
-# **Libretro notice** #
+# **CDi core for libretro based off libretro-mame** #
 
-Before sending bug reports to the upstream bug tracker, make sure the bugs are reproducible in the latest standalone release.
+This is a standalone libretro core emulating Philips CD-i machines specially tailored for REG-Linux system.
 
-To build libretro MAME core from source you need to use `Makefile.libretro` make file:
+# **Notice** #
+
+Before sending bug reports to the this bug tracker, make sure the bugs are reproducible in the latest standalone release.
+
+To build libretro CDi core from source you need to use `Makefile.libretro` make file:
 
 ```
 make -f Makefile.libretro
