@@ -375,9 +375,9 @@ bfm/rastersp.cpp
 bmc/bmcbowl.cpp
 
 bmc/bmcpokr.cpp          // poker, majong
+-dbshahb
 
 bmc/koftball.cpp          // weird inputs
--jxzh
 
 bmc/popobear.cpp
 -magkengo
@@ -388,6 +388,8 @@ bordun/att.cpp
 
 bordun/skylncr.cpp
 -blshark
+-dbsha
+-hongmayi
 -miaction
 -olymp
 -score5
@@ -692,6 +694,7 @@ dynax/royalmah.cpp          // mahjong
 -dragonmj
 -dragonmj103
 -ichiban
+-ichiban235
 -janohb
 
 edevices/diverboy.cpp
@@ -1089,6 +1092,8 @@ igs/goldstar.cpp          // fruit
 -super9
 -super9a
 -super972
+-ss2000
+-ss2000a
 -ss2001
 -tcl
 -top7
@@ -1122,7 +1127,9 @@ igs/igs_m027.cpp
 -amazoni2
 -amazonia
 -amazonkp
+-ccly
 -cjddz213cn
+-cjdh6th
 -extradrw
 -gonefsh2
 -klxyj
@@ -1801,11 +1808,12 @@ midway/midyunit.cpp
 
 midway/midzeus.cpp
 -crusnexo
--crusnexod
--crusnexoc
--crusnexob
 -crusnexoa
 -crusnexoaa
+-crusnexob
+-crusnexoc
+-crusnexod
+-crusnexoe
 -thegridb
 
 //midway/mw18w.cpp          // mech, works
@@ -2343,9 +2351,13 @@ misc/norautp.cpp          // poker
 -fastdrwp
 -gtipoker
 -gtipokra
--smshilo
+-gtipokrb
+-hilokimb
 -kimbldhl
 -kimblz80
+-krampcb3
+-krampcb4
+-krampcb6
 -newhilop
 -noraut3a
 -noraut3b
@@ -2354,8 +2366,14 @@ misc/norautp.cpp          // poker
 -norautub
 -pkii_dm
 -pma
+-pokplus
+-pokplusa
+-pokplusb
+-smshilo
 -ssjkrpkr
 -tpoker2
+-tpoker2a
+-tpoker2b
 -unkljfpk
 
 //misc/notechan.cpp          // black screen
@@ -2374,6 +2392,8 @@ misc/onetwo.cpp
 //misc/opercoin.cpp          // no screen
 
 misc/pachifev.cpp
+
+misc/paracaidista.cpp     
 
 misc/pasha2.cpp
 -zdrum
@@ -2734,6 +2754,8 @@ namco/polepos.cpp
 namco/rallyx.cpp
 
 //namco/rbowlorama.cpp          // black screen
+
+//namco/sg_vga.cpp                     // black screen
 
 //namco/shootaway2.cpp          // black screen
 
@@ -3269,6 +3291,8 @@ sanritsu/mjkjidai.cpp          // mahjong
 sanritsu/ron.cpp          // mahjong
 
 //sealy/sealy.cpp          // black screen
+
+//sealy/sealy_8031.cpp                 // black screen
 
 //sealy/sealy_eagle.cpp          // black screen
 
@@ -3833,8 +3857,9 @@ seta/seta.cpp
 -zingzipbl
 
 seta/seta2.cpp
--namcostr
 -ablastb
+-blnctry
+-namcostr
 -staraudi
 
 seta/simple_st0016.cpp
@@ -3876,6 +3901,8 @@ sigma/spiders.cpp
 
 //skeleton/banpresto_tomy_h8s.cpp // black screen
 
+//skeleton/biorhythm.cpp               // no screen
+
 //skeleton/bolsaint.cpp           // no screen
 
 //skeleton/boo.cpp                // black screen
@@ -3910,6 +3937,8 @@ sigma/spiders.cpp
 
 //skeleton/huangyeh_m68k.cpp      // black screen
 
+//skeleton/iam2.cpp                    // black screen
+
 //skeleton/kkcount.cpp            // no screen
 
 //skeleton/lgtz80.cpp             // black screen
@@ -3917,6 +3946,8 @@ sigma/spiders.cpp
 //skeleton/madmoney2.cpp          // no screen
 
 //skeleton/minihock.cpp           // no screen
+
+//skeleton/paipaile.cpp                // black screen
 
 //skeleton/palsystems_sh2.cpp     // black screen
 
@@ -3928,9 +3959,13 @@ sigma/spiders.cpp
 
 //skeleton/sgm.cpp                // black screen
 
+//skeleton/shoken_md06.cpp             // no screen
+
 //skeleton/sterz80.cpp            // black screen
 
 //skeleton/syvg.cpp               // black screen
+
+//skeleton/testlove.cpp                // no screen
 
 //skeleton/ticz80.cpp             // black screen
 
@@ -4036,6 +4071,8 @@ sunelectronics/shangha3.cpp
 sunelectronics/shanghai.cpp
 
 //sunwise/anoworld.cpp         // black screen
+
+//sunwise/jankmg2.cpp                  // no screen
 
 sunwise/jankenmn.cpp
 
