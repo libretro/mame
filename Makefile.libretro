@@ -214,6 +214,7 @@ ifeq ($(platform),osx)
 		LIBRETRO_APPLE_ISYSROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
 		ARCHOPTS =-target $(LIBRETRO_APPLE_PLATFORM) -isysroot $(LIBRETRO_APPLE_ISYSROOT)
 		PLATFLAGS +=PLATFORM=x64
+		PLATFLAGS +=NOASM=1
 		#we dont need to pass -arch as i fixed the condition and there and arm is added from upstream in the last pull req.
 		#There is no variable in the lua scrip to disable it the other platfrom will follow suit and just use PLATFORM when we are up and running.
 	endif
