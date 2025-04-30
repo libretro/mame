@@ -92,6 +92,10 @@ function osdmodulesbuild()
 		MAME_DIR .. "src/osd/modules/sound/none.cpp",
 	}
 
+	includedirs {
+		MAME_DIR .. "3rdparty/asio/include",
+	}
+
 	if _OPTIONS["targetos"]=="windows" then
 		includedirs {
 			MAME_DIR .. "3rdparty/winpcap/Include",
