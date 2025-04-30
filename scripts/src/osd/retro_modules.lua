@@ -50,8 +50,6 @@ function osdmodulesbuild()
 	}
 
 	files {
-		MAME_DIR .. "src/osd/osdnet.cpp",
-		MAME_DIR .. "src/osd/osdnet.h",
 		MAME_DIR .. "src/osd/watchdog.cpp",
 		MAME_DIR .. "src/osd/watchdog.h",
 		MAME_DIR .. "src/osd/interface/inputcode.h",
@@ -93,9 +91,6 @@ function osdmodulesbuild()
 		MAME_DIR .. "src/osd/modules/sound/sound_module.h",
 		MAME_DIR .. "src/osd/modules/sound/none.cpp",
 	}
-	includedirs {
-		MAME_DIR .. "3rdparty/asio/include",
-	}
 
 	if _OPTIONS["targetos"]=="windows" then
 		includedirs {
@@ -115,15 +110,6 @@ function osdmodulesbuild()
 		"IMGUI_DISABLE_OBSOLETE_FUNCTIONS",
 	}
 
-	files {
-		--MAME_DIR .. "src/osd/modules/render/aviwrite.cpp",
-		--MAME_DIR .. "src/osd/modules/render/aviwrite.h",
-	}
-	includedirs {
-		MAME_DIR .. "3rdparty/bx/include",
-		MAME_DIR .. "3rdparty/rapidjson/include",
-	}
-
 	defines {
         "NO_USE_MIDI",
         "NO_USE_PORTAUDIO",
@@ -136,7 +122,6 @@ end
 
 
 function osdmodulestargetconf()
-
 
 	if _OPTIONS["targetos"]=="windows" then
 		links {
