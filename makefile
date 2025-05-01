@@ -550,6 +550,9 @@ ifdef DONT_USE_NETWORK
 PARAMS += --DONT_USE_NETWORK=$(DONT_USE_NETWORK)
 endif
 
+ifeq '$(CONFIG)' 'libretro'
+TOOLCHAIN :=
+endif
 
 ifdef TOOLCHAIN
 PARAMS += --TOOLCHAIN='$(TOOLCHAIN)'
