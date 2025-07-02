@@ -358,6 +358,8 @@ public:
 	void jkrmast_portmap(address_map &map) ATTR_COLD;
 	void pkrmast_portmap(address_map &map) ATTR_COLD;
 	void ramdac_map(address_map &map) ATTR_COLD;
+	void super7_map(address_map &map) ATTR_COLD;
+	void super9_map(address_map &map) ATTR_COLD;
 	void wcat3_map(address_map &map) ATTR_COLD;
 	void wcherry_map(address_map &map) ATTR_COLD;
 	void wcherry_readwriteport(address_map &map) ATTR_COLD;
@@ -483,7 +485,6 @@ public:
 	void amcoe2(machine_config &config);
 	void amcoe1(machine_config &config);
 	void chryangl(machine_config &config);
-	void ss2001(machine_config &config);
 	void super7(machine_config &config);
 	void animalhs(machine_config &config);
 	void eldoraddoa(machine_config &config);
@@ -504,7 +505,6 @@ public:
 	void nfm_portmap(address_map &map) ATTR_COLD;
 	void super7_portmap(address_map &map) ATTR_COLD;
 	void chryangl_decrypted_opcodes_map(address_map &map) ATTR_COLD;
-	void ss2001_portmap(address_map &map) ATTR_COLD;
 
 protected:
 	// installed by various driver init handlers to get stuff to work
@@ -579,7 +579,8 @@ public:
 	void bingownga(machine_config &config);
 	void mbstar(machine_config &config);
 	void flam7_tw(machine_config &config);
-	//void magodds_map(address_map &map) ATTR_COLD;
+	void animalw(machine_config &config);
+	void animalwa(machine_config &config);
 
 protected:
 	TILE_GET_INFO_MEMBER(get_magical_fg_tile_info);
@@ -599,6 +600,8 @@ private:
 	void nd8lines_map(address_map &map) ATTR_COLD;
 	void magodds_map(address_map &map) ATTR_COLD;
 	void luckybar_map(address_map &map) ATTR_COLD;
+	void animalw_map(address_map &map) ATTR_COLD;
+	void animalwa_map(address_map &map) ATTR_COLD;
 };
 
 
@@ -1677,6 +1680,39 @@ void goldstar_state::goldstar_readport(address_map &map)
 	map(0x10, 0x10).portr("DSW6");
 }
 
+void goldstar_state::super9_map(address_map &map)
+{
+	map(0x0000, 0xb7ff).rom();
+	map(0xb800, 0xbfff).ram().share("nvram");
+	map(0xc000, 0xc7ff).rom();
+	map(0xc800, 0xcfff).ram().w(FUNC(goldstar_state::fg_vidram_w)).share("fg_vidram");
+	map(0xd000, 0xd7ff).ram().w(FUNC(goldstar_state::fg_atrram_w)).share("fg_atrram");
+	map(0xd800, 0xd9ff).ram().w(FUNC(goldstar_state::goldstar_reel1_ram_w)).share("reel1_ram");
+	map(0xe000, 0xe1ff).ram().w(FUNC(goldstar_state::goldstar_reel2_ram_w)).share("reel2_ram");
+	map(0xe800, 0xe9ff).ram().w(FUNC(goldstar_state::goldstar_reel3_ram_w)).share("reel3_ram");
+	map(0xf040, 0xf07f).ram().share("reel1_scroll");
+	map(0xf080, 0xf0bf).ram().share("reel2_scroll");
+	map(0xf0c0, 0xf0ff).ram().share("reel3_scroll");
+
+	map(0xf800, 0xf800).portr("IN1");
+	map(0xf801, 0xf801).portr("IN2");    // Test Mode
+	map(0xf802, 0xf802).portr("DSW1");
+//  map(0xf803, 0xf803)
+//  map(0xf804, 0xf804)
+	map(0xf805, 0xf805).portr("DSW4");   // DSW 4 (also appears in 8910 port)
+	map(0xf806, 0xf806).portr("IN1");
+	map(0xf810, 0xf810).portr("DSW5");
+	map(0xf811, 0xf811).portr("IN0");
+	map(0xf820, 0xf820).portr("DSW2");
+	map(0xf830, 0xf830).rw("aysnd", FUNC(ay8910_device::data_r), FUNC(ay8910_device::data_w));
+	map(0xf840, 0xf840).w("aysnd", FUNC(ay8910_device::address_w));
+	map(0xf900, 0xf900).w(FUNC(goldstar_state::p1_lamps_w));
+	map(0xfa00, 0xfa00).w(FUNC(goldstar_state::goldstar_fa00_w));
+	map(0xfb00, 0xfb00).rw("oki", FUNC(okim6295_device::read), FUNC(okim6295_device::write));
+	map(0xfc00, 0xfdff).rom();
+	map(0xfe00, 0xfeff).ram().w(m_palette, FUNC(palette_device::write8)).share("palette"); // TODO: where's the palette
+	map(0xff00, 0xffff).ram();
+}
 
 void sanghopm_state::star100_map(address_map &map)
 {
@@ -2092,6 +2128,28 @@ void goldstar_state::cm_map(address_map &map)
 	map(0xfc80, 0xffff).ram();
 }
 
+void goldstar_state::super7_map(address_map &map)
+{
+	map(0x0000, 0xcfff).rom().nopw();
+
+	map(0xd000, 0xdfff).ram().share("nvram"); // double the size if compared to cmaster
+
+	map(0xe000, 0xe7ff).ram().w(FUNC(goldstar_state::fg_vidram_w)).share("fg_vidram");
+	map(0xe800, 0xefff).ram().w(FUNC(goldstar_state::fg_atrram_w)).share("fg_atrram");
+
+	map(0xf000, 0xf1ff).ram().w(FUNC(goldstar_state::goldstar_reel1_ram_w)).share("reel1_ram");
+	map(0xf200, 0xf3ff).ram().w(FUNC(goldstar_state::goldstar_reel2_ram_w)).share("reel2_ram");
+	map(0xf400, 0xf5ff).ram().w(FUNC(goldstar_state::goldstar_reel3_ram_w)).share("reel3_ram");
+	map(0xf600, 0xf7ff).ram();
+
+	map(0xf800, 0xf87f).ram().share("reel1_scroll");
+	map(0xf880, 0xf9ff).ram();
+	map(0xfa00, 0xfa7f).ram().share("reel2_scroll");
+	map(0xfa80, 0xfbff).ram();
+	map(0xfc00, 0xfc7f).ram().share("reel3_scroll");
+	map(0xfc80, 0xffff).ram();
+}
+
 void goldstar_state::jkrmast_map(address_map &map)
 {
 	map(0x0000, 0xcfff).rom().nopw();
@@ -2224,10 +2282,16 @@ void cmaster_state::cm_portmap(address_map &map)
 
 void cmaster_state::super7_portmap(address_map &map)
 {
-	cm_portmap(map);
-
-	map(0x02, 0x03).unmaprw();
+	map.global_mask(0xff);
 	map(0x03, 0x03).w("aysnd", FUNC(ay8910_device::address_w));
+	map(0x04, 0x04).portr("IN0");
+	map(0x05, 0x05).portr("IN1");
+	map(0x06, 0x06).portr("IN2");
+	map(0x10, 0x10).w(FUNC(cmaster_state::outport0_w));
+	map(0x11, 0x11).w(FUNC(cmaster_state::cm_coincount_w));
+	map(0x12, 0x12).w(FUNC(cmaster_state::p1_lamps_w));
+	map(0x13, 0x13).w(FUNC(cmaster_state::background_col_w));
+	map(0x14, 0x14).w(FUNC(cmaster_state::girl_scroll_w));
 	map(0x81, 0x81).r("aysnd", FUNC(ay8910_device::data_r));
 	map(0x82, 0x82).w("aysnd", FUNC(ay8910_device::data_w));
 }
@@ -2279,18 +2343,6 @@ void cmaster_state::cmv4zg_portmap(address_map &map)
 	map(0x12, 0x12).w(FUNC(cmaster_state::p1_lamps_w));
 	map(0x13, 0x13).w(FUNC(cmaster_state::background_col_w));
 	map(0x14, 0x14).w(FUNC(cmaster_state::girl_scroll_w));
-}
-
-void cmaster_state::ss2001_portmap(address_map &map)  // TODO: everything but AY8910
-{
-	map.global_mask(0xff);
-	map(0x01, 0x01).r("aysnd", FUNC(ay8910_device::data_r));
-	map(0x02, 0x03).w("aysnd", FUNC(ay8910_device::data_address_w));
-	map(0x13, 0x13).portr("IN0");
-	map(0x14, 0x14).portr("IN1");
-	map(0x15, 0x15).portr("IN2");
-	map(0x16, 0x16).portr("DSW1");
-	map(0x17, 0x17).portr("DSW2");
 }
 
 void cmaster_state::chryangl_decrypted_opcodes_map(address_map &map)
@@ -2486,6 +2538,23 @@ void wingco_state::lucky8p_map(address_map &map)
 	lucky8_map(map);
 
 	map(0xf800, 0xffff).rom();
+}
+
+void wingco_state::animalw_map(address_map &map)
+{
+	lucky8_map(map);
+
+	map(0xc000, 0xcfff).rom().region("maincpu", 0x4000);
+	map(0xd000, 0xdfff).rom().region("maincpu", 0x5000);
+	map(0xe000, 0xefff).rom().region("maincpu", 0x3000);
+}
+
+void wingco_state::animalwa_map(address_map &map)
+{
+	lucky8_map(map);
+
+	map(0xc000, 0xcfff).rom().region("maincpu", 0x6000);
+	map(0xd000, 0xdfff).rom().region("maincpu", 0x7000);
 }
 
 void wingco_state::nd8lines_map(address_map &map)
@@ -3697,6 +3766,75 @@ static INPUT_PORTS_START( cmasterh )
 	PORT_DIPNAME( 0x01, 0x01, "Enable stats menu" ) PORT_DIPLOCATION("DSW1:1")
 	PORT_DIPSETTING(    0x01, DEF_STR( On ) )
 	PORT_DIPSETTING(    0x00, DEF_STR( Off ) )
+INPUT_PORTS_END
+
+// only 2 banks of 8 switches
+static INPUT_PORTS_START( super7 ) // TODO: verify everything
+	PORT_START("IN0")
+	PORT_BIT( 0x01, IP_ACTIVE_LOW, IPT_UNKNOWN )
+	PORT_BIT( 0x02, IP_ACTIVE_LOW, IPT_UNKNOWN )
+	PORT_BIT( 0x04, IP_ACTIVE_LOW, IPT_SLOT_STOP3 ) PORT_NAME("Stop 3 / Big")
+	PORT_BIT( 0x08, IP_ACTIVE_LOW, IPT_SLOT_STOP1 ) PORT_NAME("Stop 1 / D-UP")
+	PORT_BIT( 0x10, IP_ACTIVE_LOW, IPT_GAMBLE_TAKE )
+	PORT_BIT( 0x20, IP_ACTIVE_LOW, IPT_SLOT_STOP_ALL ) PORT_NAME("Bet / Stop All")
+	PORT_BIT( 0x40, IP_ACTIVE_LOW, IPT_SLOT_STOP2 ) PORT_NAME("Stop 2 / Small / Info")
+	PORT_BIT( 0x80, IP_ACTIVE_LOW, IPT_START1 ) PORT_NAME("Start")
+
+	PORT_INCLUDE( cmv4_coins )
+
+	PORT_INCLUDE( cmv4_service )
+
+	PORT_START("DSW1")
+	PORT_DIPNAME( 0x01, 0x01, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:1")
+	PORT_DIPSETTING(    0x01, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x02, 0x02, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:2")
+	PORT_DIPSETTING(    0x02, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x04, 0x04, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:3")
+	PORT_DIPSETTING(    0x04, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:4")
+	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x10, 0x10, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:5")
+	PORT_DIPSETTING(    0x10, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x20, 0x20, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:6")
+	PORT_DIPSETTING(    0x20, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:7")
+	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x80, 0x80, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW1:8")
+	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+
+	PORT_START("DSW2")
+	PORT_DIPNAME( 0x07, 0x07, "Main Game Pay Rate" ) PORT_DIPLOCATION("DSW2:1,2,3")
+	PORT_DIPSETTING(    0x00, "45%" )
+	PORT_DIPSETTING(    0x04, "50%" )
+	PORT_DIPSETTING(    0x02, "55%" )
+	PORT_DIPSETTING(    0x01, "65%" )
+	PORT_DIPSETTING(    0x06, "60%" )
+	PORT_DIPSETTING(    0x05, "70%" )
+	PORT_DIPSETTING(    0x03, "75%" )
+	PORT_DIPSETTING(    0x07, "80%" )
+	PORT_DIPNAME( 0x08, 0x08, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW2:4")
+	PORT_DIPSETTING(    0x08, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x10, 0x10, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW2:5")
+	PORT_DIPSETTING(    0x10, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x20, 0x20, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW2:6")
+	PORT_DIPSETTING(    0x20, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x40, 0x40, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW2:7")
+	PORT_DIPSETTING(    0x40, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
+	PORT_DIPNAME( 0x80, 0x80, DEF_STR( Unknown ) ) PORT_DIPLOCATION("DSW2:8")
+	PORT_DIPSETTING(    0x80, DEF_STR( Off ) )
+	PORT_DIPSETTING(    0x00, DEF_STR( On ) )
 INPUT_PORTS_END
 
 static INPUT_PORTS_START( cmast91 )
@@ -10542,10 +10680,7 @@ void goldstar_state::super9(machine_config &config)
 {
 	// basic machine hardware
 	Z80(config, m_maincpu, CPU_CLOCK);
-	m_maincpu->set_addrmap(AS_PROGRAM, &goldstar_state::goldstar_map);
-//  m_maincpu->set_addrmap(AS_PROGRAM, &goldstar_state::nfm_map);
-	m_maincpu->set_addrmap(AS_IO, &goldstar_state::goldstar_readport);
-//  m_maincpu->set_addrmap(AS_IO, &goldstar_state::unkch_portmap);
+	m_maincpu->set_addrmap(AS_PROGRAM, &goldstar_state::super9_map);
 
 	// video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
@@ -10823,13 +10958,6 @@ void cmaster_state::cm97(machine_config &config)
 	config.device_remove("ppi8255_1");
 }
 
-void cmaster_state::ss2001(machine_config &config)
-{
-	cm97(config);
-
-	m_maincpu->set_addrmap(AS_IO, &cmaster_state::ss2001_portmap);
-}
-
 void cmaster_state::chryangl(machine_config &config)
 {
 	cm(config);
@@ -10859,9 +10987,14 @@ void cmaster_state::cmv4zg(machine_config &config)
 
 void cmaster_state::super7(machine_config &config)
 {
-	chryangl(config);
+	cmv4zg(config);
 
+	m_maincpu->set_addrmap(AS_PROGRAM, &cmaster_state::super7_map);
 	m_maincpu->set_addrmap(AS_IO, &cmaster_state::super7_portmap);
+	m_maincpu->set_addrmap(AS_OPCODES, &cmaster_state::chryangl_decrypted_opcodes_map);
+
+	subdevice<ay8910_device>("aysnd")->port_a_read_callback().set_ioport("DSW1");
+	subdevice<ay8910_device>("aysnd")->port_b_read_callback().set_ioport("DSW2");
 }
 
 void cmaster_state::cmast91(machine_config &config)
@@ -11022,6 +11155,20 @@ void wingco_state::luckylad(machine_config &config)
 	maincpu.set_addrmap(AS_PROGRAM, &wingco_state::lucky8_map);
 	maincpu.set_addrmap(AS_OPCODES, &wingco_state::common_decrypted_opcodes_map);
 	maincpu.set_decrypted_tag(":decrypted_opcodes");
+}
+
+void wingco_state::animalw(machine_config &config)
+{
+	lucky8(config);
+
+	m_maincpu->set_addrmap(AS_PROGRAM, &wingco_state::animalw_map);
+}
+
+void wingco_state::animalwa(machine_config &config)
+{
+	lucky8(config);
+
+	m_maincpu->set_addrmap(AS_PROGRAM, &wingco_state::animalwa_map);
 }
 
 void wingco_state::super972(machine_config &config)
@@ -12164,53 +12311,53 @@ ROM_END
 /*
     Super Nove by Playmark
 
-    bp 2db
+    load the first half of the program ROM, bp 2db
     the next call ($0C33) hangs the game
     since there are ascii strings there
     instead of code.
 
+    the second half seems to work, but where is the palette?
+
+    are the two halves banked somehow?
 */
+
 ROM_START( super9 )
-	ROM_REGION( 0x10000, "maincpu", 0 )
-	ROM_LOAD( "27e010.30",       0x0000, 0x10000, CRC(1aaea8d3) SHA1(71395a6d74a7cd55606daa57d17ff4628aa5f577) )
-	ROM_IGNORE(                          0x10000)   // Discarding 2nd half
-//  ROM_LOAD( "27e010.30",       0x0000, 0x10000, CRC(1aaea8d3) SHA1(71395a6d74a7cd55606daa57d17ff4628aa5f577) )
-//  ROM_CONTINUE(                0x0000, 0x10000)   // Discarding 1st half
+	ROM_REGION( 0x20000, "maincpu", 0 )
+	ROM_LOAD( "27e010.30", 0x10000, 0x10000, CRC(1aaea8d3) SHA1(71395a6d74a7cd55606daa57d17ff4628aa5f577) )
+	ROM_CONTINUE(          0x00000, 0x10000 )
 
 	ROM_REGION( 0x20000, "gfx1", 0 )
-	ROM_LOAD( "nearcpu.bin",      0x00000, 0x20000, CRC(643cff6f) SHA1(305ca9182c3f6d69e09be38b854b3d7bdfa75439) )
+	ROM_LOAD( "nearcpu.bin", 0x00000, 0x20000, CRC(643cff6f) SHA1(305ca9182c3f6d69e09be38b854b3d7bdfa75439) )
 
 	ROM_REGION( 0x20000, "gfx2", 0 )
-	ROM_LOAD( "27e010.29",      0x00000, 0x08000, CRC(5ea46322) SHA1(147078689f0194affcdcf0e8f8e17fe8a113a377) )
-	ROM_CONTINUE( 0x0000, 0x08000)  // Discarding 1nd quarter 0xff filled
-	ROM_CONTINUE( 0x0000, 0x08000)  // Discarding 2nd quarter 0xff filled
-	ROM_CONTINUE( 0x0000, 0x08000)  // Discarding 3nd quarter 0xff filled
+	ROM_LOAD( "27e010.29", 0x00000, 0x08000, CRC(5ea46322) SHA1(147078689f0194affcdcf0e8f8e17fe8a113a377) )
+	ROM_CONTINUE(          0x00000, 0x08000)  // Discarding 1st quarter 0xff filled
+	ROM_CONTINUE(          0x00000, 0x08000)  // Discarding 2nd quarter 0xff filled
+	ROM_CONTINUE(          0x00000, 0x08000)  // Discarding 3rd quarter 0xff filled
 
 	ROM_REGION( 0x40000, "oki", 0 )  // Audio ADPCM
-	ROM_LOAD( "27c1001.27",  0x0000, 0x20000, CRC(9d58960f) SHA1(c68edf95743e146398aabf6b9617d18e1f9bf25b) )
+	ROM_LOAD( "27c1001.27", 0x00000, 0x20000, CRC(9d58960f) SHA1(c68edf95743e146398aabf6b9617d18e1f9bf25b) )
 ROM_END
 
 // on a very tiny PCB with only PLAYMARK s.r.l. ITALY and no PCB code
 // has Z0840006PSC with 12 MHz XTAL + ACTEL A40MX04 + U6295 1000J resonator + 5x 8-dip banks
 // basically same as above but has strings for Euro instead of Lire and some routine changed, possibly to remove bet limit
 ROM_START( super9a )
-	ROM_REGION( 0x10000, "maincpu", 0 )
-	ROM_LOAD( "27e010.30", 0x0000, 0x10000, CRC(986a9439) SHA1(c877379c6d2b283d209ec5abea4a5a542b934436) )
-	ROM_IGNORE(                    0x10000)   // Discarding 2nd half
-//  ROM_LOAD( "27e010.30", 0x0000, 0x10000, CRC(986a9439) SHA1(c877379c6d2b283d209ec5abea4a5a542b934436) )
-//  ROM_CONTINUE(          0x0000, 0x10000)   // Discarding 1st half
+	ROM_REGION( 0x20000, "maincpu", 0 )
+	ROM_LOAD( "27e010.30", 0x10000, 0x10000, CRC(986a9439) SHA1(c877379c6d2b283d209ec5abea4a5a542b934436) )
+	ROM_CONTINUE(          0x00000, 0x10000 )
 
 	ROM_REGION( 0x20000, "gfx1", 0 )
 	ROM_LOAD( "27e010.28", 0x00000, 0x20000, CRC(643cff6f) SHA1(305ca9182c3f6d69e09be38b854b3d7bdfa75439) )
 
 	ROM_REGION( 0x20000, "gfx2", 0 )
-	ROM_LOAD( "27e010.29",      0x00000, 0x08000, CRC(5ea46322) SHA1(147078689f0194affcdcf0e8f8e17fe8a113a377) )
-	ROM_CONTINUE( 0x0000, 0x08000)  // Discarding 1nd quarter 0xff filled
-	ROM_CONTINUE( 0x0000, 0x08000)  // Discarding 2nd quarter 0xff filled
-	ROM_CONTINUE( 0x0000, 0x08000)  // Discarding 3nd quarter 0xff filled
+	ROM_LOAD( "27e010.29", 0x00000, 0x08000, CRC(5ea46322) SHA1(147078689f0194affcdcf0e8f8e17fe8a113a377) )
+	ROM_CONTINUE(          0x00000, 0x08000)  // Discarding 1st quarter 0xff filled
+	ROM_CONTINUE(          0x00000, 0x08000)  // Discarding 2nd quarter 0xff filled
+	ROM_CONTINUE(          0x00000, 0x08000)  // Discarding 3rd quarter 0xff filled
 
 	ROM_REGION( 0x40000, "oki", 0 )  // Audio ADPCM
-	ROM_LOAD( "27c1001.27", 0x0000, 0x20000, CRC(9d58960f) SHA1(c68edf95743e146398aabf6b9617d18e1f9bf25b) )
+	ROM_LOAD( "27c1001.27", 0x00000, 0x20000, CRC(9d58960f) SHA1(c68edf95743e146398aabf6b9617d18e1f9bf25b) )
 
 	ROM_REGION( 0x2dd, "pld", 0 )
 	ROM_LOAD( "palce22v10", 0x000, 0x2dd, NO_DUMP )
@@ -12607,36 +12754,34 @@ ROM_START( super7 )
 	// first 0x8000 opcodes & data encrypted, 0x8000 - 0x93ff only opcodes encrypted, 0x9400 onwards unencrypted?
 	ROM_LOAD( "27c512_1", 0x00000, 0x10000, CRC(ddfa6fe7) SHA1(0d86ec5029afd565e039fe84f7001b2dc77c919c) )
 
-	ROM_REGION( 0x40000, "gfx1", 0 )  // very similar to most cmv4 sets, but differently arranged
-	ROM_LOAD( "27c010_2",      0x20000, 0x8000, CRC(9636d785) SHA1(8f851aae0b05ad909c48cf94142ab927145da464) )
-	ROM_CONTINUE(              0x10000, 0x8000 )
-	ROM_CONTINUE(              0x30000, 0x8000 )
-	ROM_CONTINUE(              0x00000, 0x8000 )
-	ROM_COPY( "gfx1", 0x20000, 0x28000, 0x8000)
-	ROM_COPY( "gfx1", 0x10000, 0x18000, 0x8000)
-	ROM_COPY( "gfx1", 0x30000, 0x38000, 0x8000)
-	ROM_COPY( "gfx1", 0x00000, 0x08000, 0x8000)
-
-	ROM_REGION( 0x40000, "graphics", 0 )
-	ROM_LOAD( "27c010_3",          0x18000, 0x8000, CRC(a6db1162) SHA1(05019166526b0797e3eca8b72d90c325573b3d74) )
-	ROM_CONTINUE(                  0x08000, 0x8000 )
-	ROM_CONTINUE(                  0x38000, 0x8000 )
-	ROM_CONTINUE(                  0x28000, 0x8000 )
-	ROM_COPY( "graphics", 0x28000, 0x20000, 0x8000)
-	ROM_COPY( "graphics", 0x18000, 0x10000, 0x8000)
-	ROM_COPY( "graphics", 0x38000, 0x30000, 0x8000)
-	ROM_COPY( "graphics", 0x08000, 0x00000, 0x8000)
+	ROM_REGION( 0x18000, "gfx1", 0 )  // very similar to most cmv4 sets, but differently arranged
+	ROM_LOAD( "27c010_2", 0x10000, 0x8000, CRC(9636d785) SHA1(8f851aae0b05ad909c48cf94142ab927145da464) )
+	ROM_CONTINUE(         0x08000, 0x8000 )
+	ROM_CONTINUE(         0x00000, 0x8000 ) // 0xff filled, overwrite
+	ROM_CONTINUE(         0x00000, 0x8000 )
 
 	ROM_REGION( 0x8000, "gfx2", 0 )
-	ROM_COPY( "graphics", 0x0e000, 0x00000, 0x2000 )
-	ROM_COPY( "graphics", 0x1e000, 0x02000, 0x2000 )
-	ROM_COPY( "graphics", 0x2e000, 0x04000, 0x2000 )
-	ROM_COPY( "graphics", 0x3e000, 0x06000, 0x2000 )
+	ROM_LOAD( "27c010_3", 0x2000, 0x2000, CRC(a6db1162) SHA1(05019166526b0797e3eca8b72d90c325573b3d74) )
+	ROM_CONTINUE(         0x2000, 0x2000 )
+	ROM_CONTINUE(         0x2000, 0x2000 )
+	ROM_CONTINUE(         0x2000, 0x2000 )
+	ROM_CONTINUE(         0x0000, 0x2000 )
+	ROM_CONTINUE(         0x0000, 0x2000 )
+	ROM_CONTINUE(         0x0000, 0x2000 )
+	ROM_CONTINUE(         0x0000, 0x2000 )
+	ROM_CONTINUE(         0x6000, 0x2000 )
+	ROM_CONTINUE(         0x6000, 0x2000 )
+	ROM_CONTINUE(         0x6000, 0x2000 )
+	ROM_CONTINUE(         0x6000, 0x2000 )
+	ROM_CONTINUE(         0x4000, 0x2000 )
+	ROM_CONTINUE(         0x4000, 0x2000 )
+	ROM_CONTINUE(         0x4000, 0x2000 )
+	ROM_CONTINUE(         0x4000, 0x2000 )
 
 	ROM_REGION( 0x10000, "user1", ROMREGION_ERASEFF )  // no girls ROM
 
 	ROM_REGION( 0x800, "proms", 0 )  // RGB generation
-	ROM_LOAD( "82s191an.bin",  0x000, 0x800, CRC(ec546abe) SHA1(1bd92c0715ec1821fa977a67499dc8971deec9c7) )
+	ROM_LOAD( "82s191an.bin", 0x000, 0x800, BAD_DUMP CRC(d54dda1d) SHA1(c3053cc412bb3b15f5ae7c58c593bd63a6ec4c80) ) // hand-fixed, original dump had address bit 6 stuck
 
 	ROM_REGION( 0x100, "proms2", 0 )
 	ROM_LOAD( "82s137an.bin",  0x000, 0x100, CRC(92975789) SHA1(4a85d169db5e298ee201fe7d4b9964b1df16992e) )
@@ -15327,7 +15472,69 @@ ROM_START( wcat )
 	ROM_LOAD( "wcat3.d12",  0x0000, 0x0020, BAD_DUMP CRC(6df3f972) SHA1(0096a7f7452b70cac6c0752cb62e24b643015b5c) )
 ROM_END
 
-ROM_START( animalw )  // according to the dumper: runs on the same HW as lucky8 but at the two 8255 has some shorts
+ROM_START( animalw ) // big CPU block marked GPS Game Power System
+	ROM_REGION( 0x10000, "maincpu", 0 )
+	ROM_LOAD( "rom9.u91",  0x0000, 0x8000, CRC(beaeafe5) SHA1(58c9ab7559a346d55dbd679b583abd1ebe2d9fae) )
+
+	ROM_REGION( 0x18000, "gfx1", 0 )
+	ROM_LOAD( "rom7.u22",  0x00000, 0x8000, CRC(4b7613da) SHA1(7a0384f24f8fb5e8722b559b7b82d922ed781139) )
+	ROM_LOAD( "rom5.u21",  0x08000, 0x8000, CRC(dfae0bd4) SHA1(b64cf45e1a0ab14995b4e0cc3d5931d81192d5cf) )
+	ROM_LOAD( "rom6.u20",  0x10000, 0x8000, CRC(fd214376) SHA1(5c9227a4aafe3a6119ee197f53fd067ab215acd1) )
+
+	ROM_REGION( 0x8000, "gfx2", 0 )
+	ROM_LOAD( "rom4.u26",  0x0000, 0x2000, CRC(cff7c18b) SHA1(bb99be34a04623063916127ab0b1cdbe649f4609) )
+	ROM_IGNORE(                    0x6000 )
+	ROM_LOAD( "rom2.u25",  0x2000, 0x2000, CRC(5342ec28) SHA1(7188f36cc55fc202f06b35f201cfe01d2ad60fc1) )
+	ROM_IGNORE(                    0x6000 )
+	ROM_LOAD( "rom1.u24",  0x4000, 0x2000, CRC(87303bc8) SHA1(7ba0d9127c743ebbd273dad7d1010ccfd8848163) )
+	ROM_IGNORE(                    0x6000 )
+	ROM_LOAD( "rom3.u23",  0x6000, 0x2000, CRC(7d366bcf) SHA1(b3b208ff9433efe62510352b98861d03673c53b4) )
+	ROM_IGNORE(                    0x6000 )
+
+	ROM_REGION( 0x200, "proms", 0 )
+	ROM_LOAD( "82s129.u28", 0x0000, 0x0100, CRC(14f47fc9) SHA1(fda1bd524e6281a47e9ca348b1b13de25242ef04) )
+	ROM_LOAD( "82s129.u27", 0x0100, 0x0100, CRC(58ec5baf) SHA1(79f29c26c2747f3baeb0fe309d4e0f1eb01c6a79) )
+
+	ROM_REGION( 0x40, "proms2", 0 )
+	ROM_LOAD( "dm74s288.u68", 0x0000, 0x0020, CRC(c6b41352) SHA1(d7c3b5aa32e4e456c9432a13bede1db6d62eb270) )
+
+	ROM_REGION( 0x100, "unkprom", 0 )
+	ROM_LOAD( "82s129.u51",  0x0000, 0x0100, CRC(1d668d4a) SHA1(459117f78323ea264d3a29f1da2889bbabe9e4be) )
+
+	ROM_REGION( 0x20, "unkprom2", 0 )
+	ROM_LOAD( "dm74s288.u69", 0x0000, 0x0020, CRC(6df3f972) SHA1(0096a7f7452b70cac6c0752cb62e24b643015b5c) )
+ROM_END
+
+ROM_START( animalwa )
+	ROM_REGION( 0x10000, "maincpu", 0 )
+	ROM_LOAD( "rom9.u91",  0x0000, 0x8000, CRC(1a2edd86) SHA1(562975eda8e01beb97a48b78b069d8f426e63713) )
+
+	ROM_REGION( 0x18000, "gfx1", 0 )
+	ROM_LOAD( "rom7.u22",  0x00000, 0x8000, CRC(5b06e957) SHA1(f8499eec69079588b6d6dc4d486bd8b089be8795) )
+	ROM_LOAD( "rom5.u21",  0x08000, 0x8000, CRC(9476e7a8) SHA1(b89812becc3d0f57fc3307f6bb744137c84c6040) )
+	ROM_LOAD( "rom6.u20",  0x10000, 0x8000, CRC(8a06e104) SHA1(b0a3489554d56f1785feb9fed82853d32ba1c69e) )
+
+	ROM_REGION( 0x8000, "gfx2", 0 )
+	ROM_LOAD( "rom4.u26",  0x0000, 0x2000, CRC(ff6189c1) SHA1(372e54856d249f94f4a2421a555b6c1493b3e741) )
+	ROM_LOAD( "rom2.u25",  0x2000, 0x2000, CRC(3f8361d6) SHA1(798f71d70176ba8108112d8d3ac722a347092673) )
+	ROM_LOAD( "rom1.u24",  0x4000, 0x2000, CRC(fc7d367b) SHA1(8bc4daec5391ff114a50d9a306680f75fcbf22e5) )
+	ROM_LOAD( "rom3.u23",  0x6000, 0x2000, CRC(c5b0899b) SHA1(6a6db13b2da45481450d72b49c7f21a68371ac32) )
+
+	ROM_REGION( 0x200, "proms", 0 )
+	ROM_LOAD( "82s129.u28", 0x0000, 0x0100, CRC(23e81049) SHA1(78071dae70fad870e972d944642fb3a2374be5e4) )
+	ROM_LOAD( "82s129.u27", 0x0100, 0x0100, CRC(526cf9d3) SHA1(eb779d70f2507d0f26d225ac8f5de8f2243599ca) )
+
+	ROM_REGION( 0x40, "proms2", 0 )
+	ROM_LOAD( "dm74s288.u68", 0x0000, 0x0020, CRC(c6b41352) SHA1(d7c3b5aa32e4e456c9432a13bede1db6d62eb270) )
+
+	ROM_REGION( 0x100, "unkprom", 0 )
+	ROM_LOAD( "82s129.u51",  0x0000, 0x0100, CRC(1d668d4a) SHA1(459117f78323ea264d3a29f1da2889bbabe9e4be) )
+
+	ROM_REGION( 0x20, "unkprom2", 0 )
+	ROM_LOAD( "dm74s288.u69", 0x0000, 0x0020, CRC(6df3f972) SHA1(0096a7f7452b70cac6c0752cb62e24b643015b5c) )
+ROM_END
+
+ROM_START( animalwbl )  // according to the dumper: runs on the same HW as lucky8 but at the two 8255 has some shorts
 	ROM_REGION( 0x10000, "maincpu", 0 )
 	ROM_LOAD( "rom8.bin",  0x0000, 0x8000, CRC(8826e4e7) SHA1(70cff8c5ce75ab0f568e8cdf39ef9165b73fa2c0) )
 
@@ -15355,7 +15562,6 @@ ROM_START( animalw )  // according to the dumper: runs on the same HW as lucky8 
 	ROM_REGION( 0x20, "unkprom2", 0 )
 	ROM_LOAD( "12-d.bin", 0x0000, 0x0020, CRC(6df3f972) SHA1(0096a7f7452b70cac6c0752cb62e24b643015b5c) )
 ROM_END
-
 
 // TMPZ84C00AP-6 main CPU, 2 x D71055C, 1 x SN76489AN, 4 x 8-dip banks
 ROM_START( nd8lines )
@@ -21657,104 +21863,6 @@ ROM_START( fl7_tw )  // Serial 00000050E9B7.
 ROM_END
 
 
-/*
-  Super Shanghai 2001
-
-  it's a 3-reel 5-liner with an extra reel.
-  Puts PATRICK SHANGHAI in NVRAM, so some kind of hack / bootleg
-
-  PCB pic is blurred, but main components appear to be:
-
-  TMPZ84C00AP-8,
-  Winbond WF19054,
-  5 8-dip banks (dip sheet available)
-
-*/
-ROM_START( ss2001 )
-	ROM_REGION( 0x10000, "maincpu", 0 )
-	ROM_LOAD( "9.u26",   0x00000, 0x10000, CRC(9ddb0239) SHA1(15733481996de9becccd5b920e40220c6101becf) )
-
-	ROM_REGION( 0x80000, "gfx", 0 )  // all 27c1001
-	ROM_LOAD( "1.u1",  0x00000, 0x10000, CRC(f4075f1c) SHA1(16513735e181e14a01fe24be6de0b22ef5a894eb) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-	ROM_LOAD( "2.u2",  0x10000, 0x10000, CRC(7df72d1b) SHA1(ad61c3de89be547014ca123b72bb9775bad55cdd) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-	ROM_LOAD( "3.u3",  0x20000, 0x10000, CRC(c8db92f7) SHA1(3a77d9a21125e47396b06dc8c54625aa8ad54386) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-	ROM_LOAD( "4.u4",  0x30000, 0x10000, CRC(bdca2cd5) SHA1(6139a697321475ac6fefac5b5a9f76c8de30f2f8) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-	ROM_LOAD( "5.u5",  0x40000, 0x10000, CRC(c01acca1) SHA1(f2caed0b8624fb224f41323f15eaa9ce3fadd886) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-	ROM_LOAD( "6.u6",  0x50000, 0x10000, CRC(a6194545) SHA1(74ddda87ad55e8bce1e986dde8fd371ab8843ceb) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-	ROM_LOAD( "7.u7",  0x60000, 0x10000, CRC(03375cf9) SHA1(d336c4dff53a7368c9264a02fbc53afd0776a9cd) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-	ROM_LOAD( "8.u8",  0x70000, 0x10000, CRC(2ad9778b) SHA1(05d8e0be028060cbe78ff1ff927f15f8114f8508) )  // 1ST AND 2ND HALF IDENTICAL
-	ROM_IGNORE(0x10000)
-
-	ROM_REGION( 0x2000, "proms", 0 )
-	ROM_LOAD( "d27hc65d.bin",   0x0000, 0x02000, CRC(af8ce88d) SHA1(59d59b6b739aed4f6ee618db04af9ab9d2873bed) )  // colour data is at 0x1800-0x18ff
-ROM_END
-
-/*
-  Super Shanghai 2000
-
-  PCB pic is blurred, but main components appear to be:
-
-  Zilog Z80,
-  Winbond WF19054,
-  5 8-dip banks (dip sheet available)
-
-*/
-ROM_START( ss2000 )  // main program (green board)
-	ROM_REGION( 0x10000, "maincpu", 0 )
-	ROM_LOAD( "main_program_set_2_green_board.bin",  0x00000, 0x10000, CRC(a5017fa0) SHA1(af985a15fe2c6195b3310ece8dc9e431d1b8c673) )
-
-	ROM_REGION( 0x80000, "gfx", 0 )  // all 27c512, same gfx set as ss2001 but half sized roms
-	ROM_LOAD( "rom1_m27c512.u1",  0x00000, 0x10000, CRC(52d1914b) SHA1(f8e5e7ba8809006e4109b82dd84e019d0d1e5447) )
-	ROM_LOAD( "rom2_m27c512.u2",  0x10000, 0x10000, CRC(d5d50ef8) SHA1(60016d62922b369ce78130b8a94d967585657cd1) )
-	ROM_LOAD( "rom3_m27c512.u3",  0x20000, 0x10000, CRC(56e6e11b) SHA1(0a20ef1e05ded62b0aece5a94565736cbc83edf7) )
-	ROM_LOAD( "rom4_m27c512.u4",  0x30000, 0x10000, CRC(2cd3eb2d) SHA1(31f804cf9ddcd7dd8501946f9bf2f8a13b5b48f3) )
-	ROM_LOAD( "rom5_m27c512.u5",  0x40000, 0x10000, CRC(57328ec5) SHA1(0f5cddb4b45ddef8f6d352220e32cff27edac2b4) )
-	ROM_LOAD( "rom6_m27c512.u6",  0x50000, 0x10000, CRC(dd228316) SHA1(2d618758e870224284efc0dc8d3a83f3447d0e48) )
-	ROM_LOAD( "rom7_m27c512.u7",  0x60000, 0x10000, CRC(a7c2a38b) SHA1(149ccc4b36bca6a149f3a26f5a580f34f4020ef3) )
-	ROM_LOAD( "rom8_m27c512.u8",  0x70000, 0x10000, CRC(f6ef214c) SHA1(1f50ea87214b86416feda58fb5065175eb18df6a) )
-
-	ROM_REGION( 0x2000, "proms", 0 )
-	ROM_LOAD( "am27s29.bin",   0x0000, 0x0200, CRC(3ad40503) SHA1(5f7516001ac4286df3ca4f6ab36882a15019546a) )
-ROM_END
-
-/*
-  Super Shanghai 2000
-  Wrestle Fiesta.
-  Main program 30% bonus by Vegas (red board)
-
-  PCB pic is blurred, but main components appear to be:
-
-  TMPZ84C00AP-8,
-  Winbond WF19054,
-  5 8-dip banks
-
-*/
-ROM_START( ss2000a )
-	ROM_REGION( 0x10000, "maincpu", 0 )
-	ROM_LOAD( "main_program_set_3_red_board.bin",  0x00000, 0x10000, CRC(4aaa348c) SHA1(a33656798807906ce72351a1740f77563c5b2640) )
-
-	ROM_REGION( 0x80000, "gfx", 0 )  // all 27c512
-	ROM_LOAD( "27c512.u1",  0x00000, 0x10000, CRC(26df6ee7) SHA1(3221639174b432ea93e0db33b7554f2ce8125052) )
-	ROM_LOAD( "27c512.u2",  0x10000, 0x10000, CRC(5983a654) SHA1(6374e1fb0eda2454370e54d4dd8bf6c82b2f177e) )
-	ROM_LOAD( "27c512.u3",  0x20000, 0x10000, CRC(0c2cd067) SHA1(a1c749ee0c0c3d25a80af6d56c41057430646ce9) )
-	ROM_LOAD( "27c512.u4",  0x30000, 0x10000, CRC(e3adb317) SHA1(817a885236c28dc5dee02cc1d7e9e1c780560cae) )
-	ROM_LOAD( "27c512.u5",  0x40000, 0x10000, CRC(e693e419) SHA1(8834419d02eb0f4f4a1619195a87b00e3f315a39) )
-	ROM_LOAD( "27c512.u6",  0x50000, 0x10000, CRC(096c691a) SHA1(59a45ad654981cdfecaa3390253850491baccb9f) )
-	ROM_LOAD( "27c512.u7",  0x60000, 0x10000, CRC(f26a3eeb) SHA1(83bbe0b068549f3bceb083d17894fb080e9b58a1) )
-	ROM_LOAD( "27c512.u8",  0x70000, 0x10000, CRC(1444ee50) SHA1(6e6137869d4c46762bab92ed54071d9292243532) )
-
-	ROM_REGION( 0x2000, "proms", 0 )
-	ROM_LOAD( "am27s29.bin",   0x0000, 0x0200, CRC(3ad40503) SHA1(5f7516001ac4286df3ca4f6ab36882a15019546a) )
-ROM_END
-
-
 /*********************************************************************************************************************/
 
 void goldstar_state::init_goldstar()
@@ -22678,6 +22786,14 @@ void cmaster_state::init_cmast91()
 	save_item(NAME(m_enable_reg));
 	save_item(NAME(m_cmaster_girl_num));
 	save_item(NAME(m_cmaster_girl_pal));
+
+	uint8_t *rom = memregion("maincpu")->base();
+
+/*  forcing PPI mode 0 for all, and A, B & C as input.
+    the mixed modes 2-0 are not working properly.
+*/
+	rom[0x0070] = 0x9b;
+	rom[0x0a92] = 0x9b;
 }
 
 void cmaster_state::init_cll()
@@ -23495,20 +23611,14 @@ void cmaster_state::init_tonypok()
 void goldstar_state::init_super9()
 {
 	uint8_t *src = memregion("gfx1")->base();
+
 	for (int i = 0; i < 0x20000; i++)
-	{
-//      src[i] = bitswap<8>(src[i], 7, 4, 2, 1, 6, 5, 3, 0);
-//      src[i] = bitswap<8>(src[i], 7, 3, 2, 6, 1, 5, 4, 0);
-		src[i] = bitswap<8>(src[i], 7, 3, 2, 6, 5, 1, 4, 0);
-	}
+		src[i] = bitswap<8>(src[i], 7, 3, 6, 2, 5, 1, 4, 0);
 
 	uint8_t *src2 = memregion("gfx2")->base();
+
 	for (int i = 0; i < 0x8000; i++)
-	{
-//      src2[i] = bitswap<8>(src2[i], 7, 4, 2, 1, 6, 5, 3, 0);
-//      src2[i] = bitswap<8>(src2[i], 7, 3, 2, 6, 1, 5, 4, 0);
-		src2[i] = bitswap<8>(src2[i], 3, 7, 6, 2, 5, 1, 0, 4);  // endianess
-	}
+		src2[i] = bitswap<8>(src2[i], 3, 7, 6, 2, 5, 1, 0, 4);
 }
 
 
@@ -23714,10 +23824,6 @@ void cmaster_state::init_tcl()
 
 void cmaster_state::init_super7()
 {
-/*  possibly incomplete decryption. Game appears to work with clean NVRAM,
-    but stops with 'scheda da inizializzare" (PCB to be initialized)
-    message with NVRAM present
-*/
 	uint8_t *rom = memregion("maincpu")->base();
 
 	for (int a = 0; a < 0x8000; a++)
@@ -23738,12 +23844,12 @@ void cmaster_state::init_super7()
 	}
 
 	for (int a = 0x9000; a < 0x9400; a++)
-		m_decrypted_opcodes[a] = bitswap<8>(rom[a] ^ 0x62, 4, 5, 3, 6, 7, 0, 2, 1);  // TODO: bit 5 and 4 might be swapped
+		m_decrypted_opcodes[a] = bitswap<8>(rom[a] ^ 0x62, 5, 4, 3, 6, 7, 0, 2, 1);
 
 	for (int a = 0x9400; a < 0xf000; a++)
 		m_decrypted_opcodes[a] = rom[a];
 
-	// try to rearrange PROM contents to what MAME expects. TODO: still doesn't work
+	// rearrange PROM contents to what MAME expects
 	uint8_t *proms = memregion("proms")->base();
 
 	for (int i = 0; i < 0x100; i++)
@@ -23753,6 +23859,8 @@ void cmaster_state::init_super7()
 		proms[i] = bits74;
 		proms[i + 0x100] = bits30;
 	}
+
+	m_palette->update();
 }
 
 void cmaster_state::init_animalhs()
@@ -23839,8 +23947,8 @@ GAME(  199?, gregular,   goldstar, moonlght, goldstar, goldstar_state, empty_ini
 GAMEL( 199?, chrygld,    0,        chrygld,  chrygld,  cb3_state,      init_chrygld,   ROT0, "bootleg",           "Cherry Gold I (set 1)",                       0,                 layout_chrygld )
 GAMEL( 199?, chry10,     0,        chrygld,  chry10,   cb3_state,      init_chry10,    ROT0, "bootleg",           "Cherry 10 (bootleg with PIC16F84)",           0,                 layout_chrygld )
 GAME(  199?, goldfrui,   goldstar, goldfrui, goldstar, goldstar_state, empty_init,     ROT0, "bootleg",           "Gold Fruit",                                  0 )                  // maybe fullname should be 'Gold Fruit (main 40%)'
-GAME(  2001, super9,     goldstar, super9,   goldstar, goldstar_state, init_super9,    ROT0, "Playmark",          "Super Nove (Playmark, Lire currency)",        MACHINE_NOT_WORKING )   // need to decode gfx and see the program loops/reset...
-GAME(  2001, super9a,    goldstar, super9,   goldstar, goldstar_state, init_super9,    ROT0, "Playmark",          "Super Nove (Playmark, Euro currency)",        MACHINE_NOT_WORKING )   // need to decode gfx and see the program loops/reset...
+GAME(  2001, super9,     goldstar, super9,   chrygld,  goldstar_state, init_super9,    ROT0, "Playmark",          "Super Nove (Playmark, V. M271B)",             MACHINE_WRONG_COLORS | MACHINE_NOT_WORKING ) // needs palette, inputs / outputs checked
+GAME(  2001, super9a,    goldstar, super9,   chrygld,  goldstar_state, init_super9,    ROT0, "Playmark",          "Super Nove (Playmark, V. M271C)",             MACHINE_WRONG_COLORS | MACHINE_NOT_WORKING ) // needs palette, inputs / outputs checked
 GAME(  2001, wcherry,    0,        wcherry,  chrygld,  goldstar_state, init_wcherry,   ROT0, "bootleg",           "Win Cherry (ver 0.16 - 19990219)",            MACHINE_NOT_WORKING )
 GAME(  199?, star100,    0,        star100,  star100,  sanghopm_state, empty_init,     ROT0, "Sang Ho",           "Ming Xing 100 (Star 100)",                    MACHINE_IMPERFECT_COLORS )
 
@@ -23900,7 +24008,7 @@ GAMEL( 1991, cmasterl,   cmaster,  cm,       cmasterb, cmaster_state,  init_cmv4
 GAMEL( 1991, cutyline,   0,        cm,       cmasterb, cmaster_state,  init_cmv4,      ROT0, "Dyna",              "Cuty Line (ver.1.01)",                        0,                 layout_cmasterb )
 GAMEL( 1991, cutylinea,  cutyline, cm,       cmasterb, cmaster_state,  init_cmv4,      ROT0, "bootleg",           "Cuty Line (LC-88 bootleg, ver.8.05C)",        MACHINE_NOT_WORKING, layout_cmasterb ) // needs correct memory map
 GAMEL( 1991, cutylineb,  cutyline, cm,       cmasterb, cmaster_state,  init_cmv4,      ROT0, "bootleg",           "Cuty Line (LC-88 bootleg, ver.7C.14)",        MACHINE_NOT_WORKING, layout_cmasterb ) // needs correct memory map
-GAMEL( 199?, super7,     cmaster,  super7,   cmaster,  cmaster_state,  init_super7,    ROT0, "bootleg",           "Super Seven",                                 MACHINE_NOT_WORKING, layout_cmasterb ) // bad palette, no reels, decryption might be missing something, too
+GAMEL( 199?, super7,     cmaster,  super7,   super7,   cmaster_state,  init_super7,    ROT0, "bootleg",           "Super Seven (ver. 2.3)",                      MACHINE_NOT_WORKING, layout_cmasterb ) // inputs / outputs needs verifying
 GAME ( 199?, wcat3a,     wcat3,    chryangl, cmaster,  cmaster_state,  init_wcat3a,    ROT0, "E.A.I.",            "Wild Cat 3 (CMV4 hardware)",                  MACHINE_NOT_WORKING ) // does not boot. Wrong decryption, wrong machine or wrong what?
 GAMEL( 199?, ll3,        cmaster,  cm,       cmasterb, cmaster_state,  init_ll3,       ROT0, "bootleg",           "Lucky Line III",                              MACHINE_NOT_WORKING, layout_cmasterb )  // not looked at yet
 GAMEL( 199?, cmfb55,     cmaster,  cmfb55,   cmaster,  cmaster_state,  init_palnibbles,ROT0, "bootleg",           "Cherry Master (bootleg, Game FB55 Ver.2)",    MACHINE_NOT_WORKING, layout_cmv4 ) // inputs not done
@@ -23920,8 +24028,8 @@ GAME(  199?, chthree,    cmaster,  cm,       cmaster,  cmaster_state,  init_chth
 
 GAME(  1991, cmast91,    0,        cmast91,  cmast91,  cmaster_state,  init_cmast91,   ROT0, "Dyna",              "Cherry Master '91 (ver.1.30)",                0 )
 GAME(  1991, cll,        0,        cmast91,  cmast91,  cmaster_state,  init_cll,       ROT0, "Dyna / TAB Austria","Cuty Line Limited (ver.1.30)",                MACHINE_NOT_WORKING ) // needs verifying inputs / dips, missing girls GFX ROM dump
-GAME(  1992, cmast92,    0,        eldoradd, cmast91,  cmaster_state,  init_cmast91,   ROT0, "Dyna",              "Cherry Master '92 (V1.2D)",                   MACHINE_NOT_WORKING ) // different GFX hw? Game is running and sounds play
-GAME(  1992, cmast92a,   cmast92,  eldoradd, cmast91,  cmaster_state,  init_cmast91,   ROT0, "Dyna",              "Cherry Master '92 (V1.1D)",                   MACHINE_NOT_WORKING ) // different GFX hw? Game is running and sounds play
+GAME(  1992, cmast92,    0,        eldoradd, cmast91,  cmaster_state,  empty_init,     ROT0, "Dyna",              "Cherry Master '92 (V1.2D)",                   MACHINE_NOT_WORKING ) // different GFX hw? Game is running and sounds play
+GAME(  1992, cmast92a,   cmast92,  eldoradd, cmast91,  cmaster_state,  empty_init,     ROT0, "Dyna",              "Cherry Master '92 (V1.1D)",                   MACHINE_NOT_WORKING ) // different GFX hw? Game is running and sounds play
 GAME(  1991, eldoradd,   0,        eldoradd, cmast91,  cmaster_state,  empty_init,     ROT0, "Dyna",              "El Dorado (V5.1DR)",                          MACHINE_NOT_WORKING ) // different GFX hw? Game is running and sounds play
 GAME(  1991, eldoraddo,  eldoradd, eldoradd, cmast91,  cmaster_state,  empty_init,     ROT0, "Dyna",              "El Dorado (V1.1TA)",                          MACHINE_NOT_WORKING ) // different GFX hw?
 GAME(  1991, eldoraddob, eldoradd, eldoradd, cmast91,  cmaster_state,  empty_init,     ROT0, "Dyna",              "El Dorado (V2.0D)",                           MACHINE_NOT_WORKING ) // different GFX hw?
@@ -23977,7 +24085,9 @@ GAME(  198?, ladylinrd,  ladylinr, ladylinrb,ladylinr, goldstar_state, init_lady
 GAME(  198?, ladylinre,  ladylinr, ladylinrb,ladylinr, goldstar_state, init_ladylinre, ROT0, "TAB Austria",       "Lady Liner (encrypted, set 4)",                            0 )
 GAME ( 1992?,wcat,       0,        wcat3,    lucky8b,  wingco_state,   init_wcat,      ROT0, "Excel",             "Wild Cat",                                                 MACHINE_IMPERFECT_GRAPHICS | MACHINE_NOT_WORKING ) // needs correct GFX ROMs, I/O, etc
 GAME(  1995, wcat3,      0,        wcat3,    lucky8,   wingco_state,   init_wcat3,     ROT0, "E.A.I.",            "Wild Cat 3",                                               MACHINE_NOT_WORKING | MACHINE_WRONG_COLORS ) // decryption partially wrong, needs soft resets before running. Bad PROM decode
-GAMEL( 199?, animalw,    0,        lucky8,   animalw,  wingco_state,   empty_init,     ROT0, "bootleg",           "Animal Wonders (ver A900)",                                MACHINE_NOT_WORKING,   layout_lucky8 )    // inputs / DIPs need to be checked
+GAMEL( 199?, animalw,    0,        animalw,  animalw,  wingco_state,   empty_init,     ROT0, "GPS",               "Animal Wonders (ver A900 66)",                             MACHINE_NOT_WORKING,   layout_lucky8 )    // inputs / DIPs need to be checked
+GAMEL( 199?, animalwa,   animalw,  animalwa, animalw,  wingco_state,   empty_init,     ROT0, "bootleg (Bigico)",  "Animal Wonders (ver A900, Bicigo bootleg)",                MACHINE_NOT_WORKING,   layout_lucky8 )    // doesn't boot
+GAMEL( 199?, animalwbl,  animalw,  lucky8,   animalw,  wingco_state,   empty_init,     ROT0, "bootleg",           "Animal Wonders (ver A900, bootleg)",                       MACHINE_NOT_WORKING,   layout_lucky8 )    // inputs / DIPs need to be checked
 GAMEL( 1989, cb2,        0,        lucky8,   lucky8,   wingco_state,   init_cb2,       ROT0, "Dyna",              "Cherry Bonus II (V2.00 06/01)",                            MACHINE_NOT_WORKING,   layout_lucky8 )    // I/O need to be checked, seems reasonably working
 GAMEL( 1990, cbaai,      0,        lucky8,   lucky8,   wingco_state,   empty_init,     ROT0, "bootleg (A.A.I.)",  "Cherry Bonus (A.A.I. bootleg)",                            MACHINE_NOT_WORKING,   layout_lucky8 )    // jumps to 0xf430 but there's nothing there?
 GAMEL( 199?, ttactoe,    0,        lucky8,   ttactoe,  wingco_state,   empty_init,     ROT0, "bootleg (Sundance)","Tic Tac Toe (Sundance bootleg of New Lucky 8 Lines)",      0,                     layout_lucky8 )    // needs more DSW figured out
@@ -24109,11 +24219,6 @@ GAMEL(1999, unkch4,      scmaster,  unkch,    unkch4,    unkch_state,    init_un
 GAME( 1996, cherry96,    scmaster,  unkch,    unkch4,    unkch_state,    init_unkch4,    ROT0, "bootleg", "New Cherry '96 (bootleg of New Fruit Bonus?)",                 MACHINE_NOT_WORKING ) // need to be moved to another machine...
 
 GAME( 1998, rolling,     scmaster,  rolling,  unkch4,    unkch_state,    empty_init,     ROT0, "bootleg", "Rolling",                                                      MACHINE_NOT_WORKING ) // inputs, outputs
-
-// this has a 4th reel
-GAME( 2001, ss2001,      0,         ss2001,   cmaster,   cmaster_state,  empty_init,     ROT0, "bootleg", "Super Shanghai 2001",                                          MACHINE_NO_SOUND | MACHINE_NOT_WORKING ) // TODO: everything
-GAME( 2000, ss2000,      0,         ss2001,   cmaster,   cmaster_state,  empty_init,     ROT0, "bootleg", "Super Shanghai 2000 (standard. green board)",                  MACHINE_NO_SOUND | MACHINE_NOT_WORKING ) // TODO: everything
-GAME( 2000, ss2000a,     0,         ss2001,   cmaster,   cmaster_state,  empty_init,     ROT0, "bootleg", "Super Shanghai 2000 - Wrestle Fiesta (30% bonus, red board)",  MACHINE_NO_SOUND | MACHINE_NOT_WORKING ) // TODO: everything
 
 
 // ******************* Stealth sets *******************

@@ -660,7 +660,7 @@ void simpsons_state::simpsons(machine_config &config)
 	screen.set_screen_update(FUNC(simpsons_state::screen_update));
 	screen.set_palette("palette");
 
-	PALETTE(config, "palette").set_format(palette_device::xBGR_555, 2048).enable_shadows().enable_hilights();
+	PALETTE(config, "palette").set_format(palette_device::xBGR_555, 2048).enable_shadows().enable_highlights();
 
 	K052109(config, m_k052109, 0);
 	m_k052109->set_xy_offset(-96, -16);
@@ -677,18 +677,17 @@ void simpsons_state::simpsons(machine_config &config)
 	K053251(config, m_k053251, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
 	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL(3'579'545))); /* verified on pcb */
-	ymsnd.add_route(0, "lspeaker", 0.5);    /* only left channel is connected */
-	ymsnd.add_route(0, "rspeaker", 0.5);
-	ymsnd.add_route(1, "lspeaker", 0.0);
-	ymsnd.add_route(1, "rspeaker", 0.0);
+	ymsnd.add_route(0, "speaker", 0.5, 0);    /* only left channel is connected */
+	ymsnd.add_route(0, "speaker", 0.5, 1);
+	ymsnd.add_route(1, "speaker", 0.0, 0);
+	ymsnd.add_route(1, "speaker", 0.0, 1);
 
 	k053260_device &k053260(K053260(config, "k053260", XTAL(3'579'545))); /* verified on pcb */
-	k053260.add_route(0, "lspeaker", 0.5);
-	k053260.add_route(1, "rspeaker", 0.5);
+	k053260.add_route(0, "speaker", 0.5, 0);
+	k053260.add_route(1, "speaker", 0.5, 1);
 	k053260.sh1_cb().set(FUNC(simpsons_state::z80_nmi_w));
 }
 

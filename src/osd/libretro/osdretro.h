@@ -8,7 +8,7 @@
 
 #include "libretro-internal/libretro_shared.h"
 
-#define RETRO_MAX_VOLUME 12
+#define SOUND_DISABLE_THREADING
 
 //============================================================
 //  Defines
