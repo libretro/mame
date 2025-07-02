@@ -8,7 +8,6 @@ acorn/bbc.cpp
 acorn/cms.cpp
 acorn/electron.cpp
 acorn/riscpc.cpp
-acorn/z88.cpp
 act/apricot.cpp
 act/apricotf.cpp
 act/apricotp.cpp
@@ -494,6 +493,7 @@ misc/3do.cpp
 misc/eva.cpp
 misc/h01x.cpp
 misc/mindset.cpp
+misc/miuchiz.cpp
 misc/monon_color.cpp
 misc/mtu130.cpp
 misc/triton.cpp
@@ -784,6 +784,7 @@ sinclair/specpls3.cpp
 sinclair/spectrum.cpp
 sinclair/timex.cpp
 sinclair/tsconf.cpp
+sinclair/z88.cpp
 sinclair/zx.cpp
 skeleton/aaa.cpp
 skeleton/acd.cpp
@@ -899,7 +900,6 @@ skeleton/mightyframe.cpp
 skeleton/milwaukee.cpp
 skeleton/mini2440.cpp
 skeleton/miniframe.cpp
-skeleton/miuchiz.cpp
 skeleton/ml20.cpp
 skeleton/mmd1.cpp
 skeleton/mmd2.cpp
