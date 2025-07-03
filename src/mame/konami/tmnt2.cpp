@@ -2396,7 +2396,7 @@ void tmnt2_state::punkshot(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	K052109(config, m_k052109, 0);
 	m_k052109->set_palette(m_palette);
@@ -2444,7 +2444,7 @@ void tmnt2_state::lgtnfght(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	MCFG_VIDEO_START_OVERRIDE(tmnt2_state,lgtnfght)
 
@@ -2461,15 +2461,13 @@ void tmnt2_state::lgtnfght(machine_config &config)
 	K053251(config, m_k053251, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "lspeaker", 1.0).add_route(1, "rspeaker", 1.0);
+	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "speaker", 1.0, 0).add_route(1, "speaker", 1.0, 1);
 
 	K053260(config, m_k053260, XTAL(3'579'545));
-	m_k053260->add_route(0, "lspeaker", 0.70);
-	m_k053260->add_route(1, "rspeaker", 0.70);
-	m_k053260->sh1_cb().set(FUNC(tmnt2_state::z80_nmi_w));
+	m_k053260->add_route(0, "speaker", 0.70, 0);
+	m_k053260->add_route(1, "speaker", 0.70, 1);
 }
 
 void tmnt2_state::blswhstl(machine_config &config)
@@ -2499,7 +2497,7 @@ void tmnt2_state::blswhstl(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	MCFG_VIDEO_START_OVERRIDE(tmnt2_state, blswhstl)
 
@@ -2517,14 +2515,13 @@ void tmnt2_state::blswhstl(machine_config &config)
 	K054000(config, m_k054000, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "lspeaker", 0.70).add_route(1, "rspeaker", 0.70);
+	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "speaker", 0.70, 0).add_route(1, "speaker", 0.70, 1);
 
 	K053260(config, m_k053260, XTAL(3'579'545));
-	m_k053260->add_route(0, "rspeaker", 0.50);   /* fixed inverted stereo channels */
-	m_k053260->add_route(1, "lspeaker", 0.50);
+	m_k053260->add_route(0, "speaker", 0.50, 1);   /* fixed inverted stereo channels */
+	m_k053260->add_route(1, "speaker", 0.50, 0);
 	m_k053260->sh1_cb().set(FUNC(tmnt2_state::z80_nmi_w));
 }
 
@@ -2563,7 +2560,7 @@ void glfgreat_state::glfgreat(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	MCFG_VIDEO_START_OVERRIDE(glfgreat_state,glfgreat)
 
@@ -2584,12 +2581,11 @@ void glfgreat_state::glfgreat(machine_config &config)
 	K053251(config, m_k053251, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
 	K053260(config, m_k053260, XTAL(3'579'545));
-	m_k053260->add_route(0, "lspeaker", 1.0);
-	m_k053260->add_route(1, "rspeaker", 1.0);
+	m_k053260->add_route(0, "speaker", 1.0, 1);
+	m_k053260->add_route(1, "speaker", 1.0, 0);
 	m_k053260->sh1_cb().set(FUNC(glfgreat_state::z80_nmi_w));
 }
 
@@ -2628,7 +2624,7 @@ void prmrsocr_state::prmrsocr(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	MCFG_VIDEO_START_OVERRIDE(prmrsocr_state,prmrsocr)
 
@@ -2648,15 +2644,14 @@ void prmrsocr_state::prmrsocr(machine_config &config)
 	K053251(config, m_k053251, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
-	K054321(config, "k054321", "lspeaker", "rspeaker");
+	K054321(config, "k054321", "speaker");
 
 	K054539(config, m_k054539, XTAL(18'432'000));
 	m_k054539->timer_handler().set_inputline("audiocpu", INPUT_LINE_NMI);
-	m_k054539->add_route(0, "lspeaker", 1.0);
-	m_k054539->add_route(1, "rspeaker", 1.0);
+	m_k054539->add_route(0, "speaker", 1.0, 0);
+	m_k054539->add_route(1, "speaker", 1.0, 1);
 }
 
 void tmnt2_state::tmnt2(machine_config &config)
@@ -2688,7 +2683,7 @@ void tmnt2_state::tmnt2(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	MCFG_VIDEO_START_OVERRIDE(tmnt2_state,lgtnfght)
 
@@ -2705,14 +2700,13 @@ void tmnt2_state::tmnt2(machine_config &config)
 	K053251(config, m_k053251, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "lspeaker", 1.0).add_route(1, "rspeaker", 1.0);
+	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "speaker", 1.0, 0).add_route(1, "speaker", 1.0, 1);
 
 	K053260(config, m_k053260, XTAL(3'579'545));
-	m_k053260->add_route(0, "lspeaker", 0.75);
-	m_k053260->add_route(1, "rspeaker", 0.75);
+	m_k053260->add_route(0, "speaker", 0.75, 0);
+	m_k053260->add_route(1, "speaker", 0.75, 1);
 	m_k053260->sh1_cb().set(FUNC(tmnt2_state::z80_nmi_w));
 }
 
@@ -2742,7 +2736,7 @@ void tmnt2_state::ssriders(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	MCFG_VIDEO_START_OVERRIDE(tmnt2_state,lgtnfght)
 
@@ -2759,14 +2753,13 @@ void tmnt2_state::ssriders(machine_config &config)
 	K053251(config, m_k053251, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "lspeaker", 1.0).add_route(1, "rspeaker", 1.0);
+	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "speaker", 1.0, 0).add_route(1, "speaker", 1.0, 1);
 
 	K053260(config, m_k053260, XTAL(3'579'545));
-	m_k053260->add_route(0, "lspeaker", 0.70);
-	m_k053260->add_route(1, "rspeaker", 0.70);
+	m_k053260->add_route(0, "speaker", 0.70, 0);
+	m_k053260->add_route(1, "speaker", 0.70, 1);
 	m_k053260->sh1_cb().set(FUNC(tmnt2_state::z80_nmi_w));
 }
 
@@ -2804,7 +2797,7 @@ void sunsetbl_state::sunsetbl(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	MCFG_VIDEO_START_OVERRIDE(sunsetbl_state,lgtnfght)
 
@@ -2820,12 +2813,11 @@ void sunsetbl_state::sunsetbl(machine_config &config)
 	K053251(config, m_k053251, 0);
 
 	/* sound hardware */
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
 	okim6295_device &oki(OKIM6295(config, "oki", 1056000, okim6295_device::PIN7_HIGH)); // clock frequency & pin 7 not verified
-	oki.add_route(ALL_OUTPUTS, "lspeaker", 1.0);
-	oki.add_route(ALL_OUTPUTS, "rspeaker", 1.0);
+	oki.add_route(ALL_OUTPUTS, "speaker", 1.0, 0);
+	oki.add_route(ALL_OUTPUTS, "speaker", 1.0, 1);
 }
 
 void tmnt2_state::thndrx2(machine_config &config)
@@ -2851,7 +2843,7 @@ void tmnt2_state::thndrx2(machine_config &config)
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
-	m_palette->enable_hilights();
+	m_palette->enable_highlights();
 
 	K052109(config, m_k052109, 0);
 	m_k052109->set_palette(m_palette);
@@ -2869,14 +2861,13 @@ void tmnt2_state::thndrx2(machine_config &config)
 
 	/* sound hardware */
 	// NB: game defaults in mono
-	SPEAKER(config, "lspeaker").front_left();
-	SPEAKER(config, "rspeaker").front_right();
+	SPEAKER(config, "speaker", 2).front();
 
-	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "lspeaker", 0.25).add_route(1, "rspeaker", 0.25);
+	YM2151(config, "ymsnd", XTAL(3'579'545)).add_route(0, "speaker", 0.25, 0).add_route(1, "speaker", 0.25, 1);
 
 	K053260(config, m_k053260, XTAL(3'579'545));
-	m_k053260->add_route(0, "lspeaker", 0.50);
-	m_k053260->add_route(1, "rspeaker", 0.50);
+	m_k053260->add_route(0, "speaker", 0.50, 0);
+	m_k053260->add_route(1, "speaker", 0.50, 1);
 	m_k053260->sh1_cb().set(FUNC(tmnt2_state::z80_nmi_w));
 }
 

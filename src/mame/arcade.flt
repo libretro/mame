@@ -1,11 +1,15 @@
 //acorn/aristmk5.cpp          // fruit, mnw
 
+//acorn/belatra.cpp          // fruit, black screen
+
 acorn/ertictac.cpp
 
 acorn/ssfindo.cpp
 
 adp/adp.cpp                 // gambling
 -funlddlx
+-funlddlx2
+-funlddlx4
 
 //adp/manohman.cpp          // no screen
 
@@ -68,22 +72,13 @@ aristocrat/caswin.cpp
 
 astrocorp/astrcorp.cpp          // gambling
 -gostopac
--hapfarm
+-lwitch
 -magibomba
--magibombd
--magibombg
--magibombm
--monkeyl
--monkeyla
--monkeylb
--monkeylc
--monkeyld
 -speedmst
 -speedmsta
 -speedmstb
 -westvent
 -winbingoa
--wwitch
 
 //astrocorp/astropc.cpp          // no screen
 
@@ -161,6 +156,7 @@ atari/cloud9.cpp
 atari/cops.cpp            // laserdiscs
 -cops
 -copsuk
+-visnqust
 
 atari/copsnrob.cpp
 
@@ -918,28 +914,44 @@ gaelco/bigkarnk_ms.cpp
 gaelco/blmbycar.cpp
 
 gaelco/gaelco.cpp
+-squashb                      // black screen
 
 gaelco/gaelco2.cpp
 -aligatorp
 -chmppool
 -jungleani
 -play2000_50i
+-sltpcyclb
+-sltpcyclc
+-sltpcycld
+-sltpcycle
+-sltpcyclf
+-sltpstepa
+-sltpstepb
+-sltpstepc
+-sltpstepd
 -srollnd
 
 gaelco/gaelco3d.cpp
+-radikalbp                     // need roms
 
 //gaelco/gaelcof3.cpp          // no screen
 
 //gaelco/gaelcopc.cpp          // black screen, some chd
 
 gaelco/glass.cpp
+-glassp                       // need roms
 
 //gaelco/goldart.cpp          // no inputs
+
+//gaelco/lotoplay.cpp         // no screen
 
 gaelco/mastboy.cpp
 -mastboyiv2
 
 gaelco/mastboyo.cpp
+
+gaelco/mastboyo_ms.cpp
 
 //gaelco/radikaldarts.cpp          // chd, mnw
 
@@ -957,7 +969,11 @@ gaelco/thoop2.cpp
 
 gaelco/wrally.cpp
 
+//gaelco/wrally_ms.cpp         // white screen
+
 gaelco/xorworld.cpp
+
+//gaelco/xorworld_ms.cpp               // black screen
 
 galaxian/dambustr.cpp
 
@@ -1029,7 +1045,7 @@ igs/goldstar.cpp          // fruit
 -3cdpokera
 -amaztsk
 -animalhsa
--animalw
+-animalwa
 -aplan
 -bonusch
 -bonuscha
@@ -1122,6 +1138,7 @@ igs/igspoker.cpp          // poker
 
 igs/igs_fear.cpp
 -icescape
+-mjzb
 
 igs/igs_m027.cpp
 -amazoni2
@@ -1132,11 +1149,13 @@ igs/igs_m027.cpp
 -cjdh6th
 -extradrw
 -gonefsh2
+-jhg3d
 -klxyj
 -luckycrs
 -olympic5
 -olympic5107us
 -olympic5a
+-royal5p
 -sdwx
 
 igs/igs_m027_023vid.cpp
@@ -1150,6 +1169,7 @@ igs/igs_m027xa.cpp
 -haunthig
 -haunthig101us
 -haunthiga
+-jking04
 -wldfruit
 
 //igs/igs_m036.cpp          // black screen
@@ -1164,11 +1184,13 @@ igs/lordgun.cpp
 igs/pgm.cpp
 -dmnfrntpcb
 -martmasttw
+-kovbl
 -kovgsyx
 -kovlsjb
 -kovlsjba
 -kovlsqh
 -kovlsqh2
+-kovplusbl
 -kovqhsgs
 -kovqhsgs302
 
@@ -1929,8 +1951,6 @@ misc/beaminv.cpp
 
 misc/beezer.cpp
 
-//misc/belatra.cpp          // fruit, no screen
-
 //misc/bingoman.cpp          // bingo, black screen
 
 //misc/bingor.cpp          // bingo, mnw
@@ -1959,6 +1979,7 @@ misc/cb2001.cpp          // fruit
 -cb4a
 -cb5
 -cb5_11
+-cb5_13
 -crzybell
 -dynastye
 -mystjb
@@ -2150,6 +2171,7 @@ misc/gms.cpp
 -magslot
 -rbmk
 -rbspm
+-smatch03
 -ssanguoj
 -super555
 
@@ -2290,6 +2312,8 @@ misc/mcatadv.cpp
 
 misc/megaphx.cpp
 
+//misc/megaturbo.cpp         // roms needed
+
 //misc/menghong.cpp          // gambling, mnw
 
 misc/meyc8080.cpp          // fruit
@@ -2339,42 +2363,9 @@ misc/news.cpp          //
 
 //misc/nibble.cpp          // corrupt frozen screen
 
-misc/norautp.cpp          // poker
--bjpoker
--dphla
--dphljp
--dphl
--dphlunka
--dphlunkb
--drhl
--drhla
--fastdrwp
--gtipoker
--gtipokra
--gtipokrb
--hilokimb
--kimbldhl
--kimblz80
--krampcb3
--krampcb4
--krampcb6
--newhilop
--noraut3a
--noraut3b
--norautu
--norautua
--norautub
--pkii_dm
--pma
--pokplus
--pokplusa
--pokplusb
--smshilo
--ssjkrpkr
--tpoker2
--tpoker2a
--tpoker2b
--unkljfpk
+//misc/ncarrera.cpp         // inputs
+
+//misc/norautp.cpp          // poker, too many not working
 
 //misc/notechan.cpp          // black screen
 
@@ -2417,6 +2408,8 @@ misc/pkscram.cpp
 //misc/pmc.cpp          // no screen
 
 //misc/pntnpuzl.cpp          // game ends immediately then freezes
+
+//misc/pntnpuzls.cpp         // inputs
 
 //misc/poker72.cpp          // poker, mnw
 
@@ -2492,6 +2485,8 @@ misc/smsmcorp.cpp
 misc/spool99.cpp          // poker
 
 misc/sprcros2.cpp
+
+misc/sshanghai.cpp
 
 //misc/startouch.cpp          // chd, mnw
 
@@ -2581,6 +2576,7 @@ misc/tvg01.cpp
 //misc/twinbskt.cpp          // no screen
 
 misc/umipoker.cpp          // poker
+-vparadis
 
 //misc/unkgolf.cpp           // no screen
 
@@ -2660,6 +2656,8 @@ namco/cgang.cpp
 //namco/dangbar.cpp          // no screen
 
 //namco/dkmb.cpp          // hang at atart
+
+//namco/ds5000.cpp                     // black screen
 
 //namco/gal3.cpp          // black screen
 
@@ -2854,6 +2852,8 @@ nichibutsu/wiping.cpp
 
 nintendo/aleck64.cpp
 
+nintendo/blockfvr.cpp
+
 nintendo/cham24.cpp
 
 nintendo/cothello.cpp
@@ -2901,6 +2901,7 @@ nintendo/spacefb.cpp
 nintendo/vsnes.cpp
 
 nintendo/vt1682.cpp
+-anpncpc                   // no inputs
 -gm235upc
 
 nix/fitfight.cpp
@@ -3008,6 +3009,8 @@ pc/pcat_nit.cpp            // use -mouse
 -streetg2
 -streetg2r5
 -streetgr3
+
+//pc/play4texash.cpp       // chd, skel
 
 //pc/przone.cpp           // chd, skel
 
@@ -3290,13 +3293,15 @@ sanritsu/mjkjidai.cpp          // mahjong
 
 sanritsu/ron.cpp          // mahjong
 
-//sealy/sealy.cpp          // black screen
-
 //sealy/sealy_8031.cpp                 // black screen
 
 //sealy/sealy_eagle.cpp          // black screen
 
 //sealy/sealy_fr.cpp          // no screen
+
+//sealy/sealy_m16c.cpp          // black screen
+
+//sealy/sealy_z80.cpp          // black screen
 
 sega/angelkds.cpp
 
@@ -3354,31 +3359,19 @@ sega/model1.cpp
 -netmerc
 
 sega/model2.cpp
--bel
--dynamcopc
--hotd
--hotdo
--hotdp
 -hpyagu98
 -lastbrnx
--lastbrnxu
 -lastbrnxj
+-lastbrnxu
 -powsled
 -powsledm
 -powsledr
 -rascot2
--skisuprg
--stcc
--stcca
--stccb
--stcco
--segawski
 -topskatr
 -topskatrj
--topskatruo
 -topskatru
+-topskatruo
 -vonr
--waverunr
 
 sega/model3.cpp
 -daytona2
@@ -3617,6 +3610,7 @@ sega/segae.cpp
 //sega/segafruit.cpp          // no screen
 
 sega/segag80r.cpp
+-005a
 
 sega/segag80v.cpp
 
@@ -3677,6 +3671,7 @@ sega/sg1000a.cpp
 sega/stactics.cpp
 
 sega/stv.cpp
+-chalgolf
 -choroqhr
 -dfeverg
 -fanzonem
@@ -3903,6 +3898,8 @@ sigma/spiders.cpp
 
 //skeleton/biorhythm.cpp               // no screen
 
+//skeleton/biorhythm_fp.cpp            // no screen
+
 //skeleton/bolsaint.cpp           // no screen
 
 //skeleton/boo.cpp                // black screen
@@ -3914,6 +3911,8 @@ sigma/spiders.cpp
 //skeleton/caramball.cpp          // no screen
 
 //skeleton/cle68k.cpp             // black screen
+
+//skeleton/clownmgc.cpp           // black screen
 
 //skeleton/cubieboard4.cpp        // no screen
 
@@ -3994,6 +3993,8 @@ snk/mechatt.cpp
 snk/miconkit.cpp
 
 snk/munchmo.cpp
+
+//snk/neocrnvl.cpp            // no screen
 
 snk/prehisle.cpp
 
@@ -4516,6 +4517,7 @@ vsystem/welltris.cpp
 
 wing/luckgrln.cpp          // gambling
 -luckstrn
+-luckstrna
 
 //wing/lucky37.cpp          // poker, no screen
 
@@ -4525,6 +4527,7 @@ wing/lucky74.cpp          // poker
 -lucky88w
 
 wing/pinkiri8.cpp          // mahjong, bad gfx
+-janmu
 -pinkiri8
 -ronjana
 -ronjansa
