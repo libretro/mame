@@ -38,8 +38,8 @@ bool libretro_ff_enabled = false;
 
 int fb_width       = 640;
 int fb_height      = 480;
-int max_width      = fb_width;
-int max_height     = fb_height;
+int max_width      = 720;
+int max_height     = 720;
 float retro_aspect = (float)4.0f / (float)3.0f;
 float view_aspect  = 1.0f;
 float sample_rate  = 48000.0f;
