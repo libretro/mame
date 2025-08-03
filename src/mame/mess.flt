@@ -578,7 +578,6 @@ nintendo/pokemini.cpp
 nintendo/snes.cpp
 nintendo/vboy.cpp
 nintendo/vt1682.cpp
-nintendo/vt_unknown.cpp
 nokia/dbox.cpp
 nokia/mikromik.cpp
 nokia/nokia_3310.cpp
@@ -758,7 +757,7 @@ sharp/fontwriter.cpp
 sharp/mz2000.cpp
 sharp/mz2500.cpp
 sharp/mz3500.cpp
-sharp/mz6500.cpp
+sharp/mz5500.cpp
 sharp/mz700.cpp
 sharp/mz80.cpp
 sharp/pc1500.cpp
