@@ -325,20 +325,17 @@ Routes are grouped by emulated device.  For each device, full routes are listed
 before channel routes.  For each route, you can select the system sound output
 or input and adjust the volume from -96 dB (quietest) to +12 dB (loudest).  For
 channel routes, you can also select the individual emulated channel and host
-channel.  Select **Delete route** to delete a route.
+channel.  Select **Remove this route** to remove a route.
 
-To add a full route, highlight a menu item for the emulated device you want to
-add the route for and press the UI Audio add full mapping key (F on the keyboard
-by default).  If possible, a full route will be added and the menu highlight
-will move to the newly added route.  If routes between the highlighted device
-and every host output/input already exist, no route will be added.
+Select **Add new full route** to add a new full route to that group.  If
+possible, it will be added and the menu highlight will move to the newly added
+route.  If routes between the highlighted device and every host output/input
+already exist, no route will be added.
 
-To add a channel route, highlight a menu item for the emulated device you want
-to add the route for and press the UI Audio add channel mapping key (C on the
-keyboard by default).  If possible, a channel route will be added and the menu
-highlight will move to the newly added route.  If routes between all channels
-for the highlighted device and every host output/input channel already exist, no
-route will be added.
+Select **Add new channel route** to add a new channel route to that group.  If
+possible, it will be added and the menu highlight will move to the newly added
+route.  If routes between all channels for the highlighted device and every
+host output/input channel already exist, no route will be added.
 
 Some sound modules allow channel assignments and volumes to be controlled using
 an external mixer interface (for example the PipeWire module for Linux has this
@@ -360,10 +357,10 @@ independent effect chain is applied for each emulated sound output device.
 The effect chain itself is not configurable.  It always consists of these four
 effects, in this order:
 
-* Filter
+* Filters
 * Compressor
 * Reverb
-* Parametric equaliser
+* Equalizer
 
 When editing parameters for an output device’s effect chain, inherited default
 parameter values are showing dimmed, while parameter values set for that chain
@@ -376,13 +373,24 @@ by output device chains.  When editing the **Default** chain, you can restore
 the built-in default value for a parameter by pressing the UI Clear key
 (Del/Delete/Forward Delete on the keyboard by default).
 
-The Audio Events menu also allows you to configure the algorithm used for audio
+By default, the high-pass filter is enabled, with minimal cutoff frequency for
+DC offset removal.  All other effects are bypassed (technically, the equalizer
+effect is active too, but all bands are set to 0 dB so it's still turned off).
+
+The Audio Effects menu also allows you to configure the algorithm used for audio
 sample rate conversion.  The default **LoFi** algorithm has modest CPU
-requirements.  The **HQ** algorithm provides higher quality sample rate
-conversion at the expense of requiring substantially higher CPU performance.
-The **HQ** algorithm has additional parameters.  Increasing the latency can
-improve quality.  Increasing the filter length or phases can improve quality at
-the expense of higher CPU performance requirements.
+requirements.  The recommended **HQ** algorithm provides higher quality sample
+rate conversion at the expense of requiring substantially higher CPU
+performance.
+
+The **HQ** algorithm has additional parameters.  Increasing the **HQ latency**
+can improve quality.  If it's increased too much and multiple sound chips are
+used, the latencies will stack up and you will end up with too much lag at the
+end.  When decreasing the latency below 1 ms, the resampler will lose its
+potential (in fact, it will sound similar to MAME's lower quality resampler from
+before version 0.278).  Increasing the **HQ filter max size** or **HQ filter max
+phases** can improve quality at the expense of higher CPU performance
+requirements.
 
 
 Filter effect
@@ -394,13 +402,13 @@ low-pass filter can simulate the poor high-frequency response typical of many
 arcade cabinets and television sets.
 
 The Q factor controls how sharp the transition from the stop band to the
-passband is.  Higher factors provide a sharper transition.  Values over 0.7
+passband is.  Higher factors provide a sharper transition.  Values over 0.71
 cause the filter to amplify frequencies close to the cutoff frequency, which
 may be surprising or undesirable.
 
 
 Compressor effect
-~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~
 
 This effect provides dynamic range compression (it is based on a
 reimplementation of Alain Paul’s Versatile Compressor).  Dynamic range
@@ -410,12 +418,14 @@ quiet sounds more audible over background noise.
 
 The parameters are:
 
+Threshold
+    The level at which the amplification fully stops.
+Ratio
+    The maximum amplification.
 Attack
     The reaction time to loud sounds to reduce the amplification.
 Release
     The reaction time to allow the amplification to go back up.
-Ratio
-    The maximum amplification.
 Input gain
     The amplification level at the input.
 Output gain
@@ -423,8 +433,6 @@ Output gain
 Convexity
     The shape of the relationship between distance to the threshold and ratio
     value.  Higher values give a steeper shape.
-Threshold
-    The level at which the amplification fully stops.
 Channel link
     At 100%, all channels of an output device are amplified identically, while
     at 0% they are fully independent.  Intermediate values give intermediate
@@ -439,14 +447,19 @@ Ceiling
     The maximum level allowed just before the output amplification.  Causes
     soft clipping at that level.
 
+By setting **Attack** to 0 ms, **Release** to Infinite, and **Ratio** to
+Infinity:1, the compressor will turn into a brickwall limiter (leave the
+advanced settings to default).  If you increase **Input gain** on top of that,
+with a **Threshold** of eg. -3 dB, it will act like a dynamic normalizer.
+
 
 Reverb effect
 ~~~~~~~~~~~~~
 
-Not implemented yet.
+Not documented yet.
 
 
-Equaliser effect
+Equalizer effect
 ~~~~~~~~~~~~~~~~
 
 A five-band parametric equalizer, allowing to amplify or attenuate specific

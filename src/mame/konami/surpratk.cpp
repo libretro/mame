@@ -60,7 +60,7 @@ private:
 	required_device<konami_cpu_device> m_maincpu;
 	required_device<address_map_bank_device> m_bank0000;
 	required_device<k052109_device> m_k052109;
-	required_device<k05324x_device> m_k053244;
+	required_device<k053244_device> m_k053244;
 	required_device<k053251_device> m_k053251;
 	required_device<palette_device> m_palette;
 
@@ -70,7 +70,7 @@ private:
 	void _5fc0_w(uint8_t data);
 	uint32_t screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect);
 
-	K05324X_CB_MEMBER(sprite_callback);
+	K053244_CB_MEMBER(sprite_callback);
 	K052109_CB_MEMBER(tile_callback);
 	void banking_callback(uint8_t data);
 	void bank0000_map(address_map &map) ATTR_COLD;
@@ -97,7 +97,7 @@ K052109_CB_MEMBER(surpratk_state::tile_callback)
 
 ***************************************************************************/
 
-K05324X_CB_MEMBER(surpratk_state::sprite_callback)
+K053244_CB_MEMBER(surpratk_state::sprite_callback)
 {
 	int pri = 0x20 | ((*color & 0x60) >> 2);
 	if (pri <= m_layerpri[2])
@@ -134,8 +134,6 @@ uint32_t surpratk_state::screen_update(screen_device &screen, bitmap_ind16 &bitm
 		if (m_layer_colorbase[i] != prev_colorbase)
 			m_k052109->mark_tilemap_dirty(i);
 	}
-
-	m_k052109->tilemap_update();
 
 	// sort layers and draw
 	int layer[3];
@@ -201,7 +199,7 @@ void surpratk_state::main_map(address_map &map)
 	map(0x5f8e, 0x5f8e).portr("DSW3");
 	map(0x5f8f, 0x5f8f).portr("DSW1");
 	map(0x5f90, 0x5f90).portr("DSW2");
-	map(0x5fa0, 0x5faf).rw(m_k053244, FUNC(k05324x_device::k053244_r), FUNC(k05324x_device::k053244_w));
+	map(0x5fa0, 0x5faf).rw(m_k053244, FUNC(k053244_device::k053244_r), FUNC(k053244_device::k053244_w));
 	map(0x5fb0, 0x5fbf).w(m_k053251, FUNC(k053251_device::write));
 	map(0x5fc0, 0x5fc0).r("watchdog", FUNC(watchdog_timer_device::reset_r)).w(FUNC(surpratk_state::_5fc0_w));
 	map(0x5fc4, 0x5fc4).w(FUNC(surpratk_state::videobank_w));
@@ -212,7 +210,7 @@ void surpratk_state::main_map(address_map &map)
 void surpratk_state::bank0000_map(address_map &map)
 {
 	map(0x0000, 0x07ff).ram();
-	map(0x0800, 0x0fff).rw(m_k053244, FUNC(k05324x_device::k053245_r), FUNC(k05324x_device::k053245_w));
+	map(0x0800, 0x0fff).rw(m_k053244, FUNC(k053244_device::k053245_r), FUNC(k053244_device::k053245_w));
 	map(0x1000, 0x1fff).ram().w(m_palette, FUNC(palette_device::write8)).share("palette");
 }
 
@@ -303,7 +301,7 @@ void surpratk_state::banking_callback(uint8_t data)
 void surpratk_state::surpratk(machine_config &config)
 {
 	// basic machine hardware
-	KONAMI(config, m_maincpu, XTAL(24'000'000) / 2); // 053248, the clock input is 12MHz, and internal CPU divider of 4
+	KONAMI(config, m_maincpu, 24_MHz_XTAL / 2); // 053248, the clock input is 12MHz, and internal CPU divider of 4
 	m_maincpu->set_addrmap(AS_PROGRAM, &surpratk_state::main_map);
 	m_maincpu->line().set(FUNC(surpratk_state::banking_callback));
 
@@ -313,32 +311,30 @@ void surpratk_state::surpratk(machine_config &config)
 
 	// video hardware
 	screen_device &screen(SCREEN(config, "screen", SCREEN_TYPE_RASTER));
-	screen.set_refresh_hz(60);
-	screen.set_vblank_time(ATTOSECONDS_IN_USEC(0));
-	screen.set_size(64*8, 32*8);
-	screen.set_visarea(12*8, (64-12)*8-1, 2*8, 30*8-1);
+	screen.set_raw(24_MHz_XTAL / 4, 384, 0, 320, 264, 16, 240);
 	screen.set_screen_update(FUNC(surpratk_state::screen_update));
 	screen.set_palette(m_palette);
 
 	PALETTE(config, m_palette).set_format(palette_device::xBGR_555, 2048);
 	m_palette->enable_shadows();
 
-	K052109(config, m_k052109, 0);
+	K052109(config, m_k052109, 24_MHz_XTAL);
 	m_k052109->set_palette(m_palette);
 	m_k052109->set_screen("screen");
 	m_k052109->set_tile_callback(FUNC(surpratk_state::tile_callback));
 	m_k052109->irq_handler().set_inputline(m_maincpu, KONAMI_IRQ_LINE);
 
-	K053244(config, m_k053244, 0);
+	K053244(config, m_k053244, 24_MHz_XTAL);
 	m_k053244->set_palette(m_palette);
 	m_k053244->set_sprite_callback(FUNC(surpratk_state::sprite_callback));
+	m_k053244->set_priority_shadows(true);
 
 	K053251(config, m_k053251, 0);
 
 	// sound hardware
 	SPEAKER(config, "speaker", 2).front();
 
-	ym2151_device &ymsnd(YM2151(config, "ymsnd", XTAL(3'579'545)));
+	ym2151_device &ymsnd(YM2151(config, "ymsnd", 3.579545_MHz_XTAL));
 	ymsnd.irq_handler().set_inputline(m_maincpu, KONAMI_FIRQ_LINE);
 	ymsnd.add_route(0, "speaker", 1.0, 0);
 	ymsnd.add_route(1, "speaker", 1.0, 1);
@@ -351,7 +347,6 @@ void surpratk_state::surpratk(machine_config &config)
   Game ROMs
 
 ***************************************************************************/
-
 
 ROM_START( suratk )
 	ROM_REGION( 0x40000, "maincpu", 0 ) // code + banked roms

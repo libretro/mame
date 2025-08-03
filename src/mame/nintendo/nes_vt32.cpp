@@ -12,10 +12,7 @@
  ***************************************************************************/
 
 #include "emu.h"
-#include "nes_vt369_vtunknown_soc.h"
 #include "nes_vt32_soc.h"
-
-#include "multibyte.h"
 
 namespace {
 
@@ -39,8 +36,6 @@ protected:
 	virtual uint8_t in1_r();
 	virtual void in0_w(uint8_t data);
 
-	void nes_vt32_map(address_map &map) ATTR_COLD;
-
 	optional_ioport m_io0;
 	optional_ioport m_io1;
 
@@ -53,9 +48,6 @@ protected:
 
 	/* Misc */
 	uint32_t m_ahigh; // external banking bits
-	uint8_t m_4242;
-	uint8_t m_411c;
-	uint8_t m_411d;
 
 	required_region_ptr<uint8_t> m_prgrom;
 
@@ -81,6 +73,11 @@ public:
 		m_soc(*this, "soc")
 	{ }
 
+	[[maybe_unused]] void vt_external_space_map_1mbyte(address_map &map) ATTR_COLD;
+	[[maybe_unused]] void vt_external_space_map_2mbyte(address_map &map) ATTR_COLD;
+	[[maybe_unused]] void vt_external_space_map_4mbyte(address_map &map) ATTR_COLD;
+	void vt_external_space_map_8mbyte(address_map &map) ATTR_COLD;
+	void vt_external_space_map_16mbyte(address_map &map) ATTR_COLD;
 	void vt_external_space_map_32mbyte(address_map &map) ATTR_COLD;
 
 protected:
@@ -95,15 +92,21 @@ public:
 	{ }
 
 	void nes_vt32_fp(machine_config& config);
+	void nes_vt32_8mb(machine_config& config);
+	void nes_vt32_16mb(machine_config& config);
 	void nes_vt32_32mb(machine_config& config);
 	void nes_vt32_4x16mb(machine_config& config);
 
 	void nes_vt32_pal_32mb(machine_config& config);
 
+	void init_rfcp168();
 	void init_g9_666();
+	void init_hhgc319();
+
+protected:
+	uint8_t vt_rom_banked_r(offs_t offset);
 
 private:
-	uint8_t vt_rom_banked_r(offs_t offset);
 	void vt_external_space_map_fp_2x32mbyte(address_map &map) ATTR_COLD;
 
 	uint8_t fcpocket_412d_r();
@@ -121,6 +124,31 @@ void nes_vt32_base_state::vtspace_w(offs_t offset, uint8_t data)
 }
 
 // VTxx can address 25-bit address space (32MB of ROM) so use maps with mirroring in depending on ROM size
+void nes_vt32_state::vt_external_space_map_1mbyte(address_map &map)
+{
+	map(0x0000000, 0x00fffff).mirror(0x1f00000).r(FUNC(nes_vt32_state::vt_rom_r));
+}
+
+void nes_vt32_state::vt_external_space_map_2mbyte(address_map &map)
+{
+	map(0x0000000, 0x01fffff).mirror(0x1e00000).r(FUNC(nes_vt32_state::vt_rom_r));
+}
+
+void nes_vt32_state::vt_external_space_map_4mbyte(address_map &map)
+{
+	map(0x0000000, 0x03fffff).mirror(0x1c00000).r(FUNC(nes_vt32_state::vt_rom_r));
+}
+
+void nes_vt32_state::vt_external_space_map_8mbyte(address_map &map)
+{
+	map(0x0000000, 0x07fffff).mirror(0x1800000).r(FUNC(nes_vt32_state::vt_rom_r));
+}
+
+void nes_vt32_state::vt_external_space_map_16mbyte(address_map &map)
+{
+	map(0x0000000, 0x0ffffff).mirror(0x1000000).r(FUNC(nes_vt32_state::vt_rom_r));
+}
+
 void nes_vt32_state::vt_external_space_map_32mbyte(address_map &map)
 {
 	map(0x0000000, 0x1ffffff).r(FUNC(nes_vt32_state::vt_rom_r));
@@ -193,18 +221,12 @@ void nes_vt32_base_state::machine_start()
 	m_previous_port0 = 0;
 
 	m_ahigh = 0;
-	m_4242 = 0;
-	m_411c = 0;
-	m_411d = 0;
 
 	save_item(NAME(m_latch0));
 	save_item(NAME(m_latch1));
 	save_item(NAME(m_previous_port0));
 
 	save_item(NAME(m_ahigh));
-	save_item(NAME(m_4242));
-	save_item(NAME(m_411c));
-	save_item(NAME(m_411d));
 }
 
 void nes_vt32_base_state::machine_reset()
@@ -307,6 +329,18 @@ void nes_vt32_unk_state::nes_vt32_4x16mb(machine_config& config)
 	dynamic_cast<nes_vt09_soc_device&>(*m_soc).upper_read_412d_callback().set(FUNC(nes_vt32_unk_state::fcpocket_412d_r));
 }
 
+void nes_vt32_unk_state::nes_vt32_8mb(machine_config& config)
+{
+	nes_vt32_fp(config);
+	m_soc->set_addrmap(AS_PROGRAM, &nes_vt32_unk_state::vt_external_space_map_8mbyte);
+}
+
+void nes_vt32_unk_state::nes_vt32_16mb(machine_config& config)
+{
+	nes_vt32_fp(config);
+	m_soc->set_addrmap(AS_PROGRAM, &nes_vt32_unk_state::vt_external_space_map_16mbyte);
+}
+
 void nes_vt32_unk_state::nes_vt32_32mb(machine_config& config)
 {
 	nes_vt32_fp(config);
@@ -322,6 +356,7 @@ static INPUT_PORTS_START( nes_vt32_fp )
 	PORT_DIPSETTING(    0x00, "472-in-1" )
 	PORT_DIPSETTING(    0x06, "128-in-1" )
 INPUT_PORTS_END
+
 
 
 ROM_START( dgun2573 ) // this one lacked a DreamGear logo but was otherwise physically identical, is it a clone product or did DreamGear drop the logo in favor of just using the 'My Arcade' brand?
@@ -360,7 +395,16 @@ ROM_START( myaasa )
 	ROM_LOAD( "mx29gl256el.u2", 0x00000, 0x2000000, CRC(1882264c) SHA1(e594b5cea634fadc4aac217b6d651be72a3024c0) )
 ROM_END
 
+ROM_START( mymman )
+	ROM_REGION( 0x800000, "mainrom", 0 )
+	ROM_LOAD( "megaman_s29gl064n90tfi04_0001227e.bin", 0x00000, 0x800000, CRC(1954cc95) SHA1(be20d42d32d625ec7b3c5db983850763c0ceff73) )
+	ROM_IGNORE(0x100)
+ROM_END
 
+ROM_START( goretrop )
+	ROM_REGION( 0x2000000, "mainrom", 0 )
+	ROM_LOAD( "goretroportable.bin", 0x00000, 0x2000000, CRC(e7279dd3) SHA1(5f096ce22e46f112c2cc6588cb1c527f4f0430b5) )
+ROM_END
 
 ROM_START( fcpocket )
 	ROM_REGION( 0x8000000, "mainrom", 0 )
@@ -394,27 +438,10 @@ ROM_START( lxpcli )
 	ROM_LOAD( "s29gl512n11tfi02.u2", 0x00000, 0x4000000, CRC(9df963c6) SHA1(e5cc7b48c31b761bb74b3e5e1563a16a0cefa272) )
 ROM_END
 
-ROM_START( rfcp168 )
+ROM_START( typo240 )
 	ROM_REGION( 0x2000000, "mainrom", 0 )
-	ROM_LOAD( "winbond_w29gl128c.bin", 0x00000, 0x1000000, CRC(d11caf71) SHA1(64b269cee30a51549a2d0491bbeed07751771559) ) // ROM verified on 2 units
-	ROM_RELOAD( 0x1000000, 0x1000000 )
+	ROM_LOAD( "240nes.u2", 0x00000, 0x1000000, CRC(d709f66c) SHA1(73ca34ce07a1a8782226bd74b1ae43fc6d7126e1) ) // s29gl128p90tfcr1
 ROM_END
-
-ROM_START( g9_666 )
-	ROM_REGION( 0x2000000, "mainrom", 0 )
-	ROM_LOAD( "666in1.u1", 0x00000, 0x1000000, CRC(e3a98465) SHA1(dfec3e74e36aef9bfa57ec530c37642015569dc5) )
-	ROM_RELOAD( 0x1000000, 0x1000000 )
-ROM_END
-
-void nes_vt32_unk_state::init_g9_666()
-{
-	uint8_t *romdata = memregion("mainrom")->base();
-	for (offs_t i = 0; i < 0x2000000; i += 2)
-	{
-		uint16_t w = get_u16le(&romdata[i]);
-		put_u16le(&romdata[i], (w & 0xf9f9) | (w & 0x0600) >> 8 | (w & 0x0006) << 8);
-	}
-}
 
 } // anonymous namespace
 
@@ -436,12 +463,13 @@ CONS( 201?, dgunl3202, 0,  0,  nes_vt32_32mb, nes_vt32, nes_vt32_unk_state, empt
 CONS( 201?, myaass,    0,  0,  nes_vt32_32mb, nes_vt32, nes_vt32_unk_state, empty_init, "dreamGEAR", "My Arcade All Star Stadium - Pocket Player (307-in-1)", MACHINE_NOT_WORKING )
 CONS( 201?, myaasa,    0,  0,  nes_vt32_32mb, nes_vt32, nes_vt32_unk_state, empty_init, "dreamGEAR", "My Arcade All Star Arena - Pocket Player (307-in-1)", MACHINE_NOT_WORKING )
 
-// doesn't boot, ends up in weeds after jumping to bank with no code, lots of accesses to $42xx (could this be a different SoC?)
-CONS( 201?, rfcp168,   0,  0,  nes_vt32_32mb, nes_vt32, nes_vt32_unk_state, empty_init, "<unknown>", "Retro FC Plus 168 in 1 Handheld", MACHINE_NOT_WORKING | MACHINE_IMPERFECT_GRAPHICS ) // "RETRO_FC_V3.5"
+CONS( 201?, mymman,    0,  0,  nes_vt32_8mb, nes_vt32, nes_vt32_unk_state, empty_init, "dreamGEAR", "My Arcade Mega Man (DGUNL-7011, Pico Player)", MACHINE_NOT_WORKING )
 
-// many duplicates, real game count to be confirmed, graphical issues in some games, lots of accesses to $42xx
-CONS( 202?, g9_666,   0,  0,  nes_vt32_32mb, nes_vt32, nes_vt32_unk_state, init_g9_666, "<unknown>", "G9 Game Box 666 Games", MACHINE_NOT_WORKING | MACHINE_IMPERFECT_GRAPHICS )
+// most games work, a few minor graphical issues common to the same games in other units
+CONS( 202?, typo240,   0,  0,  nes_vt32_16mb, nes_vt32, nes_vt32_unk_state, empty_init, "Typo", "Vintage Gamer 240-in-1", MACHINE_IMPERFECT_GRAPHICS )
 
+// there's also a 250+ version of the unit below at least
+CONS( 2018, goretrop,    0,  0,  nes_vt32_32mb, nes_vt32, nes_vt32_unk_state, empty_init,    "Retro-Bit", "Go Retro Portable 260+ Games", MACHINE_NOT_WORKING )
 
 // Some games (eg F22) are scrambled like in myaass
 // These use a 16x16x8bpp packed tile mode for the main menu which seems more like a VT3xx feature, but VT3xx extended video regs not written?
@@ -452,7 +480,7 @@ CONS( 2021, matet300,  0,         0,  nes_vt32_32mb,     nes_vt32, nes_vt32_unk_
 // unknown tech level, uses vt32 style opcode scramble and palette, lots of unmapped accesses though
 CONS( 2021, matet100,  0,        0,  nes_vt32_32mb,      nes_vt32, nes_vt32_unk_state, empty_init, "dreamGEAR", "My Arcade Tetris (DGUNL-7027, Pico Player, with 100+ bonus games)", MACHINE_NOT_WORKING | MACHINE_IMPERFECT_GRAPHICS ) // box says 100+ bonus games
 
-// Use DIP switch to select console or cartridge, as cartridge is fake and just toggles a GPIO
+// Uses DIPs switch to select console or cartridge, as cartridge is fake and just toggles a GPIO
 CONS( 2016, fcpocket,  0,  0,  nes_vt32_4x16mb,   nes_vt32_fp, nes_vt32_unk_state, empty_init, "<unknown>",   "FC Pocket 600 in 1", MACHINE_IMPERFECT_GRAPHICS | MACHINE_IMPERFECT_SOUND )  // has external banking (2x 32mbyte banks)
 
 // aside from the boot screens these have no theming and all contain a barely disguised bootleg version of Nintendo's Pinball in the Games section

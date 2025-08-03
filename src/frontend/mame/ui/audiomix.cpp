@@ -27,7 +27,7 @@ namespace {
 
 enum {
 	MT_UNDEFINED, // At startup
-	MT_NONE,      // [no mapping]
+	MT_NONE,      // No mapping
 	MT_FULL,      // Full mapping to node
 	MT_CHANNEL,   // Channel-to-channel mapping
 	MT_INTERNAL   // Go back to previous menu or other non-mapping entry
@@ -38,8 +38,9 @@ enum {
 	ITM_NODE,
 	ITM_NODE_CHANNEL,
 	ITM_DB,
-	ITM_DELETE,
-	ITM_EMPTY
+	ITM_REMOVE,
+	ITM_ADD_FULL,
+	ITM_ADD_CHANNEL
 };
 
 } // anonymous namespace
@@ -95,16 +96,6 @@ bool menu_audio_mixer::handle(event const *ev)
 	select_entry *const current_selection = ((1 <= item_num) && (m_selections.size() >= item_num)) ? &m_selections[item_num - 1] : nullptr;
 
 	switch(ev->iptkey) {
-	case IPT_UI_MIXER_ADD_FULL:
-		if(!current_selection)
-			return false;
-		return add_full(*current_selection);
-
-	case IPT_UI_MIXER_ADD_CHANNEL:
-		if(!current_selection)
-			return false;
-		return add_channel(*current_selection);
-
 	case IPT_UI_PREV_GROUP:
 		if(!current_selection || (current_selection->m_dev == m_selections.front().m_dev)) {
 			return false;
@@ -123,7 +114,7 @@ bool menu_audio_mixer::handle(event const *ev)
 				}
 				--i;
 			}
-			set_selection(reinterpret_cast<void *>(((i + 1) << 3) | ((m_selections[i].m_maptype == MT_NONE) ? ITM_EMPTY : ITM_GUEST_CHANNEL)));
+			set_selection(reinterpret_cast<void *>(((i + 1) << 3) | ((m_selections[i].m_maptype == MT_NONE) ? ITM_ADD_FULL : ITM_GUEST_CHANNEL)));
 			return true;
 		}
 		break;
@@ -134,7 +125,7 @@ bool menu_audio_mixer::handle(event const *ev)
 		} else {
 			for(uint32_t i = item_num; m_selections.size() > i; i++) {
 				if(m_selections[i].m_dev != current_selection->m_dev) {
-					set_selection(reinterpret_cast<void *>(((i + 1) << 3) | ((m_selections[i].m_maptype == MT_NONE) ? ITM_EMPTY : ITM_GUEST_CHANNEL)));
+					set_selection(reinterpret_cast<void *>(((i + 1) << 3) | ((m_selections[i].m_maptype == MT_NONE) ? ITM_ADD_FULL : ITM_GUEST_CHANNEL)));
 					break;
 				}
 			}
@@ -146,8 +137,14 @@ bool menu_audio_mixer::handle(event const *ev)
 			return false;
 
 		switch(current_item) {
-		case ITM_DELETE:
-			return delete_route(current_item - 1, *current_selection);
+		case ITM_REMOVE:
+			return remove_route(item_num - 1, *current_selection);
+
+		case ITM_ADD_FULL:
+			return add_full(*current_selection);
+
+		case ITM_ADD_CHANNEL:
+			return add_channel(*current_selection);
 		}
 		break;
 
@@ -168,13 +165,13 @@ bool menu_audio_mixer::handle(event const *ev)
 
 		switch(current_item) {
 		case ITM_GUEST_CHANNEL:
-			return set_prev_guest_channel(*current_selection);
+			return set_prev_guest_channel(item_num - 1, *current_selection);
 
 		case ITM_NODE:
-			return set_prev_node(*current_selection);
+			return set_prev_node(item_num - 1, *current_selection);
 
 		case ITM_NODE_CHANNEL:
-			return set_prev_node_channel(*current_selection);
+			return set_prev_node_channel(item_num - 1, *current_selection);
 
 		case ITM_DB:
 			if(shift_pressed) {
@@ -200,13 +197,13 @@ bool menu_audio_mixer::handle(event const *ev)
 
 		switch(current_item) {
 		case ITM_GUEST_CHANNEL:
-			return set_next_guest_channel(*current_selection);
+			return set_next_guest_channel(item_num - 1, *current_selection);
 
 		case ITM_NODE:
-			return set_next_node(*current_selection);
+			return set_next_node(item_num - 1, *current_selection);
 
 		case ITM_NODE_CHANNEL:
-			return set_next_node_channel(*current_selection);
+			return set_next_node_channel(item_num - 1, *current_selection);
 
 		case ITM_DB:
 			if(shift_pressed) {
@@ -315,7 +312,7 @@ found:
 }
 
 
-bool menu_audio_mixer::delete_route(uint32_t cursel_index, select_entry &current_selection)
+bool menu_audio_mixer::remove_route(uint32_t cursel_index, select_entry &current_selection)
 {
 	if(current_selection.m_maptype == MT_FULL) {
 		if(current_selection.m_node == 0)
@@ -345,7 +342,7 @@ bool menu_audio_mixer::delete_route(uint32_t cursel_index, select_entry &current
 		m_reset_selection.m_node = 0;
 		m_reset_selection.m_node_channel = 0;
 		m_reset_selection.m_db = 0.0;
-		m_reset_item = ITM_EMPTY;
+		m_reset_item = ITM_ADD_FULL;
 	}
 
 	reset(reset_options::REMEMBER_POSITION);
@@ -353,7 +350,7 @@ bool menu_audio_mixer::delete_route(uint32_t cursel_index, select_entry &current
 }
 
 
-bool menu_audio_mixer::set_prev_guest_channel(select_entry &current_selection)
+bool menu_audio_mixer::set_prev_guest_channel(uint32_t cursel_index, select_entry &current_selection)
 {
 	if(current_selection.m_maptype != MT_CHANNEL)
 		return false;
@@ -371,13 +368,14 @@ bool menu_audio_mixer::set_prev_guest_channel(select_entry &current_selection)
 		if(guest_channel == current_selection.m_guest_channel)
 			return false;
 		if(channel_mapping_available(current_selection.m_dev, guest_channel, current_selection.m_node, current_selection.m_node_channel)) {
+			cursel_index -= find_first_channel_mapping_selection(current_selection.m_dev);
 			if(current_selection.m_node) {
 				const auto node = find_node_name(current_selection.m_node);
 				machine().sound().config_remove_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, guest_channel, node, current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, guest_channel, node, current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			} else {
 				machine().sound().config_remove_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, guest_channel, current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, guest_channel, current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			}
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
@@ -389,7 +387,7 @@ bool menu_audio_mixer::set_prev_guest_channel(select_entry &current_selection)
 }
 
 
-bool menu_audio_mixer::set_next_guest_channel(select_entry &current_selection)
+bool menu_audio_mixer::set_next_guest_channel(uint32_t cursel_index, select_entry &current_selection)
 {
 	if(current_selection.m_maptype != MT_CHANNEL)
 		return false;
@@ -406,13 +404,14 @@ bool menu_audio_mixer::set_next_guest_channel(select_entry &current_selection)
 		if(guest_channel == current_selection.m_guest_channel)
 			return false;
 		if(channel_mapping_available(current_selection.m_dev, guest_channel, current_selection.m_node, current_selection.m_node_channel)) {
+			cursel_index -= find_first_channel_mapping_selection(current_selection.m_dev);
 			if(current_selection.m_node) {
 				const auto node = find_node_name(current_selection.m_node);
 				machine().sound().config_remove_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, guest_channel, node, current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, guest_channel, node, current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			} else {
 				machine().sound().config_remove_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, guest_channel, current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, guest_channel, current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			}
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
@@ -424,20 +423,21 @@ bool menu_audio_mixer::set_next_guest_channel(select_entry &current_selection)
 }
 
 
-bool menu_audio_mixer::set_prev_node(select_entry &current_selection)
+bool menu_audio_mixer::set_prev_node(uint32_t cursel_index, select_entry &current_selection)
 {
 	if(current_selection.m_maptype == MT_FULL) {
 		const uint32_t prev_node = current_selection.m_node;
 		const uint32_t next_node = find_previous_available_node(current_selection.m_dev, prev_node);
 		if(next_node != 0xffffffff) {
+			cursel_index -= find_first_full_mapping_selection(current_selection.m_dev);
 			if(prev_node)
 				machine().sound().config_remove_sound_io_connection_node(current_selection.m_dev, find_node_name(prev_node));
 			else
 				machine().sound().config_remove_sound_io_connection_default(current_selection.m_dev);
 			if(next_node)
-				machine().sound().config_add_sound_io_connection_node(current_selection.m_dev, find_node_name(next_node), current_selection.m_db);
+				machine().sound().config_add_sound_io_connection_node(current_selection.m_dev, find_node_name(next_node), current_selection.m_db, cursel_index);
 			else
-				machine().sound().config_add_sound_io_connection_default(current_selection.m_dev, current_selection.m_db);
+				machine().sound().config_add_sound_io_connection_default(current_selection.m_dev, current_selection.m_db, cursel_index);
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
 			return true;
@@ -446,14 +446,15 @@ bool menu_audio_mixer::set_prev_node(select_entry &current_selection)
 		const uint32_t prev_node = current_selection.m_node;
 		const uint32_t next_node = find_previous_available_channel_node(current_selection.m_dev, current_selection.m_guest_channel, prev_node, current_selection.m_node_channel);
 		if(next_node != 0xffffffff) {
+			cursel_index -= find_first_channel_mapping_selection(current_selection.m_dev);
 			if(prev_node)
 				machine().sound().config_remove_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, find_node_name(prev_node), current_selection.m_node_channel);
 			else
 				machine().sound().config_remove_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel);
 			if(next_node)
-				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, find_node_name(next_node), current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, find_node_name(next_node), current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			else
-				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
 			return true;
@@ -464,21 +465,22 @@ bool menu_audio_mixer::set_prev_node(select_entry &current_selection)
 }
 
 
-bool menu_audio_mixer::set_next_node(select_entry &current_selection)
+bool menu_audio_mixer::set_next_node(uint32_t cursel_index, select_entry &current_selection)
 {
 	if(current_selection.m_maptype == MT_FULL) {
 		const uint32_t prev_node = current_selection.m_node;
 		const uint32_t next_node = find_next_available_node(current_selection.m_dev, prev_node);
 		if(next_node != 0xffffffff) {
+			cursel_index -= find_first_full_mapping_selection(current_selection.m_dev);
 			current_selection.m_node = next_node;
 			if(prev_node)
 				machine().sound().config_remove_sound_io_connection_node(current_selection.m_dev, find_node_name(prev_node));
 			else
 				machine().sound().config_remove_sound_io_connection_default(current_selection.m_dev);
 			if(next_node)
-				machine().sound().config_add_sound_io_connection_node(current_selection.m_dev, find_node_name(next_node), current_selection.m_db);
+				machine().sound().config_add_sound_io_connection_node(current_selection.m_dev, find_node_name(next_node), current_selection.m_db, cursel_index);
 			else
-				machine().sound().config_add_sound_io_connection_default(current_selection.m_dev, current_selection.m_db);
+				machine().sound().config_add_sound_io_connection_default(current_selection.m_dev, current_selection.m_db, cursel_index);
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
 			return true;
@@ -487,15 +489,16 @@ bool menu_audio_mixer::set_next_node(select_entry &current_selection)
 		const uint32_t prev_node = current_selection.m_node;
 		const uint32_t next_node = find_next_available_channel_node(current_selection.m_dev, current_selection.m_guest_channel, prev_node, current_selection.m_node_channel);
 		if(next_node != 0xffffffff) {
+			cursel_index -= find_first_channel_mapping_selection(current_selection.m_dev);
 			current_selection.m_node = next_node;
 			if(prev_node)
 				machine().sound().config_remove_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, find_node_name(prev_node), current_selection.m_node_channel);
 			else
 				machine().sound().config_remove_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel);
 			if(next_node)
-				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, find_node_name(next_node), current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, find_node_name(next_node), current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			else
-				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel, current_selection.m_db, cursel_index);
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
 			return true;
@@ -506,7 +509,7 @@ bool menu_audio_mixer::set_next_node(select_entry &current_selection)
 }
 
 
-bool menu_audio_mixer::set_prev_node_channel(select_entry &current_selection)
+bool menu_audio_mixer::set_prev_node_channel(uint32_t cursel_index, select_entry &current_selection)
 {
 	if(current_selection.m_maptype != MT_CHANNEL)
 		return false;
@@ -524,13 +527,14 @@ bool menu_audio_mixer::set_prev_node_channel(select_entry &current_selection)
 		if(node_channel == current_selection.m_node_channel)
 			return false;
 		if(channel_mapping_available(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node, node_channel)) {
+			cursel_index -= find_first_channel_mapping_selection(current_selection.m_dev);
 			if(current_selection.m_node) {
 				const auto node = find_node_name(current_selection.m_node);
 				machine().sound().config_remove_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, node_channel, current_selection.m_db, cursel_index);
 			} else {
 				machine().sound().config_remove_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, node_channel, current_selection.m_db, cursel_index);
 			}
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
@@ -542,7 +546,7 @@ bool menu_audio_mixer::set_prev_node_channel(select_entry &current_selection)
 }
 
 
-bool menu_audio_mixer::set_next_node_channel(select_entry &current_selection)
+bool menu_audio_mixer::set_next_node_channel(uint32_t cursel_index, select_entry &current_selection)
 {
 	if(current_selection.m_maptype != MT_CHANNEL)
 		return false;
@@ -559,13 +563,14 @@ bool menu_audio_mixer::set_next_node_channel(select_entry &current_selection)
 		if(node_channel == current_selection.m_node_channel)
 			return false;
 		if(channel_mapping_available(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node, node_channel)) {
+			cursel_index -= find_first_channel_mapping_selection(current_selection.m_dev);
 			if(current_selection.m_node) {
 				const auto node = find_node_name(current_selection.m_node);
 				machine().sound().config_remove_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_node(current_selection.m_dev, current_selection.m_guest_channel, node, node_channel, current_selection.m_db, cursel_index);
 			} else {
 				machine().sound().config_remove_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, current_selection.m_node_channel);
-				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, node_channel, current_selection.m_db);
+				machine().sound().config_add_sound_io_channel_connection_default(current_selection.m_dev, current_selection.m_guest_channel, node_channel, current_selection.m_db, cursel_index);
 			}
 			m_reset_selection.m_maptype = MT_INTERNAL;
 			reset(reset_options::REMEMBER_POSITION);
@@ -632,8 +637,11 @@ void menu_audio_mixer::populate()
 	}
 
 	// If there's nothing, get out of there
-	if(m_selections.empty())
+	if(m_selections.empty()) {
+		item_append(_("menu-audiomix", "[mappings not initialized]"), FLAG_DISABLE, nullptr);
+		item_append(menu_item_type::SEPARATOR);
 		return;
+	}
 
 	// Find the line of the current selection, if any.
 	// Otherwise default to the first line
@@ -651,7 +659,7 @@ void menu_audio_mixer::populate()
 				if (m_selections[i].m_maptype != MT_NONE)
 					m_reset_item = ITM_GUEST_CHANNEL;
 				else
-					m_reset_item = ITM_EMPTY;
+					m_reset_item = ITM_ADD_FULL;
 				cursel_line = i;
 				break;
 			}
@@ -661,7 +669,10 @@ void menu_audio_mixer::populate()
 	if(cursel_line == 0xffffffff)
 		cursel_line = 0;
 
-	if(m_reset_selection.m_maptype == MT_INTERNAL)
+	if(!m_reset_item)
+		m_reset_item = (m_selections[0].m_maptype == MT_NONE) ? ITM_ADD_FULL : ITM_GUEST_CHANNEL;
+
+	else if(m_reset_selection.m_maptype == MT_INTERNAL)
 		cursel_line = 0xffffffff;
 
 	if((cursel_line < m_selections.size()) && (m_selections[cursel_line].m_maptype == MT_FULL)) {
@@ -671,16 +682,30 @@ void menu_audio_mixer::populate()
 
 	// (Re)build the menu
 	uint32_t cursel = 0;
+
+	auto const add_routes = [this, &cursel] ()
+			{
+				item_append(
+						_("menu-audiomix", "Add new full route"),
+						0,
+						reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_ADD_FULL));
+				item_append(
+						_("menu-audiomix", "Add new channel route"),
+						0,
+						reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_ADD_CHANNEL));
+			};
+
 	for(const auto &omap : mapping) {
 		item_append(omap.m_dev->tag(), FLAG_UI_HEADING | FLAG_DISABLE, nullptr);
 		bool first = true;
 		for(const auto &nmap : omap.m_node_mappings) {
 			const auto &node = find_node(nmap.m_node);
 
-			if(first)
+			if(first) {
 				first = false;
-			else
-				item_append(menu_item_type::SEPARATOR);
+				add_routes();
+			}
+			item_append(menu_item_type::SEPARATOR);
 
 			item_append(
 					omap.m_dev->is_output() ? _("menu-audiomix", "Output") : _("menu-audiomix", "Input"),
@@ -702,19 +727,20 @@ void menu_audio_mixer::populate()
 					((nmap.m_db > -96.0f) ? FLAG_LEFT_ARROW : 0) | ((nmap.m_db < 12.0f) ? FLAG_RIGHT_ARROW : 0),
 					reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_DB));
 			item_append(
-					_("menu-audiomix", "Delete route"),
+					_("menu-audiomix", "Remove this route"),
 					0,
-					reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_DELETE));
+					reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_REMOVE));
 
 			++cursel;
 		}
 		for(const auto &cmap : omap.m_channel_mappings) {
 			const auto &node = find_node(cmap.m_node);
 
-			if(first)
+			if(first) {
 				first = false;
-			else
-				item_append(menu_item_type::SEPARATOR);
+				add_routes();
+			}
+			item_append(menu_item_type::SEPARATOR);
 
 			item_append(
 					omap.m_dev->is_output() ? _("menu-audiomix", "Output") : _("menu-audiomix", "Input"),
@@ -741,18 +767,14 @@ void menu_audio_mixer::populate()
 					((cmap.m_db > -96.0f) ? FLAG_LEFT_ARROW : 0) | ((cmap.m_db < 12.0f) ? FLAG_RIGHT_ARROW : 0),
 					reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_DB));
 			item_append(
-					_("menu-audiomix", "Delete route"),
+					_("menu-audiomix", "Remove this route"),
 					0,
-					reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_DELETE));
+					reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_REMOVE));
 
 			++cursel;
 		}
 		if(omap.m_node_mappings.empty() && omap.m_channel_mappings.empty()) {
-			item_append(
-					_("menu-audiomix", "[no routes]"),
-					0,
-					reinterpret_cast<void *>(((cursel + 1) << 3) | ITM_EMPTY));
-
+			add_routes();
 			++cursel;
 		}
 	}
@@ -761,40 +783,6 @@ void menu_audio_mixer::populate()
 
 	if(cursel_line != 0xffffffff)
 		set_selection(reinterpret_cast<void *>(((cursel_line + 1) << 3) | m_reset_item));
-
-	m_add_full_prompt = util::string_format(_("menu-audiomix", "Press %1$s to add a full route\n"), ui().get_general_input_setting(IPT_UI_MIXER_ADD_FULL));
-	m_add_channel_prompt = util::string_format(_("menu-audiomix", "Press %1$s to add a channel route\n"), ui().get_general_input_setting(IPT_UI_MIXER_ADD_CHANNEL));
-}
-
-
-//-------------------------------------------------
-//  recompute_metrics - recompute metrics
-//-------------------------------------------------
-
-void menu_audio_mixer::recompute_metrics(uint32_t width, uint32_t height, float aspect)
-{
-	menu::recompute_metrics(width, height, aspect);
-
-	// leave space for showing prompts below the menu
-	set_custom_space(0.0f, 2.0f * line_height() + 3.0f * tb_border());
-}
-
-
-//-------------------------------------------------
-//  menu_audio_mixer_custom_render - perform our special
-//  rendering
-//-------------------------------------------------
-
-void menu_audio_mixer::custom_render(uint32_t flags, void *selectedref, float top, float bottom, float x1, float y1, float x2, float y2)
-{
-	char const *const text[] = {
-			m_add_full_prompt.c_str(),
-			m_add_channel_prompt.c_str() };
-	draw_text_box(
-			std::begin(text), std::end(text),
-			x1, x2, y2 + tb_border(), y2 + bottom,
-			text_layout::text_justify::CENTER, text_layout::word_wrapping::NEVER, false,
-			ui().colors().text_color(), ui().colors().background_color());
 }
 
 
@@ -1196,6 +1184,22 @@ uint32_t menu_audio_mixer::find_previous_available_channel_node(sound_io_device 
 			index = find_previous_source_node_index(index);
 		return index == 0xffffffff ? 0xffffffff : info.m_nodes[index].m_id;
 	}
+}
+
+uint32_t menu_audio_mixer::find_first_full_mapping_selection(sound_io_device *dev) const
+{
+	for(uint32_t i = 0; i != m_selections.size(); i++)
+		if(m_selections[i].m_dev == dev && m_selections[i].m_maptype == MT_FULL)
+			return i;
+	return 0xffffffff;
+}
+
+uint32_t menu_audio_mixer::find_first_channel_mapping_selection(sound_io_device *dev) const
+{
+	for(uint32_t i = 0; i != m_selections.size(); i++)
+		if(m_selections[i].m_dev == dev && m_selections[i].m_maptype == MT_CHANNEL)
+			return i;
+	return 0xffffffff;
 }
 
 } // namespace ui

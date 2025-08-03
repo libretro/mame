@@ -81,6 +81,14 @@ void debugwin_info::destroy()
 	DestroyWindow(m_wnd);
 }
 
+
+bool debugwin_info::has_focus() const
+{
+	HWND focus_hwnd = GetFocus();
+	return m_wnd == focus_hwnd || IsChild(m_wnd, focus_hwnd);
+}
+
+
 bool debugwin_info::set_default_focus()
 {
 	return false;
@@ -352,6 +360,7 @@ void debugwin_info::restore_configuration_from_node(util::xml::data_node const &
 	// sort out contents
 	recompute_children();
 }
+
 
 // Set the bounds for the corresponding debug_viewinfo.  This implementation
 // is only intended for use with win_infos that appear solely as an
