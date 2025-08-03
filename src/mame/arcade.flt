@@ -13,6 +13,8 @@ adp/adp.cpp                 // gambling
 
 //adp/manohman.cpp          // no screen
 
+//adp/servicetastatur.cpp              // mess, nw
+
 //adp/stella8085.cpp        // no screen
 
 //adp/stellafr.cpp          // fruit, no screen
@@ -71,14 +73,12 @@ apple/superga2.cpp
 aristocrat/caswin.cpp
 
 astrocorp/astrcorp.cpp          // gambling
--gostopac
--lwitch
--magibomba
--speedmst
--speedmsta
--speedmstb
+-keno21
+-magibomb_br44
 -westvent
--winbingoa
+-westvent_aa01b                 //broken parent
+-westvent_aa02e                 //broken parent
+-winbingo_gm051
 
 //astrocorp/astropc.cpp          // no screen
 
@@ -674,6 +674,8 @@ dynax/ddenlovr.cpp
 
 dynax/dynax.cpp          // 99% mahjong
 -mjelct3bl
+-mjelct3bla
+-mjelct3blb
 -ougonhaib3
 -tenkai2b
 
@@ -933,18 +935,18 @@ gaelco/gaelco2.cpp
 -srollnd
 
 gaelco/gaelco3d.cpp
--radikalbp                     // need roms
+-radikalbp                     // black screen
 
 //gaelco/gaelcof3.cpp          // no screen
 
 //gaelco/gaelcopc.cpp          // black screen, some chd
 
 gaelco/glass.cpp
--glassp                       // need roms
+-glassp                        // black screen
 
-//gaelco/goldart.cpp          // no inputs
+//gaelco/goldart.cpp           // no inputs
 
-//gaelco/lotoplay.cpp         // no screen
+//gaelco/lotoplay.cpp          // no screen
 
 gaelco/mastboy.cpp
 -mastboyiv2
@@ -955,7 +957,7 @@ gaelco/mastboyo_ms.cpp
 
 //gaelco/radikaldarts.cpp          // chd, mnw
 
-//gaelco/rollext.cpp          // black screen
+gaelco/rollext.cpp
 
 gaelco/splash.cpp
 -rebus
@@ -1108,6 +1110,7 @@ igs/goldstar.cpp          // fruit
 -super9
 -super9a
 -super972
+-superdrg
 -ss2000
 -ss2000a
 -ss2001
@@ -1961,6 +1964,9 @@ misc/beezer.cpp
 
 //misc/bntyhunt.cpp          // chd, mnw
 
+misc/boramz80.cpp
+-tpkborama
+
 //misc/brglitz.cpp          //no screen
 
 //misc/buster.cpp          // fruit, mnw
@@ -2166,20 +2172,24 @@ misc/gei.cpp
 //misc/globalvr.cpp          // chd, mnw
 
 misc/gluck2.cpp          // poker
+-unkyungyu
 
 misc/gms.cpp
 -magslot
 -rbmk
 -rbspm
 -smatch03
+-smwc
 -ssanguoj
 -super555
+-tbss
 
 //misc/goldngam.cpp          // poker, mnw
 
 misc/goldnpkr.cpp          // poker
 -falcnwldc
 -goldnpkd
+-kmhpan
 -maxidpkr
 -olym65wc
 -op5cards
@@ -2312,7 +2322,7 @@ misc/mcatadv.cpp
 
 misc/megaphx.cpp
 
-//misc/megaturbo.cpp         // roms needed
+//misc/megaturbo.cpp         // no screen
 
 //misc/menghong.cpp          // gambling, mnw
 
@@ -2424,6 +2434,8 @@ misc/policetr.cpp
 //misc/psattack.cpp          // chd, mnw
 
 //misc/pse.cpp          // black screen
+
+//misc/ps_m3.cpp                       //black screen
 
 misc/quizo.cpp
 
@@ -2659,6 +2671,8 @@ namco/cgang.cpp
 
 //namco/ds5000.cpp                     // black screen
 
+//namco/ds6000.cpp                     // black screen
+
 //namco/gal3.cpp          // black screen
 
 namco/galaga.cpp
@@ -2727,12 +2741,9 @@ namco/namcos21_de.cpp
 namco/namcos22.cpp
 
 namco/namcos23.cpp
--500gp
--aking
 -crszonev2a
 -downhill
 -downhillu
--finfurl2j
 -gunwars
 -gunwarsa
 -raceon
@@ -3754,6 +3765,8 @@ seibu/banprestoms.cpp
 -tvdenwam
 -tvdenwat
 
+//seibu/banprestomsz80.cpp             //mnw
+
 seibu/bloodbro.cpp
 
 //seibu/bloodbro_ms.cpp          // bad gfx
@@ -3863,6 +3876,7 @@ seta/simple_st0016.cpp
 seta/speedatk.cpp
 -hanaren2
 -harashi
+-unkalba
 
 seta/speglsht.cpp
 
@@ -3904,8 +3918,6 @@ sigma/spiders.cpp
 
 //skeleton/boo.cpp                // black screen
 
-//skeleton/boramz80.cpp           // black screen
-
 //skeleton/bullion2.cpp           // no screen
 
 //skeleton/caramball.cpp          // no screen
@@ -3937,6 +3949,8 @@ sigma/spiders.cpp
 //skeleton/huangyeh_m68k.cpp      // black screen
 
 //skeleton/iam2.cpp                    // black screen
+
+//skeleton/jinhuang6.cpp           // need roms
 
 //skeleton/kkcount.cpp            // no screen
 
@@ -4022,9 +4036,19 @@ stern/supdrapo.cpp          // poker
 
 subsino/lastfght.cpp
 
-//subsino/subsino.cpp          // fruit/poker
+subsino/subsino.cpp
+-dinofmly
+-dinofmlya
+-grndprix
+-luckyseven
+-mtrainnv
+-ndongmul
+-newhunterc
+-sevenlnd
+-trsocean
 
 subsino/subsino2.cpp
+-jgaoshou
 -queenbeeb
 -queenbeei
 -queenbeesa
