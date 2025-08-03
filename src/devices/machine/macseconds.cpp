@@ -8,10 +8,11 @@
     (seconds since 1/1/1904 at midnight).
 */
 
-#include "dirtc.h"
 
 #include "emu.h"
 #include "macseconds.h"
+
+#include "dirtc.h"
 
 macseconds_interface::macseconds_interface()
 {
