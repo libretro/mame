@@ -1266,34 +1266,32 @@ public:
 		switch_ids[SWITCH_L2] = device.add_item(
 			joystick_button_name[RETROPAD_L2],
 			std::string_view(),
-			ITEM_ID_BUTTON7,
+			ITEM_ID_INVALID,
 			generic_button_get_state<std::int32_t>,
 			&joystickstate[joystick_count].button[RETROPAD_L2]);
-		add_button_assignment(assignments, ioport_type(IPT_BUTTON7), { switch_ids[SWITCH_L2] });
 
 		switch_ids[SWITCH_R2] = device.add_item(
 			joystick_button_name[RETROPAD_R2],
 			std::string_view(),
-			ITEM_ID_BUTTON8,
+			ITEM_ID_INVALID,
 			generic_button_get_state<std::int32_t>,
 			&joystickstate[joystick_count].button[RETROPAD_R2]);
-		add_button_assignment(assignments, ioport_type(IPT_BUTTON8), { switch_ids[SWITCH_R2] });
 
 		switch_ids[SWITCH_L3] = device.add_item(
 			joystick_button_name[RETROPAD_L3],
 			std::string_view(),
-			ITEM_ID_BUTTON9,
+			ITEM_ID_BUTTON7,
 			generic_button_get_state<std::int32_t>,
 			&joystickstate[joystick_count].button[RETROPAD_L3]);
-		add_button_assignment(assignments, IPT_BUTTON9, { switch_ids[SWITCH_L3] });
+		add_button_assignment(assignments, IPT_BUTTON7, { switch_ids[SWITCH_L3] });
 
 		switch_ids[SWITCH_R3] = device.add_item(
 			joystick_button_name[RETROPAD_R3],
 			std::string_view(),
-			ITEM_ID_BUTTON10,
+			ITEM_ID_BUTTON8,
 			generic_button_get_state<std::int32_t>,
 			&joystickstate[joystick_count].button[RETROPAD_R3]);
-		add_button_assignment(assignments, IPT_BUTTON10, { switch_ids[SWITCH_R3] });
+		add_button_assignment(assignments, IPT_BUTTON8, { switch_ids[SWITCH_R3] });
 
 		// d-pad
 		switch_ids[SWITCH_DPAD_UP] = device.add_item(
