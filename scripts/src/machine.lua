@@ -1924,18 +1924,6 @@ end
 
 ---------------------------------------------------
 --
---@src/devices/machine/keytronic_l2207.h,MACHINES["KEYTRONIC_L2207"] = true
----------------------------------------------------
-
-if (MACHINES["KEYTRONIC_L2207"]~=null) then
-	files {
-		MAME_DIR .. "src/devices/machine/keytronic_l2207.cpp",
-		MAME_DIR .. "src/devices/machine/keytronic_l2207.h",
-	}
-end
-
----------------------------------------------------
---
 --@src/devices/machine/kr1601rr1.h,MACHINES["KR1601RR1"] = true
 ---------------------------------------------------
 
@@ -1967,18 +1955,6 @@ if (MACHINES["LATCH8"]~=null) then
 	files {
 		MAME_DIR .. "src/devices/machine/latch8.cpp",
 		MAME_DIR .. "src/devices/machine/latch8.h",
-	}
-end
-
----------------------------------------------------
---
---@src/devices/machine/lc89510.h,MACHINES["LC89510"] = true
----------------------------------------------------
-
-if (MACHINES["LC89510"]~=null) then
-	files {
-		MAME_DIR .. "src/devices/machine/lc89510.cpp",
-		MAME_DIR .. "src/devices/machine/lc89510.h",
 	}
 end
 
