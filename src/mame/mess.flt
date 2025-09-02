@@ -4,7 +4,8 @@ acorn/accomm.cpp
 acorn/acrnsys.cpp
 acorn/acrnsys1.cpp
 acorn/atom.cpp
-acorn/bbc.cpp
+acorn/bbc_m.cpp
+acorn/bbc_v.cpp
 acorn/cms.cpp
 acorn/electron.cpp
 acorn/riscpc.cpp
@@ -724,12 +725,7 @@ sanyo/phc25.cpp
 saturn/st17xx.cpp
 sega/dccons.cpp
 sega/mdconsole.cpp
-sega/megadriv_rad.cpp
-sega/megadriv_sunplus_hybrid.cpp
-sega/megadriv_vt_hybrid.cpp
 sega/saturn.cpp
-sega/sega_beena.cpp
-sega/sega_sawatte.cpp
 sega/segapico.cpp
 sega/segapm.cpp
 sega/sg1000.cpp
