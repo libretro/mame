@@ -158,8 +158,123 @@ Sunset Riders info
 ****************************************************************************/
 
 #include "emu.h"
-#include "megadriv_acbl.h"
 
+#include "megadriv.h"
+
+#include "cpu/pic16c5x/pic16c5x.h"
+#include "sound/okim6295.h"
+
+namespace {
+
+class md_boot_state : public md_ctrl_state
+{
+public:
+	md_boot_state(const machine_config &mconfig, device_type type, const char *tag) :
+		md_ctrl_state(mconfig, type, tag),
+		m_io_exp(*this, "EXP")
+	{ }
+
+	void megadrvb(machine_config &config) ATTR_COLD;
+	void md_bootleg(machine_config &config) ATTR_COLD;
+
+	void init_srmdb() ATTR_COLD;
+	void init_barek2ch() ATTR_COLD;
+	void init_barek3() ATTR_COLD;
+	void init_barek3a() ATTR_COLD;
+	void init_biohzdmb() ATTR_COLD;
+	void init_sonic2mb() ATTR_COLD;
+	void init_twinktmb() ATTR_COLD;
+
+protected:
+	uint16_t dsw_r(offs_t offset);
+
+	void md_bootleg_map(address_map &map) ATTR_COLD;
+
+private:
+	void aladmdb_w(uint16_t data);
+	uint16_t barek3mba_r();
+	uint16_t twinktmb_r();
+
+	optional_ioport m_io_exp;
+};
+
+// for games with emulated PIC microcontroller
+class md_boot_mcu_state : public md_boot_state
+{
+public:
+	md_boot_mcu_state(const machine_config &mconfig, device_type type, const char *tag) :
+		md_boot_state(mconfig, type, tag),
+		m_mcu(*this, "mcu"),
+		m_dsw(*this, "DSW")
+	{ }
+
+	void md_boot_mcu(machine_config &config) ATTR_COLD;
+
+private:
+	void md_boot_mcu_map(address_map &map) ATTR_COLD;
+
+	uint16_t mcu_r();
+	void mcu_w(uint16_t data);
+
+	void mcu_porta_w(uint8_t data);
+	uint8_t mcu_portc_r();
+	void mcu_portb_w(uint8_t data);
+	void mcu_portc_w(uint8_t data);
+
+	required_device<pic16c57_device> m_mcu;
+	required_ioport m_dsw;
+
+	uint8_t m_mcu_porta = 0;
+	uint8_t m_mcu_portc = 0;
+	uint8_t m_mcu_in_latch_msb = 0;
+	uint8_t m_mcu_in_latch_lsb = 0;
+	uint8_t m_mcu_out_latch_msb = 0;
+	uint8_t m_mcu_out_latch_lsb = 0;
+};
+
+class md_sonic3bl_state : public md_boot_state
+{
+public:
+	md_sonic3bl_state(const machine_config &mconfig, device_type type, const char *tag) :
+		md_boot_state(mconfig, type, tag),
+		m_in_coin(*this, "COIN"),
+		m_in_mcu(*this, "MCU")
+	{ }
+
+	void init_sonic3mb() ATTR_COLD;
+
+private:
+	void prot_w(u8 data);
+	uint16_t prot_r();
+
+	required_ioport m_in_coin;
+	required_ioport m_in_mcu;
+
+	u8 m_prot_cmd = 0;
+};
+
+class md_boot_6button_state : public md_boot_state
+{
+public:
+	md_boot_6button_state(const machine_config& mconfig, device_type type, const char* tag) :
+		md_boot_state(mconfig, type, tag)
+	{
+	}
+
+	void megadrvb_6b(machine_config &config) ATTR_COLD;
+	void ssf2mdb(machine_config &config) ATTR_COLD;
+
+	void init_mk3mdb() ATTR_COLD;
+	void init_bk3ssrmb() ATTR_COLD;
+	void init_barekch() ATTR_COLD;
+	void init_srssf2mb() ATTR_COLD;
+
+protected:
+	virtual void machine_start() override ATTR_COLD;
+
+private:
+	void ssf2mdb_68k_map(address_map &map) ATTR_COLD;
+};
 
 /************************************ Mega Drive Bootlegs *************************************/
 
@@ -194,7 +309,6 @@ void md_boot_6button_state::ssf2mdb_68k_map(address_map &map)
 	map(0x770070, 0x770075).r(FUNC(md_boot_6button_state::dsw_r));
 	map(0xa130f0, 0xa130ff).nopw(); // custom banking is disabled (!)
 }
-
 
 /*************************************
  *
@@ -358,7 +472,6 @@ void md_boot_mcu_state::mcu_portc_w(uint8_t data)
 {
 	m_mcu_portc = data;
 }
-
 
 /*************************************
  *
@@ -1034,7 +1147,6 @@ void md_boot_6button_state::machine_start()
 	m_vdp->stop_timers();
 }
 
-
 /*************************************
  *
  *  Game-specific driver inits
@@ -1091,7 +1203,7 @@ void md_boot_6button_state::init_mk3mdb()
 
 void md_boot_state::init_srmdb()
 {
-	uint8_t* rom = memregion("maincpu")->base();
+	uint8_t *rom = memregion("maincpu")->base();
 
 	for (int x = 0x00001; x < 0x40000; x += 2)
 	{
@@ -1147,7 +1259,7 @@ void md_boot_state::init_barek2ch()
 
 void md_boot_state::init_barek3()
 {
-	uint8_t* rom = memregion("maincpu")->base();
+	uint8_t *rom = memregion("maincpu")->base();
 
 	for (int x = 0x00001; x < 0x300000; x += 2)
 	{
@@ -1169,7 +1281,7 @@ void md_boot_state::init_barek3a()
 
 void md_boot_6button_state::init_bk3ssrmb()
 {
-	uint8_t* rom = memregion("maincpu")->base();
+	uint8_t *rom = memregion("maincpu")->base();
 
 	for (int x = 0x00001; x < 0x80000; x += 2)
 	{
@@ -1246,7 +1358,7 @@ void md_sonic3bl_state::init_sonic3mb()
 void md_boot_state::init_twinktmb()
 {
 	// boot vectors don't seem to be valid, so they are patched...
-	uint8_t* rom = memregion("maincpu")->base();
+	uint8_t *rom = memregion("maincpu")->base();
 	rom[0x01] = 0x00;
 
 	rom[0x04] = 0x00;
@@ -1258,6 +1370,25 @@ void md_boot_state::init_twinktmb()
 	m_maincpu->space(AS_PROGRAM).install_read_handler(0x300000, 0x300001, read16smo_delegate(*this, FUNC(md_boot_state::twinktmb_r)));
 }
 
+void md_boot_state::init_biohzdmb()
+{
+	uint8_t *rom = memregion("maincpu")->base();
+
+	for (int x = 0x00001; x < 0x80000; x += 2)
+		rom[x] = bitswap<8>(rom[x] ^ 0xff, 0, 3, 2, 5, 4, 6, 7, 1);
+
+	for (int x = 0x80001; x < 0x100000; x += 2)
+		rom[x] = bitswap<8>(rom[x], 6, 4, 0, 5, 1, 3, 2, 7);
+
+	// boot vectors don't seem to be valid, so they are patched...
+	rom[0x04] = 0x00;
+	rom[0x05] = 0x00;
+	rom[0x06] = 0x04;
+	rom[0x07] = 0x02;
+
+	init_megadrij();
+	m_maincpu->space(AS_PROGRAM).install_read_handler(0x770070, 0x770075, read16sm_delegate(*this, FUNC(md_boot_state::dsw_r)));
+}
 
 /*************************************
  *
@@ -1431,6 +1562,13 @@ ROM_START( barek2ch ) // all 27c4001
 	ROM_LOAD16_BYTE( "u17", 0x100000, 0x080000, CRC(cae1922e) SHA1(811c2164b6c467a49af4b0d22f151cd13c9efbc9) )
 ROM_END
 
+ROM_START( biohzdmb )
+	ROM_REGION( 0x400000, "maincpu", 0 )
+	ROM_LOAD16_BYTE( "u14", 0x000001, 0x080000, CRC(b96cf28c) SHA1(0a49cf2fc0a2712b423b4e1f95a4befe3bf5c746) )
+	ROM_LOAD16_BYTE( "u15", 0x000000, 0x080000, CRC(41a8eae8) SHA1(a9db565f4ca4d71c81fbb44fd429221951887bab) )
+ROM_END
+
+} // anonymous namespace
 
 /*************************************
  *
@@ -1448,11 +1586,12 @@ GAME( 1993, twinktmb,  0,        md_bootleg,  twinktmb, md_boot_state,     init_
 GAME( 1993, jparkmb,   0,        md_boot_mcu, jparkmb,  md_boot_mcu_state, init_megadrij, ROT0, "bootleg / Sega", "Jurassic Park (bootleg of Mega Drive version)",        0 ) // PCB labeled "JPA-028"
 
 // Scrambled bootlegs with Actel for scrambling and Mega Drive bootleg chipset marked TA-04, TA-05 and TA-06.
-GAME( 1994, barekch,   0,        megadrvb_6b, barekch,   md_boot_6button_state, init_barekch,  ROT0, "bootleg",          "Bare Knuckle (scrambled bootleg of Mega Drive version)",                                   0 )
-GAME( 1994, barek2ch,  0,        md_bootleg,  barek2ch,  md_boot_state,         init_barek2ch, ROT0, "bootleg",          "Bare Knuckle II (scrambled bootleg of Mega Drive version)",                                0 )
-GAME( 1994, barek3mb,  0,        megadrvb,    barek3,    md_boot_state,         init_barek3,   ROT0, "bootleg / Sega",   "Bare Knuckle III (scrambled bootleg of Mega Drive version)",                                       0 )
-GAME( 1994, bk3ssrmb,  0,        megadrvb_6b, bk3ssrmb,  md_boot_6button_state, init_bk3ssrmb, ROT0, "bootleg / Sega",   "Bare Knuckle III / Sunset Riders (scrambled bootleg of Mega Drive versions)",                      MACHINE_NOT_WORKING ) // Currently boots as Bare Knuckle III, mechanism to switch game not emulated yet
+GAME( 1994, barekch,   0,        megadrvb_6b, barekch,   md_boot_6button_state, init_barekch,  ROT0, "bootleg",          "Bare Knuckle (scrambled bootleg of Mega Drive version)",                                                   0 )
+GAME( 1994, barek2ch,  0,        md_bootleg,  barek2ch,  md_boot_state,         init_barek2ch, ROT0, "bootleg",          "Bare Knuckle II (scrambled bootleg of Mega Drive version)",                                                0 )
+GAME( 1994, barek3mb,  0,        megadrvb,    barek3,    md_boot_state,         init_barek3,   ROT0, "bootleg / Sega",   "Bare Knuckle III (scrambled bootleg of Mega Drive version)",                                               0 )
+GAME( 1994, bk3ssrmb,  0,        megadrvb_6b, bk3ssrmb,  md_boot_6button_state, init_bk3ssrmb, ROT0, "bootleg / Sega",   "Bare Knuckle III / Sunset Riders (scrambled bootleg of Mega Drive versions)",                              MACHINE_NOT_WORKING ) // Currently boots as Bare Knuckle III, mechanism to switch game not emulated yet
 GAME( 1994, srssf2mb,  0,        megadrvb_6b, bk3ssrmb,  md_boot_6button_state, init_srssf2mb, ROT0, "bootleg / Sega",   "Sunset Riders / Super Street Fighter II - The New Challengers (scrambled bootleg of Mega Drive versions)", MACHINE_NOT_WORKING )
-GAME( 1996, mk3mdb,    0,        megadrvb_6b, mk3mdb,    md_boot_6button_state, init_mk3mdb,   ROT0, "bootleg / Midway", "Mortal Kombat 3 (scrambled bootleg of Mega Drive version)",                                        0 )
-GAME( 1994, ssf2mdb,   0,        ssf2mdb,     ssf2mdb,   md_boot_6button_state, init_megadrij, ROT0, "bootleg / Capcom", "Super Street Fighter II - The New Challengers (scrambled bootleg of Mega Drive version)", 0 )
-GAME( 1993, srmdb,     0,        megadrvb,    srmdb,     md_boot_state,         init_srmdb,    ROT0, "bootleg / Konami", "Sunset Riders (scrambled bootleg of Mega Drive version)",                                          0 )
+GAME( 1996, mk3mdb,    0,        megadrvb_6b, mk3mdb,    md_boot_6button_state, init_mk3mdb,   ROT0, "bootleg / Midway", "Mortal Kombat 3 (scrambled bootleg of Mega Drive version)",                                                0 )
+GAME( 1994, ssf2mdb,   0,        ssf2mdb,     ssf2mdb,   md_boot_6button_state, init_megadrij, ROT0, "bootleg / Capcom", "Super Street Fighter II - The New Challengers (scrambled bootleg of Mega Drive version)",                  0 )
+GAME( 1993, srmdb,     0,        megadrvb,    srmdb,     md_boot_state,         init_srmdb,    ROT0, "bootleg / Konami", "Sunset Riders (scrambled bootleg of Mega Drive version)",                                                  0 )
+GAME( 1993, biohzdmb,  0,        megadrvb,    srmdb,     md_boot_state,         init_biohzdmb, ROT0, "bootleg / Sega",   "Bio-Hazard Battle (scrambled bootleg of Mega Drive version)",                                              MACHINE_NOT_WORKING ) // inputs

@@ -636,8 +636,6 @@ dataeast/progolf.cpp
 
 dataeast/rohga.cpp
 
-dataeast/scregg.cpp
-
 dataeast/shootout.cpp
 
 dataeast/sidepckt.cpp
@@ -977,6 +975,8 @@ gaelco/xorworld.cpp
 
 //gaelco/xorworld_ms.cpp               // black screen
 
+galaxian/119.cpp
+
 galaxian/dambustr.cpp
 
 galaxian/fastfred.cpp
@@ -999,6 +999,7 @@ galaxian/galaxian.cpp
 galaxian/galaxian_rockclim.cpp
 
 galaxian/galaxold.cpp
+-dkongjrv
 -drivfrcsga
 -spcwarp
 -trvchlng
@@ -1151,6 +1152,7 @@ igs/igs_m027.cpp
 -cjddz213cn
 -cjdh6th
 -extradrw
+-gonefsh
 -gonefsh2
 -jhg3d
 -klxyj
@@ -1160,6 +1162,7 @@ igs/igs_m027.cpp
 -olympic5a
 -royal5p
 -sdwx
+-tshs101
 
 igs/igs_m027_023vid.cpp
 
@@ -1171,8 +1174,10 @@ igs/igs_m027_033vid.cpp
 igs/igs_m027xa.cpp
 -haunthig
 -haunthig101us
+-haunthig107us
 -haunthiga
 -jking04
+-krzykeno
 -wldfruit
 
 //igs/igs_m036.cpp          // black screen
@@ -1308,7 +1313,7 @@ jaleco/cischeat.cpp
 
 jaleco/citycon.cpp
 
-jaleco/ddayjlc.cpp
+jaleco/dday.cpp
 
 jaleco/exerion.cpp
 
@@ -1856,8 +1861,6 @@ midway/seattle.cpp
 
 midway/spyhuntertec.cpp
 
-midway/sspeedr.cpp
-
 //midway/starrider.cpp          // no screen
 
 midway/tmaster.cpp
@@ -2181,20 +2184,23 @@ misc/gms.cpp
 -smatch03
 -smwc
 -ssanguoj
--super555
 -tbss
 
 //misc/goldngam.cpp          // poker, mnw
 
 misc/goldnpkr.cpp          // poker
+-dash_a37
+-dash_a37b
+-dynchance
+-dynchancf
+-dynplus
 -falcnwldc
--goldnpkd
--kmhpan
+-lfhouse
+-lfhouseb
 -maxidpkr
+-olym65bj
 -olym65wc
--op5cards
 -pokerdub
--potnpkrn
 -wldwitchb
 -wldwitche
 -witchgmea
@@ -2561,6 +2567,8 @@ misc/thayers.cpp          // moogly says it works
 
 misc/tickee.cpp
 
+misc/timelimt.cpp
+
 //misc/tmspoker.cpp          // black screen
 
 //misc/tomsadvs.cpp          // no screen
@@ -2742,8 +2750,6 @@ namco/namcos22.cpp
 
 namco/namcos23.cpp
 -crszonev2a
--downhill
--downhillu
 -gunwars
 -gunwarsa
 -raceon
@@ -2846,6 +2852,7 @@ nichibutsu/nbmj9195.cpp
 
 nichibutsu/nightgal.cpp          // mahjong
 -sgaltrop
+-sgaltropa
 
 nichibutsu/niyanpai.cpp          // mahjong
 
@@ -3361,6 +3368,8 @@ sega/megadriv_acbl.cpp
 
 sega/megadriv_sunmix.cpp
 
+sega/megadriv_ybox.cpp
+
 sega/megaplay.cpp
 
 sega/megatech.cpp
@@ -3598,8 +3607,6 @@ sega/naomi.cpp
 -wldkicksu
 -zunou
 
-sega/puckpkmn.cpp
-
 //sega/saturn.cpp          // no arcade games
 
 //sega/sderby2.cpp          // black screen
@@ -3736,6 +3743,7 @@ sega/system1.cpp
 sega/system16.cpp
 -beautyb
 -bloxeedbl
+-cltchitrbl
 -iqpipe
 -timescanbl
 -wb3bble
@@ -3920,6 +3928,8 @@ sigma/spiders.cpp
 
 //skeleton/bullion2.cpp           // no screen
 
+//skeleton/cadillacjack_mc68340.cpp   // no screen
+
 //skeleton/caramball.cpp          // no screen
 
 //skeleton/cle68k.cpp             // black screen
@@ -3948,9 +3958,9 @@ sigma/spiders.cpp
 
 //skeleton/huangyeh_m68k.cpp      // black screen
 
-//skeleton/iam2.cpp                    // black screen
+//skeleton/iam2.cpp                // black screen
 
-//skeleton/jinhuang6.cpp           // need roms
+//skeleton/jinhuang6.cpp           // black screen
 
 //skeleton/kkcount.cpp            // no screen
 
@@ -3991,6 +4001,8 @@ sigma/spiders.cpp
 //skeleton/vgame.cpp              // black screen
 
 //skeleton/whtm68k.cpp            // bad gfx
+
+//skeleton/xinyun.cpp             // black screen
 
 snk/bbusters.cpp
 
@@ -4216,6 +4228,9 @@ taito/retofinv.cpp
 
 taito/rollrace.cpp
 
+taito/roundup.cpp
+-zaryavos
+
 taito/sbmjb.cpp
 -bubbroul17
 -harikiri
@@ -4230,11 +4245,15 @@ taito/slapshot.cpp
 
 taito/spdheat.cpp
 
+taito/sspeedr.cpp
+
 taito/ssrj.cpp
 
 taito/superchs.cpp
 
 taito/superqix.cpp
+
+taito/suprridr.cpp
 
 taito/taitoair.cpp         // no inputs ingame
 
@@ -4398,11 +4417,6 @@ tecmo/wc90.cpp
 
 tecmo/wc90b.cpp
 
-thepit/thepit.cpp
--zaryavos
-
-thepit/timelimt.cpp
-
 toaplan/batsugun.cpp
 
 toaplan/dogyuun.cpp
@@ -4423,6 +4437,7 @@ toaplan/pipibibi.cpp
 -pipibibsbl2
 
 toaplan/raizing.cpp
+-kingdmgpbl
 
 toaplan/raizing_batrider.cpp
 
@@ -4501,8 +4516,6 @@ valadon/tankbust.cpp
 venture/looping.cpp
 
 venture/spcforce.cpp
-
-venture/suprridr.cpp
 
 //virtual/ldplayer.cpp      // not a game
 
