@@ -4,8 +4,13 @@ acorn/accomm.cpp
 acorn/acrnsys.cpp
 acorn/acrnsys1.cpp
 acorn/atom.cpp
+acorn/bbc_kbd.cpp
 acorn/bbc_m.cpp
 acorn/bbc_v.cpp
+acorn/bbcb.cpp
+acorn/bbcbp.cpp
+acorn/bbcm.cpp
+acorn/bbcmc.cpp
 acorn/cms.cpp
 acorn/electron.cpp
 acorn/riscpc.cpp
