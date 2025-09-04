@@ -69,11 +69,11 @@ public:
 				lvl = RETRO_LOG_DEBUG;
 				break;	
 		}
+
+		log_cb(lvl, buffer.str().c_str());
 		
-		/* Prefer CLI output when using command line */
-		if (get_MgamePath() || lvl == RETRO_LOG_DEBUG)
-			log_cb(lvl, buffer.str().c_str());
-		else
+		/* Log errors also to console */
+		if (lvl == RETRO_LOG_ERROR)
 			printf("%s", buffer.str().c_str());
 	}
 };
