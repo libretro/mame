@@ -312,6 +312,8 @@ handheld/monty.cpp
 handheld/pensebem.cpp
 handheld/rzone.cpp
 handheld/scrablex.cpp
+handheld/st2302u_bbl_rom.cpp
+handheld/st2302u_bbl_spi.cpp
 handheld/talkingbb.cpp
 handheld/talkingfb.cpp
 handheld/teammate.cpp
@@ -1151,8 +1153,6 @@ tvgames/spg2xx_tvgogo.cpp
 tvgames/spg2xx_vii.cpp
 tvgames/spg2xx_wiwi.cpp
 tvgames/spg2xx_zone.cpp
-tvgames/st2302u_bbl_rom.cpp
-tvgames/st2302u_bbl_spi.cpp
 tvgames/titan_soc.cpp
 tvgames/trkfldch.cpp
 tvgames/tvgame.cpp

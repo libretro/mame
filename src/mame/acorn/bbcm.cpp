@@ -67,6 +67,8 @@ public:
 	void mpc900gx(machine_config &config);
 	void se3010(machine_config &config);
 
+	void init_se();
+
 	//static void mpc_prisma_default(device_t *device);
 
 protected:
@@ -99,6 +101,7 @@ private:
 	uint8_t fetch_r(offs_t offset);
 	uint8_t acccon_r();
 	void acccon_w(uint8_t data);
+	uint8_t romsel_r();
 	void romsel_w(offs_t offset, uint8_t data);
 	uint8_t paged_r(offs_t offset);
 	void paged_w(offs_t offset, uint8_t data);
@@ -198,7 +201,7 @@ void bbcm_state::bbcm_io(address_map &map)
 	map(0x0220, 0x0223).w(FUNC(bbcm_state::video_ula_w));                                                                // W: FE20-FE23  Video ULA      Video system chip
 	map(0x0224, 0x0227).w(FUNC(bbcm_state::drive_control_w));                                                            // W: FE24-FE27  FDC Latch      1770 Control latch
 	map(0x0228, 0x022f).rw(m_wdfdc, FUNC(wd1770_device::read), FUNC(wd1770_device::write));                              //    FE28-FE2F  1770 FDC       Floppy disc controller
-	map(0x0230, 0x0233).w(FUNC(bbcm_state::romsel_w));                                                                   // W: FE30-FE33  ROMSEL         ROM Select
+	map(0x0230, 0x0233).rw(FUNC(bbcm_state::romsel_r), FUNC(bbcm_state::romsel_w));                                      //    FE30-FE33  ROMSEL         ROM Select
 	map(0x0234, 0x0237).rw(FUNC(bbcm_state::acccon_r), FUNC(bbcm_state::acccon_w));                                      //    FE34-FE37  ACCCON         ACCCON select register
 	map(0x0238, 0x023b).lr8(NAME([this]() { econet_int_enable(0); return 0xfe; }));                                      // R: FE38-FE3B  INTOFF         ECONET Interrupt Off
 	map(0x0238, 0x023b).lw8(NAME([this](uint8_t data) { econet_int_enable(0); }));                                       // W: FE38-FE3B  INTOFF         ECONET Interrupt Off
@@ -229,7 +232,7 @@ void bbcm_state::bbcmet_io(address_map &map)
 	map(0x0200, 0x0200).mirror(0x06).rw(m_crtc, FUNC(hd6845s_device::status_r), FUNC(hd6845s_device::address_w));        //    FE00-FE07  6845 CRTC      Video controller
 	map(0x0201, 0x0201).mirror(0x06).rw(m_crtc, FUNC(hd6845s_device::register_r), FUNC(hd6845s_device::register_w));
 	map(0x0220, 0x0223).w(FUNC(bbcm_state::video_ula_w));                                                                // W: FE20-FE23  Video ULA      Video system chip
-	map(0x0230, 0x0233).w(FUNC(bbcm_state::romsel_w));                                                                   // W: FE30-FE33  ROMSEL         ROM Select
+	map(0x0230, 0x0233).rw(FUNC(bbcm_state::romsel_r), FUNC(bbcm_state::romsel_w));                                      // W: FE30-FE33  ROMSEL         ROM Select
 	map(0x0234, 0x0237).rw(FUNC(bbcm_state::acccon_r), FUNC(bbcm_state::acccon_w));                                      //    FE34-FE37  ACCCON         ACCCON select register
 	map(0x0238, 0x023b).lr8(NAME([this]() { econet_int_enable(0); return 0xfe; }));                                      // R: FE38-FE3B  INTOFF         ECONET Interrupt Off
 	map(0x0238, 0x023b).lw8(NAME([this](uint8_t data) { econet_int_enable(0); }));                                       // W: FE38-FE3B  INTOFF         ECONET Interrupt Off
@@ -251,9 +254,14 @@ uint8_t bbcm_state::fetch_r(offs_t offset)
 }
 
 
+uint8_t bbcm_state::romsel_r()
+{
+	return m_romsel;
+}
+
 void bbcm_state::romsel_w(offs_t offset, uint8_t data)
 {
-	// ROMSEL - FE30 write only
+	// ROMSEL - FE30 read/write register
 	//  b7 RAM 1 = Page in ANDY 8000-8FFF
 	//         0 = Page in ROM  8000-8FFF
 	//  b6     Not Used
@@ -495,6 +503,10 @@ void bbcm_state::update_sdb()
 {
 	uint8_t const latch = m_latch->output_state();
 
+	// sound
+	if (!BIT(latch,0))
+		m_sn->write(m_sdb);
+
 	// rtc
 	if (m_mc146818_ce)
 	{
@@ -609,6 +621,17 @@ static INPUT_PORTS_START(bbcm)
 INPUT_PORTS_END
 
 
+void bbcm_state::init_se()
+{
+	bbc_state::init_bbc();
+
+	uint8_t *cmos = memregion("rtc")->base();
+
+	cmos[0x13] |= 0x0f; // *Configure File 15
+	cmos[0x1e] |= 0x10; // *Configure Boot
+}
+
+
 static void bbc_floppies(device_slot_interface &device)
 {
 	device.option_add("525sssd", FLOPPY_525_SSSD);
@@ -645,7 +668,7 @@ void bbcm_state::bbcmet(machine_config &config)
 	RAM(config, m_ram).set_default_size("128K");
 
 	SCREEN(config, m_screen, SCREEN_TYPE_RASTER);
-	m_screen->set_raw(16_MHz_XTAL, 1024, 0, 640, 624, 0, 512);
+	m_screen->set_raw(16_MHz_XTAL, 1024, 0, 640, 312, 0, 256);
 	m_screen->set_screen_update("crtc", FUNC(hd6845s_device::screen_update));
 
 	PALETTE(config, m_palette).set_entries(16);
@@ -665,7 +688,6 @@ void bbcm_state::bbcmet(machine_config &config)
 	config.set_default_layout(layout_bbcm);
 
 	LS259(config, m_latch);
-	m_latch->q_out_cb<0>().set([this](int state) { if (!state) m_sn->write(m_sdb); });
 	m_latch->q_out_cb<3>().set(m_kbd, FUNC(bbc_kbd_device::write_kb_en));
 	m_latch->q_out_cb<6>().set_output("capslock_led");
 	m_latch->q_out_cb<7>().set_output("shiftlock_led");
@@ -764,8 +786,8 @@ void bbcm_state::bbcm(machine_config &config)
 	centronics.set_output_latch(latch);
 
 	upd7002_device &upd7002(UPD7002(config, "upd7002", 16_MHz_XTAL / 16));
-	upd7002.set_get_analogue_callback(FUNC(bbcm_state::get_analogue_input));
-	upd7002.set_eoc_callback(m_sysvia, FUNC(via6522_device::write_cb1));
+	upd7002.get_analogue_callback().set(m_analog, FUNC(bbc_analogue_slot_device::ch_r));
+	upd7002.eoc_callback().set(m_sysvia, FUNC(via6522_device::write_cb1));
 
 	BBC_ANALOGUE_SLOT(config, m_analog, bbc_analogue_devices, nullptr);
 	m_analog->lpstb_handler().set(m_sysvia, FUNC(via6522_device::write_cb2));
@@ -1405,7 +1427,7 @@ COMP( 1986, bbcmarm,    bbcm,   0,     bbcmarm,    bbcm,   bbcm_state,   init_bb
 COMP( 1987, mpc800,     bbcm,   0,     mpc800,     bbcm,   bbcm_state,   init_bbc,  "G2 Systems",                  "MasterPieCe 800 Series",             MACHINE_NOT_WORKING )
 COMP( 1988, mpc900,     bbcm,   0,     mpc900,     bbcm,   bbcm_state,   init_bbc,  "G2 Systems",                  "MasterPieCe 900 Series",             MACHINE_NOT_WORKING )
 COMP( 1990, mpc900gx,   bbcm,   0,     mpc900gx,   bbcm,   bbcm_state,   init_bbc,  "G2 Systems",                  "MasterPieCe 900GX Series",           MACHINE_NOT_WORKING )
-COMP( 1987, se3010,     bbcm,   0,     se3010,     bbcm,   bbcm_state,   init_bbc,  "Softel Electronics",          "SE3010 Teletext Editing Terminal",   MACHINE_NOT_WORKING )
+COMP( 1987, se3010,     bbcm,   0,     se3010,     bbcm,   bbcm_state,   init_se,   "Softel Electronics",          "SE3010 Teletext Editing Terminal",   MACHINE_NOT_WORKING )
 
 // Jukeboxes
 //COMP( 1988, discmast,   bbcm,   0,     discmast,   bbcm,   bbcm_state,   init_bbc,  "Arbiter Leisure",             "Arbiter Discmaster A-00",            MACHINE_NOT_WORKING )

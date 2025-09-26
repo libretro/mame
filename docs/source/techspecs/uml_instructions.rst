@@ -18,6 +18,13 @@ Front-ends translate code running on the guest CPUs to UML instructions,
 and back-ends convert the UML instructions to a form that can be
 executed or interpreted on the host system.
 
+Many UML instruction have multiple instruction sizes.  Integer instructions
+default to 32-bit size.  Adding a ``D`` or ``d`` prefix to the mnemonic changes
+to 64-bit size (double word).  Floating point instructions use the mnemonic
+prefix/suffix ``FS`` or ``fs`` for IEEE 754 32-bit format (single precision) or
+or the prefix/suffix ``FD`` or ``fd`` for IEEE 754 64-bit format (double
+precision).
+
 
 .. _umlinst-flow:
 
@@ -49,17 +56,16 @@ string
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-nop:
 
@@ -79,17 +85,16 @@ No operation.
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-label:
 
@@ -120,17 +125,16 @@ label (label number)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-handle:
 
@@ -163,17 +167,16 @@ handle (code handle)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-hash:
 
@@ -210,17 +213,16 @@ pc (32-bit – immediate, map variable)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-jmp:
 
@@ -255,17 +257,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-callh:
 
@@ -300,17 +301,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-exh:
 
@@ -350,17 +350,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -398,17 +397,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-hashjmp:
 
@@ -457,17 +455,16 @@ handle (code handle)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-exit:
 
@@ -500,17 +497,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -548,17 +544,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 .. _umlinst-debug:
 
@@ -591,17 +586,16 @@ pc (32-bit – memory, integer register, immediate, map variable)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -629,17 +623,16 @@ left in final code.
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 
 .. _umlinst-datamove:
@@ -679,17 +672,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -733,17 +725,16 @@ cond (condition)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -780,17 +771,16 @@ src (32-bit or 64-bit – memory, integer register)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-icopyf:
 
@@ -821,17 +811,16 @@ src (32-bit or 64-bit – memory, floating point register)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-load:
 
@@ -878,17 +867,16 @@ scale (index scale)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-loads:
 
@@ -935,17 +923,16 @@ scale (index scale)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-store:
 
@@ -991,17 +978,16 @@ scale (index scale)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-fload:
 
@@ -1039,17 +1025,16 @@ index (32-bit – memory, integer register, immediate, map variable)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-fstore:
 
@@ -1087,17 +1072,16 @@ src (32-bit or 64-bit – memory, floating point register)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-getexp:
 
@@ -1125,17 +1109,16 @@ dst (32-bit – memory, integer register)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-mapvar:
 
@@ -1165,17 +1148,16 @@ value (32-bit – immediate, map variable)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Unchanged. |
-+---------------+------------+
-| overflow (V)  | Unchanged. |
-+---------------+------------+
-| zero (Z)      | Unchanged. |
-+---------------+------------+
-| sign (S)      | Unchanged. |
-+---------------+------------+
-| unordered (U) | Unchanged. |
-+---------------+------------+
+carry (C)
+    Unchanged.
+overflow (V)
+    Unchanged.
+zero (Z)
+    Unchanged.
+sign (S)
+    Unchanged.
+unordered (U)
+    Unchanged.
 
 .. _umlinst-recover:
 
@@ -1209,17 +1191,16 @@ mapvar (map variable)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 
 .. _umlinst-memaccess:
@@ -1269,17 +1250,16 @@ space (address space number)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -1329,17 +1309,16 @@ space (address space number)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -1391,17 +1370,16 @@ space (address space number)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -1452,17 +1430,16 @@ space (address space number)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -1510,17 +1487,16 @@ space (address space number)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
@@ -1564,19 +1540,2113 @@ space (address space number)
 Flags
 ^^^^^
 
-+---------------+------------+
-| carry (C)     | Undefined. |
-+---------------+------------+
-| overflow (V)  | Undefined. |
-+---------------+------------+
-| zero (Z)      | Undefined. |
-+---------------+------------+
-| sign (S)      | Undefined. |
-+---------------+------------+
-| unordered (U) | Undefined. |
-+---------------+------------+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
 
 Simplification rules
 ^^^^^^^^^^^^^^^^^^^^
 
 * Immediate values for the ``addr`` operand are truncated to 32 bits.
+
+
+.. _umlinst-intarith:
+
+Integer arithmetic and logic
+----------------------------
+
+.. _umlinst-add:
+
+ADD
+~~~
+
+Add two integers.
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block:: C++                   |
+|                           |                                       |
+|     add     dst,src1,src2 |     UML_ADD(block, dst, src1, src2);  |
+|     dadd    dst,src1,src2 |     UML_DADD(block, dst, src1, src2); |
++---------------------------+---------------------------------------+
+
+Calculates ``dst = src1 + src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the sum will be stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The first addend.
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The second addend.
+
+Flags
+^^^^^
+
+carry (C)
+    Set in the case of arithmetic carry out of the most significant bit,
+    or cleared otherwise (unsigned overflow).
+overflow (V)
+    Set in the case of signed two’s complement overflow, or cleared
+    otherwise.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src1`` and ``src2`` operands are both
+  immediate values and the carry and overflow flags are not required.
+* Converted to :ref:`MOV <umlinst-mov>` or :ref:`AND <umlinst-and>` if
+  the ``src1`` operand or ``src2`` operand is the immediate value zero
+  and the carry and overflow flags are not required.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+* If the ``src2`` and ``dst`` operands refer to the same register or
+  memory location, the ``src1`` and ``src2`` operands are exchanged.
+* If the ``src1`` operand is an immediate value and the ``src2`` operand
+  is not an immediate value, the ``src1`` and ``src2`` operands are
+  exchanged.
+
+.. _umlinst-addc:
+
+ADDC
+~~~~
+
+Add two integers and the carry flag.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block:: C++                    |
+|                           |                                        |
+|     addc    dst,src1,src2 |     UML_ADDC(block, dst, src1, src2);  |
+|     daddc   dst,src1,src2 |     UML_DADDC(block, dst, src1, src2); |
++---------------------------+----------------------------------------+
+
+Calculates ``dst = src1 + src2 + C``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the sum will be stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The first addend.
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The second addend.
+
+Flags
+^^^^^
+
+carry (C)
+    Set in the case of arithmetic carry out of the most significant bit,
+    or cleared otherwise (unsigned overflow).
+overflow (V)
+    Set in the case of signed two’s complement overflow, or cleared
+    otherwise.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+* If the ``src2`` and ``dst`` operands refer to the same register or
+  memory location, the ``src1`` and ``src2`` operands are exchanged.
+* If the ``src1`` operand is an immediate value and the ``src2`` operand
+  is not an immediate value, the ``src1`` and ``src2`` operands are
+  exchanged.
+
+.. _umlinst-sub:
+
+SUB
+~~~
+
+Subtract an integer from another integer.
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block:: C++                   |
+|                           |                                       |
+|     sub     dst,src1,src2 |     UML_SUB(block, dst, src1, src2);  |
+|     dsub    dst,src1,src2 |     UML_DSUB(block, dst, src1, src2); |
++---------------------------+---------------------------------------+
+
+Calculates ``dst = src1 - src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the difference will be stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The minuend (the value to subtract from).
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The subtrahend (the value to subtract).
+
+Flags
+^^^^^
+
+carry (C)
+    Set if the subtrahend is a larger unsigned value than the minuend,
+    or cleared otherwise (unsigned overflow, or arithmetic borrow).
+overflow (V)
+    Set in the case of signed two’s complement overflow, or cleared
+    otherwise.
+zero (Z)
+    Set if the result is zero, or cleared otherwise (set if the minuend
+    and subtrahend are equal, or cleared otherwise).
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src1`` and ``src2`` operands are both
+  immediate values and the carry and overflow flags are not required.
+* Converted to :ref:`MOV <umlinst-mov>` or :ref:`AND <umlinst-and>` if
+  the ``src2`` operand is the immediate value zero and the carry and
+  overflow flags are not required.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+
+.. _umlinst-subb:
+
+SUBB
+~~~~
+
+Subtract an integer and the carry flag from another integer.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block:: C++                    |
+|                           |                                        |
+|     subb    dst,src1,src2 |     UML_SUBB(block, dst, src1, src2);  |
+|     dsubb   dst,src1,src2 |     UML_DSUBB(block, dst, src1, src2); |
++---------------------------+----------------------------------------+
+
+Calculates ``dst = src1 - src2 - C``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the difference will be stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The minuend (the value to subtract from).
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The subtrahend (the value to subtract).
+
+Flags
+^^^^^
+
+carry (C)
+    Set if the subtrahend plus the carry flag is a larger unsigned value
+    than the minuend, or cleared otherwise (unsigned overflow, or
+    arithmetic borrow).
+overflow (V)
+    Set in the case of signed two’s complement overflow, or cleared
+    otherwise.
+zero (Z)
+    Set if the result is zero, or cleared otherwise (set if the minuend
+    is equal to the subtrahend plus the carry flag, or cleared
+    otherwise).
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+
+.. _umlinst-cmp:
+
+CMP
+~~~
+
+Compare two integers and set the flags as though they were subtracted.
+
++-----------------------+----------------------------------+
+| Disassembly           | Usage                            |
++=======================+==================================+
+| .. code-block::       | .. code-block:: C++              |
+|                       |                                  |
+|     cmp     src1,src2 |     UML_CMP(block, src1, src2);  |
+|     dcmp    src1,src2 |     UML_DCMP(block, src1, src2); |
++-----------------------+----------------------------------+
+
+Sets the flags based on calculating ``src1 - src2`` but discards the
+result of the subtraction.
+
+Operands
+^^^^^^^^
+
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The left-hand side value to compare, or the minuend (the value to
+    subtract from).
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The right-hand side value to compare, or the subtrahend (the value
+    to subtract).
+
+Flags
+^^^^^
+
+carry (C)
+    Set if the unsigned value of the ``src1`` operand is smaller than
+    the unsigned value of the ``src2`` operand, or cleared otherwise.
+overflow (V)
+    Set if subtracting the value of the ``src2`` operand from the value
+    of the ``src1`` operand would result in two’s complement overflow,
+    or cleared otherwise.
+zero (Z)
+    Set if the values of the ``src1`` and ``src2`` operands are equal,
+    or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result of
+    subtracting the value of the ``src2`` operand from the value of the
+    ``src1`` operand (set if the result would be a negative signed
+    integer, or cleared otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`NOP <umlinst-nop>` if no flags are required.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+
+.. _umlinst-and:
+
+AND
+~~~
+
+Calculate the bitwise logical conjunction of two integers (result bits
+will be set if the corresponding bits are set in both inputs).
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block:: C++                   |
+|                           |                                       |
+|     and     dst,src1,src2 |     UML_AND(block, dst, src1, src2);  |
+|     dand    dst,src1,src2 |     UML_DAND(block, dst, src1, src2); |
++---------------------------+---------------------------------------+
+
+Calculates ``dst = src1 & src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the logical conjunction will be stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The first input.
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The second input.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>` if the ``src1`` and ``src2``
+  operands refer to the same memory location or register, the ``src1``
+  and ``src2`` operands are both immediate values or one of them is an
+  immediate value with all bits set or no bits set and flags are not
+  required.
+* Converted to :ref:`OR <umlinst-or>` if the ``src1`` and ``src2``
+  operands are both immediate values with all bits set and flags are
+  required.
+* Converted to :ref:`TEST <umlinst-test>` if the instruction size is
+  64 bits or the ``dst`` operand refers to a memory location, one of the
+  ``src1`` and ``src2`` operands refer to the same memory location or
+  register as ``dst``, the other source operand refers to the same
+  memory location or register or is an immediate value with all bits
+  set, and flags are required.
+* If the ``src1`` and ``src2`` operands are both immediate values, the
+  conjunction is not zero and flags are required, ``src1`` is replaced
+  with the conjunction and ``src2`` is set to an immediate value with
+  all bits set.
+* If the ``src1`` and ``src2`` operands are both immediate values and
+  the conjunction is zero or either the ``src1`` or ``src2`` operand is
+  the immediate value zero and flags are required, ``src1`` is set to
+  refer to the same memory location or register as ``dst`` and ``src2``
+  is set to the immediate value zero.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+* If the ``src2`` and ``dst`` operands refer to the same register or
+  memory location, the ``src1`` and ``src2`` operands are exchanged.
+* If the ``src1`` operand is an immediate value and the ``src2`` operand
+  is not an immediate value, the ``src1`` and ``src2`` operands are
+  exchanged.
+
+.. _umlinst-test:
+
+TEST
+~~~~
+
+Set the flags based on the bitwise logical conjunction of two integers.
+
++-----------------------+-----------------------------------+
+| Disassembly           | Usage                             |
++=======================+===================================+
+| .. code-block::       | .. code-block:: C++               |
+|                       |                                   |
+|     test    src1,src2 |     UML_TEST(block, src1, src2);  |
+|     dtest   src1,src2 |     UML_DTEST(block, src1, src2); |
++-----------------------+-----------------------------------+
+
+Sets the flags based on calculating ``src1 & src2`` but discards the
+result of the conjunction.
+
+Operands
+^^^^^^^^
+
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The first input.
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The second input.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result of the conjunction is zero, or cleared otherwise.
+sign (S)
+    Set if the most significant bit is set in both inputs, or cleared
+    otherwise (set if the both inputs are negative signed integers, or
+    cleared otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`NOP <umlinst-nop>` if flags are not required.
+* If the ``src1`` and ``src2`` operands are both immediate values and
+  the bitwise logical conjunction is not zero, the ``src1`` operand is
+  set to the conjunction and the ``src2`` operand is set to an immediate
+  value with all bits set.
+* If either of the ``src1`` and ``src2`` operands is the immediate value
+  zero or the ``src1`` and ``src2`` operands are both immediate values
+  and the bitwise logical conjunction is zero, the ``src1`` and ``src2``
+  operands are both set to the immediate value zero.
+* If the ``src1`` and ``src2`` operands refer to the same memory
+  location or register, the ``src2`` operand is set to an immediate
+  value with all bits set.  * Immediate values for the ``src1`` and
+  ``src2`` operands are truncated to the instruction size.
+* If the ``src1`` operand is an immediate value and the ``src2`` operand
+  is not an immediate value, the ``src1`` and ``src2`` operands are
+  exchanged.
+
+.. _umlinst-or:
+
+OR
+~~
+
+Calculate the bitwise logical inclusive disjunction of two integers (result bits
+will be set if the corresponding bits are set in either input).
+
++---------------------------+--------------------------------------+
+| Disassembly               | Usage                                |
++===========================+======================================+
+| .. code-block::           | .. code-block:: C++                  |
+|                           |                                      |
+|     or      dst,src1,src2 |     UML_OR(block, dst, src1, src2);  |
+|     dor     dst,src1,src2 |     UML_DOR(block, dst, src1, src2); |
++---------------------------+--------------------------------------+
+
+Calculates ``dst = src1 | src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the logical inclusive disjunction will be
+    stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The first input.
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The second input.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>` if the ``src1`` and ``src2``
+  operands are both immediate values or one of the ``src1`` or ``src2``
+  operands is an immediate value with all bits set and flags are not
+  required.
+* Converted to :ref:`AND <umlinst-and>` if the ``src1`` and ``src2``
+  operands are both immediate values and the inclusive disjunction does
+  not have all bits set and flags are required.
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`TEST <umlinst-test>` if the ``src1`` and ``src2`` operands refer
+  to the same memory location or register or if one of the ``src1`` and
+  ``src2`` operands is the immediate value zero.
+* If one of the ``src1`` and ``src2`` operands is an immediate value
+  with all bits set or the ``src1`` and ``src2`` operands are both
+  immediate values and the inclusive disjunction has all bits set and
+  flags are required, ``src1`` is set to refer to the same memory
+  location or register as ``dst`` and ``src2`` is set to an immediate
+  value with all bits set.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+* If the ``src2`` and ``dst`` operands refer to the same register or
+  memory location, the ``src1`` and ``src2`` operands are exchanged.
+* If the ``src1`` operand is an immediate value and the ``src2`` operand
+  is not an immediate value, the ``src1`` and ``src2`` operands are
+  exchanged.
+
+.. _umlinst-xor:
+
+XOR
+~~~
+
+Calculate the bitwise logical exclusive disjunction of two integers
+(result bits will be set if the corresponding bit is set in one input
+and unset in the other input).
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block:: C++                   |
+|                           |                                       |
+|     xor     dst,src1,src2 |     UML_XOR(block, dst, src1, src2);  |
+|     dxor    dst,src1,src2 |     UML_DXOR(block, dst, src1, src2); |
++---------------------------+---------------------------------------+
+
+Calculates ``dst = src1 ^ src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the logical exclusive disjunction will be
+    stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The first input.
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The second input.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>`,
+  :ref:`TEST <umlinst-test>` or :ref:`OR <umlinst-or>` if the ``src1``
+  and ``src2`` operands are both immediate values, if one of the
+  ``src1`` and ``src2`` operands is the immediate value zero or if the
+  ``src1`` and ``src2`` operands refer to the same memory location or
+  register.
+
+.. _umlinst-sext:
+
+SEXT
+~~~~
+
+Sign extend an integer value.
+
++--------------------------+---------------------------------------+
+| Disassembly              | Usage                                 |
++==========================+=======================================+
+| .. code-block::          | .. code-block::                       |
+|                          |                                       |
+|     sext    dst,src,size |     UML_SEXT(block, dst, src, size);  |
+|     dsext   dst,src,size |     UML_DSEXT(block, dst, src, size); |
++--------------------------+---------------------------------------+
+
+Sets ``dst`` to the value of ``src`` sign extended from the size
+specified by the ``size`` operand to the instruction size.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the sign extended value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to sign extend.
+size (access size)
+    The size of the value to sign extend.  Must be ``SIZE_BYTE``
+    (8-bit), ``SIZE_WORD`` (16-bit) or ``SIZE_DWORD`` (32-bit).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src`` operand is an immediate value or
+  if the ``size`` operand specifies a size no smaller than the
+  instruction size.
+
+.. _umlinst-lzcnt:
+
+LZCNT
+~~~~~
+
+Count the number of contiguous left-aligned zero bits in an integer
+(count leading zeroes).
+
++---------------------+----------------------------------+
+| Disassembly         | Usage                            |
++=====================+==================================+
+| .. code-block::     | .. code-block:: C++              |
+|                     |                                  |
+|     lzcnt   dst,src |     UML_LZCNT(block, dst, src);  |
+|     dlzcnt  dst,src |     UML_DLZCNT(block, dst, src); |
++---------------------+----------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the result will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The input value in which to count left-aligned zero bits.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise (set to the most
+    significant bit of the input).
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>` or :ref:`AND <umlinst-and>` if
+  the ``src`` operand is an immediate value.
+
+.. _umlinst-tzcnt:
+
+TZCNT
+~~~~~
+
+Count the number of contiguous right-aligned zero bits in an integer
+(count trailing zeroes).
+
++---------------------+----------------------------------+
+| Disassembly         | Usage                            |
++=====================+==================================+
+| .. code-block::     | .. code-block:: C++              |
+|                     |                                  |
+|     tzcnt   dst,src |     UML_TZCNT(block, dst, src);  |
+|     dtzcnt  dst,src |     UML_DTZCNT(block, dst, src); |
++---------------------+----------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the result will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The input value in which to count right-aligned zero bits.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise (set to the least
+    significant bit of the input).
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>` or :ref:`AND <umlinst-and>` if
+  the ``src`` operand is an immediate value.
+
+
+.. _umlinst-intmuldiv:
+
+Integer multiply and divide
+---------------------------
+
+.. _umlinst-mullw:
+
+MULLW
+~~~~~
+
+Multiply two integer values.
+
++---------------------------+------------------------------------------+
+| Disassembly               | Usage                                    |
++===========================+==========================================+
+| .. code-block::           | .. code-block:: C++                      |
+|                           |                                          |
+|     mululw  dst,src1,src2 |     UML_MULULW(block, dst, src1, src2);  |
+|     mulslw  dst,src1,src2 |     UML_MULSLW(block, dst, src1, src2);  |
+|     dmululw dst,src1,src2 |     UML_DMULULW(block, dst, src1, src2); |
+|     dmulslw dst,src1,src2 |     UML_DMULSLW(block, dst, src1, src2); |
++---------------------------+------------------------------------------+
+
+Calculates ``dst = src1 * src2`` producing a result the same size as the
+inputs.  MULULW and DMULULW take unsigned integer values as inputs and
+produce an unsigned integer value as a result, while MULSLW and DMULSLW
+take signed integer values as inputs and produce a signed integer value
+as a result.  Note that the distinction between signed and unsigned
+values only affects the calculation of the overflow flag for this
+instruction.  It does not affect the result of the multiplication.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the product will be stored.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The multiplicand (the value to multiply).
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The multiplier (the value to multiply by).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Set if the full result of the multiplication cannot be represented
+    within the instruction size.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.  Note that this is
+    based on the possibly truncated result value, not the full result of
+    the multiplication.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).  Note that this is based on the possibly truncated
+    result value, not the full result of the multiplication.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src1`` and ``src2`` operands are both
+  immediate values or either the ``src1`` or ``src2`` operand is the
+  immediate value zero or one and the overflow flag is not required.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+* If the ``src2`` and ``dst`` operands refer to the same register or
+  memory location, the ``src1`` and ``src2`` operands are exchanged.
+* If the ``src1`` operand is an immediate value and the ``src2`` operand
+  is not an immediate value, the ``src1`` and ``src2`` operands are
+  exchanged.
+
+.. _umlinst-mul:
+
+MUL
+~~~
+
+Multiply two integer values, possibly producing an extended result.
+
++--------------------------------+----------------------------------------------+
+| Disassembly                    | Usage                                        |
++================================+==============================================+
+| .. code-block::                | .. code-block:: C++                          |
+|                                |                                              |
+|     mulu    dst,edst,src1,src2 |     UML_MULU(block, dst, edst, src1, src2);  |
+|     muls    dst,edst,src1,src2 |     UML_MULS(block, dst, edst, src1, src2);  |
+|     dmulu   dst,edst,src1,src2 |     UML_DMULU(block, dst, edst, src1, src2); |
+|     dmuls   dst,edst,src1,src2 |     UML_DMULS(block, dst, edst, src1, src2); |
++--------------------------------+----------------------------------------------+
+
+Calculates ``edst:dst = src1 * src2`` if the ``dst`` and ``edst``
+operands do not refer to the same register or memory location, or
+``dst = src1 * src2`` if the ``dst`` and ``edst`` operands refer to the
+same register or memory location.  MULU and DMULU take unsigned integer
+values as inputs and produce an unsigned integer value as a result,
+while MULS and DMULS take signed integer values as inputs and produce a
+signed integer value as a result.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the least significant half of the full product
+    will be stored.
+edst (32-bit or 64-bit – memory, integer register)
+    The destination where the most significant half of the full product
+    will be stored if this operand does not refer to the same memory
+    location or register as the ``dst`` operand.  If this operand refers
+    to the same memory location or register as the ``dst`` operand, the
+    most significant half of the full product will be discarded,
+    producing a result the same size as the inputs.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The multiplicand (the value to multiply).
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The multiplier (the value to multiply by).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Set if the full result of the multiplication cannot be represented
+    within the instruction size.
+zero (Z)
+    Set if the full result of the multiplication is zero, or cleared
+    otherwise.  Note that this is based on the full result of the
+    multiplication even when the ``dst`` and ``edst`` operands refer to
+    the same memory location or register, causing the result to be
+    truncated.
+sign (S)
+    Set to the value of the most significant bit of the full result of
+    the multiplication (set if the result is a negative signed integer
+    value, or cleared otherwise).  Note that this is based on the full
+    result of the multiplication even when the ``dst`` and ``edst``
+    operands refer to the same memory location or register, causing the
+    result to be truncated.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MULLW <umlinst-mullw>` if the ``dst`` and ``edst``
+  operands refer to the same memory location or register and the zero
+  and sign flags are not required.
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``dst`` and ``edst`` operands refer to
+  the same memory location or register, the ``src1`` and ``src2``
+  operands are both immediate values or either the ``src1`` or ``src2``
+  operand is the immediate value zero, the most significant half of the
+  full result of the multiplication is the sign extension of the least
+  significant half or the sign flag is not required, and the overflow
+  flag is not required.
+* Converted to :ref:`MOV <umlinst-mov>` or :ref:`AND <umlinst-and>` if
+  the ``dst`` and ``edst`` operands refer to the same memory location or
+  register, either the ``src1`` or ``src2`` operand is the immediate
+  value one, signed multiplication is being performed or the sign flag
+  is not required, and the overflow flag is not required.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+* If the ``src1`` operand is an immediate value and the ``src2`` operand
+  is not an immediate value, the ``src1`` and ``src2`` operands are
+  exchanged.
+
+.. _umlinst-div:
+
+DIV
+~~~
+
+Divide an integer value by another integer value.
+
++--------------------------------+----------------------------------------------+
+| Disassembly                    | Usage                                        |
++================================+==============================================+
+| .. code-block::                | .. code-block:: C++                          |
+|                                |                                              |
+|     divu    dst,edst,src1,src2 |     UML_DIVU(block, dst, edst, src1, src2);  |
+|     divs    dst,edst,src1,src2 |     UML_DIVS(block, dst, edst, src1, src2);  |
+|     ddivu   dst,edst,src1,src2 |     UML_DDIVU(block, dst, edst, src1, src2); |
+|     ddivs   dst,edst,src1,src2 |     UML_DDIVS(block, dst, edst, src1, src2); |
++--------------------------------+----------------------------------------------+
+
+If the value of ``src2`` is not zero, the value of ``src1`` is divided
+by the value of ``src2``, the quotient is stored in the memory location
+or register referred to by ``dst``, and the remainder is stored in the
+memory location or register referred to by ``edst`` if the ``dst`` and
+``edst`` operands do not refer to the same memory location or register.
+
+If the value of ``src2`` is zero, the overflow flag is set and the
+values of the memory locations or registers referred to by the ``dst``
+and ``edst`` operands are undefined.
+
+DIVU and DDIVU take unsigned integer values as inputs and produce
+unsigned integer values as results, while DIVS and DDIVS take signed
+integer values as inputs and produce signed integer values as results.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the quotient will be stored if the value of
+    the ``src2`` operand is not zero.
+edst (32-bit or 64-bit – memory, integer register)
+    The destination where the value of the remainder will be stored if
+    this operand does not refer to the same memory location or register
+    as the ``dst`` operand and the value of the ``src2`` operand is not
+    zero.
+src1 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The dividend (the value to divide).
+src2 (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The divisor (the value to divide by).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Set if the divisor (the value of the ``src2`` operand) is zero, or
+    cleared otherwise.
+zero (Z)
+    Set if the divisor (the value of the ``src2`` operand) is not zero
+    and the quotient is zero, or cleared otherwise.
+sign (S)
+    Set to the most significant bit of the quotient (set if the quotient
+    is a negative signed integer value) if the divisor (the value of the
+    ``src2`` operand) is not zero, or cleared otherwise.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``dst`` and ``edst`` operands refer to
+  the same memory location or register, the ``src1`` and ``src2``
+  operands are both immediate values or ``src2`` operand is the
+  immediate value one, the ``src2`` operand is not the immediate value
+  zero, and the overflow flag is not required.
+* Immediate values for the ``src1`` and ``src2`` operands are truncated
+  to the instruction size.
+
+
+.. _umlinst-intshift:
+
+Integer shift and rotate
+------------------------
+
+.. _umlinst-shl:
+
+SHL
+~~~
+
+Shift an integer value to the left (toward the most significant bit
+position), shifting zeroes into the least significant bit.
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block::                       |
+|                           |                                       |
+|     shl     dst,src,count |     UML_SHL(block, dst, src, count);  |
+|     dshl    dst,src,count |     UML_DSHL(block, dst, src, count); |
++---------------------------+---------------------------------------+
+
+Sets ``dst`` to the value of ``src`` shifted left by ``count`` bit
+positions modulo the operand size in bits.  Zeroes are shifted into the
+least significant bit position.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the shifted value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to shift.
+count (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The number of bit positions to shift by.  Only the least significant
+    five bits or six bits of this operand are used, depending on the
+    instruction size.
+
+Flags
+^^^^^
+
+carry (C)
+    Set to the value of the last bit shifted out of the most significant
+    bit position if the shift count modulo the operand size in bits is
+    non-zero, or cleared if the shift count modulo the operand size in
+    bits is zero.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src`` and ``count`` operands are both
+  immediate values or the ``count`` operand is the immediate value zero
+  and the carry flag is not required.
+* Immediate values for the ``src`` operand are truncated to the
+  instruction size.
+* Immediate values for the ``count`` operand are truncated to five or
+  six bits for 32-bit or 64-bit operands, respectively.
+
+.. _umlinst-shr:
+
+SHR
+~~~
+
+Shift an integer value to the right (toward the least significant bit
+position), shifting zeroes into the most significant bit.
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block::                       |
+|                           |                                       |
+|     shr     dst,src,count |     UML_SHR(block, dst, src, count);  |
+|     dshr    dst,src,count |     UML_DSHR(block, dst, src, count); |
++---------------------------+---------------------------------------+
+
+Sets ``dst`` to the value of ``src`` shifted right by ``count`` bit
+positions modulo the operand size in bits.  Zeroes are shifted into the
+most significant bit position.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the shifted value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to shift.
+count (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The number of bit positions to shift by.  Only the least significant
+    five bits or six bits of this operand are used, depending on the
+    instruction size.
+
+Flags
+^^^^^
+
+carry (C)
+    Set to the value of the last bit shifted out of the least
+    significant bit position if the shift count modulo the operand size
+    in bits is non-zero, or cleared if the shift count modulo the
+    operand size in bits is zero.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src`` and ``count`` operands are both
+  immediate values or the ``count`` operand is the immediate value zero
+  and the carry flag is not required.
+* Immediate values for the ``src`` operand are truncated to the
+  instruction size.
+* Immediate values for the ``count`` operand are truncated to five or
+  six bits for 32-bit or 64-bit operands, respectively.
+
+.. _umlinst-sar:
+
+SAR
+~~~
+
+Shift an integer value to the right (toward the least significant bit
+position), preserving the value of the most significant bit.
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block::                       |
+|                           |                                       |
+|     sar     dst,src,count |     UML_SAR(block, dst, src, count);  |
+|     dsar    dst,src,count |     UML_DSAR(block, dst, src, count); |
++---------------------------+---------------------------------------+
+
+Sets ``dst`` to the value of ``src`` shifted right by ``count`` bit
+positions modulo the operand size in bits.  The value of the most
+significant bit is preserved  after each shift step.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the shifted value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to shift.
+count (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The number of bit positions to shift by.  Only the least significant
+    five bits or six bits of this operand are used, depending on the
+    instruction size.
+
+Flags
+^^^^^
+
+carry (C)
+    Set to the value of the last bit shifted out of the least
+    significant bit position if the shift count modulo the operand size
+    in bits is non-zero, or cleared if the shift count modulo the
+    operand size in bits is zero.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src`` and ``count`` operands are both
+  immediate values or the ``count`` operand is the immediate value zero
+  and the carry flag is not required.
+* Immediate values for the ``src`` operand are truncated to the
+  instruction size.
+* Immediate values for the ``count`` operand are truncated to five or
+  six bits for 32-bit or 64-bit operands, respectively.
+
+.. _umlinst-rol:
+
+ROL
+~~~
+
+Rotate an integer value to the left (toward the most significant bit
+position).  Bits shifted out of the most significant bit position are
+shifted into the least significant bit position.
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block::                       |
+|                           |                                       |
+|     rol     dst,src,count |     UML_ROL(block, dst, src, count);  |
+|     drol    dst,src,count |     UML_DROL(block, dst, src, count); |
++---------------------------+---------------------------------------+
+
+Sets ``dst`` to the value of ``src`` rotated left by ``count`` bit
+positions.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the rotated value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to rotated.
+count (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The number of bit positions to rotate by.  Only the least
+    significant five bits or six bits of this operand are used,
+    depending on the instruction size.
+
+Flags
+^^^^^
+
+carry (C)
+    Set to the value of the last bit rotated out of the most significant
+    bit position (set to the least significant bit of the result) if the
+    shift count modulo the operand size in bits is non-zero, or cleared
+    if the shift count modulo the operand size in bits is zero.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src`` and ``count`` operands are both
+  immediate values or the ``count`` operand is the immediate value zero
+  and the carry flag is not required.
+* Immediate values for the ``src`` operand are truncated to the
+  instruction size.
+* Immediate values for the ``count`` operand are truncated to five or
+  six bits for 32-bit or 64-bit operands, respectively.
+
+.. _umlinst-ror:
+
+ROR
+~~~
+
+Rotate an integer value to the right (toward the least significant bit
+position).  Bits shifted out of the least significant bit position are
+shifted into the most significant bit position.
+
++---------------------------+---------------------------------------+
+| Disassembly               | Usage                                 |
++===========================+=======================================+
+| .. code-block::           | .. code-block::                       |
+|                           |                                       |
+|     ror     dst,src,count |     UML_ROR(block, dst, src, count);  |
+|     dror    dst,src,count |     UML_DROR(block, dst, src, count); |
++---------------------------+---------------------------------------+
+
+Sets ``dst`` to the value of ``src`` rotated right by ``count`` bit
+positions.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the rotated value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to rotated.
+count (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The number of bit positions to rotate by.  Only the least
+    significant five bits or six bits of this operand are used,
+    depending on the instruction size.
+
+Flags
+^^^^^
+
+carry (C)
+    Set to the value of the last bit rotated out of the least
+    significant bit position (set to the most significant bit of the
+    result) if the shift count modulo the operand size in bits is
+    non-zero, or cleared if the shift count modulo the operand size in
+    bits is zero.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>`, :ref:`AND <umlinst-and>` or
+  :ref:`OR <umlinst-or>` if the ``src`` and ``count`` operands are both
+  immediate values or the ``count`` operand is the immediate value zero
+  and the carry flag is not required.
+* Immediate values for the ``src`` operand are truncated to the
+  instruction size.
+* Immediate values for the ``count`` operand are truncated to five or
+  six bits for 32-bit or 64-bit operands, respectively.
+
+.. _umlinst-rolc:
+
+ROLC
+^^^^
+
+Rotate an integer value concatenated with the carry flag to the left
+(toward the most significant bit position).  For each step, the carry
+flag is shifted into the least significant bit position, and the carry
+flag is set to the bit shifted out of the most significant bit position.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block::                        |
+|                           |                                        |
+|     rolc    dst,src,count |     UML_ROLC(block, dst, src, count);  |
+|     drolc   dst,src,count |     UML_DROLC(block, dst, src, count); |
++---------------------------+----------------------------------------+
+
+Sets ``dst`` to the value of ``src`` concatenated with the carry flag
+rotated left by ``count`` bit positions modulo the operand size in bits.
+For each shift step, the current value of the carry flag is shifted into
+the least significant bit position, and the carry flag is set to the
+value of the bit shifted out of the most significant bit position.
+
+Note that although this instruction rotates a 33-bit or 65-bit value
+(including the carry flag), the shift count is interpreted modulo 32 or
+64.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the rotated value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to rotated.
+count (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The number of bit positions to rotate by.  Only the least
+    significant five bits or six bits of this operand are used,
+    depending on the instruction size.
+
+Flags
+^^^^^
+
+carry (C)
+    Set to the value of the last bit shifted out of the least
+    significant bit position if the shift count modulo the operand size
+    in bits is non-zero, or unchanged if the shift count modulo the
+    operand size in bits is zero.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>` or :ref:`NOP <umlinst-nop>` if
+  the ``count`` operand is the immediate value zero and the zero and
+  sign flags are not required.
+* Immediate values for the ``src`` operand are truncated to the
+  instruction size.
+* Immediate values for the ``count`` operand are truncated to five or
+  six bits for 32-bit or 64-bit operands, respectively.
+
+.. _umlinst-rorc:
+
+RORC
+^^^^
+
+Rotate an integer value concatenated with the carry flag to the right
+(toward the least significant bit position).  For each step, the carry
+flag is shifted into the most significant bit position, and the carry
+flag is set to the bit shifted out of the least significant bit
+position.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block::                        |
+|                           |                                        |
+|     rorc    dst,src,count |     UML_RORC(block, dst, src, count);  |
+|     drorc   dst,src,count |     UML_DRORC(block, dst, src, count); |
++---------------------------+----------------------------------------+
+
+Sets ``dst`` to the value of ``src`` concatenated with the carry flag
+rotated right by ``count`` bit positions modulo the operand size in
+bits.  For each shift step, the current value of the carry flag is
+shifted into the most significant bit position, and the carry flag is
+set to the value of the bit shifted out of the least significant bit
+position.
+
+Note that although this instruction rotates a 33-bit or 65-bit value
+(including the carry flag), the shift count is interpreted modulo 32 or
+64.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the rotated value will be stored.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The value to rotated.
+count (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The number of bit positions to rotate by.  Only the least
+    significant five bits or six bits of this operand are used,
+    depending on the instruction size.
+
+Flags
+^^^^^
+
+carry (C)
+    Set to the value of the last bit shifted out of the least
+    significant bit position if the shift count modulo the operand size
+    in bits is non-zero, or unchanged if the shift count modulo the
+    operand size in bits is zero.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the result is zero, or cleared otherwise.
+sign (S)
+    Set to the value of the most significant bit of the result (set if
+    the result is a negative signed integer value, or cleared
+    otherwise).
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`MOV <umlinst-mov>` or :ref:`NOP <umlinst-nop>` if
+  the ``count`` operand is the immediate value zero and the zero and
+  sign flags are not required.
+* Immediate values for the ``src`` operand are truncated to the
+  instruction size.
+* Immediate values for the ``count`` operand are truncated to five or
+  six bits for 32-bit or 64-bit operands, respectively.
+
+
+.. _umlinst-fparith:
+
+Floating point arithmetic
+-------------------------
+
+.. _umlinst-fadd:
+
+FADD
+~~~~
+
+Add two floating point numbers.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block:: C++                    |
+|                           |                                        |
+|     fsadd   dst,src1,src2 |     UML_FSADD(block, dst, src1, src2); |
+|     fdadd   dst,src1,src2 |     UML_FDADD(block, dst, src1, src2); |
++---------------------------+----------------------------------------+
+
+Calculates ``dst = src1 + src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the sum will be stored.
+src1 (32-bit or 64-bit – memory, floating point register)
+    The first addend.
+src2 (32-bit or 64-bit – memory, floating point register)
+    The second addend.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-fsub:
+
+FSUB
+~~~~
+
+Subtract a floating point number from another floating point number.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block:: C++                    |
+|                           |                                        |
+|     fssub   dst,src1,src2 |     UML_FSSUB(block, dst, src1, src2); |
+|     fdsub   dst,src1,src2 |     UML_FDSUB(block, dst, src1, src2); |
++---------------------------+----------------------------------------+
+
+Calculates ``dst = src1 - src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the difference will be stored.
+src1 (32-bit or 64-bit – memory, floating point register)
+    The minuend (the value to subtract from).
+src2 (32-bit or 64-bit – memory, floating point register)
+    The subtrahend (the value to subtract).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-fcmp:
+
+FCMP
+~~~~
+
+Compare two floating-point numbers and set the carry, zero and unordered
+flags.
+
++-----------------------+-----------------------------------+
+| Disassembly           | Usage                             |
++=======================+===================================+
+| .. code-block::       | .. code-block:: C++               |
+|                       |                                   |
+|     fscmp   src1,src2 |     UML_FSCMP(block, src1, src2); |
+|     fdcmp   src1,src2 |     UML_FDCMP(block, src1, src2); |
++-----------------------+-----------------------------------+
+
+Operands
+^^^^^^^^
+
+src1 (32-bit or 64-bit – memory, floating point register)
+    The left-hand side value to compare.
+src2 (32-bit or 64-bit – memory, floating point register)
+    The right-hand side value to compare.
+
+Flags
+^^^^^
+
+carry (C)
+    Set if the value of ``src1`` is less than the value of ``src2``, or
+    cleared otherwise.
+overflow (V)
+    Undefined.
+zero (Z)
+    Set if the values of ``src1`` and ``src2`` are equal, or cleared
+    otherwise.
+sign (S)
+    Undefined.
+unordered (U)
+    Set if either ``src1`` or ``src2`` is not a number (NaN), or cleared
+    otherwise.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-fmul:
+
+FMUL
+~~~~
+
+Multiply two floating point numbers.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block:: C++                    |
+|                           |                                        |
+|     fsmul   dst,src1,src2 |     UML_FSMUL(block, dst, src1, src2); |
+|     fdmul   dst,src1,src2 |     UML_FDMUL(block, dst, src1, src2); |
++---------------------------+----------------------------------------+
+
+Calculates ``dst = src1 * src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the product will be stored.
+src1 (32-bit or 64-bit – memory, floating point register)
+    The multiplicand (the value to multiply).
+src2 (32-bit or 64-bit – memory, floating point register)
+    The multiplier (the value to multiply by).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-fdiv:
+
+FDIV
+~~~~
+
+Divide a floating point number by another floating point number.
+
++---------------------------+----------------------------------------+
+| Disassembly               | Usage                                  |
++===========================+========================================+
+| .. code-block::           | .. code-block:: C++                    |
+|                           |                                        |
+|     fsdiv   dst,src1,src2 |     UML_FSDIV(block, dst, src1, src2); |
+|     fddiv   dst,src1,src2 |     UML_FDDIV(block, dst, src1, src2); |
++---------------------------+----------------------------------------+
+
+Calculates ``dst = src1 / src2``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the quotient will be stored.
+src1 (32-bit or 64-bit – memory, floating point register)
+    The dividend (the value to divide).
+src2 (32-bit or 64-bit – memory, floating point register)
+    The divisor (the value to divide by).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-fneg:
+
+FNEG
+~~~~
+
+Negate a floating point number.
+
++---------------------+---------------------------------+
+| Disassembly         | Usage                           |
++=====================+=================================+
+| .. code-block::     | .. code-block:: C++             |
+|                     |                                 |
+|     fsneg   dst,src |     UML_FSNEG(block, dst, src); |
+|     fdneg   dst,src |     UML_FDNEG(block, dst, src); |
++---------------------+---------------------------------+
+
+Calculates ``dst = -src``.
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the result will be stored.
+src (32-bit or 64-bit – memory, floating point register)
+    The value to be negated.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-fabs:
+
+FABS
+~~~~
+
+Calculate the absolute value of a floating point number.
+
++---------------------+---------------------------------+
+| Disassembly         | Usage                           |
++=====================+=================================+
+| .. code-block::     | .. code-block:: C++             |
+|                     |                                 |
+|     fsabs   dst,src |     UML_FSABS(block, dst, src); |
+|     fdabs   dst,src |     UML_FDABS(block, dst, src); |
++---------------------+---------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the result will be stored.
+src (32-bit or 64-bit – memory, floating point register)
+    The value to calculate the absolute value of.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-fsqrt:
+
+FSQRT
+~~~~~
+
+Calculate the square root of a floating point number.
+
++---------------------+----------------------------------+
+| Disassembly         | Usage                            |
++=====================+==================================+
+| .. code-block::     | .. code-block:: C++              |
+|                     |                                  |
+|     fssqrt  dst,src |     UML_FSSQRT(block, dst, src); |
+|     fdsqrt  dst,src |     UML_FDSQRT(block, dst, src); |
++---------------------+----------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the square root will be stored.
+src (32-bit or 64-bit – memory, floating point register)
+    The value to calculate the square root of.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-frecip:
+
+FRECIP
+~~~~~~
+
+Calculate an approximate reciprocal value of a floating point number.
+The algorithm used, precision and nature of inaccuracies in the
+approximation are unspecified.
+
++---------------------+---------------------------------+
+| Disassembly         | Usage                           |
++=====================+=================================+
+| .. code-block::     | .. code-block:: C++             |
+|                     |                                 |
+|     fsabs   dst,src |     UML_FSABS(block, dst, src); |
+|     fdabs   dst,src |     UML_FDABS(block, dst, src); |
++---------------------+---------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the result will be stored.
+src (32-bit or 64-bit – memory, floating point register)
+    The value to approximate the reciprocal of.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-frsqrt:
+
+FRSQRT
+~~~~~~
+
+Calculate an approximate reciprocal value of the square root of a
+floating point number.  The algorithm used, precision and nature of
+inaccuracies in the approximation are unspecified.
+
++---------------------+-----------------------------------+
+| Disassembly         | Usage                             |
++=====================+===================================+
+| .. code-block::     | .. code-block:: C++               |
+|                     |                                   |
+|     fsrsqrt dst,src |     UML_FSRSQRT(block, dst, src); |
+|     fdrsqrt dst,src |     UML_FDRSQRT(block, dst, src); |
++---------------------+-----------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the result will be stored.
+src (32-bit or 64-bit – memory, floating point register)
+    The value to approximate the reciprocal of the square root of.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-frnds:
+
+FRNDS
+~~~~~
+
+Round a 64-bit floating point value to 32-bit precision.  The current
+default rounding type set using the :ref:`SETFMOD <umlinst-setfmod>` is
+used.  Note that the instruction size must always be 64 bits for this
+instruction.
+
++---------------------+----------------------------------+
+| Disassembly         | Usage                            |
++=====================+==================================+
+| .. code-block::     | .. code-block::                  |
+|                     |                                  |
+|     fdrnds  dst,src |     UML_FDRNDS(block, dst, src); |
++---------------------+----------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (64-bit – memory, floating point register)
+    The destination where the rounded value will be stored.
+src (64-bit – memory, floating point register)
+    The floating point value to round to 32-bit precision.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+
+.. _umlinst-fpconv:
+
+Floating point conversion
+-------------------------
+
+.. _umlinst-ftoint:
+
+FTOINT
+~~~~~~
+
+Convert a floating point number to a signed two’s complement integer.
+
++--------------------------------+------------------------------------------------+
+| Disassembly                    | Usage                                          |
++================================+================================================+
+| .. code-block::                | .. code-block::                                |
+|                                |                                                |
+|     fstoint dst,src,size,round |     UML_FSTOINT(block, dst, src, size, round); |
+|     fdtoint dst,src,size,round |     UML_FDTOINT(block, dst, src, size, round); |
++--------------------------------+------------------------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, integer register)
+    The destination where the integer value will be stored.  The
+    size/format is controlled by the ``size`` operand.
+src (32-bit or 64-bit – memory, floating point register)
+    The floating point value to convert to an integer.  The instruction
+    size sets the size/format of this operand.
+size (access size)
+    The size of the result.  Must be ``SIZE_DWORD`` (32-bit) or
+    ``SIZE_QWORD`` (64-bit).  Note that this operand controls the size
+    of the ``dst`` operand while the instruction size sets the size of
+    the ``src`` operand.
+round (rounding type)
+    The rounding type to use.  Must be ``ROUND_ROUND`` (round to
+    nearest), ``ROUND_CEIL`` (round toward positive infinity),
+    ``ROUND_FLOOR`` (round toward negative infinity), ``ROUND_TRUNC``
+    (round toward zero) or ``ROUND_DEFAULT`` (use the current default
+    rounding type set using the :ref:`SETFMOD <umlinst-setfmod>`
+    instruction).
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+No simplifications are applied to this instruction.
+
+.. _umlinst-ffrint:
+
+FFRINT
+~~~~~~
+
+Convert a signed two’s complement integer to a floating point number.
+
++--------------------------+-----------------------------------------+
+| Disassembly              | Usage                                   |
++==========================+=========================================+
+| .. code-block::          | .. code-block::                         |
+|                          |                                         |
+|     fsfrint dst,src,size |     UML_FSFRINT(block, dst, src, size); |
+|     fdfrint dst,src,size |     UML_FDFRINT(block, dst, src, size); |
++--------------------------+-----------------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the floating point value will be stored.  The
+    instruction size sets the size/format of this operand.
+src (32-bit or 64-bit – memory, integer register, immediate, map variable)
+    The integer value to convert to a floating point value.  The
+    size/format is controlled by the ``size`` operand.
+size (access size)
+    The size of the input.  Must be ``SIZE_DWORD`` (32-bit) or
+    ``SIZE_QWORD`` (64-bit).  Note that this operand controls the size
+    of the ``src`` operand while the instruction size sets the size of
+    the ``dst`` operand.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Immediate values for the ``src`` operand are truncated to the size set
+  using the ``size`` operand.
+
+.. _umlinst-ffrflt:
+
+FFRFLT
+~~~~~~
+
+Convert between floating point formats.  The current default rounding
+type set using the :ref:`SETFMOD <umlinst-setfmod>` is used if
+applicable.
+
++--------------------------+-----------------------------------------+
+| Disassembly              | Usage                                   |
++==========================+=========================================+
+| .. code-block::          | .. code-block::                         |
+|                          |                                         |
+|     fsfrflt dst,src,size |     UML_FSFRFLT(block, dst, src, size); |
+|     fdfrflt dst,src,size |     UML_FDFRFLT(block, dst, src, size); |
++--------------------------+-----------------------------------------+
+
+Operands
+^^^^^^^^
+
+dst (32-bit or 64-bit – memory, floating point register)
+    The destination where the converted value will be stored.  The
+    instruction size sets the size/format of this operand.
+src (32-bit or 64-bit – memory, floating point register)
+    The floating point value to convert.  The size/format is controlled
+    by the ``size`` operand.
+size (access size)
+    The size of the input.  Must be ``SIZE_SHORT`` (32-bit) or
+    ``SIZE_DOUBLE`` (64-bit).  Note that this operand controls the size
+    of the ``src`` operand while the instruction size sets the size of
+    the ``dst`` operand.
+
+Flags
+^^^^^
+
+carry (C)
+    Undefined.
+overflow (V)
+    Undefined.
+zero (Z)
+    Undefined.
+sign (S)
+    Undefined.
+unordered (U)
+    Undefined.
+
+Simplification rules
+^^^^^^^^^^^^^^^^^^^^
+
+* Converted to :ref:`FMOV <umlinst-fmov>` or :ref:`NOP <umlinst-nop>` if
+  the ``dst`` and ``src`` operands have the same size/format.

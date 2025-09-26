@@ -898,6 +898,7 @@ funworld/funworld.cpp
 funworld/snookr10.cpp          // poker
 
 funworld/supercrd.cpp
+-fruitstr
 -fruitstra
 -gampo812
 -gampo816
@@ -1085,9 +1086,6 @@ igs/goldstar.cpp          // fruit
 -fevercha
 -feverchtw
 -halltsk
--jkrmast
--jkrmasta
--ll3
 -lucky8j
 -luckybar
 -luckylad
@@ -1095,13 +1093,12 @@ igs/goldstar.cpp          // fruit
 -magoddsd
 -mbs2euro
 -megaline
+-missbingoc
 -mtonic2
 -nd8lines
 -nfm
 -nfma
 -noved
--pkrmast
--pkrmasta
 -rolling
 -roypok96c
 -skillch
@@ -1235,7 +1232,7 @@ irem/m107.cpp
 -kftgoal
 -wpksoc
 
-//irem/m119.cpp          // quits by itself at start, no message
+//irem/m119.cpp          // black screen
 
 irem/m14.cpp
 
@@ -1284,6 +1281,8 @@ itech/iteagle.cpp          // chd untested
 itech/itech32.cpp
 
 itech/itech8.cpp
+-gpgolf                   // attract mode crash
+-gpgolfa                  // same
 -slikshot
 -slikshot16
 -slikshot17
@@ -1953,6 +1952,8 @@ misc/avt.cpp
 
 //misc/bailey.cpp          // black screen
 
+misc/banpresto_bpsc68000.cpp
+
 misc/beaminv.cpp
 
 misc/beezer.cpp
@@ -2175,14 +2176,10 @@ misc/gei.cpp
 //misc/globalvr.cpp          // chd, mnw
 
 misc/gluck2.cpp          // poker
--unkyungyu
 
 misc/gms.cpp
--magslot
--rbmk
--rbspm
+-sglc
 -smatch03
--smwc
 -ssanguoj
 -tbss
 
@@ -2498,6 +2495,8 @@ misc/smotor.cpp
 misc/smsmcorp.cpp
 -trvhanga
 
+misc/spcforce.cpp
+
 //misc/spdamjes.cpp          // no screen
 
 misc/spool99.cpp          // poker
@@ -2548,8 +2547,6 @@ misc/stuntair.cpp
 //misc/summit.cpp          // fruit, how to use?
 
 //misc/sumt8035.cpp          // no screen
-
-misc/supertnk.cpp
 
 misc/tapatune.cpp
 -smartoss                    // no screen
@@ -2618,8 +2615,6 @@ misc/vampire.cpp
 
 //misc/vcombat.cpp          // missing gfx
 
-misc/video21.cpp          // gambling
-
 misc/videosaa.cpp
 -jokrlady
 -paradar
@@ -2636,6 +2631,8 @@ misc/videosaa.cpp
 //misc/vpoker.cpp          // poker, mnw
 
 misc/vroulet.cpp
+
+misc/whtm68k.cpp
 
 //misc/wildpkr.cpp          // poker, mnw
 
@@ -2830,7 +2827,7 @@ nichibutsu/galivan.cpp
 
 nichibutsu/gomoku.cpp
 
-//nichibutsu/hrdvd.cpp          // chd untested, listed as all not working, unexpected exit after MEMORY NG
+//nichibutsu/hrdvd.cpp          // mnw, many black screen
 
 nichibutsu/hyhoo.cpp
 
@@ -2933,6 +2930,7 @@ nmk/ddealer.cpp
 nmk/macrossp.cpp
 
 nmk/nmk16.cpp
+-macrossbl               // badgfx
 -tdragonb2
 -powerinsc
 
@@ -3094,6 +3092,8 @@ phoenix/safarir.cpp
 pinball/byvid.cpp          // combo pinball&video
 
 //pinball/capcom.cpp          // pinball
+
+//pinball/criter75.cpp        // no screen
 
 //pinball/de_2.cpp          // pinball
 
@@ -3339,6 +3339,13 @@ sega/coolridr.cpp
 //sega/dccons.cpp          // game freezes after a while
 
 sega/dc_atomiswave.cpp
+-basschal                   // black screen
+-basschalo                  // black screen
+-mslug6                     // black screen
+-salmankt                   // start button nw
+-vfurlong                   // please wait...
+-xtrmhnt2                   // lan problem
+-xtrmhunt                   // black screen
 
 sega/deniam.cpp
 
@@ -3875,6 +3882,11 @@ seta/seta.cpp
 seta/seta2.cpp
 -ablastb
 -blnctry
+-funcube
+-funcube2
+-funcube3
+-funcube4
+-funcube5
 -namcostr
 -staraudi
 
@@ -3915,6 +3927,8 @@ sigma/r2dtank.cpp
 sigma/sigmab98.cpp
 
 sigma/spiders.cpp
+
+//skeleton/amcoe_au1250.cpp        // black screen
 
 //skeleton/banpresto_tomy_h8s.cpp // black screen
 
@@ -3999,8 +4013,6 @@ sigma/spiders.cpp
 //skeleton/venteta.cpp            // black screen
 
 //skeleton/vgame.cpp              // black screen
-
-//skeleton/whtm68k.cpp            // bad gfx
 
 //skeleton/xinyun.cpp             // black screen
 
@@ -4513,9 +4525,11 @@ valadon/bagman.cpp
 
 valadon/tankbust.cpp
 
-venture/looping.cpp
+videogames/looping.cpp
 
-venture/spcforce.cpp
+videogames/supertnk.cpp
+
+videogames/video21.cpp          // gambling
 
 //virtual/ldplayer.cpp      // not a game
 
