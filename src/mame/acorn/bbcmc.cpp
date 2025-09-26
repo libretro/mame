@@ -77,6 +77,7 @@ private:
 	uint8_t fetch_r(offs_t offset);
 	uint8_t acccon_r();
 	void acccon_w(uint8_t data);
+	uint8_t romsel_r();
 	void romsel_w(offs_t offset, uint8_t data);
 	uint8_t paged_r(offs_t offset);
 	void paged_w(offs_t offset, uint8_t data);
@@ -162,7 +163,7 @@ void bbcmc_state::bbcmc_io(address_map &map)
 	map(0x0220, 0x0223).w(FUNC(bbcmc_state::video_ula_w));                                                             // W: FE20-FE23  Video ULA      Video system chip
 	map(0x0224, 0x0227).w(FUNC(bbcmc_state::drive_control_w));                                                         // W: FE24-FE27  FDC Latch      1772 Control latch
 	map(0x0228, 0x022f).rw(m_wdfdc, FUNC(wd1772_device::read), FUNC(wd1772_device::write));                            //    FE28-FE2F  1772 FDC       Floppy disc controller
-	map(0x0230, 0x0233).w(FUNC(bbcmc_state::romsel_w));                                                                // W: FE30-FE33  ROMSEL         ROM Select
+	map(0x0230, 0x0233).rw(FUNC(bbcmc_state::romsel_r), FUNC(bbcmc_state::romsel_w));                                  //    FE30-FE33  ROMSEL         ROM Select
 	map(0x0234, 0x0237).rw(FUNC(bbcmc_state::acccon_r), FUNC(bbcmc_state::acccon_w));                                  //    FE34-FE37  ACCCON         ACCCON select register
 	map(0x0238, 0x023b).lr8(NAME([this]() { econet_int_enable(0); return 0xfe; }));                                    // R: FE38-FE3B  INTOFF         ECONET Interrupt Off
 	map(0x0238, 0x023b).lw8(NAME([this](uint8_t data) { econet_int_enable(0); }));                                     // W: FE38-FE3B  INTOFF         ECONET Interrupt Off
@@ -203,9 +204,14 @@ uint8_t bbcmc_state::fetch_r(offs_t offset)
 }
 
 
+uint8_t bbcmc_state::romsel_r()
+{
+	return m_romsel;
+}
+
 void bbcmc_state::romsel_w(offs_t offset, uint8_t data)
 {
-	// ROMSEL - FE30 write only
+	// ROMSEL - FE30 read/write register
 	//  b7 RAM 1 = Page in ANDY 8000-8FFF
 	//         0 = Page in ROM  8000-8FFF
 	//  b6     Not Used
@@ -279,7 +285,20 @@ uint8_t bbcmc_state::paged_r(offs_t offset)
 
 	switch (m_romsel)
 	{
-	case 0: case 1: case 4: case 5: case 6: case 7:
+	case 0: case 1:
+		// 32K socket or External (selected by link PL11)
+		if (m_rom[m_romsel & 0x0e] && m_rom[m_romsel & 0x0e]->present())
+		{
+			data = m_rom[m_romsel & 0x0e]->read(offset | (m_romsel & 0x01) << 14);
+		}
+		else
+		{
+			data  = m_exp->rom_r(offset | (m_romsel & 0x01) << 14);
+			data &= m_region_rom->base()[offset + (m_romsel << 14)];
+		}
+		break;
+
+	case 4: case 5: case 6: case 7:
 		// 32K sockets
 		if (m_rom[m_romsel & 0x0e] && m_rom[m_romsel & 0x0e]->present())
 		{
@@ -311,7 +330,19 @@ void bbcmc_state::paged_w(offs_t offset, uint8_t data)
 {
 	switch (m_romsel)
 	{
-	case 0: case 1: case 4: case 5: case 6: case 7:
+	case 0: case 1:
+		// 32K socket or External (selected by link PL11)
+		if (m_rom[m_romsel & 0x0e] && m_rom[m_romsel & 0x0e]->present())
+		{
+			m_rom[m_romsel & 0x0e]->write(offset | (m_romsel & 0x01) << 14, data);
+		}
+		else
+		{
+			m_exp->rom_w(offset | (m_romsel & 0x01) << 14, data);
+		}
+		break;
+
+	case 4: case 5: case 6: case 7:
 		// 32K sockets
 		if (m_rom[m_romsel & 0x0e])
 		{
@@ -347,6 +378,12 @@ void bbcmc_state::sysvia_pa_w(uint8_t data)
 
 void bbcmc_state::update_sdb()
 {
+	uint8_t const latch = m_latch->output_state();
+
+	// sound
+	if (!BIT(latch, 0))
+		m_sn->write(m_sdb);
+
 	// keyboard
 	m_sdb = m_kbd->read(m_sdb);
 }
@@ -497,7 +534,6 @@ void bbcmc_state::bbcmc(machine_config &config)
 	config.set_default_layout(layout_bbcm);
 
 	LS259(config, m_latch);
-	m_latch->q_out_cb<0>().set([this](int state) { if (!state) m_sn->write(m_sdb); });
 	m_latch->q_out_cb<3>().set(m_kbd, FUNC(bbc_kbd_device::write_kb_en));
 	m_latch->q_out_cb<6>().set_output("capslock_led");
 	m_latch->q_out_cb<7>().set_output("shiftlock_led");
@@ -577,6 +613,9 @@ void bbcmc_state::bbcmc(machine_config &config)
 	BBC_EXP_SLOT(config, m_exp, 16_MHz_XTAL / 2, bbc_exp_devices, nullptr);
 	m_exp->irq_handler().set(m_irqs, FUNC(input_merger_device::in_w<3>));
 	m_exp->nmi_handler().set(FUNC(bbcmc_state::bus_nmi_w));
+	m_exp->lpstb_handler().set(m_sysvia, FUNC(via6522_device::write_cb2));
+	m_exp->lpstb_handler().append([this](int state) { if (state) m_crtc->assert_light_pen_input(); });
+	// CB handlers for Mertec device that also plugs into joystick port.
 	m_exp->cb1_handler().set(m_uservia, FUNC(via6522_device::write_cb1));
 	m_exp->cb2_handler().set(m_uservia, FUNC(via6522_device::write_cb2));
 
@@ -596,6 +635,7 @@ void bbcmc_state::bbcmc(machine_config &config)
 	SOFTWARE_LIST(config, "flop_ls_m").set_compatible("bbcm_flop");
 	SOFTWARE_LIST(config, "flop_ls_b").set_compatible("bbcb_flop");
 	SOFTWARE_LIST(config, "flop_ls_b_orig").set_compatible("bbcb_flop_orig");
+	SOFTWARE_LIST(config, "cart_ls_m").set_original("bbcm_cart");
 	SOFTWARE_LIST(config, "rom_ls").set_original("bbc_rom").set_filter("M");
 }
 
