@@ -674,7 +674,10 @@ dynax/dynax.cpp          // 99% mahjong
 -mjelct3bl
 -mjelct3bla
 -mjelct3blb
--ougonhaib3
+-ougonhai
+-ougonhaib1              // parent nw
+-ougonhaib2              // parent nw
+-ougonhaib3              // parent nw, badgfx
 -tenkai2b
 
 dynax/hnayayoi.cpp
@@ -691,7 +694,11 @@ dynax/royalmah.cpp          // mahjong
 -dragonmj103
 -ichiban
 -ichiban235
+-janoh
+-janoha                   // parent nw
 -janohb
+-jansou
+-jansoua                  // parent nw
 
 edevices/diverboy.cpp
 -tumblebed
@@ -731,9 +738,11 @@ excellent/d9final.cpp          // gambling
 
 excellent/dblcrown.cpp          // poker
 
-//excellent/es9501.cpp                 // black screen
+excellent/es8906.cpp
 
-//excellent/es8906.cpp                 // black screen
+excellent/es9501.cpp
+-d9flower
+-d9flowera
 
 excellent/gcpinbal.cpp
 
@@ -1024,6 +1033,8 @@ gottlieb/gottlieb.cpp
 
 //ice/chexx.cpp          // mechanical, no inputs
 
+//ice/fcourtfev.cpp             // no screen
+
 //ice/frenzyxprss.cpp          // no screen
 
 //ice/ice_bozopail.cpp          // no screen
@@ -1076,15 +1087,13 @@ igs/goldstar.cpp          // fruit
 -crazybonb
 -cutylinea
 -cutylineb
+-cutylinec
 -eldoradd
 -eldoraddo
 -eldoraddoa
 -eldoraddob
 -eldoraddoc
 -f16s8l
--feverch
--fevercha
--feverchtw
 -halltsk
 -lucky8j
 -luckybar
@@ -1124,11 +1133,14 @@ igs/goldstar.cpp          // fruit
 
 igs/igs011.cpp
 
-//igs/igs017.cpp
-//-jking302us
-//-slqz2a
-//-tarzan
-//-tarzana
+igs/igs017.cpp
+-jking302us
+-lhzb2b
+-lhzb2c
+-mgcsb
+-slqz2a
+-tarzan
+-tarzana
 
 igs/igspoker.cpp          // poker
 -cpoker210ks
@@ -1154,11 +1166,12 @@ igs/igs_m027.cpp
 -jhg3d
 -klxyj
 -luckycrs
+-magtree
 -olympic5
 -olympic5107us
 -olympic5a
--royal5p
 -sdwx
+-tarzan2
 -tshs101
 
 igs/igs_m027_023vid.cpp
@@ -1169,11 +1182,6 @@ igs/igs_m027_033vid.cpp
 //igs/igs_m027_link.cpp     // white screen or no screen
 
 igs/igs_m027xa.cpp
--haunthig
--haunthig101us
--haunthig107us
--haunthiga
--jking04
 -krzykeno
 -wldfruit
 
@@ -1204,25 +1212,30 @@ igs/pgm2.cpp
 
 //igs/pgm3.cpp          // chd, mnw
 
-//igs/spoker.cpp          // poker, some mnw
-//-cjdh6
-//-jinhulu2
-//-jinhulu2100gi
-//-jinhulu2120gi
-//-jinhulu2101is
-//-spk102ua
-//-spk200ua
-//-spk201ua
-//-spk203us
-//-spk205us
+igs/spoker.cpp          // poker, some mnw
+-3super8
+-dafuwng3
+-hsheng2
+-huahuas2
+-huahuas2a
+-huluw2
+-jinhuang
+-jinhuang2
+-jinhulu2
+-jinhulu2100gi
+-jinhulu2101is
+-jinhulu2120gi
+-sleyuan2
+-xjinhuang
+-zuanshiw
 
-//igt/drw80pkr.cpp          // poker, need setup
+igt/drw80pkr.cpp          // poker
 
 igt/fortune1.cpp          // poker
 
 //igt/gkigt.cpp          // mnw
 
-//igt/peplus.cpp          // fruit, how to use?
+//igt/peplus.cpp          // fruit, supposed to be working, but...
 
 //igt/splus.cpp          // fruit, mech, mnw
 
@@ -1281,8 +1294,6 @@ itech/iteagle.cpp          // chd untested
 itech/itech32.cpp
 
 itech/itech8.cpp
--gpgolf                   // attract mode crash
--gpgolfa                  // same
 -slikshot
 -slikshot16
 -slikshot17
@@ -2021,7 +2032,6 @@ misc/cocoloco.cpp
 
 misc/coinmstr.cpp
 -pokeroul
--supnudg2
 -trailblz
 
 //misc/coinmvga.cpp          // black screen
@@ -2195,6 +2205,8 @@ misc/goldnpkr.cpp          // poker
 -lfhouse
 -lfhouseb
 -maxidpkr
+-megadpkr
+-megadpkrb
 -olym65bj
 -olym65wc
 -pokerdub
@@ -2593,7 +2605,6 @@ misc/tvg01.cpp
 //misc/twinbskt.cpp          // no screen
 
 misc/umipoker.cpp          // poker
--vparadis
 
 //misc/unkgolf.cpp           // no screen
 
@@ -2719,8 +2730,10 @@ namco/namcos10.cpp
 -sekaikh
 -sekaikha
 -slotouji
+-slotoujia
 -sugorotc
 -sugorotca
+-sugorotcb
 -taikort
 
 namco/namcos11.cpp
@@ -3963,6 +3976,10 @@ sigma/spiders.cpp
 //skeleton/extrema_m27sv.cpp      // black screen
 
 //skeleton/falconun.cpp           // black screen
+
+//skeleton/fdek_h8s.cpp           // no screen
+
+//skeleton/flashgun.cpp           // no screen
 
 //skeleton/flashvga2.cpp          // black screen
 

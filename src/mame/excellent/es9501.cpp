@@ -24,14 +24,13 @@ Undumped games known to run on this PCB:
 * Multi Spin
 
 TODO
-- EEPROM write doesn't work;
+- EEPROM write doesn't always work;
 - layout for lamps;
 - sprite colors aren't always correct (i.e. specd9 title screen). Is palette banked, too?;
 - verify sprites / tilemaps priorities;
 - flip screen support;
 - only a small part of the videoregs are (perhaps) understood;
-- d9flower needs correct EEPROM;
-- d9flower doesn't update palette after boot and doesn't accept controls (IRQ problem?)
+- IRQ handling not 100% correct;
 - device-ify ES-9409 and share with excellent/dblcrown.cpp.
 */
 
@@ -391,10 +390,10 @@ static INPUT_PORTS_START( specd9 )
 	PORT_BIT( 0x8000, IP_ACTIVE_LOW, IPT_MEMORY_RESET )
 
 	PORT_START("DSW")
-	PORT_BIT(                      0x00ff, IP_ACTIVE_LOW, IPT_UNUSED )
-	PORT_DIPNAME(          0x0100, 0x0100, "Win Rate Configuration Screen" ) PORT_DIPLOCATION( "SW1:1" )
-	PORT_DIPSETTING(               0x0100, DEF_STR( Off ) )
-	PORT_DIPSETTING(               0x0000, DEF_STR( On ) )
+	PORT_BIT(                       0x00ff, IP_ACTIVE_LOW, IPT_UNUSED )
+	PORT_DIPNAME(           0x0100, 0x0100, "Win Rate Configuration Screen" ) PORT_DIPLOCATION( "SW1:1" )
+	PORT_DIPSETTING(                0x0100, DEF_STR( Off ) )
+	PORT_DIPSETTING(                0x0000, DEF_STR( On ) )
 	PORT_DIPUNKNOWN_DIPLOC( 0x0200, 0x0200, "SW1:2" )
 	PORT_DIPUNKNOWN_DIPLOC( 0x0400, 0x0400, "SW1:3" )
 	PORT_DIPUNKNOWN_DIPLOC( 0x0800, 0x0800, "SW1:4" )
@@ -427,7 +426,7 @@ GFXDECODE_END
 
 // bit 0 unused in specd9, d9flower depends on it on memory clear screen
 // bit 1 looks vblank (would hang otherwise)
-// bit 2 unknown (sprite DMA complete? Unset by specd9)
+// bit 2 unknown (sprite DMA complete? Unset by specd9. Used for inputs and palette updates by d9flower)
 TIMER_DEVICE_CALLBACK_MEMBER(es9501_state::scanline_cb)
 {
 	int const scanline = param;
@@ -436,6 +435,12 @@ TIMER_DEVICE_CALLBACK_MEMBER(es9501_state::scanline_cb)
 	{
 		m_maincpu->set_input_line(1, HOLD_LINE);
 		m_irq_source |= 2;
+	}
+
+	if ((scanline >= 0) && (scanline < 240) && BIT(m_irq_mask, 2))
+	{
+		m_maincpu->set_input_line(1, HOLD_LINE);
+		m_irq_source |= 4;
 	}
 
 	if (scanline == 0 && BIT(m_irq_mask, 0))
@@ -500,7 +505,7 @@ ROM_START( d9flower ) // Dream 9 Flower string, but images seem more Flower 9 Dr
 	ROM_LOAD( "5.u23", 0x000000, 0x080000, CRC(b6ad2e58) SHA1(84c0cdc155f641d4e5d8ae99acbfa5b297762418) )
 
 	ROM_REGION16_BE( 0x100, "eeprom", ROMREGION_ERASE00 )
-	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, NO_DUMP )
+	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, CRC(3ffcac74) SHA1(43bd5324b27e9859f235c5d9b1545e012431a5a4) )
 
 	ROM_REGION( 0x117, "plds", 0 )
 	ROM_LOAD( "3.u37", 0x000, 0x117, BAD_DUMP CRC(bea4cb24) SHA1(09987e6b903cc3bd202a9d933474b36bdbb99d9a) ) // not dumped for this set, but marked same
@@ -519,7 +524,7 @@ ROM_START( d9flowera ) // same GFX / sound ROMs as d9flower, updated program (bu
 	ROM_LOAD( "j5.u23", 0x000000, 0x080000, CRC(b6ad2e58) SHA1(84c0cdc155f641d4e5d8ae99acbfa5b297762418) )
 
 	ROM_REGION16_BE( 0x100, "eeprom", ROMREGION_ERASE00 )
-	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, NO_DUMP )
+	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, CRC(3ffcac74) SHA1(43bd5324b27e9859f235c5d9b1545e012431a5a4) )
 
 	ROM_REGION( 0x117, "plds", 0 )
 	ROM_LOAD( "003.u37", 0x000, 0x117, BAD_DUMP CRC(bea4cb24) SHA1(09987e6b903cc3bd202a9d933474b36bdbb99d9a) ) // not dumped for this set, but probably same
@@ -538,7 +543,7 @@ ROM_START( specd9 )
 	ROM_LOAD( "t59.u23", 0x000000, 0x200000, CRC(b11857b4) SHA1(c0a6478fd8a8ef1ed35cfbfa9fd2af44eb258725) )
 
 	ROM_REGION16_BE( 0x100, "eeprom", 0 )
-	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, CRC(dba91cd8) SHA1(dfbe41e3a8d7e8ad7068d25afe10a1d93bf3cc4d) )
+	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, CRC(bdf66ef7) SHA1(a41caf78b769af3a0cdffc5e89a0dc236c21371a) )
 
 	ROM_REGION( 0x117, "plds", 0 )
 	ROM_LOAD( "3.u37", 0x000, 0x117, CRC(bea4cb24) SHA1(09987e6b903cc3bd202a9d933474b36bdbb99d9a) ) // PALCE16V8H
@@ -576,7 +581,7 @@ ROM_START( starball )
 	ROM_LOAD( "t59.u23", 0x000000, 0x200000, CRC(b11857b4) SHA1(c0a6478fd8a8ef1ed35cfbfa9fd2af44eb258725) )
 
 	ROM_REGION16_BE( 0x100, "eeprom", 0 )
-	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, BAD_DUMP CRC(3d0a5809) SHA1(5d754d359c36db8a08337c61d6101050a97407e3) ) // handcrafted
+	ROM_LOAD16_WORD_SWAP( "93c56.u12", 0x000, 0x100, CRC(e91dc32e) SHA1(b2e44321882abef012afc363cd78409a06a58764) )
 
 	ROM_REGION( 0x117, "plds", 0 )
 	ROM_LOAD( "3.u37", 0x000, 0x117, CRC(bea4cb24) SHA1(09987e6b903cc3bd202a9d933474b36bdbb99d9a) ) // PALCE16V8H
