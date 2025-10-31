@@ -1114,13 +1114,11 @@ tvgames/actions_atj2279b.cpp
 tvgames/elan_ep3a19a.cpp
 tvgames/elan_eu3a05.cpp
 tvgames/elan_eu3a14.cpp
-tvgames/generalplus_gpl_unknown.cpp
 tvgames/generalplus_gpl16250_mobigo.cpp
 tvgames/generalplus_gpl16250_nand.cpp
 tvgames/generalplus_gpl16250_rom.cpp
 tvgames/generalplus_gpl16250_romram.cpp
 tvgames/generalplus_gpl16250_spi.cpp
-tvgames/generalplus_gpl16250_spi_direct.cpp
 tvgames/generalplus_gpl162xx_lcdtype.cpp
 tvgames/generalplus_gpl32612.cpp
 tvgames/magiceyes_pollux_vr3520f.cpp
