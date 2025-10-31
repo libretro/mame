@@ -49,6 +49,10 @@ function devicesProject(_target, _subtarget)
 
 	dofile(path.join("src", "video.lua"))
 
+if _OPTIONS["osd"]=="retro" then
+    dofile(path.join("src", "video_retro.lua"))
+end
+
 	dofile(path.join("src", "machine.lua"))
 
 	dofile(path.join("src", "bus.lua"))

@@ -292,6 +292,7 @@ const double XTAL::known_xtals[] = {
 	 16'588'800, // 16.5888_MHz_XTAL       SM 7238
 	 16'666'600, // 16.6666_MHz_XTAL       Firebeat GCU
 	 16'667'000, // 16.667_MHz_XTAL        Visual XDS-19P
+	 16'668'000, // 16.668_MHz_XTAL        Hoei Future Flash
 	 16'669'800, // 16.6698_MHz_XTAL       Qume QVT-102
 	 16'670'000, // 16.67_MHz_XTAL         -
 	 16'777'216, // 16.777216_MHz_XTAL     Nintendo Game Boy Advance
@@ -311,6 +312,7 @@ const double XTAL::known_xtals[] = {
 	 17'734'475, // 17.734475_MHz_XTAL     4x PAL subcarrier - "
 	 17'734'476, // 17.734476_MHz_XTAL     4x PAL subcarrier - "
 	 17'812'000, // 17.812_MHz_XTAL        Videopac C52
+	 17'820'000, // 17.82_MHz_XTAL         Convergent AWS-2xx
 	 17'971'200, // 17.9712_MHz_XTAL       Compucolor II, Hazeltine Esprit III
 	 18'000'000, // 18_MHz_XTAL            S.A.R, Ikari Warriors 3
 	 18'414'000, // 18.414_MHz_XTAL        Ann Arbor Ambassador
