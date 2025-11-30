@@ -965,7 +965,7 @@ gaelco/mastboyo_ms.cpp
 
 //gaelco/radikaldarts.cpp          // chd, mnw
 
-gaelco/rollext.cpp
+//gaelco/rollext.cpp               // black screen
 
 gaelco/splash.cpp
 -rebus
@@ -1031,6 +1031,12 @@ gottlieb/exterm.cpp
 
 gottlieb/gottlieb.cpp
 
+//handheld/tama_4u.cpp              // black screen
+
+//handheld/tama_id.cpp              // black screen
+
+//handheld/tama_mix.cpp             // black screen
+
 //ice/chexx.cpp          // mechanical, no inputs
 
 //ice/fcourtfev.cpp             // no screen
@@ -1053,8 +1059,6 @@ ice/lethalj.cpp
 
 igs/dunhuang.cpp          // mahjong
 
-igs/funtech.cpp          // poker
-
 igs/goldstar.cpp          // fruit
 -3cdpoker
 -3cdpokera
@@ -1068,15 +1072,13 @@ igs/goldstar.cpp          // fruit
 -cb3f
 -cb3s51
 -cbaai
--cherry96
 -chryangl
 -chryangla
 -chryanglb
 -cmast92
 -cmast92a
--cmast97
--cmast97a
--cmast97i
+-cmast97bl16
+-cmast97bl18
 -cmast99
 -cmast99b
 -cmasterbv
@@ -1094,7 +1096,9 @@ igs/goldstar.cpp          // fruit
 -eldoraddob
 -eldoraddoc
 -f16s8l
+-fl7_twb
 -halltsk
+-jkrmastc
 -lucky8j
 -luckybar
 -luckylad
@@ -1110,8 +1114,9 @@ igs/goldstar.cpp          // fruit
 -noved
 -rolling
 -roypok96c
--skillch
--skillcha
+-special7
+-special7a
+-special7b
 -srmagic
 -super7
 -super9
@@ -1127,7 +1132,6 @@ igs/goldstar.cpp          // fruit
 -war3cb
 -wcat3
 -wcat3a
--wcherry
 
 //igs/igs009.cpp
 
@@ -1157,9 +1161,9 @@ igs/igs_m027.cpp
 -amazoni2
 -amazonia
 -amazonkp
--ccly
 -cjddz213cn
 -cjdh6th
+-cjdh6tha
 -extradrw
 -gonefsh
 -gonefsh2
@@ -1182,7 +1186,9 @@ igs/igs_m027_033vid.cpp
 //igs/igs_m027_link.cpp     // white screen or no screen
 
 igs/igs_m027xa.cpp
+-crzybug2
 -krzykeno
+-texashld
 -wldfruit
 
 //igs/igs_m036.cpp          // black screen
@@ -1597,6 +1603,8 @@ konami/ksys573.cpp          // chd
 -pcnfrk2mk
 -pcnfrk3m
 -pcnfrk3mk
+-pcnfrk4m
+-pcnfrk4mk                //pcnfrk4m nw
 -pcnfrk5m
 -pcnfrk5mk
 -pcnfrk6m
@@ -1711,6 +1719,7 @@ konami/viper.cpp          // chd, mnw. sscopex(nw)parent of sogeki(w)
 -mocapb
 -mocapbj
 -mocapglf
+-sscopexu
 -thrild2
 -thrild2a
 -thrild2ab
@@ -1996,6 +2005,7 @@ misc/carrera.cpp
 //misc/castle.cpp          // mnw
 
 misc/cb2001.cpp          // fruit
+-bsbonanza
 -cb4
 -cb4a
 -cb5
@@ -2006,11 +2016,14 @@ misc/cb2001.cpp          // fruit
 -mystjb
 -ndongmul2
 -nmondop
+-pdouble8                  // badgfx on reels
 -scherrym
 -scherrym12
 -scherrymp
 -scherrymp10u
 -tripjack
+-tripjack07
+-tripjack11
 
 //misc/chameleonrx1.cpp          //no screen
 
@@ -2202,6 +2215,7 @@ misc/goldnpkr.cpp          // poker
 -dynchancf
 -dynplus
 -falcnwldc
+-icproul
 -lfhouse
 -lfhouseb
 -maxidpkr
@@ -2672,6 +2686,8 @@ msx/sangho.cpp
 msx/sfkick.cpp
 
 namco/20pacgal.cpp
+-25pacman
+-25pacmano                  //25pacman nw
 
 namco/30test.cpp
 
@@ -3414,6 +3430,7 @@ sega/model2.cpp
 -vonr
 
 sega/model3.cpp
+-bassdx
 -daytona2
 -dayto2pe
 -dirtdvls
@@ -3426,6 +3443,7 @@ sega/model3.cpp
 -fvipers2o
 -getbass
 -getbassdx
+-getbassur                   // bassdx nw
 -harleya
 -lemans24
 -lostwsga
@@ -3531,8 +3549,9 @@ sega/naomi.cpp
 -mj1d
 -mj1e
 -mushikc
--mushikk
+-mushike
 -mushikeo
+-mushikep             //mushike nw
 -mushik2e
 -mushik4e
 -mushik4t
@@ -3540,6 +3559,7 @@ sega/naomi.cpp
 -mushi2eo
 -mushi2k5
 -mushi2k62
+-mushikk
 -ndcfboxa
 -ngdup23a
 -ngdup23c
@@ -3825,6 +3845,7 @@ seibu/legionna.cpp
 -olysoc92
 -olysoc92a
 -olysoc92b
+//-cupsoc                     // nw, has working clones
 -cupsoca
 -cupsocb
 -cupsocs
@@ -3895,11 +3916,6 @@ seta/seta.cpp
 seta/seta2.cpp
 -ablastb
 -blnctry
--funcube
--funcube2
--funcube3
--funcube4
--funcube5
 -namcostr
 -staraudi
 
@@ -3999,6 +4015,8 @@ sigma/spiders.cpp
 
 //skeleton/madmoney2.cpp          // no screen
 
+//skeleton/megacrane.cpp            // no screen
+
 //skeleton/minihock.cpp           // no screen
 
 //skeleton/paipaile.cpp                // black screen
@@ -4089,7 +4107,9 @@ subsino/subsino.cpp
 -trsocean
 
 subsino/subsino2.cpp
+-blushark
 -jgaoshou
+-queenbee107u
 -queenbeeb
 -queenbeei
 -queenbeesa
@@ -4300,8 +4320,9 @@ taito/taitosj.cpp
 
 //taito/taitotz.cpp          // hangs while booting, some chd
 
-taito/taitowlf.cpp
--p5txla
+//taito/taitowlf.cpp
+-p5txla                      // hang while booting
+-pf2012                      // black screen
 
 taito/taito_b.cpp
 -realpunc
@@ -4597,7 +4618,9 @@ wing/lucky74.cpp          // poker
 wing/pinkiri8.cpp          // mahjong, bad gfx
 -janmu
 -pinkiri8
+-ronjan
 -ronjana
+-ronjans
 -ronjansa
 -ronjansb
 
