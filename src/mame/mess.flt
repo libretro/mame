@@ -149,7 +149,7 @@ chess/compuchess.cpp
 chess/conchess.cpp
 chess/conic_cchess2.cpp
 chess/conic_cchess3.cpp
-chess/krypton_regency.cpp
+chess/krypton_challenge.cpp
 chess/regence.cpp
 chess/tasc.cpp
 chromatics/cgc7900.cpp
@@ -1163,7 +1163,7 @@ ultratec/minicom.cpp
 unicard/bbcbc.cpp
 unisonic/unichamp.cpp
 unisys/univac.cpp
-usp/patinho_feio.cpp
+usp/patinhofeio.cpp
 ussr/apogee.cpp
 ussr/argo.cpp
 ussr/b2m.cpp
