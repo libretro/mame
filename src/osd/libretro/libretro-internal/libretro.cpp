@@ -49,7 +49,8 @@ int video_changed  = 0;
 int screen_configured = 0;
 
 static bool draw_this_frame = true;
-static int cpu_overclock = 100;
+static int maincpu_overclock = 100;
+static int soundcpu_overclock = 100;
 
 const char *retro_save_directory;
 const char *retro_system_directory;
@@ -326,11 +327,6 @@ void retro_set_environment(retro_environment_t cb)
 
 static void update_runtime_variables(bool startup)
 {
-   // Skip at startup if using default speed, because
-   // games like 'dragoona' use a CPU timing boothack
-   if (startup && cpu_overclock == 100)
-      return;
-
    // Update CPU Overclock
    if (mame_machine_manager::instance() != NULL && mame_machine_manager::instance()->machine() != NULL)
    {
@@ -339,9 +335,22 @@ static void update_runtime_variables(bool startup)
       {
          if (dynamic_cast<cpu_device *>(&device) != nullptr)
          {
-            cpu_device* firstcpu = downcast<cpu_device *>(&device);
-            firstcpu->set_clock_scale((float)cpu_overclock * 0.01f);
-            break;
+            float clock = 100;
+
+            if (!strcmp(device.tag(), ":maincpu"))
+               clock = maincpu_overclock;
+            else if (!strcmp(device.tag(), ":soundcpu")
+                  || !strcmp(device.tag(), ":audiocpu")
+                  ||  strstr(device.tag(), ":audio_cpu"))
+               clock = soundcpu_overclock;
+
+            // Skip at startup if using default speed, because
+            // games like 'dragoona' use a CPU timing boothack
+            if (startup && clock == 100)
+               continue;
+
+            cpu_device* cpu = downcast<cpu_device *>(&device);
+            cpu->set_clock_scale(clock * 0.01f);
          }
       }
    }
@@ -504,9 +513,18 @@ static void check_variables(void)
    var.value = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
    {
-      cpu_overclock = 100;
+      maincpu_overclock = 100;
       if (strcmp(var.value, "default"))
-         cpu_overclock = atoi(var.value);
+         maincpu_overclock = atoi(var.value);
+   }
+
+   var.key   = CORE_NAME "_cpu_sound_overclock";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      soundcpu_overclock = 100;
+      if (strcmp(var.value, "default"))
+         soundcpu_overclock = atoi(var.value);
    }
 
    var.key   = CORE_NAME "_autoloadfastforward";
