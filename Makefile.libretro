@@ -276,6 +276,27 @@ ifeq ($(platform),tvos-arm64)
 	PLATFLAGS +=macosx_arm64_clang
 endif
 
+ifneq (,$(or $(findstring webos,$(CROSS_COMPILE)),$(findstring starfish,$(CROSS_COMPILE))))
+	LIBRETRO_CPU :=
+	FORCE_DRC_C_BACKEND := 1
+	PTR64 := 0
+	PLATFLAGS += NOASM=1
+	PLATFLAGS += PLATFORM=arm
+	PLATFLAGS += ARCHITECTURE=
+	PLATFLAGS += USE_QTDEBUG=0
+	ifneq (,$(findstring starfish,$(CROSS_COMPILE)))
+		TOOLCHAIN_PREFIX = arm-starfishmllib32-linux-gnueabi-
+	else
+		TOOLCHAIN_PREFIX = arm-webos-linux-gnueabi-
+	endif
+	PLATFLAGS += OVERRIDE_CC=$(TOOLCHAIN_PREFIX)gcc OVERRIDE_CXX=$(TOOLCHAIN_PREFIX)g++
+	PLATFLAGS += OVERRIDE_LD=$(TOOLCHAIN_PREFIX)ld OVERRIDE_AR=$(TOOLCHAIN_PREFIX)ar
+	PLATFLAGS += CROSS_BUILD=1
+	BUILDFLAGS += LDOPTS=-fuse-ld=gold
+	BUILDFLAGS += LDOPTS+=-Wl,--long-plt
+    BUILDFLAGS += OPTIMIZE=s
+endif
+
 ifneq ($(LIBRETRO_CPU),)
 	PLATFLAGS += LIBRETRO_CPU=$(LIBRETRO_CPU)
 endif
