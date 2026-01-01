@@ -74,7 +74,10 @@ aristocrat/caswin.cpp
 
 astrocorp/astrcorp.cpp          // gambling
 -keno21
+-luckycoin
 -magibomb_br44
+-skilldrp
+-skilldrp_g10s
 -westvent
 -westvent_aa01b                 //broken parent
 -westvent_aa02e                 //broken parent
@@ -275,7 +278,7 @@ atari/tomcat.cpp          // inputs unusable, but needed by tomcatsw
 
 atari/toobin.cpp
 
-atari/tourtabl.cpp
+//atari/tourtabl.cpp         // inputs
 
 atari/triplhnt.cpp          // have to turn off service mode before it can be played
 
@@ -489,6 +492,7 @@ cave/cv1k.cpp
 //cave/fstgfish.cpp         // chd, skel
 
 ces/cesclass.cpp
+-tsclass                         // mechanical
 
 ces/galgames.cpp
 
@@ -585,6 +589,7 @@ dataeast/deco32.cpp
 -lockloadu
 
 dataeast/decocass.cpp
+-ctsttape
 
 dataeast/deco_ld.cpp          // not working, but parent of combram3
 -begas
@@ -674,6 +679,7 @@ dynax/dynax.cpp          // 99% mahjong
 -mjelct3bl
 -mjelct3bla
 -mjelct3blb
+-mjtkp2
 -ougonhai
 -ougonhaib1              // parent nw
 -ougonhaib2              // parent nw
@@ -729,6 +735,7 @@ eolith/eolith.cpp
 eolith/eolith16.cpp
 
 eolith/ghosteo.cpp
+-touryuu                        // inputs
 
 eolith/vegaeo.cpp
 
@@ -772,6 +779,10 @@ f32/crospang.cpp
 f32/f-32.cpp
 
 f32/silvmil.cpp
+
+funtech/funtech_h8.cpp
+
+funtech/funtech_z80.cpp
 
 //funworld/4roses.cpp          // black screen
 
@@ -1037,6 +1048,10 @@ gottlieb/gottlieb.cpp
 
 //handheld/tama_mix.cpp             // black screen
 
+//hominn/hominn_980924.cpp          // hang at start
+
+//hominn/hominn_mcs51.cpp           // black screen
+
 //ice/chexx.cpp          // mechanical, no inputs
 
 //ice/fcourtfev.cpp             // no screen
@@ -1057,21 +1072,22 @@ ice/lethalj.cpp
 
 //igs/cabaret.cpp          // poker, black screen after dealing
 
+igs/5clown.cpp          // poker
+
 igs/dunhuang.cpp          // mahjong
 
 igs/goldstar.cpp          // fruit
 -3cdpoker
 -3cdpokera
+-aladdin
+-aladdina
 -amaztsk
 -animalhsa
 -animalwa
 -aplan
 -bonusch
 -bonuscha
--cb3c
 -cb3f
--cb3s51
--cbaai
 -chryangl
 -chryangla
 -chryanglb
@@ -1081,6 +1097,9 @@ igs/goldstar.cpp          // fruit
 -cmast97bl18
 -cmast99
 -cmast99b
+-cmast99c
+-cmast99d
+-cmast99hc
 -cmasterbv
 -cmfb55
 -cmtetrisb
@@ -1093,8 +1112,10 @@ igs/goldstar.cpp          // fruit
 -eldoradd
 -eldoraddo
 -eldoraddoa
+-eldoraddoab
 -eldoraddob
 -eldoraddoc
+-eldoraddod
 -f16s8l
 -fl7_twb
 -halltsk
@@ -1127,6 +1148,12 @@ igs/goldstar.cpp          // fruit
 -ss2000a
 -ss2001
 -tcl
+-texas99
+-texas99b
+-texas99c
+-texas99d
+-texas99e
+-texas99hc
 -top7
 -top7a
 -war3cb
@@ -1536,6 +1563,7 @@ konami/konmedal.cpp
 konami/konmedal68k.cpp
 -crossmg2
 -fruitsmg
+-spcpokan
 -unkkonmd
 
 //konami/konmedalppc.cpp       // mnw
@@ -1921,8 +1949,6 @@ misc/39in1.cpp
 misc/4enraya.cpp
 -strker
 
-misc/5clown.cpp          // poker
-
 //misc/a1supply.cpp          // no screen
 
 misc/acefruit.cpp          // fruit
@@ -1956,6 +1982,7 @@ misc/amusco.cpp          // poker
 //misc/arachnid.cpp          // mech, seems to work, W=enter
 
 misc/artmagic.cpp
+-shtstar
 
 //misc/astrafr.cpp          // fruit, no screen
 
@@ -2224,10 +2251,11 @@ misc/goldnpkr.cpp          // poker
 -olym65bj
 -olym65wc
 -pokerdub
--wldwitchb
--wldwitche
--witchgmea
--wtchjackh
+-wldwitchb              //bad dump
+-wldwitche              //bad dump
+-witchgme               //need setup ins
+-witchgmea              //need setup ins
+-wtchjackh              //bad dumps
 
 misc/good.cpp
 
@@ -2320,14 +2348,7 @@ misc/ltcasino.cpp          // gambling
 //misc/luckybal.cpp          // gambling, how to use?
 
 misc/magic10.cpp          // poker
--altaten
 -hotslot
--lunaprk
--mcolors
--mcolorsa
--magic102
--magic102a
--suprpool
 
 //misc/magicard.cpp          // poker, blue screen
 
@@ -2558,6 +2579,8 @@ misc/statriv2.cpp
 -quaquiz2
 -nsupertr3
 -supertr
+-supertr2                  //stuck in setup
+-supertr3                  //stuck in setup
 -statriv5se
 
 //misc/stop.cpp          // no screen
@@ -2621,8 +2644,6 @@ misc/tvg01.cpp
 misc/umipoker.cpp          // poker
 
 //misc/unkgolf.cpp           // no screen
-
-misc/unkhorse.cpp
 
 //misc/unkpoker.cpp          // poker, mnw
 
@@ -2766,6 +2787,8 @@ namco/namcos12.cpp
 
 namco/namcos2.cpp
 
+//namco/namcos14x.cpp          // black screen
+
 namco/namcos21.cpp
 
 namco/namcos21_c67.cpp
@@ -2841,6 +2864,7 @@ neogeo/neogeo.cpp
 neogeo/neopcb.cpp
 
 nichibutsu/armedf.cpp
+-skyrobobl
 
 nichibutsu/cclimber.cpp
 -bagmanf
@@ -3368,13 +3392,9 @@ sega/coolridr.cpp
 //sega/dccons.cpp          // game freezes after a while
 
 sega/dc_atomiswave.cpp
--basschal                   // black screen
--basschalo                  // black screen
--mslug6                     // black screen
 -salmankt                   // start button nw
--vfurlong                   // please wait...
--xtrmhnt2                   // lan problem
--xtrmhunt                   // black screen
+-vfurlong                   // wait 5 min then start button nw
+-xtrmhnt2                   // Lan problem
 
 sega/deniam.cpp
 
@@ -3415,7 +3435,6 @@ sega/model1.cpp
 -netmerc
 
 sega/model2.cpp
--hpyagu98
 -lastbrnx
 -lastbrnxj
 -lastbrnxu
@@ -3476,7 +3495,7 @@ sega/model3.cpp
 
 //sega/monacogp.cpp          // black screen
 
-sega/naomi.cpp
+sega/naomi.cpp             // needed by dc_atomiswave
 -alpilotj
 -alpilot
 -anpanman2
@@ -3497,7 +3516,7 @@ sega/naomi.cpp
 -clubkrtc
 -crackndj
 -crakndj2
--cvsgd
+-cvsgd               //freezes after pressing start
 -derbyoc
 -derbyo2k
 -derbyoc2
@@ -3511,6 +3530,8 @@ sega/naomi.cpp
 -dragntr2
 -dragntr3
 -dybb99
+-dygolf
+-dygolfp                //dygolf nw
 -f355
 -f355p
 -f355twin
@@ -3607,6 +3628,7 @@ sega/naomi.cpp
 -spawn
 -sstrkfgt
 -sstrkfgta
+-tetkiwam
 -tduno
 -tduno2
 -vf4cart
@@ -3698,6 +3720,9 @@ sega/segas24.cpp
 
 sega/segas32.cpp
 -as1
+-as1a
+-as1b
+-as1c
 -kokoroj
 -kokoroja
 
@@ -3784,6 +3809,7 @@ sega/system16.cpp
 -beautyb
 -bloxeedbl
 -cltchitrbl
+-eswatbl3
 -iqpipe
 -timescanbl
 -wb3bble
@@ -4045,6 +4071,8 @@ sigma/spiders.cpp
 
 //skeleton/tvcobrasd.cpp          // no screen
 
+//skeleton/unkcrane8085.cpp       // no screen
+
 //skeleton/venteta.cpp            // black screen
 
 //skeleton/vgame.cpp              // black screen
@@ -4054,6 +4082,8 @@ sigma/spiders.cpp
 snk/bbusters.cpp
 
 snk/dmndrby.cpp
+
+snk/drderby.cpp
 
 snk/hng64.cpp
 
@@ -4105,9 +4135,11 @@ subsino/subsino.cpp
 -newhunterc
 -sevenlnd
 -trsocean
+-trsoceana
 
 subsino/subsino2.cpp
 -blushark
+-dongshiz                 //black screen
 -jgaoshou
 -queenbee107u
 -queenbeeb
@@ -4410,6 +4442,8 @@ technos/chinagat.cpp
 technos/ddragon.cpp
 -ddragon6809
 -ddragon6809a
+-ddragon6809b
+-ddragon6809c
 
 technos/ddragon3.cpp
 
