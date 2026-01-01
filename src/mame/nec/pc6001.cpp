@@ -1739,6 +1739,7 @@ void pc6001_state::pc6001(machine_config &config)
 
 	GENERIC_CARTSLOT(config, m_cart, generic_plain_slot, "pc6001_cart");
 	SOFTWARE_LIST(config, "cart_list_pc6001").set_original("pc6001_cart");
+	SOFTWARE_LIST(config, "cass_list_pc6001").set_original("pc6001_cass");
 
 //  CASSETTE(config, m_cassette);
 //  m_cassette->set_formats(pc6001_cassette_formats);
@@ -1776,6 +1777,9 @@ void pc6001mk2_state::pc6001mk2(machine_config &config)
 	subdevice<gfxdecode_device>("gfxdecode")->set_info(gfx_pc6001m2);
 
 	UPD7752(config, "upd7752", PC6001_MAIN_CLOCK / 4).add_route(ALL_OUTPUTS, "mono", 1.00);
+
+	SOFTWARE_LIST(config, "cass_list_pc6001mk2").set_original("pc6001mk2_cass");
+
 }
 
 void pc6601_state::floppy_formats(format_registration &fr)
@@ -1870,7 +1874,7 @@ ROM_START( pc6001 )
 	ROM_LOAD( "basicrom.60", 0x0000, 0x4000, CRC(54c03109) SHA1(c622fefda3cdc2b87a270138f24c05828b5c41d2) )
 
 	ROM_REGION( 0x800, "mcu", 0 )
-	ROM_LOAD( "upd8049.ic17", 0x000, 0x800, CRC(6682ec41) SHA1(ea739be6178c0f2ef48a3a33a3f2a3438ed2ca61) )
+	ROM_LOAD( "upd8049.ic17", 0x000, 0x800, CRC(6682ec41) SHA1(ea739be6178c0f2ef48a3a33a3f2a3438ed2ca61) BAD_DUMP )
 
 	ROM_REGION( 0x2000, "gfx1", 0 )
 	ROM_LOAD( "cgrom60.60", 0x0000, 0x1000, CRC(b0142d32) SHA1(9570495b10af5b1785802681be94b0ea216a1e26) )
