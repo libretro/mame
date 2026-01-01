@@ -290,7 +290,6 @@ fidelity/vsc.cpp
 force/miniforce.cpp
 fujitsu/fm7.cpp
 fujitsu/fmtowns.cpp
-funtech/supracan.cpp
 gamepark/gp2x.cpp
 gamepark/gp32.cpp
 gridcomp/gridcomp.cpp
@@ -1160,6 +1159,7 @@ tvgames/xavix_2002.cpp
 tvgames/xavix2.cpp
 ultimachine/rambo.cpp
 ultratec/minicom.cpp
+umc/supracan.cpp
 unicard/bbcbc.cpp
 unisonic/unichamp.cpp
 unisys/univac.cpp
