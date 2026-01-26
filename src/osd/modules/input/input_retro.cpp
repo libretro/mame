@@ -24,9 +24,12 @@
 #include "libretro/libretro-internal/libretro.h"
 #include "libretro/libretro-internal/libretro_shared.h"
 
+#define BUTTON_MAX   0x80
+#define ANALOG_MAX   0x7FFF
+#define LIGHTGUN_MAX 0xFFFF
 extern bool libretro_supports_bitmasks;
 
-static unsigned short retro_key_state[RETROK_LAST] = {0};
+static unsigned short retro_key_state[RETROK_LAST]       = {0};
 static unsigned short retro_key_event_state[RETROK_LAST] = {0};
 static bool retro_key_capslock = false;
 
@@ -34,7 +37,7 @@ joystickstate_t joystickstate[RETRO_MAX_PLAYERS];
 mousestate_t mousestate[RETRO_MAX_PLAYERS];
 lightgunstate_t lightgunstate[RETRO_MAX_PLAYERS];
 
-uint8_t mouse_count = 0;
+uint8_t mouse_count    = 0;
 uint8_t joystick_count = 0;
 uint8_t lightgun_count = 0;
 
@@ -595,7 +598,7 @@ void retro_osd_interface::process_keyboard_state(running_machine &machine)
    {
       if (retro_key_event_state[keyboard_table[i].retro_key_name] && !retro_key_state[keyboard_table[i].retro_key_name])
       {
-         retro_key_state[keyboard_table[i].retro_key_name] = 0x80;
+         retro_key_state[keyboard_table[i].retro_key_name] = BUTTON_MAX;
          retro_push_char(machine, keyboard_table[i].retro_key_name);
          repeat_trigger = PUSH_CHAR_REPEAT_TRIGGER;
          repeat = 0;
@@ -649,15 +652,15 @@ void retro_osd_interface::process_joystick_state(running_machine &machine)
       for (i = 0; i < RETRO_MAX_JOYSTICK_BUTTONS; i++)
       {
          if (ret[j] & (1 << i))
-            joystickstate[j].button[i] = 0x80;
+            joystickstate[j].button[i] = BUTTON_MAX;
          else
             joystickstate[j].button[i] = 0;
       }
 
-      joystickstate[j].a1[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X)), -32767, 32767);
-      joystickstate[j].a1[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y)), -32767, 32767);
-      joystickstate[j].a2[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X)), -32767, 32767);
-      joystickstate[j].a2[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y)), -32767, 32767);
+      joystickstate[j].a1[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X)), -ANALOG_MAX, ANALOG_MAX);
+      joystickstate[j].a1[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_Y)), -ANALOG_MAX, ANALOG_MAX);
+      joystickstate[j].a2[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_X)), -ANALOG_MAX, ANALOG_MAX);
+      joystickstate[j].a2[1] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_RIGHT, RETRO_DEVICE_ID_ANALOG_Y)), -ANALOG_MAX, ANALOG_MAX);
 
       analog_l2 = input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_BUTTON, RETRO_DEVICE_ID_JOYPAD_L2);
       analog_r2 = input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_BUTTON, RETRO_DEVICE_ID_JOYPAD_R2);
@@ -666,17 +669,17 @@ void retro_osd_interface::process_joystick_state(running_machine &machine)
       if (analog_l2 == 0)
       {
          if (ret[j] & (1 << RETRO_DEVICE_ID_JOYPAD_L2))
-            analog_l2 = 32767;
+            analog_l2 = ANALOG_MAX;
       }
 
       if (analog_r2 == 0)
       {
          if (ret[j] & (1 << RETRO_DEVICE_ID_JOYPAD_R2))
-            analog_r2 = 32767;
+            analog_r2 = ANALOG_MAX;
       }
 
-      joystickstate[j].a3[0] = -normalize_absolute_axis(analog_l2, -32767, 32767);
-      joystickstate[j].a3[1] = -normalize_absolute_axis(analog_r2, -32767, 32767);
+      joystickstate[j].a3[0] = -normalize_absolute_axis(analog_l2, -ANALOG_MAX, ANALOG_MAX);
+      joystickstate[j].a3[1] = -normalize_absolute_axis(analog_r2, -ANALOG_MAX, ANALOG_MAX);
    }
 }
 
@@ -755,7 +758,7 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
 		// mouse buttons
 		if (!mousestate[i].button[MOUSE_LEFT] && mouse_l)
 		{
-			mousestate[i].button[MOUSE_LEFT] = 0x80;
+			mousestate[i].button[MOUSE_LEFT] = BUTTON_MAX;
 
 			// internal UI
 			if (i == 0)
@@ -815,42 +818,42 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
 		}
 
 		if (!mousestate[i].button[MOUSE_RIGHT] && mouse_r)
-			mousestate[i].button[MOUSE_RIGHT] = 0x80;
+			mousestate[i].button[MOUSE_RIGHT] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_RIGHT] && !mouse_r)
 			mousestate[i].button[MOUSE_RIGHT] = 0;
 
 		if (!mousestate[i].button[MOUSE_MIDDLE] && mouse_m)
-			mousestate[i].button[MOUSE_MIDDLE] = 0x80;
+			mousestate[i].button[MOUSE_MIDDLE] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_MIDDLE] && !mouse_m)
 			mousestate[i].button[MOUSE_MIDDLE] = 0;
 
 		if (!mousestate[i].button[MOUSE_4] && mouse_4)
-			mousestate[i].button[MOUSE_4] = 0x80;
+			mousestate[i].button[MOUSE_4] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_4] && !mouse_4)
 			mousestate[i].button[MOUSE_4] = 0;
 
 		if (!mousestate[i].button[MOUSE_5] && mouse_5)
-			mousestate[i].button[MOUSE_5] = 0x80;
+			mousestate[i].button[MOUSE_5] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_5] && !mouse_5)
 			mousestate[i].button[MOUSE_5] = 0;
 
 		if (!mousestate[i].button[MOUSE_WHEEL_UP] && mouse_wu)
-			mousestate[i].button[MOUSE_WHEEL_UP] = 0x80;
+			mousestate[i].button[MOUSE_WHEEL_UP] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_WHEEL_UP] && !mouse_wu)
 			mousestate[i].button[MOUSE_WHEEL_UP] = 0;
 
 		if (!mousestate[i].button[MOUSE_WHEEL_DOWN] && mouse_wd)
-			mousestate[i].button[MOUSE_WHEEL_DOWN] = 0x80;
+			mousestate[i].button[MOUSE_WHEEL_DOWN] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_WHEEL_DOWN] && !mouse_wd)
 			mousestate[i].button[MOUSE_WHEEL_DOWN] = 0;
 
 		if (!mousestate[i].button[MOUSE_WHEEL_LEFT] && mouse_wl)
-			mousestate[i].button[MOUSE_WHEEL_LEFT] = 0x80;
+			mousestate[i].button[MOUSE_WHEEL_LEFT] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_WHEEL_LEFT] && !mouse_wl)
 			mousestate[i].button[MOUSE_WHEEL_LEFT] = 0;
 
 		if (!mousestate[i].button[MOUSE_WHEEL_RIGHT] && mouse_wr)
-			mousestate[i].button[MOUSE_WHEEL_RIGHT] = 0x80;
+			mousestate[i].button[MOUSE_WHEEL_RIGHT] = BUTTON_MAX;
 		else if (mousestate[i].button[MOUSE_WHEEL_RIGHT] && !mouse_wr)
 			mousestate[i].button[MOUSE_WHEEL_RIGHT] = 0;
 	}
@@ -882,7 +885,7 @@ void retro_osd_interface::process_lightgun_state(running_machine &machine)
 			int touch_count[8];
 			touch_count[i] = input_state_cb(i, RETRO_DEVICE_POINTER, 0, RETRO_DEVICE_ID_POINTER_COUNT);
 			if (touch_count[i] > 0 && touch_count[i] <= 4)
-				lightgunstate[i].button[touch_count[i]-1] = 0x80;
+				lightgunstate[i].button[touch_count[i]-1] = BUTTON_MAX;
 		}
 		else
 		{
@@ -893,34 +896,34 @@ void retro_osd_interface::process_lightgun_state(running_machine &machine)
 			reload    = input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_RELOAD);
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_TRIGGER) || reload)
-				lightgunstate[i].button[LIGHTGUN_TRIGGER] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_TRIGGER] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_AUX_A))
-				lightgunstate[i].button[LIGHTGUN_AUX_A] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_AUX_A] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_AUX_B))
-				lightgunstate[i].button[LIGHTGUN_AUX_B] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_AUX_B] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_AUX_C))
-				lightgunstate[i].button[LIGHTGUN_AUX_C] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_AUX_C] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_START))
-				lightgunstate[i].button[LIGHTGUN_START] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_START] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_SELECT))
-				lightgunstate[i].button[LIGHTGUN_SELECT] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_SELECT] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_DPAD_UP))
-				lightgunstate[i].button[LIGHTGUN_DPAD_UP] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_DPAD_UP] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_DPAD_DOWN))
-				lightgunstate[i].button[LIGHTGUN_DPAD_DOWN] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_DPAD_DOWN] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_DPAD_LEFT))
-				lightgunstate[i].button[LIGHTGUN_DPAD_LEFT] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_DPAD_LEFT] = BUTTON_MAX;
 
 			if (input_state_cb(i, RETRO_DEVICE_LIGHTGUN, 0, RETRO_DEVICE_ID_LIGHTGUN_DPAD_RIGHT))
-				lightgunstate[i].button[LIGHTGUN_DPAD_RIGHT] = 0x80;
+				lightgunstate[i].button[LIGHTGUN_DPAD_RIGHT] = BUTTON_MAX;
 		}
 
 		lightgunstate[i].x = gun_x * 2;
@@ -934,26 +937,26 @@ void retro_osd_interface::process_lightgun_state(running_machine &machine)
 		{
 			if (lightgun_offscreen_mode == RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_TOP_LEFT)
 			{
-				lightgunstate[i].x = -65535;
-				lightgunstate[i].y = -65535;
+				lightgunstate[i].x = -LIGHTGUN_MAX;
+				lightgunstate[i].y = -LIGHTGUN_MAX;
 			}
 			else
 			{
-				lightgunstate[i].x = 65535;
-				lightgunstate[i].y = 65535;
+				lightgunstate[i].x = LIGHTGUN_MAX;
+				lightgunstate[i].y = LIGHTGUN_MAX;
 			}
 		}
 		else if (!offscreen && reload)
 		{
 			if (lightgun_offscreen_mode == RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_TOP_LEFT)
 			{
-				lightgunstate[i].x = -65535;
-				lightgunstate[i].y = -65535;
+				lightgunstate[i].x = -LIGHTGUN_MAX;
+				lightgunstate[i].y = -LIGHTGUN_MAX;
 			}
 			else if (lightgun_offscreen_mode == RETRO_SETTING_LIGHTGUN_OFFSCREEN_MODE_BOTTOM_RIGHT)
 			{
-				lightgunstate[i].x = 65535;
-				lightgunstate[i].y = 65535;
+				lightgunstate[i].x = LIGHTGUN_MAX;
+				lightgunstate[i].y = LIGHTGUN_MAX;
 			}
 		}
 	}
