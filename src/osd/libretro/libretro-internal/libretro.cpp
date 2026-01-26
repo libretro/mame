@@ -815,6 +815,9 @@ void retro_init(void)
    if (environ_cb(RETRO_ENVIRONMENT_SET_FASTFORWARDING_OVERRIDE, NULL))
       libretro_supports_ff_override = true;
 
+   bool achievements = true;
+   environ_cb(RETRO_ENVIRONMENT_SET_SUPPORT_ACHIEVEMENTS, &achievements);
+
    static struct retro_keyboard_callback keyboard_callback = {retro_keyboard_event};
    environ_cb(RETRO_ENVIRONMENT_SET_KEYBOARD_CALLBACK, &keyboard_callback);
 
