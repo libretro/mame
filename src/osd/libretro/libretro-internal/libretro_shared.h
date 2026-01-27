@@ -112,6 +112,8 @@ extern float sound_timer;
 extern int rotation_mode;
 extern int thread_mode;
 extern int screen_configured;
+extern unsigned coin_inserted;
+extern unsigned coin_limit;
 
 extern const char *slash_str;
 

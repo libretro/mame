@@ -537,6 +537,13 @@ static void check_variables(void)
          autoloadfastforward = true;
    }
 
+   var.key   = CORE_NAME "_coin_limit";
+   var.value = NULL;
+   if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
+   {
+      coin_limit = atoi(var.value);
+   }
+
    var.key   = CORE_NAME "_thread_mode";
    var.value = NULL;
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE, &var) && var.value)
@@ -841,6 +848,7 @@ void retro_deinit(void)
 void retro_reset(void)
 {
    mame_reset = 1;
+   coin_inserted = 0;
 }
 
 void retro_run(void)

@@ -625,6 +625,11 @@ void retro_osd_interface::process_keyboard_state(running_machine &machine)
    } while (keyboard_table[i].retro_key_name != -1);
 }
 
+/* Coin limit */
+unsigned coin_inserted = 0;
+unsigned coin_limit    = 0;
+static bool select_pressed[RETRO_MAX_PLAYERS] = {false};
+
 void retro_osd_interface::process_joystick_state(running_machine &machine)
 {
    unsigned i, j;
@@ -652,9 +657,28 @@ void retro_osd_interface::process_joystick_state(running_machine &machine)
       for (i = 0; i < RETRO_MAX_JOYSTICK_BUTTONS; i++)
       {
          if (ret[j] & (1 << i))
+         {
+            if (i == RETRO_DEVICE_ID_JOYPAD_SELECT && !select_pressed[j])
+            {
+               if ((coin_limit && coin_inserted < coin_limit) || !coin_limit)
+               {
+                  select_pressed[j] = true;
+                  coin_inserted++;
+               }
+
+               if (!select_pressed[j])
+                  continue;
+            }
+
             joystickstate[j].button[i] = BUTTON_MAX;
+         }
          else
+         {
+            if (i == RETRO_DEVICE_ID_JOYPAD_SELECT && select_pressed[j])
+               select_pressed[j] = false;
+
             joystickstate[j].button[i] = 0;
+         }
       }
 
       joystickstate[j].a1[0] = normalize_absolute_axis((input_state_cb(j, RETRO_DEVICE_ANALOG, RETRO_DEVICE_INDEX_ANALOG_LEFT, RETRO_DEVICE_ID_ANALOG_X)), -ANALOG_MAX, ANALOG_MAX);
