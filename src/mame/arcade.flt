@@ -483,6 +483,7 @@ capcom/tigeroad.cpp
 //capcom/tvcapcom.cpp          // black screen
 
 capcom/vulgus.cpp
+-1942iti
 
 //cave/cavepc.cpp          // chd, no screen
 
@@ -935,6 +936,12 @@ gaelco/bigkarnk_ms.cpp
 gaelco/blmbycar.cpp
 
 gaelco/gaelco.cpp
+-sltpcycld
+-sltpcycle
+-sltpcyclf
+-sltpstepb
+-sltpstepc
+-sltpstepd
 -squashb                      // black screen
 
 gaelco/gaelco2.cpp
@@ -944,13 +951,7 @@ gaelco/gaelco2.cpp
 -play2000_50i
 -sltpcyclb
 -sltpcyclc
--sltpcycld
--sltpcycle
--sltpcyclf
 -sltpstepa
--sltpstepb
--sltpstepc
--sltpstepd
 -srollnd
 
 gaelco/gaelco3d.cpp
@@ -1020,7 +1021,6 @@ galaxian/galaxian.cpp
 galaxian/galaxian_rockclim.cpp
 
 galaxian/galaxold.cpp
--dkongjrv
 -drivfrcsga
 -spcwarp
 -trvchlng
@@ -1070,7 +1070,7 @@ ice/lethalj.cpp
 
 //ice/vp101.cpp          // not working
 
-//igs/cabaret.cpp          // poker, black screen after dealing
+//igs/cabaret.cpp          // poker, none work correctly
 
 igs/5clown.cpp          // poker
 
@@ -1083,11 +1083,12 @@ igs/goldstar.cpp          // fruit
 -aladdina
 -amaztsk
 -animalhsa
--animalwa
 -aplan
 -bonusch
 -bonuscha
 -cb3f
+-cb3i
+-cb3j
 -chryangl
 -chryangla
 -chryanglb
@@ -1117,7 +1118,6 @@ igs/goldstar.cpp          // fruit
 -eldoraddoc
 -eldoraddod
 -f16s8l
--fl7_twb
 -halltsk
 -jkrmastc
 -lucky8j
@@ -1144,9 +1144,6 @@ igs/goldstar.cpp          // fruit
 -super9a
 -super972
 -superdrg
--ss2000
--ss2000a
--ss2001
 -tcl
 -texas99
 -texas99b
@@ -1175,7 +1172,6 @@ igs/igs017.cpp
 
 igs/igspoker.cpp          // poker
 -cpoker210ks
--kungfua
 -stellecu
 
 //igs/igs_68k_023vid.cpp     // no inputs
@@ -1195,12 +1191,10 @@ igs/igs_m027.cpp
 -gonefsh
 -gonefsh2
 -jhg3d
--klxyj
 -luckycrs
 -magtree
 -olympic5
 -olympic5107us
--olympic5a
 -sdwx
 -tarzan2
 -tshs101
@@ -1229,7 +1223,6 @@ igs/lordgun.cpp
 
 igs/pgm.cpp
 -dmnfrntpcb
--martmasttw
 -kovbl
 -kovgsyx
 -kovlsjb
@@ -1238,7 +1231,6 @@ igs/pgm.cpp
 -kovlsqh2
 -kovplusbl
 -kovqhsgs
--kovqhsgs302
 
 igs/pgm2.cpp
 -bubucar
@@ -1439,6 +1431,7 @@ kaneko/sandscrp.cpp
 kaneko/snowbros.cpp
 
 kaneko/suprnova.cpp
+-puzzloopkbl
 
 kiwako/jongkyo.cpp          // bad colours, mahjong
 
@@ -1750,13 +1743,9 @@ konami/viper.cpp          // chd, mnw. sscopex(nw)parent of sogeki(w)
 -sscopexu
 -thrild2
 -thrild2a
--thrild2ab
--thrild2ac
 -thrild2c
 -thrild2j
--tsurugie
 -wcombat
--wcombatb
 -wcombatj
 -wcombatk
 -wcombatu
@@ -1794,12 +1783,7 @@ meadows/meadows.cpp
 meadows/warpsped.cpp
 
 merit/merit.cpp          // mostly gambling
--dodgectya
--dodgectyb
--dodgectyc
--mosdraw
 -tictacuk
--unkmerit
 
 //merit/merit3xx.cpp          // black screen
 
@@ -2027,7 +2011,6 @@ misc/boramz80.cpp
 misc/cardline.cpp          // poker, how to use?
 
 misc/carrera.cpp
--ncarrera
 
 //misc/castle.cpp          // mnw
 
@@ -2779,7 +2762,6 @@ namco/namcos11.cpp
 namco/namcos12.cpp
 -sws2000
 -sws2001
--tektagtja
 -tektagtja3
 -tektagtjb
 
@@ -2796,6 +2778,7 @@ namco/namcos21_c67.cpp
 namco/namcos21_de.cpp
 
 namco/namcos22.cpp
+-dirtdashb                     // black screen
 
 namco/namcos23.cpp
 -crszonev2a
@@ -3109,7 +3092,6 @@ philips/cdi.cpp        // chd, tested
 -cdimono1
 -cdimono2
 -gpi1200
--quizardi_10
 -quizardff
 
 phoenix/naughtyb.cpp
@@ -3501,7 +3483,6 @@ sega/naomi.cpp             // needed by dc_atomiswave
 -anpanman2
 -anpanman2a
 -beachspi
--chokomk
 -clubkcyc
 -clubkcyco
 -clubkprz
@@ -3806,6 +3787,7 @@ sega/suprloco.cpp
 sega/system1.cpp
 
 sega/system16.cpp
+-altbeastbl2
 -beautyb
 -bloxeedbl
 -cltchitrbl
@@ -4027,6 +4009,8 @@ sigma/spiders.cpp
 
 //skeleton/ganbaremo.cpp          // no screen
 
+//skeleton/gamebox.cpp            // freezes mame at start
+
 //skeleton/happyvideo.cpp         // no screen
 
 //skeleton/huangyeh_m68k.cpp      // black screen
@@ -4037,6 +4021,8 @@ sigma/spiders.cpp
 
 //skeleton/kkcount.cpp            // no screen
 
+//skeleton/lanmao.cpp             // no inputs
+
 //skeleton/lgtz80.cpp             // black screen
 
 //skeleton/madmoney2.cpp          // no screen
@@ -4044,6 +4030,8 @@ sigma/spiders.cpp
 //skeleton/megacrane.cpp            // no screen
 
 //skeleton/minihock.cpp           // no screen
+
+//skeleton/mgt_multigame.cpp       // black screen
 
 //skeleton/paipaile.cpp                // black screen
 
@@ -4147,6 +4135,8 @@ subsino/subsino2.cpp
 -queenbeesa
 -xplan
 -xreel
+
+//subsino/subsino_kr_h8.cpp       // black screen
 
 success/big10.cpp          // keno
 
