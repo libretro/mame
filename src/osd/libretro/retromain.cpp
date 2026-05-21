@@ -71,9 +71,9 @@ public:
 		}
 
 		log_cb(lvl, buffer.str().c_str());
-		
-		/* Log errors also to console */
-		if (lvl == RETRO_LOG_ERROR)
+
+		/* Log errors and -listdevices also to console */
+		if (lvl == RETRO_LOG_ERROR || !get_MgamePath())
 			printf("%s", buffer.str().c_str());
 	}
 };
