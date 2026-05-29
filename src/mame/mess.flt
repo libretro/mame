@@ -462,7 +462,6 @@ lsi/octopus.cpp
 luxor/abc1600.cpp
 luxor/abc80.cpp
 luxor/abc80x.cpp
-luxor/ds90.cpp
 makerbot/replicator.cpp
 matsushita/duet16.cpp
 matsushita/jr100.cpp
@@ -488,8 +487,9 @@ microterm/microterm_f8.cpp
 microterm/mt420.cpp
 microterm/mt5510.cpp
 midway/astrohome.cpp
-miltonbradley/microvsn.cpp
-miltonbradley/milton6805.cpp
+miltonbradley/grandmaster.cpp
+miltonbradley/microvision.cpp
+miltonbradley/milton.cpp
 miltonbradley/vectrex.cpp
 mips/mips.cpp
 misc/3do.cpp
@@ -652,8 +652,6 @@ philips/yes.cpp
 pitronics/beta.cpp
 poly88/poly88.cpp
 positron/positron.cpp
-psion/psion.cpp
-psion/psion5.cpp
 quantel/dpb7000.cpp
 quantel/harriet.cpp
 qume/qvt102.cpp
@@ -784,14 +782,12 @@ siemens/pg685.cpp
 sinclair/atm.cpp
 sinclair/elwro800.cpp
 sinclair/pentagon.cpp
-sinclair/pentevo.cpp
 sinclair/ql.cpp
 sinclair/scorpion.cpp
 sinclair/spec128.cpp
 sinclair/specpls3.cpp
 sinclair/spectrum.cpp
 sinclair/timex.cpp
-sinclair/tsconf.cpp
 sinclair/z88.cpp
 sinclair/zx.cpp
 skeleton/aaa.cpp
@@ -801,7 +797,6 @@ skeleton/adacp150.cpp
 skeleton/aid80f.cpp
 skeleton/airbase99.cpp
 skeleton/alcat7100.cpp
-skeleton/alesis_qs.cpp
 skeleton/alfaskop_s41_kb.cpp
 skeleton/alphasma.cpp
 skeleton/alphasma3k.cpp
@@ -1125,7 +1120,6 @@ tvgames/generalplus_gpl16250_nand.cpp
 tvgames/generalplus_gpl16250_rom.cpp
 tvgames/generalplus_gpl16250_romram.cpp
 tvgames/generalplus_gpl16250_spi.cpp
-tvgames/generalplus_gpl162xx_lcdtype.cpp
 tvgames/generalplus_gpl32612.cpp
 tvgames/magiceyes_pollux_vr3520f.cpp
 tvgames/micom_mahjong.cpp
