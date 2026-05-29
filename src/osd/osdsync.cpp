@@ -64,10 +64,11 @@
 #if defined(__LIBRETRO__)
 extern int thread_mode;
 #endif
-template<typename _AtomType, typename _MainType>
-static void spin_while(const volatile _AtomType * volatile atom, const _MainType val, const osd_ticks_t timeout, const int invert = 0)
+
+template <typename AtomType, typename MainType>
+static void spin_while(const volatile AtomType *atom, MainType val, osd_ticks_t timeout, int invert = 0)
 {
-	osd_ticks_t stopspin = osd_ticks() + timeout;
+	const osd_ticks_t stopspin = osd_ticks() + timeout;
 
 	do {
 		int spin = 10000;
@@ -79,10 +80,10 @@ static void spin_while(const volatile _AtomType * volatile atom, const _MainType
 	} while (((*atom == val) ^ invert) && osd_ticks() < stopspin);
 }
 
-template<typename _AtomType, typename _MainType>
-static void spin_while_not(const volatile _AtomType * volatile atom, const _MainType val, const osd_ticks_t timeout)
+template <typename AtomType, typename MainType>
+static void spin_while_not(const volatile AtomType *atom, MainType val, osd_ticks_t timeout)
 {
-	spin_while<_AtomType, _MainType>(atom, val, timeout, 1);
+	spin_while<AtomType, MainType>(atom, val, timeout, 1);
 }
 
 //============================================================
