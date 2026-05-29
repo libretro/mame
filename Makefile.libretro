@@ -279,15 +279,21 @@ endif
 ifneq (,$(or $(findstring webos,$(CROSS_COMPILE)),$(findstring starfish,$(CROSS_COMPILE))))
 	LIBRETRO_CPU :=
 	FORCE_DRC_C_BACKEND := 1
-	PTR64 := 0
 	PLATFLAGS += NOASM=1
-	PLATFLAGS += PLATFORM=arm
 	PLATFLAGS += ARCHITECTURE=
 	PLATFLAGS += USE_QTDEBUG=0
-	ifneq (,$(findstring starfish,$(CROSS_COMPILE)))
-		TOOLCHAIN_PREFIX = arm-starfishmllib32-linux-gnueabi-
+	ifneq (,$(findstring aarch64,$(CROSS_COMPILE)))
+		PTR64 := 1
+		PLATFLAGS += PLATFORM=arm64
+		TOOLCHAIN_PREFIX = aarch64-webos-linux-gnu-
 	else
-		TOOLCHAIN_PREFIX = arm-webos-linux-gnueabi-
+		PTR64 := 0
+		PLATFLAGS += PLATFORM=arm
+		ifneq (,$(findstring starfish,$(CROSS_COMPILE)))
+			TOOLCHAIN_PREFIX = arm-starfishmllib32-linux-gnueabi-
+		else
+			TOOLCHAIN_PREFIX = arm-webos-linux-gnueabi-
+		endif
 	endif
 	PLATFLAGS += OVERRIDE_CC=$(TOOLCHAIN_PREFIX)gcc OVERRIDE_CXX=$(TOOLCHAIN_PREFIX)g++
 	PLATFLAGS += OVERRIDE_LD=$(TOOLCHAIN_PREFIX)ld OVERRIDE_AR=$(TOOLCHAIN_PREFIX)ar
