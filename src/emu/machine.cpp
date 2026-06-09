@@ -1445,8 +1445,6 @@ void running_machine::retro_loop()
 	else
 		call_notifiers(MACHINE_NOTIFY_FRAME);
 
-	running_machine::sound().retro_update_audio();
-
 	while (RLOOP == 1)
 	{
 		// execute CPUs if not paused

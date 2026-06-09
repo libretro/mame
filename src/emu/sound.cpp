@@ -28,7 +28,7 @@
 #include <algorithm>
 
 #ifdef __LIBRETRO__
-void sound_manager::retro_update_audio(void) { update(0); }
+#include "libretro/osdretro.h"
 #endif
 
 //**************************************************************************
@@ -771,11 +771,9 @@ sound_manager::sound_manager(running_machine &machine) :
 	// register global states
 	machine.save().save_item(NAME(m_last_sync_time));
 
-#ifndef __LIBRETRO__
 	// start the periodic update flushing timer
 	m_update_timer = machine.scheduler().timer_alloc(timer_expired_delegate(FUNC(sound_manager::update), this));
 	m_update_timer->adjust(STREAMS_UPDATE_ATTOTIME, 0, STREAMS_UPDATE_ATTOTIME);
-#endif
 
 	// mark the generation as "just starting, waiting for config loading"
 	m_osd_info.m_generation = 0xffff0000;
@@ -2691,6 +2689,15 @@ void sound_manager::update(s32)
 	streams_update();
 
 	m_last_sync_time = machine().time();
+
+#ifdef __LIBRETRO__
+	/* Adjust sound timer for minimal latency */
+	if (sound_timer != retro_fps)
+	{
+		sound_timer = retro_fps;
+		m_update_timer->adjust(attotime::from_hz(sound_timer * retro_fps), 0, attotime::from_hz(sound_timer * retro_fps));
+	}
+#endif
 }
 
 void sound_manager::streams_update()

@@ -482,10 +482,6 @@ public:
 	void set_resampler_hq_length(u32 length);
 	void set_resampler_hq_phases(u32 phases);
 
-#ifdef __LIBRETRO__
-	void retro_update_audio();
-#endif
-
 private:
 	struct effect_step {
 		std::unique_ptr<audio_effect> m_effect;
