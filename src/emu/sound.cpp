@@ -2691,12 +2691,9 @@ void sound_manager::update(s32)
 	m_last_sync_time = machine().time();
 
 #ifdef __LIBRETRO__
-	/* Adjust sound timer for minimal latency */
-	if (sound_timer != retro_fps)
-	{
-		sound_timer = retro_fps;
-		m_update_timer->adjust(attotime::from_hz(sound_timer * retro_fps), 0, attotime::from_hz(sound_timer * retro_fps));
-	}
+	/* Adjust sound timer for minimal latency and chunk size,
+	 * Runahead will break on startup if this is readjusted on change only */
+	m_update_timer->adjust(attotime::from_hz(retro_fps * retro_fps), 0, attotime::from_hz(retro_fps * retro_fps));
 #endif
 }
 

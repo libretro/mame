@@ -115,7 +115,6 @@ extern int fb_height;
 extern float retro_aspect;
 extern float view_aspect;
 extern float retro_fps;
-extern float sound_timer;
 extern int rotation_mode;
 extern int thread_mode;
 extern int screen_configured;
