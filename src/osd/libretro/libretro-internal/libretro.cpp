@@ -24,7 +24,9 @@
 extern void retro_finish();
 extern void retro_main_loop();
 
+int POSTNOTIFY     = 5; /* See retro_loop() */
 int RLOOP          = 1;
+int ENDEXEC        = 0;
 int retro_pause    = 0;
 int SHIFTON        = -1;
 char RPATH[512];

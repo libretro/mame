@@ -34,9 +34,8 @@
 #include <ctime>
 
 #if defined(__LIBRETRO__)
-int POSTNOTIFY = 2;
-int ENDEXEC = 0;
 extern int RLOOP;
+extern int ENDEXEC;
 extern mame_machine_manager *retro_manager;
 extern core_options *retro_global_options;
 extern void retro_loop(running_machine *machine);

@@ -1615,13 +1615,16 @@ public:
 
 
 
-void retro_osd_interface::process_events_buf()
+void retro_osd_interface::process_events_buf(void)
 {
-	input_poll_cb();
+	if (input_poll_cb)
+		input_poll_cb();
 }
 
 void retro_osd_interface::poll_inputs(running_machine &machine)
 {
+	if (!input_state_cb)
+		return;
 	process_mouse_state(machine);
 	process_keyboard_state(machine);
 	process_joystick_state(machine);
