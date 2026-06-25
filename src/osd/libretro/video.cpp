@@ -95,7 +95,6 @@ void retro_osd_interface::video_exit()
 //  update
 //============================================================
 extern int RLOOP;
-extern bool render_video_active;
 
 void retro_osd_interface::update(bool skip_redraw)
 {
