@@ -129946,7 +129946,7 @@ license:CC0-1.0
 	</software>
 
 	<software name="poolrad_nes">
-		<description>Pool of Radiance (NES)</description>
+		<description>Advanced Dungeons &amp; Dragons: Pool of Radiance (NES)</description>
 		<year>1992</year>
 		<publisher>FCI (U) / Pony Canyon (J)</publisher>
 		<info name="cores" value="NES APU (RP2A03)"/>
@@ -160586,7 +160586,7 @@ license:CC0-1.0
 	</software>
 
 	<software name="poolrad_98">
-		<description>Pool of Radiance (NEC PC-9801)</description>
+		<description>Advanced Dungeons &amp; Dragons: Pool of Radiance (NEC PC-9801)</description>
 		<year>1989</year>
 		<publisher>Pony Canyon</publisher>
 		<info name="cores" value="YM2203"/>
