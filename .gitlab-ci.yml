@@ -238,11 +238,20 @@ android-x86_64:
     - master
     - /^libretro/mame.*$/
     
-# # Android 32-bit x86
-# android-x86:
-#   extends:
-#     - .libretro-android-jni-x86
-#     - .core-defs
+# Android x86
+android-x86:
+  extends:
+    - .libretro-android-make-x86
+    - .core-defs
+  variables:
+    TARGET:    mame
+    SUBTARGET: arcade
+    CORENAME:  mamearcade
+  cache:
+    <<: *global_cache
+  only:
+    - master
+    - /^libretro/mame.*$/
 
 # iOS
 libretro-build-ios-arm64:
