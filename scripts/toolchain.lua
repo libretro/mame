@@ -501,6 +501,9 @@ function toolchain(_buildDir, _subDir)
 		linkoptions {
 			"--gcc-toolchain=" .. androidToolchainRoot(),
 			"--sysroot=" .. androidToolchainRoot() .. "/sysroot",
+-- RETRO HACK for libretro android
+			"-static-libstdc++",
+-- RETRO HACK END for libretro android
 			"-Wl,--no-undefined",
 			"-Wl,-z,noexecstack",
 			"-Wl,-z,relro",
