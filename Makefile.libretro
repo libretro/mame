@@ -9,7 +9,7 @@ TARGET ?= mame
 # OS ?= linux
 # TARGETOS ?= linux
 PYTHON_EXECUTABLE ?= python3
-REGENIE ?= 1
+REGENIE ?= 0
 GITHUB_REPO ?= https://github.com/libretro/mame/
 DEBUG ?= 0
 
