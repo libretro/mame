@@ -158,6 +158,8 @@ libretro-build-osx-x64:
     - .core-defs
   variables:
     MACOSX_DEPLOYMENT_TARGET: "10.14"
+  tags:
+    - mac-apple-silicon
   cache:
     <<: *global_cache
   only:
