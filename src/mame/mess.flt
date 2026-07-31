@@ -107,6 +107,7 @@ ausnz/proteus.cpp
 ausnz/pulsar.cpp
 ausnz/super80.cpp
 ausnz/tec1.cpp
+bally/astrohome.cpp
 banctec/banctec.cpp
 bandai/design_master.cpp
 bandai/rx78.cpp
@@ -486,7 +487,6 @@ microterm/ergo201.cpp
 microterm/microterm_f8.cpp
 microterm/mt420.cpp
 microterm/mt5510.cpp
-midway/astrohome.cpp
 miltonbradley/grandmaster.cpp
 miltonbradley/microvision.cpp
 miltonbradley/milton.cpp
@@ -557,7 +557,6 @@ nec/pc98ha.cpp
 nec/pce.cpp
 nec/pcfx.cpp
 nec/tk80bs.cpp
-neogeo/neogeocd.cpp
 netronics/elf.cpp
 netronics/exp85.cpp
 newcrest/chess2001.cpp
@@ -988,6 +987,7 @@ skeleton/zms8085.cpp
 skeleton/zorba.cpp
 skeleton/zt8802.cpp
 slicer/slicer.cpp
+snk/neogeocd.cpp
 snk/ngp.cpp
 sony/betacam.cpp
 sony/bvm.cpp

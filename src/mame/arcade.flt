@@ -12,6 +12,10 @@ adp/adp.cpp
 -funlddlx
 -funlddlx2
 -funlddlx4
+-kkornf4                    // inputs
+-skattv                     // alarm
+-skattva                    // alarm
+-skattvs1                   // alarm
 -trumpfas                   // cant credit, crash on exit
 
 //adp/manohman.cpp          // no screen
@@ -318,6 +322,36 @@ atlus/patapata.cpp
 
 //atlus/rallypnt.cpp          // no screen
 
+bally/astrocde.cpp
+-tenpindx
+
+bally/balsente.cpp
+-triviaes4
+-triviaes5
+
+//bally/cashline.cpp             // no screen
+
+bally/gridlee.cpp
+
+bally/mcr.cpp
+-nflfoot
+
+bally/mcr3.cpp
+
+bally/mcr68.cpp
+
+//bally/midwayttl.cpp         // black screen
+
+//bally/mw18w.cpp          // mech, works
+
+//bally/mwsub.cpp          // mech, works
+
+bally/omegrace.cpp
+
+bally/spyhuntertec.cpp
+
+bally/zwackery.cpp
+
 //barcrest/mpu1.cpp          // U:fruit, mech
 
 //barcrest/mpu3.cpp          // U:fruit, mech
@@ -572,6 +606,8 @@ dataeast/btime.cpp
 
 dataeast/bwing.cpp
 
+dataeast/captaven.cpp
+
 dataeast/cbuster.cpp
 
 dataeast/chanbara.cpp
@@ -593,13 +629,6 @@ dataeast/dec0.cpp
 
 dataeast/dec8.cpp
 
-dataeast/deco156.cpp
-
-dataeast/deco32.cpp
--gunhard
--lockload
--lockloadu
-
 dataeast/decocass.cpp
 -ctsttape                     // U:not a game
 
@@ -618,22 +647,31 @@ dataeast/deco_mlc.cpp
 
 dataeast/dietgo.cpp
 
+dataeast/dragngun.cpp
+-gunhard
+-lockload
+-lockloadu
+
 dataeast/dreambal.cpp
 
 dataeast/exprraid.cpp
 
 //dataeast/ffantasy_ms.cpp          // black screen
 
+dataeast/fghthist.cpp
+
 dataeast/firetrap.cpp
 
 dataeast/funkyjet.cpp
+
+dataeast/hvysmsh.cpp
 
 dataeast/karnov.cpp
 -karnovjbl                     // inputs, freezes
 
 dataeast/kchamp.cpp
 
-dataeast/kingobox.cpp
+dataeast/kingofb.cpp
 
 dataeast/lemmings.cpp
 
@@ -1017,6 +1055,7 @@ igs/goldstar.cpp
 -eldoraddod
 -halltsk
 -jkrmastc
+-jkrmastd
 -lucky8x    // dies after first play
 -luckylad
 -magoddsc
@@ -1078,6 +1117,7 @@ igs/igs_m027.cpp
 -sdwx
 -tarzan2
 -tshs101
+-xyxcxysj
 
 igs/igs_m027_023vid.cpp
 
@@ -1097,6 +1137,7 @@ igs/iqblock.cpp
 
 igs/jackie.cpp          // fruit
 -kungfu
+-spec8way
 
 igs/lordgun.cpp
 
@@ -1186,7 +1227,7 @@ irem/vigilant.cpp
 
 itech/capbowl.cpp
 
-itech/iteagle.cpp          // chd untested
+itech/iteagle.cpp
 
 itech/itech32.cpp
 
@@ -1330,7 +1371,7 @@ konami/chqflag.cpp
 konami/circusc.cpp
 
 konami/cobra.cpp
--racjamdx                   // bad gfx then crashes
+-racjamdx                   // MT09119
 
 konami/combatsc.cpp
 
@@ -1346,13 +1387,13 @@ konami/ddribble.cpp
 
 konami/divebomb.cpp
 
-konami/djmain.cpp          // chd, some untested
+konami/djmain.cpp
 
 konami/fastlane.cpp
 
 konami/finalizr.cpp
 
-konami/firebeat.cpp          // chd, some untested
+konami/firebeat.cpp
 
 konami/flkatck.cpp
 
@@ -1397,17 +1438,16 @@ konami/junofrst.cpp
 
 konami/konamigq.cpp
 
-konami/konamigs.cpp          // chd untested
+konami/konamigs.cpp
 
-konami/konamigv.cpp          // chd untested
--btchamp
+konami/konamigv.cpp
 
 konami/konamigx.cpp
 -racinfrc              // inputs,gfx
 -racinfrcu             // inputs,gfx
 -sexyparoebl
 
-konami/konamim2.cpp          // chd
+konami/konamim2.cpp
 -totlvica
 -totlvicj
 -totlvicu
@@ -1512,7 +1552,7 @@ konami/mikie.cpp
 konami/mogura.cpp
 
 konami/moo.cpp
--moomesabl                    // spites missing
+-moomesabl                    // sprites missing
 
 konami/mystwarr.cpp
 
@@ -1536,7 +1576,7 @@ konami/plygonet.cpp
 
 konami/pooyan.cpp
 
-konami/qdrmfgp.cpp          // chd untested
+konami/qdrmfgp.cpp
 
 konami/quickpick5.cpp
 
@@ -1558,7 +1598,7 @@ konami/simpsons.cpp
 
 konami/spy.cpp
 
-//konami/stingnet.cpp        // chd missing
+//konami/stingnet.cpp        // need password
 
 konami/surpratk.cpp
 
@@ -1584,7 +1624,7 @@ konami/tutankhm.cpp
 
 konami/twin16.cpp
 
-konami/twinkle.cpp          // chd
+konami/twinkle.cpp
 -bmiidx
 -bmiidxa
 -bmiidxc
@@ -1699,82 +1739,6 @@ midw8080/8080bw.cpp
 midw8080/mw8080bw.cpp
 
 midw8080/rotaryf.cpp
-
-midway/astrocde.cpp
--tenpindx
-
-midway/atlantis.cpp          // chd untested
-
-midway/balsente.cpp
--triviaes4
--triviaes5
-
-//midway/cashline.cpp             // no screen
-
-midway/gridlee.cpp
-
-midway/mcr.cpp
--nflfoot
-
-midway/mcr3.cpp
-
-midway/mcr68.cpp
-
-//midway/midqslvr.cpp          // black screen, most use chd
-
-midway/midtunit.cpp
-
-midway/midvunit.cpp
-
-//midway/midwayttl.cpp         // black screen
-
-midway/midwunit.cpp
-
-midway/midxunit.cpp
-
-midway/midyunit.cpp
--mkrep
-
-midway/midzeus.cpp
--crusnexo
--crusnexoa
--crusnexoaa
--crusnexob
--crusnexoc
--crusnexod
--crusnexoe
--thegridb
-
-//midway/mw18w.cpp          // mech, works
-
-//midway/mwsub.cpp          // mech, works
-
-midway/omegrace.cpp
-
-//midway/pinball2k.cpp          // U:pinball
-
-midway/predators.cpp
-
-midway/seattle.cpp
--carnevil1                // W:MT09440
--sfrushrkw
--sfrushrkwo
-
-midway/spyhuntertec.cpp
-
-//midway/starrider.cpp          // no screen
-
-midway/tmaster.cpp
-
-midway/vegas.cpp          // chd untested
-
-midway/williams.cpp
--tornado2
--defndjeu
-
-midway/wmg.cpp
-
-midway/zwackery.cpp
 
 miltonbradley/vectrex.cpp
 -vectrex
@@ -2116,6 +2080,7 @@ misc/goldnpkr.cpp          // poker
 -olym65bj
 -olym65wc
 -pokerdub
+-unkdep                 // black screen, lfhouse nw
 -wldwitchb              //bad dump
 -wldwitche              //bad dump
 -wtchjackh              //bad dumps
@@ -2316,8 +2281,6 @@ misc/musclem.cpp
 
 //misc/neomania.cpp          // chd, mnw
 
-//misc/neoprint.cpp          // gets stuck on some screen
-
 misc/news.cpp
 
 //misc/nexus3d.cpp          // black screen
@@ -2457,7 +2420,6 @@ misc/sliver.cpp          // adult
 misc/smotor.cpp
 
 misc/smsmcorp.cpp
--trvhanga
 
 misc/spcforce.cpp
 
@@ -2656,7 +2618,7 @@ namco/cgang.cpp
 
 //namco/dangbar.cpp          // no screen
 
-//namco/dkmb.cpp          // hang at atart
+namco/dkmb.cpp
 
 //namco/ds5000.cpp                     // black screen
 
@@ -2743,6 +2705,9 @@ namco/namcos23.cpp
 -rapidrvr
 -rapidrvrp
 -rapidrvrv2c
+-motoxgo
+-motoxgov1a
+-motoxgov2a
 
 //namco/namcos6.cpp             // black screen
 
@@ -2788,9 +2753,9 @@ nasco/himesiki.cpp
 nasco/suprgolf.cpp
 -albatross
 
-neogeo/midas.cpp
+snk/midas.cpp
 
-neogeo/neogeo.cpp
+snk/neogeo.cpp
 -aes
 -mvstemp
 -ng_mv1
@@ -2800,7 +2765,7 @@ neogeo/neogeo.cpp
 -ng_mv4f
 -stakwindev
 
-neogeo/neopcb.cpp
+snk/neopcb.cpp
 
 nichibutsu/armedf.cpp
 -skyrobobl
@@ -2900,7 +2865,6 @@ nintendo/punchout.cpp
 //nintendo/sfcbox.cpp          // mnw
 
 nintendo/snesb.cpp
--issdxb                  // black screen when beginning a game
 
 nintendo/snesb51.cpp
 -snes4sl
@@ -3056,6 +3020,7 @@ phoenix/naughtyb.cpp
 phoenix/phoenix.cpp
 -fenix
 -griffono
+-pleiadsmm          // reboots when entering lvl 2
 
 phoenix/safarir.cpp
 
@@ -3354,7 +3319,7 @@ sega/dotrikun.cpp
 
 //sega/eshockey.cpp          // no screen
 
-//sega/flashbeats.cpp          // no screen
+sega/flashbeats.cpp
 
 //sega/fwheel.cpp          // black screen
 
@@ -3382,7 +3347,7 @@ sega/megatech.cpp
 -mt_gsocr
 
 sega/model1.cpp
--netmerc
+//-netmerc          // somewhat playable, no sound, freezes in city stage
 
 sega/model2.cpp     // fvipers/b,fvipersa,scamp,sfight=nodrc only
 -powsled
@@ -3732,6 +3697,7 @@ sega/stv.cpp
 -pclub26w
 -pclub26wa
 -pclub27s
+-pclubsc5
 -pclubyo
 -prc28su
 -prc29au
@@ -3776,6 +3742,7 @@ sega/turbo.cpp
 //sega/unkhockey.cpp          // no screen
 
 sega/vicdual.cpp
+-deepscch                  // car hunt roms missing
 
 //sega/winclub.cpp          // black screen
 
@@ -3889,6 +3856,7 @@ seta/seta.cpp
 -inttoote
 -setaroula             // U:debug hack
 -setaroulm
+-spkings
 -zingzipbl
 
 seta/seta2.cpp
@@ -3902,6 +3870,9 @@ seta/simple_st0016.cpp
 -dcrowna
 
 seta/speedatk.cpp
+-hana6
+-hana6bl
+-hanaren
 -hanaren2
 -harashi
 -unkalba
@@ -3955,9 +3926,13 @@ sigma/spiders.cpp
 
 //skeleton/caramball.cpp          // no screen
 
+skeleton/carnival37.cpp
+
 //skeleton/cle68k.cpp             // black screen
 
 //skeleton/clownmgc.cpp           // black screen
+
+//skeleton/cosmo68k.cpp           // reels blank
 
 //skeleton/cubieboard4.cpp        // no screen
 
@@ -3987,6 +3962,8 @@ sigma/spiders.cpp
 
 //skeleton/happyvideo.cpp         // no screen
 
+//skeleton/hkcastle.cpp           // no screen
+
 //skeleton/iam2.cpp               // black screen
 
 //skeleton/jinhuang6.cpp          // black screen
@@ -3996,6 +3973,8 @@ sigma/spiders.cpp
 //skeleton/lanmao.cpp             // no inputs
 
 //skeleton/lgtz80.cpp             // black screen
+
+//skeleton/luckyjkr.cpp           // badgfx
 
 //skeleton/madmoney2.cpp          // no screen
 
@@ -4020,6 +3999,8 @@ sigma/spiders.cpp
 //skeleton/shoken_md06.cpp        // no screen
 
 //skeleton/sammy_pachislo_z80.cpp // no screen
+
+//skeleton/st25.cpp               // white screen
 
 //skeleton/sterz80.cpp            // black screen
 
@@ -4058,6 +4039,8 @@ snk/miconkit.cpp
 snk/munchmo.cpp
 
 //snk/neocrnvl.cpp            // no screen
+
+//snk/neoprint.cpp          // gets stuck on some screen
 
 snk/prehisle.cpp
 
@@ -4182,6 +4165,8 @@ taito/buggychl.cpp
 
 //taito/capr1.cpp          // mnw
 
+//taito/capr2.cpp          // no screen
+
 //taito/caprcyc.cpp          // mnw
 
 taito/cchance.cpp          // fruit, how to use?
@@ -4263,6 +4248,8 @@ taito/othunder.cpp
 taito/pitnrun.cpp
 
 //taito/pkspirit.cpp        // no inputs
+
+//taito/pres2k.cpp        // resets when 5 pressed
 
 taito/qix.cpp
 
@@ -4609,6 +4596,51 @@ vsystem/tail2nos.cpp
 vsystem/taotaido.cpp
 
 vsystem/welltris.cpp
+
+williams/atlantis.cpp          // chd untested
+
+//williams/midqslvr.cpp          // black screen, most use chd
+
+williams/midtunit.cpp
+
+williams/midvunit.cpp
+
+williams/midwunit.cpp
+
+williams/midxunit.cpp
+
+williams/midyunit.cpp
+
+williams/midzeus.cpp
+-crusnexo
+-crusnexoa
+-crusnexoaa
+-crusnexob
+-crusnexoc
+-crusnexod
+-crusnexoe
+-thegridb
+
+//williams/pinball2k.cpp          // U:pinball
+
+williams/predators.cpp
+
+williams/seattle.cpp
+-carnevil1                // W:MT09440
+-sfrushrkw
+-sfrushrkwo
+
+//williams/starrider.cpp          // no screen
+
+williams/tmaster.cpp
+
+williams/vegas.cpp          // chd untested
+
+williams/williams.cpp
+-tornado2
+-defndjeu
+
+williams/wmg.cpp
 
 wing/luckgrln.cpp
 -luckstrn
