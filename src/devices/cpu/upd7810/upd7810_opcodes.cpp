@@ -290,12 +290,9 @@ void upd7810_device::NEGA()
 }
 
 /* 48 3b: 0100 1000 0011 1011 */
-void upd7810_device::HALT()
+void upd7810_device::HLT()
 {
-	int cycles = (m_icount / 4) * 4;
-	m_icount -= cycles;
-	handle_timers(cycles);
-	PC -= 1;        /* continue executing HALT */
+	m_halt = 1;
 }
 
 /* 48 3d: 0100 1000 0011 1101 */
@@ -829,7 +826,7 @@ void upd7810_device::STOP()
 	int cycles = (m_icount / 4) * 4;
 	m_icount -= cycles;
 	handle_timers(cycles);
-	PC -= 1;
+	PC -= 2;
 }
 
 /* 48 c0: 0100 1000 1100 0000 */
@@ -9454,12 +9451,12 @@ void upd7810_device::SKIT_F0()
 {
 	if (IRR & INTF0)
 		PSW |= SK;
-	IRR &= ~INTF0;
 }
 
 void upd7810_device::SKNIT_F0()
 {
-	logerror("unimplemented instruction: SKNIT_F0\n");
+	if (0 == (IRR & INTF0))
+		PSW |= SK;
 }
 
 void upd7810_device::STM()

@@ -8,7 +8,7 @@
 class gpl_chx_device : public device_t
 {
 public:
-	gpl_chx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	gpl_chx_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
 
 	auto cha_write_callback() { return m_cha_output_cb.bind(); }
 	auto chb_write_callback() { return m_chb_output_cb.bind(); }
@@ -30,13 +30,15 @@ public:
 	u16 chb_fifo_r();
 	void chb_fifo_w(u16 data);
 
+	void check_cha_fifo_empty();
+	void check_chb_fifo_empty();
+
 	void process_cha_fifo();
 	void process_chb_fifo();
 
 protected:
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;
-	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 
 private:
 	u16 m_cha_ctrl;

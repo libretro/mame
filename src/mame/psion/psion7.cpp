@@ -218,15 +218,9 @@ void psion7_state::update_amp()
 	constexpr float codec_volume[4] = { 1.0f, 0.75f, 0.5f, 0.25f };
 
 	if (m_amp_enable)
-	{
-		m_buzzer->set_output_gain(ALL_OUTPUTS, 1.0);
 		m_codec->set_output_gain(ALL_OUTPUTS, codec_volume[m_volume]); // VOL
-	}
 	else
-	{
-		m_buzzer->set_output_gain(ALL_OUTPUTS, 0.0);
 		m_codec->set_output_gain(ALL_OUTPUTS, 0.0);
-	}
 }
 #endif
 
@@ -394,7 +388,7 @@ void psion7_state::psion7(machine_config &config)
 	rs232_port_device &uart3(RS232_PORT(config, "uart3", default_rs232_devices, nullptr));
 	uart3.set_option_device_input_defaults("terminal", DEVICE_INPUT_DEFAULTS_NAME(debug_port));
 
-	//ADS7843(config, "adc", 0);
+	//ADS7843(config, "adc");
 
 	RAM(config, m_ram).set_default_size("16M").set_extra_options("32M");
 	NVRAM(config, "nvram", nvram_device::DEFAULT_NONE);
@@ -457,6 +451,7 @@ ROM_START( psion7 )
 	ROMX_LOAD("s7_105_254_build_756.rom", 0x000000, 0x1000000, CRC(56162c36) SHA1(8e78d474185b443d10267d18446f2524b49fdfcc), ROM_BIOS(0))
 	ROM_SYSTEM_BIOS(1, "754", "V1.05(254) Build 754")
 	ROMX_LOAD("s7_105_254_build_754.rom", 0x000000, 0x1000000, CRC(2447e9bb) SHA1(288e9ecaf67f56794e65bf2cf90fbd54a5c8eb4a), ROM_BIOS(1))
+	// Other known versions: V1.05(254) Build 751
 
 	ROM_REGION16_LE(0x80, "eeprom", ROMREGION_ERASEFF)
 ROM_END

@@ -15,6 +15,7 @@
 #include "emu.h"
 #include "uiinput.h"
 #include "corestr.h"
+#include "render.h"
 
 #include "input_common.h"
 #include "input_retro.h"
@@ -583,7 +584,7 @@ void retro_osd_interface::retro_push_char(running_machine &machine, int retro_ke
 
    /* Allow only practical chars and backspace */
    if ((push_char > 0x1F && push_char < 0x80) || push_char == 0x8)
-      machine.ui_input().push_char_event(osd_common_t::s_window_list.front()->target(), push_char);
+      machine.render().first_target()->push_char_event(push_char);
 }
 
 #define PUSH_CHAR_REPEAT_TRIGGER 10
@@ -766,8 +767,7 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
 			{
 				int cx = -1, cy = -1;
 				if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-					machine.ui_input().push_pointer_update(
-							window->target(),
+					machine.render().first_target()->push_pointer_update(
 							osd::ui_event_handler::pointer::MOUSE,
 							i,
 							0,
@@ -793,8 +793,7 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
 					auto const double_click_speed = std::chrono::milliseconds(250);
 					auto const click = std::chrono::steady_clock::now();
 
-					machine.ui_input().push_pointer_update(
-							window->target(),
+					machine.render().first_target()->push_pointer_update(
 							osd::ui_event_handler::pointer::MOUSE,
 							i,
 							0,
@@ -806,8 +805,7 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
 						&& (cy >= (m_last_click_y - 4) && cy <= (m_last_click_y + 4)))
 					{
 						m_last_click_time = std::chrono::time_point<std::chrono::steady_clock>::min();
-						machine.ui_input().push_pointer_update(
-								window->target(),
+						machine.render().first_target()->push_pointer_update(
 								osd::ui_event_handler::pointer::MOUSE,
 								i,
 								0,
@@ -831,8 +829,7 @@ void retro_osd_interface::process_mouse_state(running_machine &machine)
 			{
 				int cx = -1, cy = -1;
 				if (window != nullptr && window->renderer().xy_to_render_target(vmx, vmy, &cx, &cy))
-					machine.ui_input().push_pointer_update(
-						window->target(),
+					machine.render().first_target()->push_pointer_update(
 						osd::ui_event_handler::pointer::MOUSE,
 						i,
 						0,

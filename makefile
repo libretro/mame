@@ -28,6 +28,7 @@
 # NO_OPENGL = 0
 # USE_DISPATCH_GL = 0
 # USE_SDL = 1
+# USE_SDL3 = 1
 # SDL_INI_PATH = .;$HOME/.mame/;ini;
 # SDL2_MULTIAPI = 1
 # NO_USE_MIDI = 1
@@ -468,7 +469,7 @@ OSD := sdl
 else ifeq ($(TARGETOS),macosx)
 OSD := sdl3
 else ifeq ($(TARGETOS),asmjs)
-OSD := sdl
+OSD := sdl3
 endif # TARGETOS
 
 endif # OSD
@@ -778,6 +779,10 @@ endif
 
 ifdef USE_SDL
 PARAMS += --USE_SDL='$(USE_SDL)'
+endif
+
+ifdef USE_SDL3
+PARAMS += --USE_SDL3='$(USE_SDL3)'
 endif
 
 ifdef SDL_INI_PATH
@@ -1594,7 +1599,7 @@ endif
 
 ifeq (posix,$(SHELLTYPE))
 $(GENDIR)/version.cpp: makefile $(GENDIR)/git_desc | $(GEN_FOLDERS)
-	@echo '#define BARE_BUILD_VERSION "0.288"' > $@
+	@echo '#define BARE_BUILD_VERSION "0.289"' > $@
 	@echo '#define BARE_VCS_REVISION "$(NEW_GIT_VERSION)"' >> $@
 	@echo 'extern const char bare_build_version[];' >> $@
 	@echo 'extern const char bare_vcs_revision[];' >> $@
@@ -1604,7 +1609,7 @@ $(GENDIR)/version.cpp: makefile $(GENDIR)/git_desc | $(GEN_FOLDERS)
 	@echo 'const char build_version[] = BARE_BUILD_VERSION " (" BARE_VCS_REVISION ")";' >> $@
 else
 $(GENDIR)/version.cpp: makefile $(GENDIR)/git_desc | $(GEN_FOLDERS)
-	@echo #define BARE_BUILD_VERSION "0.288" > $@
+	@echo #define BARE_BUILD_VERSION "0.289" > $@
 	@echo #define BARE_VCS_REVISION "$(NEW_GIT_VERSION)" >> $@
 	@echo extern const char bare_build_version[]; >> $@
 	@echo extern const char bare_vcs_revision[]; >> $@

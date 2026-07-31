@@ -2,9 +2,9 @@
 // copyright-holders:Ryan Holtz, David Haywood
 /*****************************************************************************
 
-    SunPlus GCM394-series SoC peripheral emulation (Video)
+    SunPlus GPL162xx-series SoC peripheral emulation (Video)
 
-    This is very similar to spg2xx but with additional features, layers and modes
+    This is very similar to SPG2xx but with additional features, layers and modes
 
 **********************************************************************/
 
@@ -28,10 +28,10 @@ DEFINE_DEVICE_TYPE(GCM394_VIDEO, gcm394_video_device, "gcm394_video", "GeneralPl
 gcm394_base_video_device::gcm394_base_video_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, u32 clock) :
 	device_t(mconfig, type, tag, owner, clock),
 	device_video_interface(mconfig, *this),
-	m_rowscroll(*this, "^rowscroll"), // FIXME: assumption about surrounding system
-	m_rowzoom(*this, "^rowzoom"), // FIXME: assumption about surrounding system
 	m_cpu(*this, finder_base::DUMMY_TAG),
 	m_screen(*this, finder_base::DUMMY_TAG),
+	m_rowscroll(*this, "^rowscroll"), // FIXME: assumption about surrounding system
+	m_rowzoom(*this, "^rowzoom"), // FIXME: assumption about surrounding system
 	m_renderer(*this, "renderer"),
 	m_palette(*this, "palette"),
 	m_gfxdecode(*this, "gfxdecode"),
@@ -40,7 +40,11 @@ gcm394_base_video_device::gcm394_base_video_device(const machine_config &mconfig
 	m_cpuspace(*this, finder_base::DUMMY_TAG, -1),
 	m_cs_space(*this, finder_base::DUMMY_TAG, -1),
 	m_use_legacy_mode(false),
-	m_disallow_resolution_control(false)
+	m_disallow_resolution_control(false),
+	m_has_vga_modes(false),
+	m_has_3d_sprites(false),
+	m_has_gpl162xx_b_features(false),
+	m_has_gpl162xx_b_extended_sprites(false)
 {
 }
 
@@ -282,7 +286,7 @@ void gcm394_base_video_device::device_reset()
 	for (int i=0;i<0x100 * 0x10;i++)
 		m_paletteram[i] = machine().rand()&0x7fff;
 
-	m_707f = 0x0000;
+	m_707f = 0x0001;
 	m_703a_palettebank = 0x0000;
 	m_video_irq_enable = 0x0000;
 	m_video_irq_status = 0x0000;
@@ -321,6 +325,10 @@ void gcm394_base_video_device::device_reset()
 	m_page2_addr_msb = 0;
 	m_page3_addr_lsb = 0;
 	m_page3_addr_msb = 0;
+
+	// start in 320x240 mode
+	if (!m_disallow_resolution_control)
+		m_screen->set_visible_area(0, 320 - 1, 0, 240 - 1);
 }
 
 u32 gcm394_base_video_device::screen_update(screen_device &screen, bitmap_rgb32 &bitmap, const rectangle &cliprect)
@@ -373,7 +381,7 @@ u32 gcm394_base_video_device::screen_update(screen_device &screen, bitmap_rgb32 
 	//const u16 bgcol = 0x7c1f; // magenta
 //  const u16 bgcol = 0x0000; // black
 	bool highres = false;
-	if (!m_disallow_resolution_control)
+	if ((!m_disallow_resolution_control) && m_has_vga_modes)
 	{
 		if (m_707f & 0x0010)
 		{
@@ -883,7 +891,22 @@ u16 gcm394_base_video_device::ppu_enable_r()
 }
 void gcm394_base_video_device::ppu_enable_w(u16 data)
 {
-	LOGMASKED(LOG_GCM394_VIDEO, "%s:gcm394_base_video_device::ppu_enable_w %04x\n", machine().describe_context(), data);
+	u8 save_rom = (data & 0x8000) >> 15;
+	u8 unused = (data & 0x7000) >> 12;
+	u8 fb_mono = (data & 0x0c00) >> 10;
+	u8 spr25d = (data & 0x0200) >> 9;
+	u8 fb_format = (data & 0x0100) >> 8;
+	u8 fb_en = (data & 0x0080) >> 7;
+	u8 free_adr = (data & 0x0040) >> 6;
+	u8 vga_nointl = (data & 0x0020) >> 5;
+	u8 vga_en = (data & 0x0010) >> 4;
+	u8 tx_botup = (data & 0x0008) >> 3;
+	u8 tx_direct = (data & 0x0004) >> 2;
+	u8 tchar = (data & 0x0002) >> 1;
+	u8 ppu_en = (data & 0x0001) >> 0;
+
+	LOGMASKED(LOG_GCM394_VIDEO, "%s:gcm394_base_video_device::ppu_enable_w %04x (save_rom %01x, unused %01x, fb_mono %01x, spr25d %01x, fb_format %01x, fb_en %01x, free_adr %01x, vga_nointl %01x, vga_en %01x, tx_botup %01x, tx_direct %01x, tchar %01x, ppu_en %01x)\n",
+		machine().describe_context(), data, save_rom, unused, fb_mono, spr25d, fb_format, fb_en, free_adr, vga_nointl, vga_en, tx_botup, tx_direct, tchar, ppu_en);
 
 	m_707f = data;
 	m_renderer->set_video_reg_7f(data);
@@ -920,7 +943,6 @@ u16 gcm394_base_video_device::video_703a_palettebank_r()
 
 void gcm394_base_video_device::video_703a_palettebank_w(u16 data)
 {
-
 	LOGMASKED(LOG_GCM394_VIDEO, "%s:gcm394_base_video_device::video_703a_palettebank_w %04x\n", machine().describe_context(), data);
 	m_703a_palettebank = data;
 }
@@ -1294,7 +1316,7 @@ void gcm394_base_video_device::device_add_mconfig(machine_config &config)
 	PALETTE(config, m_palette).set_format(palette_device::xRGB_555, 256*0x10);
 	GFXDECODE(config, m_gfxdecode, m_palette, gfx);
 
-	GPL_RENDERER(config, m_renderer, 0);
+	GPL_RENDERER(config, m_renderer);
 }
 
 
