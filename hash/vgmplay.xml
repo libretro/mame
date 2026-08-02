@@ -435,7 +435,7 @@ license:CC0-1.0
 	<software name="ffant_msxfm">
 		<description>Final Fantasy 1 (MSX FM)</description>
 		<year>1989</year>
-		<publisher>Micro Cabin Corp.</publisher>
+		<publisher>Micro Cabin</publisher>
 		<info name="cores" value="MSX PSG (AY-3-8910A), MSX-Music (YM2413)"/>
 		<part name="001" interface="vgm_quik">
 			<feature name="part_id" value="01_prelude.vgm" />
@@ -129946,7 +129946,7 @@ license:CC0-1.0
 	</software>
 
 	<software name="poolrad_nes">
-		<description>Pool of Radiance (NES)</description>
+		<description>Advanced Dungeons &amp; Dragons: Pool of Radiance (NES)</description>
 		<year>1992</year>
 		<publisher>FCI (U) / Pony Canyon (J)</publisher>
 		<info name="cores" value="NES APU (RP2A03)"/>
@@ -139838,7 +139838,7 @@ license:CC0-1.0
 	</software>
 
 	<software name="yiear_nes">
-		<description>Yie Ar Kung Fu (NES)</description>
+		<description>Yie Ar Kung-Fu (NES)</description>
 		<year>1985</year>
 		<publisher>Konami</publisher>
 		<info name="cores" value="NES APU (RP2A03)"/>
@@ -160586,7 +160586,7 @@ license:CC0-1.0
 	</software>
 
 	<software name="poolrad_98">
-		<description>Pool of Radiance (NEC PC-9801)</description>
+		<description>Advanced Dungeons &amp; Dragons: Pool of Radiance (NEC PC-9801)</description>
 		<year>1989</year>
 		<publisher>Pony Canyon</publisher>
 		<info name="cores" value="YM2203"/>
@@ -181436,7 +181436,7 @@ license:CC0-1.0
 	<software name="xak3_98">
 		<description>Xak III - The Eternal Recurrence (NEC PC-9801)</description>
 		<year>1993</year>
-		<publisher>Microcabin</publisher>
+		<publisher>Micro Cabin</publisher>
 		<info name="cores" value="YM2203"/>
 		<part name="001" interface="vgm_quik">
 			<feature name="part_id" value="01 main theme from xak iii (title).vgz" />
@@ -248167,7 +248167,7 @@ license:CC0-1.0
 	<software name="ffant_msx2">
 		<description>Final Fantasy (MSX2, PSG)</description>
 		<year>1989</year>
-		<publisher>Micro Cabin Corp.</publisher>
+		<publisher>Micro Cabin</publisher>
 		<info name="cores" value="PSG (AY8910)"/>
 		<part name="001" interface="vgm_quik">
 			<feature name="part_id" value="01 prelude.vgz" />
@@ -262402,7 +262402,7 @@ license:CC0-1.0
 	<software name="draghalf_98">
 		<description>Dragon Half (NEC PC-9801)</description>
 		<year>1993</year>
-		<publisher>Microcabin</publisher>
+		<publisher>Micro Cabin</publisher>
 		<info name="cores" value="YM2203"/>
 		<part name="001" interface="vgm_quik">
 			<feature name="part_id" value="01 come on! come on! come and see!!.vgz" />
@@ -268234,7 +268234,7 @@ license:CC0-1.0
 	<software name="kax3_98">
 		<description>Kax III (NEC PC-9801)</description>
 		<year>1993</year>
-		<publisher>Microcabin</publisher>
+		<publisher>Micro Cabin</publisher>
 		<info name="cores" value="YM2203"/>
 		<part name="001" interface="vgm_quik">
 			<feature name="part_id" value="01 startup.vgz" />
@@ -305638,7 +305638,7 @@ license:CC0-1.0
 	<software name="draghalf_fmt">
 		<description>Dragon Half (FM Towns)</description>
 		<year>1994</year>
-		<publisher>Microcabin</publisher>
+		<publisher>Micro Cabin</publisher>
 		<info name="cores" value="YM3438"/>
 		<part name="001" interface="vgm_quik">
 			<feature name="part_id" value="01 come on! come on! come and see!!.vgz" />
@@ -383366,7 +383366,7 @@ license:CC0-1.0
 	</software>
 
 	<software name="wwfsup_md">
-		<description>WWF Super Wrestlemania (GEN/MD)</description>
+		<description>WWF Super WrestleMania (GEN/MD)</description>
 		<year>1992</year>
 		<publisher>Flying Edge</publisher>
 		<info name="cores" value="SN76496, YM2612"/>

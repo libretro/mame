@@ -319,7 +319,7 @@ void macvail_state::maclc3_base(machine_config &config)
 	m_sonora->set_maincpu_tag("maincpu");
 	m_sonora->set_rom_tag("bootrom");
 
-	nubus_device &nubus(NUBUS(config, "pds", 0));
+	nubus_device &nubus(NUBUS(config, "pds"));
 	nubus.set_space(m_maincpu, AS_PROGRAM);
 	nubus.set_bus_mode(nubus_device::nubus_mode_t::LC32_PDS);
 	// LC III style PDS cards have slot IRQs $C, $D, and $E connected
@@ -402,8 +402,8 @@ void macvail_state::maclc520(machine_config &config)
 
 	APPLE_DFAC2(config, m_dfac2, 22257);
 	m_dfac2->sda_callback().set(m_cuda, FUNC(cuda_device::set_iic_sda));
-	m_cuda->iic_scl_callback().set(m_dfac2, FUNC(dfac2_device::scl_write));
-	m_cuda->iic_sda_callback().set(m_dfac2, FUNC(dfac2_device::sda_write));
+	m_cuda->iic_scl_callback().append(m_dfac2, FUNC(dfac2_device::scl_write));
+	m_cuda->iic_sda_callback().append(m_dfac2, FUNC(dfac2_device::sda_write));
 }
 
 void macvail_state::maclc550(machine_config &config)

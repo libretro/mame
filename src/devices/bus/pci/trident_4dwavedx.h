@@ -24,22 +24,22 @@ public:
 protected:
 	trident_4dwavedx_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
 
-	virtual void device_start() override;
-	virtual void device_reset() override;
-	virtual void device_add_mconfig(machine_config &config) override;
+	virtual void device_start() override ATTR_COLD;
+	virtual void device_reset() override ATTR_COLD;
+	virtual void device_add_mconfig(machine_config &config) override ATTR_COLD;
 
 	virtual void map_extra(uint64_t memory_window_start, uint64_t memory_window_end, uint64_t memory_offset, address_space *memory_space,
 						   uint64_t io_window_start, uint64_t io_window_end, uint64_t io_offset, address_space *io_space) override;
 
-	virtual void config_map(address_map &map) override;
+	virtual void config_map(address_map &map) override ATTR_COLD;
 
 	virtual u8 capptr_r() override;
 
 private:
-	void io_map(address_map &map);
-	void mmio_map(address_map &map);
+	void io_map(address_map &map) ATTR_COLD;
+	void mmio_map(address_map &map) ATTR_COLD;
 
-	void gameport_map(address_map &map);
+	void gameport_map(address_map &map) ATTR_COLD;
 
 	required_device<t4dwave_pcm_device> m_pcm;
 	required_device<ac97_stac9704_device> m_ac97;
@@ -62,7 +62,7 @@ class t4dwave_pcm_device : public device_t
 						 , public device_sound_interface
 {
 public:
-	t4dwave_pcm_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock);
+	t4dwave_pcm_device(const machine_config &mconfig, const char *tag, device_t *owner, uint32_t clock = 0);
 
 	auto datain_cb() { return m_datain_cb.bind(); }
 	auto irq_cb()    { return m_irq_cb.bind(); }
@@ -104,7 +104,7 @@ public:
 	void gvsel_w(offs_t offset, u32 data, u32 mem_mask = ~0);
 
 protected:
-	t4dwave_pcm_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock);
+	t4dwave_pcm_device(const machine_config &mconfig, device_type type, const char *tag, device_t *owner, uint32_t clock = 0);
 
 	virtual void device_start() override ATTR_COLD;
 	virtual void device_reset() override ATTR_COLD;

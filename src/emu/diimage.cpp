@@ -763,7 +763,7 @@ std::error_condition device_image_interface::load_software(software_list_device 
 			// handle files
 			if (ROMENTRY_ISFILE(romp))
 			{
-				const software_info *const swinfo = swlist.find(std::string(swname));
+				const software_info *const swinfo = swlist.find(swname);
 				if (!swinfo)
 					return image_error::NOSOFTWARE;
 
@@ -1107,7 +1107,7 @@ void device_image_interface::clear() noexcept
 
 void device_image_interface::unload()
 {
-	if (is_loaded() || loaded_through_softlist())
+	if (is_loaded() || loaded_through_softlist() || exists())
 	{
 		call_unload();
 		clear();

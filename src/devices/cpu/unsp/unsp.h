@@ -90,6 +90,7 @@ public:
 	virtual ~unsp_device();
 
 	void set_vectorbase(uint16_t vector) { m_vectorbase = vector; }
+	void set_bootvectorbase(uint16_t vector) { m_bootvectorbase = vector; }
 
 	uint8_t get_csb();
 
@@ -131,11 +132,12 @@ protected:
 	/* internal compiler state */
 	struct compiler_state
 	{
+		compiler_state() = default;
 		compiler_state(compiler_state const&) = delete;
 		compiler_state& operator=(compiler_state const&) = delete;
 
-		uint32_t m_cycles;          /* accumulated cycles */
-		uml::code_label m_labelnum; /* index for local labels */
+		uint32_t m_cycles = 0;          /* accumulated cycles */
+		uml::code_label m_labelnum = 0; /* index for local labels */
 	};
 
 	struct internal_unsp_state
@@ -311,6 +313,7 @@ private:
 
 	bool m_enable_drc;
 	uint16_t m_vectorbase;
+	uint16_t m_bootvectorbase;
 	internal_unsp_state m_local_core; // for non-DRC mode
 
 	void execute_run_drc();

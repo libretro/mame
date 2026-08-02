@@ -33,7 +33,6 @@ newoption {
 		{ "openbsd-clang", "OpenBSD (clang compiler)"},
 		{ "osx",           "OSX (GCC compiler)"     },
 		{ "osx-clang",     "OSX (Clang compiler)"   },
-		{ "solaris",       "Solaris"                },
 	},
 }
 
@@ -42,8 +41,7 @@ newoption {
 	value = "toolset",
 	description = "Choose VS toolset",
 	allowed = {
-		{ "intel-15",      "Intel C++ Compiler XE 15.0" },
-		{ "clangcl",       "Visual Studio 2019 using Clang/LLVM" },
+		{ "clangcl",       "Visual Studio using Clang/LLVM" },
 	},
 }
 
@@ -145,10 +143,6 @@ function toolchain(_buildDir, _subDir)
 			location (_buildDir .. "projects/" .. _subDir .. "/".. _ACTION .. "-linux")
 		end
 
-		if "solaris" == _OPTIONS["gcc"] then
-			location (_buildDir .. "projects/" .. _subDir .. "/".. _ACTION .. "-solaris")
-		end
-
 
 		if "linux-clang" == _OPTIONS["gcc"] then
 			premake.gcc.cc  = "clang"
@@ -212,10 +206,11 @@ function toolchain(_buildDir, _subDir)
 			premake.vstudio.toolset = ("ClangCL")
 			location (_buildDir .. "projects/" .. _subDir .. "/".. _ACTION .. "-clang")
 		end
+	elseif _ACTION == "vs2026" then
 
-		if "intel-15" == _OPTIONS["vs"] then
-			premake.vstudio.toolset = "Intel C++ Compiler XE 15.0"
-			location (_buildDir .. "projects/" .. _subDir .. "/".. _ACTION .. "-intel")
+		if "clangcl" == _OPTIONS["vs"] then
+			premake.vstudio.toolset = ("ClangCL")
+			location (_buildDir .. "projects/" .. _subDir .. "/".. _ACTION .. "-clang")
 		end
 	end
 
@@ -376,35 +371,6 @@ function toolchain(_buildDir, _subDir)
 	configuration { "linux-clang", "x64", "Debug" }
 		targetdir (_buildDir .. "linux_clang" .. "/bin/x64/Debug")
 
-	configuration { "solaris", "x32" }
-		objdir (_buildDir .. "solaris" .. "/obj")
-		buildoptions {
-			"-m32",
-		}
-
-	configuration { "solaris", "x32", "Release" }
-		targetdir (_buildDir .. "solaris" .. "/bin/x32/Release")
-
-	configuration { "solaris", "x32", "Debug" }
-		targetdir (_buildDir .. "solaris" .. "/bin/x32/Debug")
-
-	configuration { "solaris", "x64" }
-		objdir (_buildDir .. "solaris" .. "/obj")
-		buildoptions {
-			"-m64",
-		}
-
-	configuration { "solaris", "x64", "Release" }
-		targetdir (_buildDir .. "solaris" .. "/bin/x64/Release")
-
-	configuration { "solaris", "x64", "Debug" }
-		targetdir (_buildDir .. "solaris" .. "/bin/x64/Debug")
-
-	configuration { "freebsd", "x32" }
-		objdir (_buildDir .. "freebsd" .. "/obj")
-		buildoptions {
-			"-m32",
-		}
 
 	configuration { "freebsd", "x32", "Release" }
 		targetdir (_buildDir .. "freebsd" .. "/bin/x32/Release")
@@ -475,18 +441,6 @@ function toolchain(_buildDir, _subDir)
 
 	configuration { "android-*" }
 		objdir (_buildDir .. "android/obj/" .. _OPTIONS["PLATFORM"])
-		includedirs {
-			MAME_DIR .. "3rdparty/bgfx/3rdparty/khronos",
-			--  LIBRETRO: don't mess with NDK includir order
-			-- "$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libcxx/include",
-			-- "$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/include",
-			-- "$(ANDROID_NDK_HOME)/sysroot/usr/include",
-			-- "$(ANDROID_NDK_HOME)/sources/android/support/include",
-			-- "$(ANDROID_NDK_HOME)/sources/android/native_app_glue",
-		}
-		linkoptions {
-			"-nostdlib",
-		}
 		flags {
 			"NoImportLib",
 		}
@@ -496,29 +450,26 @@ function toolchain(_buildDir, _subDir)
 			"m",
 			"android",
 			"log",
-			"c++_static",
-			"c++abi",
-			"stdc++",
 		}
 		buildoptions_c {
-			"-Wno-strict-prototypes",
+			"--gcc-toolchain=" .. androidToolchainRoot(),
+			"--sysroot=" .. androidToolchainRoot() .. "/sysroot",
 		}
 		buildoptions {
+			"--gcc-toolchain=" .. androidToolchainRoot(),
+			"--sysroot=" .. androidToolchainRoot() .. "/sysroot",
 			"-fpic",
 			"-ffunction-sections",
 			"-funwind-tables",
 			"-fstack-protector-strong",
 			"-no-canonical-prefixes",
-			"-Wunused-value",
-			"-Wundef",
-			"-Wno-cast-align",
-			"-Wno-unknown-attributes",
-			"-Wno-macro-redefined",
-			"-DASIO_HAS_STD_STRING_VIEW",
-			"-Wno-unused-function",
 		}
 		linkoptions {
-			"-no-canonical-prefixes",
+			"--gcc-toolchain=" .. androidToolchainRoot(),
+			"--sysroot=" .. androidToolchainRoot() .. "/sysroot",
+-- RETRO HACK for libretro android
+			"-static-libstdc++",
+-- RETRO HACK END for libretro android
 			"-Wl,--no-undefined",
 			"-Wl,-z,noexecstack",
 			"-Wl,-z,relro",
@@ -526,104 +477,44 @@ function toolchain(_buildDir, _subDir)
 		}
 
 	configuration { "android-arm" }
-			libdirs {
-				"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/armeabi-v7a",
-				androidToolchainRoot() .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel,
-			}
-			includedirs {
-			}
 			buildoptions {
-				"--gcc-toolchain=" .. androidToolchainRoot(),
-				"-target armv7-linux-androideabi" .. androidApiLevel,
+				"--target=armv7-none-linux-android" .. androidApiLevel,
 				"-march=armv7-a",
 				"-mfloat-abi=softfp",
-				"-mfpu=vfpv3-d16",
+				"-mfpu=neon",
 				"-mthumb",
 			}
-			links {
-				"android_support",
-				"unwind",
-				"gcc",
-			}
 			linkoptions {
-				"--gcc-toolchain=" .. androidToolchainRoot(),
-				"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel,
-
-				androidToolchainRoot()  .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel .. "/crtbegin_so.o",
-				androidToolchainRoot()  .. "/sysroot/usr/lib/arm-linux-androideabi/" .. androidApiLevel .. "/crtend_so.o",
-				"-target armv7-linux-androideabi" .. androidApiLevel,
+				"--target=armv7-none-linux-android" .. androidApiLevel,
+				"-march=armv7-a",
 			}
 
 	configuration { "android-arm64" }
-			libdirs {
-				"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/arm64-v8a",
-				androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel,
-			}
-			includedirs {
-			}
 			buildoptions {
-				"--gcc-toolchain=" .. androidToolchainRoot(),
-				"-target aarch64-linux-android" .. androidApiLevel,
-				"-march=armv8-a",
-			}
-			links {
-				"gcc",
+				"--target=aarch64-none-linux-android" .. androidApiLevel,
 			}
 			linkoptions {
-				"--gcc-toolchain=" .. androidToolchainRoot(),
-				"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel,
-				androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel .. "/crtbegin_so.o",
-				androidToolchainRoot() .. "/sysroot/usr/lib/aarch64-linux-android/" .. androidApiLevel .. "/crtend_so.o",
-				"-target aarch64-linux-android" .. androidApiLevel,
+				"--target=aarch64-none-linux-android" .. androidApiLevel,
 			}
 
 	configuration { "android-x86" }
-			libdirs {
-				"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/x86",
-				androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel,
-			}
-			includedirs {
-			}
-			buildoptions {
-				"--gcc-toolchain=" .. androidToolchainRoot(),
-				"-target i686-linux-android" .. androidApiLevel,
-				"-mtune=atom",
-				"-mstackrealign",
-				"-msse3",
-				"-mfpmath=sse",
-			}
-			links {
-				"gcc",
-			}
-			linkoptions {
-				"--gcc-toolchain=" .. androidToolchainRoot(),
-				"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel,
-				androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel .. "/crtbegin_so.o",
-				androidToolchainRoot() .. "/sysroot/usr/lib/i686-linux-android/" .. androidApiLevel .. "/crtend_so.o",
-				"-target i686-linux-android" .. androidApiLevel,
-			}
-
-
-	configuration { "android-x64" }
-		libdirs {
-			"$(ANDROID_NDK_HOME)/sources/cxx-stl/llvm-libc++/libs/x86_64",
-			androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel,
-		}
-		includedirs {
-		}
 		buildoptions {
-			"--gcc-toolchain=" .. androidToolchainRoot(),
-			"-target x86_64-linux-android" .. androidApiLevel,
-		}
-		links {
-			"gcc",
+			"--target=i686-none-linux-android" .. androidApiLevel,
+			"-mtune=atom",
+			"-mstackrealign",
+			"-msse3",
+			"-mfpmath=sse",
 		}
 		linkoptions {
-			"--gcc-toolchain=" .. androidToolchainRoot(),
-			"--sysroot=" .. androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel,
-			androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel .. "/crtbegin_so.o",
-			androidToolchainRoot() .. "/sysroot/usr/lib/x86_64-linux-android/" .. androidApiLevel .. "/crtend_so.o",
-			"-target x86_64-linux-android" .. androidApiLevel,
+			"--target=i686-none-linux-android" .. androidApiLevel,
+		}
+
+	configuration { "android-x64" }
+		buildoptions {
+			"--target=x86_64-none-linux-android" .. androidApiLevel,
+		}
+		linkoptions {
+			"--target=x86_64-none-linux-android" .. androidApiLevel,
 		}
 
 	configuration { "asmjs" }

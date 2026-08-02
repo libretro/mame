@@ -1183,8 +1183,9 @@ void sound_coreaudio::coreaudio_stream::close()
 {
 	if (m_graph)
 	{
-		std::lock_guard<std::mutex> steam_guard(m_stream_mutex);
+		// stop the graph before locking m_stream_mutex, else AUGraphStop deadlocks against the render callback that also takes it
 		AUGraphStop(m_graph);
+		std::lock_guard<std::mutex> steam_guard(m_stream_mutex);
 		AUGraphUninitialize(m_graph);
 		DisposeAUGraph(m_graph);
 		m_graph = nullptr;
@@ -1328,7 +1329,7 @@ bool sound_coreaudio::coreaudio_stream::create_source_graph(struct coreaudio_dev
 	}
 
 	format.mFormatID = kAudioFormatLinearPCM;
-	format.mFormatFlags = kAudioFormatFlagsNativeEndian | kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
+	format.mFormatFlags = 0U | kAudioFormatFlagsNativeEndian | kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked; // zero because C++20 doesn't allow arithmetic between different enum types
 	format.mFramesPerPacket = 1;
 	format.mChannelsPerFrame = device.m_channels;
 	format.mBitsPerChannel = 16;
@@ -1679,7 +1680,7 @@ int sound_coreaudio::coreaudio_stream::create_sink_stream(struct coreaudio_devic
 	AudioStreamBasicDescription format;
 	format.mSampleRate = m_sample_rate;
 	format.mFormatID = kAudioFormatLinearPCM;
-	format.mFormatFlags = kAudioFormatFlagsNativeEndian | kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked;
+	format.mFormatFlags = 0U | kAudioFormatFlagsNativeEndian | kLinearPCMFormatFlagIsSignedInteger | kLinearPCMFormatFlagIsPacked; // zero because C++20 doesn't allow arithmetic between different enum types
 	format.mFramesPerPacket = 1;
 	format.mChannelsPerFrame = m_channels;
 	format.mBitsPerChannel = 16;
