@@ -15,6 +15,7 @@
 #include "emu.h"
 #include "uiinput.h"
 #include "corestr.h"
+#include "path.h"
 #include "render.h"
 
 #include "input_common.h"
@@ -230,31 +231,69 @@ void Input_Binding(running_machine &machine)
    button_mapping[5] = RETROPAD_R;
 
    if (
-         !core_stricmp(machine.system().name, "avengrgs")    ||
-         !core_stricmp(machine.system().parent, "avengrgs")  ||
-         !core_stricmp(machine.system().name, "bloodwar")    ||
-         !core_stricmp(machine.system().parent, "bloodwar")  ||
-         !core_stricmp(machine.system().name, "daraku")    ||
-         !core_stricmp(machine.system().parent, "daraku")  ||
-         !core_stricmp(machine.system().name, "drgnmst")   ||
-         !core_stricmp(machine.system().parent, "drgnmst")   ||
+         !core_stricmp(machine.system().name, "avengrgs")   ||
+         !core_stricmp(machine.system().parent, "avengrgs") ||
+         !core_stricmp(machine.system().name, "bloodwar")   ||
+         !core_stricmp(machine.system().parent, "bloodwar") ||
+         !core_stricmp(machine.system().name, "daraku")     ||
+         !core_stricmp(machine.system().parent, "daraku")   ||
+         !core_stricmp(machine.system().name, "dbz2")       ||
+         !core_stricmp(machine.system().parent, "dbz2")     ||
+         !core_stricmp(machine.system().name, "drgnmst")    ||
+         !core_stricmp(machine.system().parent, "drgnmst")  ||
+         !core_stricmp(machine.system().name, "kabukikl")   ||
+         !core_stricmp(machine.system().parent, "kabukikl") ||
+         !core_stricmp(machine.system().name, "karnovr")    ||
+         !core_stricmp(machine.system().parent, "karnovr")  ||
+         !core_stricmp(machine.system().name, "lastblad")   ||
+         !core_stricmp(machine.system().parent, "lastblad") ||
+         !core_stricmp(machine.system().name, "lastbld2")   ||
+         !core_stricmp(machine.system().parent, "lastbld2") ||
+         !core_stricmp(machine.system().name, "ninjamas")   ||
+         !core_stricmp(machine.system().parent, "ninjamas") ||
          !core_stricmp(machine.system().name, "primrage")   ||
-         !core_stricmp(machine.system().parent, "primrage")   ||
-         !core_stricmp(machine.system().name, "rabbit")    ||
-         !core_stricmp(machine.system().parent, "rabbit")  ||
+         !core_stricmp(machine.system().parent, "primrage") ||
+         !core_stricmp(machine.system().name, "rabbit")     ||
+         !core_stricmp(machine.system().parent, "rabbit")   ||
+         !core_stricmp(machine.system().name, "rvschool")   ||
+         !core_stricmp(machine.system().parent, "rvschool") ||
+         !core_stricmp(machine.system().name, "sams64")     ||
+         !core_stricmp(machine.system().parent, "sams64")   ||
+         !core_stricmp(machine.system().name, "sams64_2")   ||
+         !core_stricmp(machine.system().parent, "sams64_2") ||
+         !core_stricmp(machine.system().name, "samsh5sp")   ||
+         !core_stricmp(machine.system().parent, "samsh5sp") ||
+         !core_stricmp(machine.system().name, "samsho")     ||
+         !core_stricmp(machine.system().parent, "samsho")   ||
+         !core_stricmp(machine.system().name, "samsho2")    ||
+         !core_stricmp(machine.system().parent, "samsho2")  ||
+         !core_stricmp(machine.system().name, "samsho5")    ||
+         !core_stricmp(machine.system().parent, "samsho5")  ||
          !core_stricmp(machine.system().name, "shogwarr")   ||
-         !core_stricmp(machine.system().parent, "shogwarr")   ||
-         !core_stricmp(machine.system().name, "tekken")    ||
-         !core_stricmp(machine.system().parent, "tekken")  ||
-         !core_stricmp(machine.system().name, "tekken2")   ||
-         !core_stricmp(machine.system().parent, "tekken2")   ||
+         !core_stricmp(machine.system().parent, "shogwarr") ||
+         !core_stricmp(machine.system().name, "starglad")  ||
+         !core_stricmp(machine.system().parent, "starglad") ||
+         !core_stricmp(machine.system().name, "tekken")     ||
+         !core_stricmp(machine.system().parent, "tekken")   ||
+         !core_stricmp(machine.system().name, "tekken2")    ||
+         !core_stricmp(machine.system().parent, "tekken2")  ||
+         !core_stricmp(machine.system().name, "tekken3")    ||
+         !core_stricmp(machine.system().parent, "tekken3")  ||
          !core_stricmp(machine.system().name, "tkdensho")   ||
-         !core_stricmp(machine.system().parent, "tkdensho")   ||
-         !core_stricmp(machine.system().name, "vf")   ||
-         !core_stricmp(machine.system().parent, "vf")
+         !core_stricmp(machine.system().parent, "tkdensho") ||
+         !core_stricmp(machine.system().name, "wakuwak7")   ||
+         !core_stricmp(machine.system().parent, "wakuwak7") ||
+         !core_stricmp(machine.system().name, "whp")        ||
+         !core_stricmp(machine.system().parent, "whp")
       )
    {
-      /* Tekken 1/2/Virtua Fighter/Etc.*/
+      /*
+ * Four-button layout B
+ *
+ *          2 / X
+ *  1 / Y           4 / A
+ *          3 / B
+ */
       button_mapping[0] = RETROPAD_Y;
       button_mapping[1] = RETROPAD_X;
       button_mapping[2] = RETROPAD_B;
@@ -263,19 +302,45 @@ void Input_Binding(running_machine &machine)
       button_mapping[5] = RETROPAD_R;
    }
    else if (
-              !core_stricmp(machine.system().name, "jojo")    ||
-              !core_stricmp(machine.system().parent, "jojo")  ||
+              !core_stricmp(machine.system().name, "blandia")   ||
+              !core_stricmp(machine.system().parent, "blandia") ||
+              !core_stricmp(machine.system().name, "cybots")    ||
+              !core_stricmp(machine.system().parent, "cybots")  ||
+              !core_stricmp(machine.system().name, "doa")       ||
+              !core_stricmp(machine.system().parent, "doa")     ||
+              !core_stricmp(machine.system().name, "doapp")     ||
+              !core_stricmp(machine.system().parent, "doapp")   ||
+              !core_stricmp(machine.system().name, "jojo")      ||
+              !core_stricmp(machine.system().parent, "jojo")    ||
               !core_stricmp(machine.system().name, "jojoba")    ||
               !core_stricmp(machine.system().parent, "jojoba")  ||
-              !core_stricmp(machine.system().name, "souledge")    ||
-              !core_stricmp(machine.system().parent, "souledge")  ||
-              !core_stricmp(machine.system().name, "soulclbr")    ||
-              !core_stricmp(machine.system().parent, "soulclbr")    ||
-              !core_stricmp(machine.system().name, "svg")    ||
-              !core_stricmp(machine.system().parent, "svg")
+              !core_stricmp(machine.system().name, "mmaulers")  ||
+              !core_stricmp(machine.system().parent, "mmaulers") ||
+              !core_stricmp(machine.system().name, "mtlchamp")  ||
+              !core_stricmp(machine.system().parent, "mtlchamp") ||
+              !core_stricmp(machine.system().name, "plsmaswd")  ||
+              !core_stricmp(machine.system().parent, "plsmaswd") ||
+              !core_stricmp(machine.system().name, "samsho3")   ||
+              !core_stricmp(machine.system().parent, "samsho3") ||
+              !core_stricmp(machine.system().name, "samsho4")   ||
+              !core_stricmp(machine.system().parent, "samsho4") ||
+              !core_stricmp(machine.system().name, "souledge")  ||
+              !core_stricmp(machine.system().parent, "souledge") ||
+              !core_stricmp(machine.system().name, "soulclbr")  ||
+              !core_stricmp(machine.system().parent, "soulclbr") ||
+              !core_stricmp(machine.system().name, "svg")       ||
+              !core_stricmp(machine.system().parent, "svg")     ||
+              !core_stricmp(machine.system().name, "vfremix")   ||
+              !core_stricmp(machine.system().parent, "vfremix")
            )
    {
-      /* Soul Edge/Soul Calibur/JoJo/SVG */
+      /*
+ * Four-button layout C
+ *
+ *          2 / X
+ *  1 / Y           3 / A
+ *          4 / B
+ */
       button_mapping[0] = RETROPAD_Y;
       button_mapping[1] = RETROPAD_X;
       button_mapping[2] = RETROPAD_A;
@@ -284,14 +349,44 @@ void Input_Binding(running_machine &machine)
       button_mapping[5] = RETROPAD_R;
    }
    else if (
-              !core_stricmp(machine.system().name, "doapp")
+              !core_stricmp(machine.system().name, "techromn") ||
+              !core_stricmp(machine.system().parent, "techromn")
            )
    {
-      /* Dead or Alive++ */
-      button_mapping[0] = RETROPAD_B;
-      button_mapping[1] = RETROPAD_Y;
-      button_mapping[2] = RETROPAD_X;
-      button_mapping[3] = RETROPAD_A;
+      /*
+       * Tech Romancer
+       *
+       *          1 / X
+       *  4 / Y           2 / A
+       *          3 / B
+       */
+      button_mapping[0] = RETROPAD_X;
+      button_mapping[1] = RETROPAD_A;
+      button_mapping[2] = RETROPAD_B;
+      button_mapping[3] = RETROPAD_Y;
+      button_mapping[4] = RETROPAD_L;
+      button_mapping[5] = RETROPAD_R;
+   }
+   else if (
+              !core_stricmp(machine.system().name, "vf")  ||
+              !core_stricmp(machine.system().parent, "vf") ||
+              !core_stricmp(machine.system().name, "vf2") ||
+              !core_stricmp(machine.system().parent, "vf2") ||
+              !core_stricmp(machine.system().name, "vf3") ||
+              !core_stricmp(machine.system().parent, "vf3")
+           )
+   {
+      /*
+       * Virtua Fighter 1, 2 and 3
+       *
+       *          1 / X
+       *  3 / Y           2 / A
+       *          4 / B
+       */
+      button_mapping[0] = RETROPAD_X;
+      button_mapping[1] = RETROPAD_A;
+      button_mapping[2] = RETROPAD_Y;
+      button_mapping[3] = RETROPAD_B;
       button_mapping[4] = RETROPAD_L;
       button_mapping[5] = RETROPAD_R;
    }
@@ -300,13 +395,18 @@ void Input_Binding(running_machine &machine)
               !core_stricmp(machine.system().parent, "ehrgeiz")
            )
    {
-      /* Ehrgeiz */
-      button_mapping[0] = RETROPAD_Y;
-      button_mapping[1] = RETROPAD_B;
+      /*
+       * Ehrgeiz, inspired by the PlayStation layout
+       *
+       * 1 / B    2 / Y    3 / A
+       * 4 / R    5 / L    6 / R2
+       */
+      button_mapping[0] = RETROPAD_B;
+      button_mapping[1] = RETROPAD_Y;
       button_mapping[2] = RETROPAD_A;
-      button_mapping[3] = RETROPAD_X;
+      button_mapping[3] = RETROPAD_R;
       button_mapping[4] = RETROPAD_L;
-      button_mapping[5] = RETROPAD_R;
+      button_mapping[5] = RETROPAD_R2;
    }
    else if (
               !core_stricmp(machine.system().name, "ts2") ||
@@ -336,8 +436,8 @@ void Input_Binding(running_machine &machine)
               !core_stricmp(machine.system().parent, "nwarr") ||
               !core_stricmp(machine.system().name, "redearth") ||
               !core_stricmp(machine.system().parent, "redearth") ||
-              !core_stricmp(machine.system().name, "rvschool") ||
-              !core_stricmp(machine.system().parent, "rvschool") ||
+              !core_stricmp(machine.system().name, "sf") ||
+              !core_stricmp(machine.system().parent, "sf") ||
               !core_stricmp(machine.system().name, "sf2") ||
               !core_stricmp(machine.system().parent, "sf2") ||
               !core_stricmp(machine.system().name, "sf2ce") ||
@@ -427,82 +527,71 @@ void Input_Binding(running_machine &machine)
       button_mapping[5] = RETROPAD_R;
    }
    else if (
-              !core_stricmp(machine.system().parent, "aof") ||
-              !core_stricmp(machine.system().parent, "aof2") ||
-              !core_stricmp(machine.system().parent, "aof3") ||
-              !core_stricmp(machine.system().parent, "breakers") ||
-              !core_stricmp(machine.system().parent, "breakrev") ||
-              !core_stricmp(machine.system().parent, "doubledr") ||
-              !core_stricmp(machine.system().parent, "fatfury1") ||
-              !core_stricmp(machine.system().parent, "fatfury2") ||
-              !core_stricmp(machine.system().parent, "fatfury3") ||
-              !core_stricmp(machine.system().parent, "fatfursp") ||
-              !core_stricmp(machine.system().parent, "fightfev") ||
-              !core_stricmp(machine.system().parent, "galaxyfg") ||
-              !core_stricmp(machine.system().parent, "garou") ||
-              !core_stricmp(machine.system().parent, "gowcaizr") ||
-              !core_stricmp(machine.system().parent, "neogeo") ||
-              !core_stricmp(machine.system().parent, "karnovr") ||
-              !core_stricmp(machine.system().parent, "kizuna") ||
-              !core_stricmp(machine.system().parent, "kabukikl") ||
-              !core_stricmp(machine.system().parent, "matrim") ||
-              !core_stricmp(machine.system().parent, "mslug") ||
-              !core_stricmp(machine.system().parent, "mslug2") ||
-              !core_stricmp(machine.system().parent, "mslugx") ||
-              !core_stricmp(machine.system().parent, "mslug3") ||
-              !core_stricmp(machine.system().parent, "mslug4") ||
-              !core_stricmp(machine.system().parent, "mslug5") ||
-              !core_stricmp(machine.system().parent, "kof94") ||
-              !core_stricmp(machine.system().parent, "kof95") ||
-              !core_stricmp(machine.system().parent, "kof96") ||
-              !core_stricmp(machine.system().parent, "kof97") ||
-              !core_stricmp(machine.system().parent, "kof98") ||
-              !core_stricmp(machine.system().parent, "kof99") ||
-              !core_stricmp(machine.system().parent, "kof2000") ||
-              !core_stricmp(machine.system().parent, "kof2001") ||
-              !core_stricmp(machine.system().parent, "kof2002") ||
-              !core_stricmp(machine.system().parent, "kof2003") ||
-              !core_stricmp(machine.system().parent, "lresort") ||
-              !core_stricmp(machine.system().parent, "lastblad") ||
-              !core_stricmp(machine.system().parent, "lastbld2") ||
-              !core_stricmp(machine.system().parent, "ninjamas") ||
-              !core_stricmp(machine.system().parent, "rotd") ||
-              !core_stricmp(machine.system().parent, "rbff1") ||
-              !core_stricmp(machine.system().parent, "rbff2") ||
-              !core_stricmp(machine.system().parent, "rbffspec") ||
-              !core_stricmp(machine.system().parent, "savagere") ||
-              !core_stricmp(machine.system().parent, "sengoku3") ||
-              !core_stricmp(machine.system().parent, "samsho") ||
-              !core_stricmp(machine.system().parent, "samsho2") ||
-              !core_stricmp(machine.system().parent, "samsho3") ||
-              !core_stricmp(machine.system().parent, "samsho4") ||
-              !core_stricmp(machine.system().parent, "samsho5") ||
-              !core_stricmp(machine.system().parent, "samsh5sp") ||
-              !core_stricmp(machine.system().parent, "svc") ||
-              !core_stricmp(machine.system().parent, "viewpoin") ||
-              !core_stricmp(machine.system().parent, "wakuwak7") ||
-              !core_stricmp(machine.system().parent, "wh1") ||
-              !core_stricmp(machine.system().parent, "wh2") ||
-              !core_stricmp(machine.system().parent, "wh2j") ||
-              !core_stricmp(machine.system().parent, "whp")
+              core_filename_extract_base(machine.system().type.source(), true) == "neogeo" ||
+              core_filename_extract_base(machine.system().type.source(), true) == "neopcb"
            )
    {
-      /* Neo Geo */
-      button_mapping[0] = RETROPAD_B;
-      button_mapping[1] = RETROPAD_A;
-      button_mapping[2] = RETROPAD_Y;
-      button_mapping[3] = RETROPAD_X;
+      /*
+ * Four-button layout A
+ *
+ *          3 / X
+ *  1 / Y           4 / A
+ *          2 / B
+ *
+ * Generic Neo Geo profile. The NEOGEO mini PAD uses this same layout.
+ */
+      button_mapping[0] = RETROPAD_Y;
+      button_mapping[1] = RETROPAD_B;
+      button_mapping[2] = RETROPAD_X;
+      button_mapping[3] = RETROPAD_A;
       button_mapping[4] = RETROPAD_L;
       button_mapping[5] = RETROPAD_R;
    }
    else if (
-              !core_stricmp(machine.system().name, "tektagt")   ||
-              !core_stricmp(machine.system().parent, "tektagt") ||
-              !core_stricmp(machine.system().name, "tekken3")   ||
-              !core_stricmp(machine.system().parent, "tekken3")
+              !core_stricmp(machine.system().name, "darkedge") ||
+              !core_stricmp(machine.system().parent, "darkedge")
            )
    {
-      /* Tekken 3/Tekken Tag Tournament */
+      /* Dark Edge */
+      button_mapping[0] = RETROPAD_Y;
+      button_mapping[1] = RETROPAD_X;
+      button_mapping[2] = RETROPAD_R;
+      button_mapping[3] = RETROPAD_B;
+      button_mapping[4] = RETROPAD_A;
+      button_mapping[5] = RETROPAD_L;
+   }
+   else if (
+              !core_stricmp(machine.system().name, "ringdest") ||
+              !core_stricmp(machine.system().parent, "ringdest")
+           )
+   {
+      /* Ring of Destruction: Slam Masters II */
+      button_mapping[0] = RETROPAD_L;
+      button_mapping[1] = RETROPAD_Y;
+      button_mapping[2] = RETROPAD_X;
+      button_mapping[3] = RETROPAD_R;
+      button_mapping[4] = RETROPAD_B;
+      button_mapping[5] = RETROPAD_A;
+   }
+   else if (
+              !core_stricmp(machine.system().name, "mk4") ||
+              !core_stricmp(machine.system().parent, "mk4")
+           )
+   {
+      /* Mortal Kombat 4 */
+      button_mapping[0] = RETROPAD_X;
+      button_mapping[1] = RETROPAD_Y;
+      button_mapping[2] = RETROPAD_L;
+      button_mapping[3] = RETROPAD_A;
+      button_mapping[4] = RETROPAD_B;
+      button_mapping[5] = RETROPAD_R;
+   }
+   else if (
+              !core_stricmp(machine.system().name, "tektagt") ||
+              !core_stricmp(machine.system().parent, "tektagt")
+           )
+   {
+      /* Tekken Tag Tournament */
       button_mapping[0] = RETROPAD_Y;
       button_mapping[1] = RETROPAD_X;
       button_mapping[2] = RETROPAD_R;
