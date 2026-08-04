@@ -121,6 +121,9 @@ extern int screen_configured;
 extern unsigned coin_inserted;
 extern unsigned coin_limit;
 
+extern bool render_video_active;
+extern bool render_audio_active;
+
 extern const char *slash_str;
 
 /* libretro callbacks */
