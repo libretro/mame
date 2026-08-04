@@ -1,0 +1,22 @@
+name: CI (Libretro - iOS)
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -s /Applications/Xcode.app
+
+      - name: Build
+        run: |
+          make -f Makefile.libretro \
+            platform=ios \
+            -j$(sysctl -n hw.ncpu)
