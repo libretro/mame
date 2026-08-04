@@ -5,6 +5,7 @@
   variables:
     MAKEFILE: Makefile.libretro
     CORENAME: mame
+    REGENIE: 0
 
 # Core definitions
 include:
