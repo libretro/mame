@@ -61,7 +61,9 @@
 #include <cstdlib>
 #include <unistd.h>
 
-
+#ifdef __LIBRETRO__
+#include "libretro_vfs.h"
+#endif
 
 namespace {
 
@@ -232,6 +234,16 @@ std::error_condition osd_file::open(std::string const &path, std::uint32_t openf
 	else if (posix_check_domain_path(path))
 		return posix_open_domain(path, openflags, file, filesize);
 
+#ifdef __LIBRETRO__
+	// Prefer VFS when available
+	if (libretro_vfs_active())
+	{
+		std::error_condition vfserr = libretro_vfs_open(path, openflags, file, filesize);
+		if (!vfserr)
+			return vfserr;
+	}
+#endif
+
 	// select the file open modes
 	int access;
 	if (openflags & OPEN_FLAG_WRITE)
@@ -346,6 +358,14 @@ std::error_condition osd_file::openpty(ptr &file, std::string &name) noexcept
 
 std::error_condition osd_file::remove(std::string const &filename) noexcept
 {
+#ifdef __LIBRETRO__
+	if (libretro_vfs_active())
+	{
+		std::error_condition vfserr = libretro_vfs_remove(filename);
+		if (!vfserr)
+			return vfserr;
+	}
+#endif
 	if (::unlink(filename.c_str()) < -1)
 		return std::error_condition(errno, std::generic_category());
 	else
@@ -369,6 +389,14 @@ bool osd_get_physical_drive_geometry(const char *filename, uint32_t *cylinders, 
 
 osd::directory::entry::ptr osd_stat(const std::string &path)
 {
+#ifdef __LIBRETRO__
+	if (libretro_vfs_active())
+	{
+		osd::directory::entry::ptr result = libretro_vfs_stat(path);
+		if (result)
+			return result;
+	}
+#endif
 #if defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__bsdi__) || defined(__DragonFly__) || defined(__HAIKU__) || defined(_WIN32) || defined(SDLMAME_NO64BITIO) || defined(__ANDROID__)
 	struct stat st;
 	int const err = ::stat(path.c_str(), &st);

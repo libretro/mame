@@ -29,9 +29,14 @@
 #include "modules/lib/osdlib.h"
 #include "modules/diagnostics/diagnostics_module.h"
 
+#include "libretro_vfs.h"
+
 bool fexists(std::string path)
 {
-    return osd_stat(path) ? true : false;
+	if (retro_vfs_interface_ptr)
+		return libretro_vfs_file_exists(path.c_str());
+
+	return osd_stat(path) ? true : false;
 }
 
 extern bool get_MgamePath(void);
