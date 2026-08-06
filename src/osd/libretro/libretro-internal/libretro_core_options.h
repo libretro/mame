@@ -272,6 +272,20 @@ struct retro_core_option_v2_definition option_defs_us[] = {
       "rom"
    },
    {
+      CORE_NAME "_vfs_enabled",
+      "VFS Enabled",
+      NULL,
+      "Enable or disable RetroArch VFS interface. VFS interface v4 or higher is required. Restart core to take effect",
+      NULL,
+      "system",
+      {
+         { "disabled", NULL },
+         { "enabled",  NULL },
+         { NULL, NULL },
+      },
+      "enabled"
+   },
+   {
       CORE_NAME "_joystick_deadzone",
       "Joystick Deadzone",
       NULL,

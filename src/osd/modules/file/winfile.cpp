@@ -29,6 +29,9 @@
 #include <cstdlib>
 #include <cctype>
 
+#ifdef __LIBRETRO__
+#include "libretro_vfs.h"
+#endif
 
 namespace {
 
@@ -180,6 +183,15 @@ std::error_condition osd_file::open(std::string const &path, uint32_t openflags,
 	else if (win_check_ptty_path(path))
 		return win_open_ptty(path, openflags, file, filesize);
 
+#ifdef __LIBRETRO__
+	if (libretro_vfs_active())
+	{
+		std::error_condition vfserr = libretro_vfs_open(path, openflags, file, filesize);
+		if (!vfserr)
+			return vfserr;
+	}
+#endif
+
 	// convert path to TCHAR
 	osd::text::tstring t_path;
 	try { t_path = osd::text::to_tstring(path); }
@@ -301,6 +313,14 @@ std::error_condition osd_file::openpty(ptr &file, std::string &name) noexcept
 
 std::error_condition osd_file::remove(std::string const &filename) noexcept
 {
+#ifdef __LIBRETRO__
+	if (libretro_vfs_active())
+	{
+		std::error_condition vfserr = libretro_vfs_remove(filename);
+		if (!vfserr)
+			return vfserr;
+	}
+#endif
 	osd::text::tstring tempstr;
 	try { tempstr = osd::text::to_tstring(filename); }
 	catch (...) { return std::errc::not_enough_memory; }
@@ -373,6 +393,14 @@ bool osd_get_physical_drive_geometry(const char *filename, uint32_t *cylinders, 
 
 osd::directory::entry::ptr osd_stat(const std::string &path)
 {
+#ifdef __LIBRETRO__
+	if (libretro_vfs_active())
+	{
+		osd::directory::entry::ptr result = libretro_vfs_stat(path);
+		if (result)
+			return result;
+	}
+#endif
 	// convert the path to TCHARs
 	osd::text::tstring t_path;
 	try { t_path = osd::text::to_tstring(path); }

@@ -18,6 +18,7 @@
 #include "libretro.h"
 #include "libretro_shared.h"
 #include "libretro_core_options.h"
+#include "libretro_vfs.h"
 
 /* forward decls / externs / prototypes */
 
@@ -864,6 +865,8 @@ void retro_init(void)
    init_output_audio_buffer(2048);
 
    retro_pause = 0;
+
+   libretro_vfs_init();
 
    log_cb(RETRO_LOG_INFO, "------------------------\n");
    log_cb(RETRO_LOG_INFO, "MAME %s\n", build_version);
