@@ -102,6 +102,7 @@ project ("osd_" .. _OPTIONS["osd"])
 
 	files {
 		MAME_DIR .. "src/osd/libretro/libretro-internal/retro_init.cpp",
+		MAME_DIR .. "src/osd/libretro/libretro-internal/libretro_vfs.cpp",
 		MAME_DIR .. "src/osd/libretro/osdretro.h",
 		MAME_DIR .. "src/osd/libretro/retroprefix.h",
 		MAME_DIR .. "src/osd/libretro/retromain.cpp",
