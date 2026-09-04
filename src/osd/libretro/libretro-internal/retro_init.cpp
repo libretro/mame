@@ -346,8 +346,6 @@ static int getGameInfo(const char *gameName, int *rotation, int *driverIndex, bo
 
 void Extract_AllPath(const char *srcpath)
 {
-   int result_value = 0;
-
    if (!srcpath[0])
       return;
 
@@ -358,7 +356,6 @@ void Extract_AllPath(const char *srcpath)
    if (result == 0)
    {
       strcpy(MgameName, srcpath);
-      result_value |= 1;
       log_cb(RETRO_LOG_ERROR, "Error parsing game path: \"%s\"\n", srcpath);
    }
 
@@ -369,7 +366,6 @@ void Extract_AllPath(const char *srcpath)
    if (result == 0)
    {
       strcpy(MsystemName, srcpath);
-      result_value |= 2;
       log_cb(RETRO_LOG_ERROR, "Error parsing system name: \"%s\"\n", srcpath);
    }
 
@@ -379,7 +375,6 @@ void Extract_AllPath(const char *srcpath)
    if (result == 0)
    {
       strcpy(MparentPath, srcpath);
-      result_value |= 4;
       log_cb(RETRO_LOG_ERROR, "Error parsing parent path: \"%s\"\n", srcpath);
    }
 
@@ -392,6 +387,11 @@ void Extract_AllPath(const char *srcpath)
 
 static void Add_Option(const char *option)
 {
+   if (XARGC >= ARGC_SIZE)
+   {
+      log_cb(RETRO_LOG_ERROR, "%s: XARGC overflow, dropping option: \"%s\".\n", __func__, option);
+      return;
+   }
    sprintf(XARGV[XARGC++], "%s", option);
 }
 
@@ -721,6 +721,8 @@ static void parse_cmdline(const char *argv)
    char *p2 = NULL;
    char *start_of_word = NULL;
 
+   ARGUC = 0;
+
    strcpy(buffer, argv);
    strcat(buffer, " \0");
 
@@ -752,10 +754,13 @@ static void parse_cmdline(const char *argv)
             if (c == '"')
             {
                /* word goes from start_of_word to p-1 */
-               //... do something with the word ...
-               for (c2=0, p2 = start_of_word; p2 < p; p2++, c2++)
-                  ARGUV[ARGUC][c2] = (unsigned char)*p2;
-               ARGUC++;
+               if (ARGUC < ARGC_SIZE)
+               {
+                  for (c2 = 0, p2 = start_of_word; p2 < p && c2 < RETRO_PATH_MAX - 1; p2++, c2++)
+                     ARGUV[ARGUC][c2] = (unsigned char)*p2;
+                  ARGUV[ARGUC][c2] = '\0';
+                  ARGUC++;
+               }
 
                state = DULL; /* back to "not in word, not in string" state */
             }
@@ -766,10 +771,13 @@ static void parse_cmdline(const char *argv)
             if (isspace(c))
             {
                /* word goes from start_of_word to p-1 */
-               /*... do something with the word ... */
-               for (c2=0,p2 = start_of_word; p2 <p; p2++,c2++)
-                  ARGUV[ARGUC][c2] = (unsigned char) *p2;
-               ARGUC++;
+               if (ARGUC < ARGC_SIZE)
+               {
+                  for (c2 = 0, p2 = start_of_word; p2 < p && c2 < RETRO_PATH_MAX - 1; p2++, c2++)
+                     ARGUV[ARGUC][c2] = (unsigned char)*p2;
+                  ARGUV[ARGUC][c2] = '\0';
+                  ARGUC++;
+               }
 
                state = DULL; /* back to "not in word, not in string" state */
             }
