@@ -331,7 +331,9 @@ void ngcd_state::control_w(address_space &space, offs_t offset, uint16_t data, u
 				// is there some way to enable write protection on the RAM vector area or is it some IRQ masking issue?
 				// the games still write to the normal address for this too?
 				// writes 00 / 01 / ff
-				//printf("MapVectorTable? %04x %04x\n",data,mem_mask);
+#ifndef __LIBRETRO__
+				printf("MapVectorTable? %04x %04x\n",data,mem_mask);
+#endif
 
 				//m_bank_vectors->set_entry(data == 0 ? 0 : 1);
 				m_use_cart_vectors = (data == 0 ? 0 : 1);
@@ -707,6 +709,7 @@ void ngcd_state::do_dma(address_space& curr_space)
 			//  - DMA controller program[12] -> 0xC515 (PC: 0xC0FD88)
 			//  - DMA controller program[14] -> 0xFCF5 (PC: 0xC0FD8A)
 
+#ifdef __LIBRETRO__
 			// Xeno Crisis hang fix
 			bool write = false;
 
@@ -722,6 +725,16 @@ void ngcd_state::do_dma(address_space& curr_space)
 				m_dma_address1 += 2;
 				m_dma_address2 += 2;
 			}
+#else
+			seek_idle(m_dma_count * 1);
+
+			while (m_dma_count--)
+			{
+				curr_space.write_word(m_dma_address2, curr_space.read_word(m_dma_address1));
+				m_dma_address1 += 2;
+				m_dma_address2 += 2;
+			}
+#endif
 
 			if (m_dma_address2 == 0x0800)
 			{
