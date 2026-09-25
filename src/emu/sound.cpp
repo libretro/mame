@@ -673,6 +673,9 @@ void sound_stream::do_update()
 {
 	// Mix in all the inputs (if any)
 	if(m_input_count) {
+#ifdef __LIBRETRO__
+		if (render_audio_active) {
+#endif
 		for(auto &b : m_input_buffer)
 			std::fill(b.begin(), b.begin() + m_samples_to_update, 0.0);
 		for(const auto &r : m_bw_routes) {
@@ -690,6 +693,9 @@ void sound_stream::do_update()
 					db[i] += sb[i] * gain;
 			}
 		}
+#ifdef __LIBRETRO__
+		}
+#endif
 	}
 
 	// Prepare the output space (if any)
@@ -1001,6 +1007,13 @@ void sound_manager::input_get(int id, sound_stream &stream)
 
 void sound_manager::output_push(int id, sound_stream &stream)
 {
+#ifdef __LIBRETRO__
+    if (!render_audio_active) {
+	     m_record_samples = stream.samples();
+	     return; 
+	}
+#endif
+
 	auto &spk = m_speakers[id];
 	auto &out = spk.m_buffer;
 	auto &inp = stream.m_input_buffer;
@@ -1164,10 +1177,16 @@ void sound_manager::run_effects()
 
 		machine().osd().sound_begin_update();
 
+#ifdef __LIBRETRO__
+		if (render_audio_active) {
+#endif
 		// Send the result to the osd
 		for(auto &stream : m_osd_output_streams)
 			if(stream.m_samples)
 				machine().osd().sound_stream_sink_update(stream.m_id, stream.m_buffer.data(), stream.m_samples);
+#ifdef __LIBRETRO__
+		}
+#endif
 
 		machine().osd().sound_end_update();
 #ifndef SOUND_DISABLE_THREADING
