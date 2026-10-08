@@ -247,6 +247,10 @@ int mmain(int argc, char *argv[])
 
 	{
 		static retro_options retro_global_options;
+
+		// A new content session must not inherit slot/image defaults from
+		// the previous machine (e.g. different Neo Geo cartridge types).
+		retro_global_options.set_system_name("");
 		retro_global_osd = new retro_osd_interface(retro_global_options);
 
 		retro_output retrooutput;
