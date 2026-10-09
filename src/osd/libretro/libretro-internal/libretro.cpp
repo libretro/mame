@@ -1008,13 +1008,38 @@ size_t retro_serialize_size(void)
 
    return 0;
 }
+// Match running_machine::handle_saveload: anonymous timers must finish before
+// saving or restoring. Discarding their timers during postload otherwise leaves
+// pending CPU input queues without a callback (e.g. Neo Geo cold autoload).
+static bool retro_wait_for_safe_state(running_machine &machine)
+{
+   device_scheduler &scheduler = machine.scheduler();
+   const attotime started = machine.time();
+   unsigned steps = 0;
+   while (!scheduler.can_save())
+   {
+      if ((machine.time() - started) > attotime::from_seconds(1) || ++steps > 100000)
+      {
+         log_cb(RETRO_LOG_ERROR, "State operation blocked by pending anonymous timers.\n");
+         return false;
+      }
+      scheduler.timeslice();
+   }
+   return true;
+}
+
 bool retro_serialize(void *data, size_t size)
 {
    save_error error = STATERR_NOT_FOUND;
    if (     mame_machine_manager::instance() != NULL
 	      && mame_machine_manager::instance()->machine() != NULL
 	      && ram_state::get_size(mame_machine_manager::instance()->machine()->save()) > 0)
-      error = mame_machine_manager::instance()->machine()->save().write_buffer((u8*)data, size);
+   {
+      running_machine &machine = *mame_machine_manager::instance()->machine();
+      if (!retro_wait_for_safe_state(machine))
+         return false;
+      error = machine.save().write_buffer((u8*)data, size);
+   }
 
    if (error != STATERR_NONE)
       log_cb(RETRO_LOG_ERROR, "State save error %d.\n", error);
@@ -1026,7 +1051,12 @@ bool retro_unserialize(const void *data, size_t size)
    if (     mame_machine_manager::instance() != NULL
          && mame_machine_manager::instance()->machine() != NULL
          &&	ram_state::get_size(mame_machine_manager::instance()->machine()->save()) > 0)
-      error = mame_machine_manager::instance()->machine()->save().read_buffer((u8*)data, size);
+   {
+      running_machine &machine = *mame_machine_manager::instance()->machine();
+      if (!retro_wait_for_safe_state(machine))
+         return false;
+      error = machine.save().read_buffer((u8*)data, size);
+   }
 
    if (error != STATERR_NONE)
       log_cb(RETRO_LOG_ERROR, "State load error %d.\n", error);
