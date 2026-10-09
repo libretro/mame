@@ -51,6 +51,8 @@ int video_changed  = VIDEO_CHANGED_NONE;
 int screen_configured = 0;
 
 static bool draw_this_frame = true;
+bool render_video_active = true;
+bool render_audio_active = true;
 static int maincpu_overclock = 100;
 static int soundcpu_overclock = 100;
 
@@ -181,7 +183,7 @@ static void upload_output_audio_buffer()
 
 void retro_audio_queue(const int16_t *data, int32_t samples)
 {
-   if ((samples < 1) || retro_pause)
+   if ((samples < 1) || retro_pause || !render_audio_active)
       return;
 
    if (output_audio_buffer.capacity - output_audio_buffer.size < samples)
@@ -890,6 +892,15 @@ void retro_reset(void)
 void retro_run(void)
 {
    bool updated = false;
+   int audio_video_enable = 0;
+
+   if (environ_cb(RETRO_ENVIRONMENT_GET_AUDIO_VIDEO_ENABLE, &audio_video_enable)) {
+       render_video_active = (audio_video_enable & 1) != 0;
+       render_audio_active = (audio_video_enable & 2) != 0;
+   } else {
+       render_video_active = true;
+       render_audio_active = true;
+   }
 
    if (environ_cb(RETRO_ENVIRONMENT_GET_VARIABLE_UPDATE, &updated) && updated)
    {
@@ -918,14 +929,24 @@ void retro_run(void)
 
 //FIXME: re-add way to handle OGL
 #if defined(HAVE_OPENGL) || defined(HAVE_OPENGLES)
-   do_glflush();
+   if (render_video_active)
+      do_glflush();
 #else
-   if (draw_this_frame)
+   if (draw_this_frame && render_video_active)
       video_cb(videoBuffer, fb_width, fb_height, fb_width << LOG_PIXEL_BYTES);
    else
       video_cb(NULL, fb_width, fb_height, fb_width << LOG_PIXEL_BYTES);
 #endif
-   upload_output_audio_buffer();
+   if (render_audio_active) 
+   {
+      upload_output_audio_buffer();
+   }
+   else
+   {
+      // Clear the size so we don't build up stale audio buffers in memory
+      output_audio_buffer.size = 0;
+      audio_ready = false;
+   }
 
    if (video_changed == VIDEO_CHANGED_AV_INFO)
       update_av_info();

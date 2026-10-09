@@ -103,7 +103,14 @@ void retro_osd_interface::update(bool skip_redraw)
 		machine().schedule_soft_reset();
 		mame_reset = -1;
 	}
-	
+
+	// If the frontend is running ahead and requested no video,
+	// force MAME's OSD to skip the frame generation entirely.
+	if (!render_video_active)
+	{
+		skip_redraw = true;
+	}
+
 	osd_common_t::update(skip_redraw);
 
 	// if we're not skipping this redraw, update all windows
